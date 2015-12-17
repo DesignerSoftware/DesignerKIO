@@ -48,11 +48,11 @@ public class AdministrarIngreso implements IAdministrarIngreso{
     }
 
     @Override
-    public boolean validarDatosIngreso(String usuario, String clave) {
+    public boolean validarDatosIngreso(String usuario, String clave, String nitEmpresa) {
         try {
             if (em != null) {
                 persistenciaConexionInicial.setearKiosko(em);
-                if (persistenciaConexionInicial.validarIngresoUsuario(em, usuario, clave)) {
+                if (persistenciaConexionInicial.validarIngresoUsuario(em, usuario, clave, nitEmpresa)) {
                     return true;
                 }
             }

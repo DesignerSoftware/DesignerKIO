@@ -8,7 +8,7 @@ public interface IAdministrarIngreso {
 
     public boolean conexionIngreso(String unidadPersistencia);
 
-    public boolean validarDatosIngreso(String usuario, String clave);
+    public boolean validarDatosIngreso(String usuario, String clave, String nitEmpresa);
 
     public boolean adicionarConexionUsuario(String idSesion);
 

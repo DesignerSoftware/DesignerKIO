@@ -20,13 +20,14 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     }
 
     @Override
-    public boolean validarIngresoUsuario(EntityManager eManager, String usuario, String clave) {
+    public boolean validarIngresoUsuario(EntityManager eManager, String usuario, String clave, String nitEmpresa) {
         try {
             eManager.getTransaction().begin();
-            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e WHERE ck.EMPLEADO = e.SECUENCIA AND e.codigoempleado = ? AND ck.PWD = GENERALES_PKG.ENCRYPT(?)";
+            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e, Empresas em WHERE ck.EMPLEADO = e.SECUENCIA AND e.empresa = em.secuencia AND e.codigoempleado = ? AND ck.PWD = GENERALES_PKG.ENCRYPT(?) AND em.nit = ?";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.setParameter(1, usuario);
             query.setParameter(2, clave);
+            query.setParameter(3, nitEmpresa);
             BigDecimal retorno = (BigDecimal) query.getSingleResult();
             Integer instancia = retorno.intValueExact();
             eManager.getTransaction().commit();
@@ -34,7 +35,7 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
                 System.out.println("El usuario y clave son correctos.");
                 return true;
             } else {
-                System.out.println("El usuario o clave son incorrectos.");
+                System.out.println("El usuario o clave son incorrectos o la usuario no pertenece a esa empresa.");
                 eManager.getEntityManagerFactory().close();
                 return false;
             }

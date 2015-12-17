@@ -35,7 +35,7 @@ public class LeerArchivoXML {
                 Node nNode = nList.item(temp);
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
-                    listaCadenas.add(new CadenasKioskos(eElement.getAttribute("id"), eElement.getElementsByTagName("descripcion").item(0).getTextContent(), eElement.getElementsByTagName("cadena").item(0).getTextContent()));
+                    listaCadenas.add(new CadenasKioskos(eElement.getAttribute("id"), eElement.getElementsByTagName("descripcion").item(0).getTextContent(), eElement.getElementsByTagName("cadena").item(0).getTextContent(), eElement.getElementsByTagName("nit").item(0).getTextContent()));
                 }
             }
             return listaCadenas;

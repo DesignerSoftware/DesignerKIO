@@ -42,18 +42,27 @@ public class ControladorIngreso implements Serializable {
         FacesContext contexto = FacesContext.getCurrentInstance();
         HttpSession ses = (HttpSession) contexto.getExternalContext().getSession(false);
         if (!ingresoExitoso) {
-            if (administrarIngreso.conexionIngreso(unidadPersistenciaIngreso)) {
-                if (administrarIngreso.validarDatosIngreso(usuario, clave)) {
-                    administrarIngreso.adicionarConexionUsuario(ses.getId());
-                    administrarSesiones.consultarSessionesActivas();
-                    ingresoExitoso = true;
+            CadenasKioskos cadena = null;
+            for (CadenasKioskos elemento : (new LeerArchivoXML()).leerArchivoEmpresasKiosko()) {
+                if (elemento.getId().equals(unidadPersistenciaIngreso)) {
+                    cadena = elemento;
+                    break;
+                }
+            }
+            if (cadena != null) {
+                if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
+                    if (administrarIngreso.validarDatosIngreso(usuario, clave, cadena.getNit())) {
+                        administrarIngreso.adicionarConexionUsuario(ses.getId());
+                        administrarSesiones.consultarSessionesActivas();
+                        ingresoExitoso = true;
+                    } else {
+                        //EL USUARIO O CLAVE SON INCORRECTOS
+                        ingresoExitoso = false;
+                    }
                 } else {
-                    //EL USUARIO O CLAVE SON INCORRECTOS
+                    //UNIDAD DE PERSISTENCIA INVALIDA - REVISAR ARCHIVO DE CONFIGURACION
                     ingresoExitoso = false;
                 }
-            } else {
-                //UNIDAD DE PERSISTENCIA INVALIDA - REVISAR ARCHIVO DE CONFIGURACION
-                ingresoExitoso = false;
             }
         } else {
             administrarIngreso.cerrarSession(ses.getId());
