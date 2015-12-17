@@ -3,13 +3,16 @@
     <cadenaKiosko id="1">
         <descripcion>DESIGNER SOFTWARE LTDA.</descripcion>
         <cadena>DEFAULT1</cadena>
+        <nit></nit>
     </cadenaKiosko>
     <cadenaKiosko id="2">
         <descripcion>COMPET DE COLOMBIA LTDA</descripcion>
         <cadena>DEFAULT2</cadena>
+        <nit></nit>
     </cadenaKiosko>
     <cadenaKiosko id="3">
         <descripcion>OTRA EMPRESA</descripcion>
         <cadena>DEFAULT3</cadena>
+        <nit></nit>
     </cadenaKiosko>
 </conexiones>
