@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <link href="././resources/css/estilosPersonalizados.css" rel="stylesheet" type="text/css" />
+        <title>Inicio Kiosko - Designer RHN</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:panelGrid id="pnlIngreso" columns="2" style="font-size: 14px;" styleClass="noBorders">
+                <h:outputText value="Usuario:" style="font-weight: bold"/>
+                <p:inputText value="#{controladorIngreso.usuario}" 
+                             disabled="#{controladorIngreso.ingresoExitoso ? 'true' : 'false'}"/>
+                <h:outputText value="Contraseña:" style="font-weight: bold"/>
+                <p:password value="#{controladorIngreso.clave}" 
+                            disabled="#{controladorIngreso.ingresoExitoso ? 'true' : 'false'}"/>
+                <h:outputText value="Empresa:" style="font-weight: bold"/>
+                <p:selectOneMenu value="#{controladorIngreso.unidadPersistenciaIngreso}" 
+                                 disabled="#{controladorIngreso.ingresoExitoso ? 'true' : 'false'}">
+                    <f:selectItem itemLabel="Seleccione una empresa" itemValue="#{null}"/>
+                    <f:selectItems value="#{controladorIngreso.obtenerCadenasKiosko()}" var="cadena"
+                                   itemLabel="#{cadena.descripcion}" itemValue="#{cadena.cadena}"/>
+                </p:selectOneMenu>
+                <p:column/>
+                <p:commandButton value="#{!controladorIngreso.ingresoExitoso ? 'Ingresar' : 'Cerrar Sesión'}" 
+                                 actionListener="#{controladorIngreso.ingresar()}" 
+                                 style="float: right" update="pnlIngreso"/>
+            </p:panelGrid>
+        </h:form>
+    </h:body>
+</html>
+
