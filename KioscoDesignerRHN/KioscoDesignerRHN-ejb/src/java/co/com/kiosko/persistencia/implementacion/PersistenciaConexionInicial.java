@@ -23,7 +23,7 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     public boolean validarIngresoUsuario(EntityManager eManager, String usuario, String clave) {
         try {
             eManager.getTransaction().begin();
-            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck WHERE ck.EMPLEADO = ? AND ck.PWD = GENERALES_PKG.ENCRYPT(?)";
+            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e WHERE ck.EMPLEADO = e.SECUENCIA AND e.codigoempleado = ? AND ck.PWD = GENERALES_PKG.ENCRYPT(?)";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.setParameter(1, usuario);
             query.setParameter(2, clave);
