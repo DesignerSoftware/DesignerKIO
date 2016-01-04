@@ -16,7 +16,7 @@ import org.w3c.dom.NodeList;
 
 /**
  *
- * @author 908036
+ * @author Felipe Triviño
  */
 public class LeerArchivoXML {
 

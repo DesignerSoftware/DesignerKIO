@@ -20,14 +20,84 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     }
 
     @Override
-    public boolean validarIngresoUsuario(EntityManager eManager, String usuario, String clave, String nitEmpresa) {
+    public boolean validarUsuarioyEmpresa(EntityManager eManager, String usuario, String nitEmpresa) {
         try {
             eManager.getTransaction().begin();
-            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e, Empresas em WHERE ck.EMPLEADO = e.SECUENCIA AND e.empresa = em.secuencia AND e.codigoempleado = ? AND ck.PWD = GENERALES_PKG.ENCRYPT(?) AND em.nit = ?";
+            String sqlQuery = "SELECT COUNT(*) FROM EMPLEADOS e, Empresas em WHERE e.empresa = em.secuencia AND e.codigoempleado = ? AND em.nit = ?";
+            Query query = eManager.createNativeQuery(sqlQuery);
+            query.setParameter(1, usuario);
+            query.setParameter(2, nitEmpresa);
+            BigDecimal retorno = (BigDecimal) query.getSingleResult();
+            Integer instancia = retorno.intValueExact();
+            eManager.getTransaction().commit();
+            if (instancia > 0) {
+                System.out.println("El usuario existe y corresponde a la empresa seleccionada.");
+                return true;
+            } else {
+                System.out.println("El usuario no existe ó no corresponde a la empresa seleccionada.");
+                eManager.getEntityManagerFactory().close();
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println("Error PersistenciaConexionInicial.validarUsuarioyEmpresa: " + e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean validarUsuarioRegistrado(EntityManager eManager, String usuario) {
+        try {
+            eManager.getTransaction().begin();
+            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e WHERE ck.EMPLEADO = e.SECUENCIA AND e.codigoempleado = ?";
+            Query query = eManager.createNativeQuery(sqlQuery);
+            query.setParameter(1, usuario);
+            BigDecimal retorno = (BigDecimal) query.getSingleResult();
+            Integer instancia = retorno.intValueExact();
+            eManager.getTransaction().commit();
+            if (instancia > 0) {
+                System.out.println("El usuario está registrado.");
+                return true;
+            } else {
+                System.out.println("El usuario no esta registrado");
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println("Error PersistenciaConexionInicial.validarUsuarioRegistrado: " + e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean validarEstadoUsuario(EntityManager eManager, String usuario) {
+        try {
+            eManager.getTransaction().begin();
+            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e WHERE ck.EMPLEADO = e.SECUENCIA AND e.codigoempleado = ? AND ck.activo = 'N'";
+            Query query = eManager.createNativeQuery(sqlQuery);
+            query.setParameter(1, usuario);
+            BigDecimal retorno = (BigDecimal) query.getSingleResult();
+            Integer instancia = retorno.intValueExact();
+            eManager.getTransaction().commit();
+            if (instancia > 0) {
+                System.out.println("El usuario esta bloqueado.");
+                return false;
+            } else {
+                System.out.println("El usuario esta activo");
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("Error PersistenciaConexionInicial.validarEstadoUsuario: " + e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean validarIngresoUsuarioRegistrado(EntityManager eManager, String usuario, String clave) {
+        try {
+            eManager.getTransaction().begin();
+            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e WHERE ck.EMPLEADO = e.SECUENCIA AND e.codigoempleado = ? AND ck.PWD = GENERALES_PKG.ENCRYPT(?)";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.setParameter(1, usuario);
             query.setParameter(2, clave);
-            query.setParameter(3, nitEmpresa);
             BigDecimal retorno = (BigDecimal) query.getSingleResult();
             Integer instancia = retorno.intValueExact();
             eManager.getTransaction().commit();
@@ -35,12 +105,11 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
                 System.out.println("El usuario y clave son correctos.");
                 return true;
             } else {
-                System.out.println("El usuario o clave son incorrectos o la usuario no pertenece a esa empresa.");
-                eManager.getEntityManagerFactory().close();
+                System.out.println("El usuario o clave son incorrectos");
                 return false;
             }
         } catch (Exception e) {
-            System.out.println("Error PersistenciaConexionInicial.validarIngresoUsuario: " + e);
+            System.out.println("Error PersistenciaConexionInicial.validarIngresoUsuarioRegistrado: " + e);
             return false;
         }
     }

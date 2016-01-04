@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <link href="././resources/css/estilosPersonalizados.css" rel="stylesheet" type="text/css" />
+        <title>Primer Ingreso Kiosko - Designer RHN</title>
+    </h:head>
+    <h:body style="font-size: 14px;">
+        <h:form>
+            <p:panel header="Primer ingreso - Kiosko Designer RHN" >
+                <p:messages id="mensaje" showDetail="true" autoUpdate="true" closable="true" />
+
+                <p:commandButton value="Cerrras sesión" actionListener="#{controladorIngreso.ingresar()}" style="float: right" action="ingreso"/>
+                <p:panelGrid columns="2" styleClass="noBorders">
+                    <p:column>
+                        <h:graphicImage value="resources/imagenes/preguntasSeguridad.jpg"  />
+                    </p:column>
+                    <p:column>
+                        <p:panelGrid columns="1" styleClass="noBorders" style="max-width: 850px" >
+                            <h:outputText id="informacion" value="**Es importante que memorice las respuestas de las preguntas que seleccione, 
+                                          ya que solo así podrá generar una nueva contraseña en caso de que la olvide." 
+                                          style="font-weight: bold; color: #BF1A1A; #{controladorPrimerIngreso.cssPanelPreguntas}"/>
+                        </p:panelGrid>
+                        <p:panelGrid id="pnlPreguntas" columns="2" style="#{controladorPrimerIngreso.cssPanelPreguntas}" styleClass="noBorders" >
+                            <h:outputText value="Pregunta No 1*:" style="font-weight: bold"/>
+                            <p:selectOneMenu value="#{controladorPrimerIngreso.nuevoIngreso.pregunta1}" 
+                                             converter="#{convertidorPreguntasKiosko}">
+                                <f:selectItem itemLabel="Seleccione una pregunta" itemValue="#{null}"/>
+                                <f:selectItems value="#{controladorPrimerIngreso.lstPreguntasKiosko}" var="pregunta1"
+                                               itemLabel="#{pregunta1.pregunta}" itemValue="#{pregunta1}" />
+                                <p:ajax event="select" process="@this" />
+                            </p:selectOneMenu>
+                            <h:outputText value="Respuesta*:" style="font-weight: bold"/>
+                            <p:password value="#{controladorPrimerIngreso.nuevoIngreso.respuesta1UI}" redisplay="true"/>
+
+                            <h:outputText value="Pregunta No 2*:" style="font-weight: bold"/>
+                            <p:selectOneMenu value="#{controladorPrimerIngreso.nuevoIngreso.pregunta2}" 
+                                             converter="#{convertidorPreguntasKiosko}">
+                                <f:selectItem itemLabel="Seleccione una pregunta" itemValue="#{null}"/>
+                                <f:selectItems value="#{controladorPrimerIngreso.lstPreguntasKiosko}" var="pregunta2"
+                                               itemLabel="#{pregunta2.pregunta}" itemValue="#{pregunta2}" />
+                                <p:ajax event="select" process="@this" />
+                            </p:selectOneMenu>
+                            <h:outputText value="Respuesta*:" style="font-weight: bold"/>
+                            <p:password value="#{controladorPrimerIngreso.nuevoIngreso.respuesta2UI}" redisplay="true"/>
+
+                            <p:column/>
+                            <p:commandButton value="Continuar" actionListener="#{controladorPrimerIngreso.continuar()}" 
+                                             style="float: right" update="pnlPreguntas, pnlNuevaClave, informacion" process="pnlPreguntas"/>
+                        </p:panelGrid>
+
+                        <p:panelGrid id="pnlNuevaClave" columns="2" style="#{controladorPrimerIngreso.cssPanelClave}" styleClass="noBorders">
+                            <h:outputText value="Nueva contraseña: " style="font-weight: bold"/>
+                            <p:password value="#{controladorPrimerIngreso.clave}" redisplay="true"/>
+
+                            <h:outputText value="Confirmar contraseña: " style="font-weight: bold"/>
+                            <p:password value="#{controladorPrimerIngreso.confirmacion}" redisplay="true"/>
+
+                            <p:commandButton value="Atras" actionListener="#{controladorPrimerIngreso.atras()}" 
+                                             style="float: right" update="pnlPreguntas, pnlNuevaClave, informacion"/>
+                            <p:commandButton value="Finalizar" style="float: right"  actionListener="#{controladorPrimerIngreso.finalizar()}"/>
+                        </p:panelGrid>
+                    </p:column>
+                </p:panelGrid>
+            </p:panel>
+        </h:form>
+        <h:form>
+            <p:dialog id="dlgProcesoFinalizado" header="Hemos terminado..." widgetVar="dlgProcesoFinalizado"
+                      resizable="false" draggable="false" modal="true"  closable="false" width="500">
+                <p:panelGrid columns="2"  styleClass="noBorders">
+                    <h:graphicImage value="resources/imagenes/registroExitoso.jpg" width="90" height="80"  />
+
+                    <h:outputText value="¡Felicitaciones!, las respuestas a las preguntas seleccionadas 
+                                  junto con su contraseña han sido guardadas exitosamente,
+                                  ahora puede ingresar al Kiosko con su nueva contraseña." style="text-align: justify"/>
+                    <p:column/>
+                    <p:commandButton value="Continuar" onclick="PF('dlgProcesoFinalizado').hide();" 
+                                     actionListener="#{controladorIngreso.ingresar()}"
+                                     style="float: right" process="@this" action="ingreso"/>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+    </h:body>
+</html>
+

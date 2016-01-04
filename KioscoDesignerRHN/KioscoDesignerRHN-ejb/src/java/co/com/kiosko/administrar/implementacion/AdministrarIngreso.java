@@ -1,10 +1,12 @@
 package co.com.kiosko.administrar.implementacion;
 
+import co.com.kiosko.administrar.entidades.ConexionesKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarIngreso;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.clasesAyuda.SessionEntityManager;
 import co.com.kiosko.conexionFuente.implementacion.SesionEntityManagerFactory;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionInicial;
+import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
@@ -14,12 +16,14 @@ import javax.persistence.EntityManager;
  * @author Felipe Triviño
  */
 @Stateful
-public class AdministrarIngreso implements IAdministrarIngreso{
+public class AdministrarIngreso implements IAdministrarIngreso {
 
     @EJB
-    IPersistenciaConexionInicial persistenciaConexionInicial;
+    private IPersistenciaConexionInicial persistenciaConexionInicial;
     @EJB
-    IAdministrarSesiones administrarSessiones;
+    private IAdministrarSesiones administrarSessiones;
+    @EJB
+    private IPersistenciaConexionesKioskos persistenciaConexionesKioskos;
     private EntityManager em;
     private final SesionEntityManagerFactory sessionEMF;
 
@@ -48,17 +52,54 @@ public class AdministrarIngreso implements IAdministrarIngreso{
     }
 
     @Override
-    public boolean validarDatosIngreso(String usuario, String clave, String nitEmpresa) {
+    public boolean validarUsuarioyEmpresa(String usuario, String nitEmpresa) {
         try {
             if (em != null) {
                 persistenciaConexionInicial.setearKiosko(em);
-                if (persistenciaConexionInicial.validarIngresoUsuario(em, usuario, clave, nitEmpresa)) {
-                    return true;
-                }
+                return persistenciaConexionInicial.validarUsuarioyEmpresa(em, usuario, nitEmpresa);
             }
             return false;
         } catch (Exception e) {
-            System.out.println("Error AdministrarIngreso.validarDatosIngreso" + e);
+            System.out.println("Error AdministrarIngreso.validarUsuarioyEmpresa" + e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean validarUsuarioRegistrado(String usuario) {
+        try {
+            if (em != null) {
+                return persistenciaConexionInicial.validarUsuarioRegistrado(em, usuario);
+            }
+            return false;
+        } catch (Exception e) {
+            System.out.println("Error AdministrarIngreso.validarUsuarioRegistrado" + e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean validarEstadoUsuario(String usuario) {
+        try {
+            if (em != null) {
+                return persistenciaConexionInicial.validarEstadoUsuario(em, usuario);
+            }
+            return false;
+        } catch (Exception e) {
+            System.out.println("Error AdministrarIngreso.validarEstadoUsuario" + e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean validarIngresoUsuarioRegistrado(String usuario, String clave) {
+        try {
+            if (em != null) {
+                return persistenciaConexionInicial.validarIngresoUsuarioRegistrado(em, usuario, clave);
+            }
+            return false;
+        } catch (Exception e) {
+            System.out.println("Error AdministrarIngreso.validarIngresoUsuarioRegistrado" + e);
             return false;
         }
     }
@@ -70,7 +111,7 @@ public class AdministrarIngreso implements IAdministrarIngreso{
                 if (em.isOpen()) {
                     SessionEntityManager sem = new SessionEntityManager(idSesion, sessionEMF.getEmf());
                     administrarSessiones.adicionarSesion(sem);
-                    
+
                     return true;
                 }
             }
@@ -80,12 +121,24 @@ public class AdministrarIngreso implements IAdministrarIngreso{
             return false;
         }
     }
-    
+
+    @Override
+    public boolean bloquearUsuario(String codigoEmpleado) {
+        ConexionesKioskos cnx = persistenciaConexionesKioskos.consultarConexionEmpleado(em, codigoEmpleado);
+        cnx.setActivo("N");
+        return persistenciaConexionesKioskos.registrarConexion(em, cnx);
+    }
+
     @Override
     public void cerrarSession(String idSesion) {
         if (em.isOpen()) {
             em.getEntityManagerFactory().close();
             administrarSessiones.borrarSesion(idSesion);
         }
+    }
+
+    @Override
+    public EntityManager getEm() {
+        return em;
     }
 }

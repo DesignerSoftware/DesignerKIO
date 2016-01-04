@@ -2,5 +2,12 @@
 .noBorders tr, .noBorders td {
     background: none !important;
     border: none !important;
+    max-width: 400px;
 }
 
+.centrado {
+    padding:10px;
+    position:absolute;
+    top:35%;
+    left:30%;
+}

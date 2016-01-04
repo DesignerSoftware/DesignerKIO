@@ -7,7 +7,14 @@ public interface IPersistenciaConexionInicial {
 
     public void setearKiosko(EntityManager eManager);
 
-    public boolean validarIngresoUsuario(EntityManager eManager, String usuario, String clave, String nitEmpresa);
+    public boolean validarUsuarioyEmpresa(EntityManager eManager, String usuario, String nitEmpresa);
+
+    public boolean validarUsuarioRegistrado(EntityManager eManager, String usuario);
+
+    public boolean validarIngresoUsuarioRegistrado(EntityManager eManager, String usuario, String clave);
 
     public EntityManager validarConexionUsuario(EntityManagerFactory emf);
+
+    public boolean validarEstadoUsuario(javax.persistence.EntityManager eManager, java.lang.String usuario);
+
 }

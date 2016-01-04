@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <link href="././resources/css/estilosPersonalizados.css" rel="stylesheet" type="text/css" />
+        <title>¿Olvido su clave?</title>
+    </h:head>
+    <h:body style="font-size: 14px;">
+        <h:form>
+            <p:panel header="Recuperar contraseña">
+                <p:messages id="mensaje" showDetail="true" autoUpdate="true" closable="true" />
+
+                <p:commandButton value="Cerrras sesión" actionListener="#{controladorIngreso.ingresar()}" style="float: right" action="ingreso"/>
+                <p:panelGrid id="pnlOlvidoClave" columns="2" styleClass="noBorders">
+                    <h:outputText value="Pregunta 1:"/>
+                    <h:outputText value="#{controladorOlvidoClave.conexion.pregunta1.pregunta}"/>
+                    <h:outputText value="Respuesta:"/>
+                    <p:password value="#{controladorOlvidoClave.respuesta1}"/>
+                    <h:outputText value="Pregunta 2:"/>
+                    <h:outputText value="#{controladorOlvidoClave.conexion.pregunta2.pregunta}"/>
+                    <h:outputText value="Respuesta:"/>
+                    <p:password value="#{controladorOlvidoClave.respuesta2}"/>
+
+                    <h:outputText value="Nueva contraseña:"/>
+                    <p:password value="#{controladorOlvidoClave.clave}"/>
+                    <h:outputText value="Confirmar contraseña:"/>
+                    <p:password value="#{controladorOlvidoClave.confirmacion}"/>
+
+                    <p:column/>
+                    <p:commandButton value="Cambiar contraseña" actionListener="#{controladorOlvidoClave.cambiarClave()}"
+                                     style="float: right" process="pnlOlvidoClave"/>
+                </p:panelGrid>
+            </p:panel>
+        </h:form>
+        <h:form>
+            <p:dialog id="dlgProcesoFinalizado" header="Contraseña cambiada..." widgetVar="dlgProcesoFinalizado"
+                      resizable="false" draggable="false" modal="true"  closable="false" width="500">
+                <p:panelGrid columns="2"  styleClass="noBorders">
+                    <h:graphicImage value="resources/imagenes/registroExitoso.jpg" width="90" height="80"  />
+
+                    <h:outputText value="La contraseña ha sido cambiada exitosamente,
+                                  ahora puede ingresar al Kiosko con su nueva contraseña." style="text-align: justify"/>
+                    <p:column/>
+                    <p:commandButton value="Finalizar" onclick="PF('dlgProcesoFinalizado').hide();" 
+                                     actionListener="#{controladorIngreso.ingresar()}"
+                                     style="float: right" process="@this" action="ingreso"/>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+    </h:body>
+</html>
+

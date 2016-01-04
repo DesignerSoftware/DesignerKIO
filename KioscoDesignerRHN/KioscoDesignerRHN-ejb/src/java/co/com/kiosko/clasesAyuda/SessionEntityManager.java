@@ -14,15 +14,15 @@ import javax.persistence.EntityManagerFactory;
  */
 public class SessionEntityManager {
 
-    public String idSession;
-    public EntityManagerFactory emf;
-    public EntityManager em;
+    private String idSession;
+    private EntityManagerFactory emf;
+    private EntityManager em;
 
     public SessionEntityManager(String idSession, EntityManagerFactory emf) {
         this.idSession = idSession;
         this.emf = emf;
     }
-    
+
     public String getIdSession() {
         return idSession;
     }

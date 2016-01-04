@@ -8,27 +8,61 @@
         <link href="././resources/css/estilosPersonalizados.css" rel="stylesheet" type="text/css" />
         <title>Inicio Kiosko - Designer RHN</title>
     </h:head>
-    <h:body>
+    <h:body style="font-size: 14px;">
+        <h:form styleClass="centrado">
+            <fieldset style="border-radius: 10px; box-shadow: 5px 5px 12px #000000; padding-top: 15px;">
+                <p:messages id="mensaje" showDetail="true" autoUpdate="true" closable="true" />
+                <p:panelGrid id="pnlIngreso" columns="2"  styleClass="noBorders">
+                    <h:outputText value="Usuario:" style="font-weight: bold"/>
+                    <p:inputText value="#{controladorIngreso.usuario}" 
+                                 disabled="#{controladorIngreso.ingresoExitoso ? 'true' : 'false'}"/>
+                    <h:outputText value="Contraseña:" style="font-weight: bold"/>
+                    <p:password value="#{controladorIngreso.clave}" 
+                                disabled="#{controladorIngreso.ingresoExitoso ? 'true' : 'false'}"/>
+                    <h:outputText value="Empresa:" style="font-weight: bold"/>
+                    <p:selectOneMenu value="#{controladorIngreso.unidadPersistenciaIngreso}" 
+                                     disabled="#{controladorIngreso.obtenerCadenasKiosko().size() == 1 ?  'true' : controladorIngreso.ingresoExitoso ? 'true' : 'false'}">
+                        <f:selectItem itemLabel="Seleccione una empresa" itemValue="#{null}"/>
+                        <f:selectItems value="#{controladorIngreso.obtenerCadenasKiosko()}" var="cadena"
+                                       itemLabel="#{cadena.descripcion}" itemValue="#{cadena.id}" />
+                    </p:selectOneMenu>
+                    <p:column/>
+                    <p:commandLink value="¿Olvido su clave?" action="#{controladorIngreso.olvidoClave()}"/>
+                    <p:column/>
+                    <p:commandButton value="#{!controladorIngreso.ingresoExitoso ? 'Ingresar' : 'Cerrar Sesión'}" 
+                                     action="#{controladorIngreso.ingresar()}" 
+                                     style="float: right" update="pnlIngreso"/>
+                </p:panelGrid>
+            </fieldset>
+        </h:form>
         <h:form>
-            <p:panelGrid id="pnlIngreso" columns="2" style="font-size: 14px;" styleClass="noBorders">
-                <h:outputText value="Usuario:" style="font-weight: bold"/>
-                <p:inputText value="#{controladorIngreso.usuario}" 
-                             disabled="#{controladorIngreso.ingresoExitoso ? 'true' : 'false'}"/>
-                <h:outputText value="Contraseña:" style="font-weight: bold"/>
-                <p:password value="#{controladorIngreso.clave}" 
-                            disabled="#{controladorIngreso.ingresoExitoso ? 'true' : 'false'}"/>
-                <h:outputText value="Empresa:" style="font-weight: bold"/>
-                <p:selectOneMenu value="#{controladorIngreso.unidadPersistenciaIngreso}" 
-                                 disabled="#{controladorIngreso.ingresoExitoso ? 'true' : 'false'}">
-                    <f:selectItem itemLabel="Seleccione una empresa" itemValue="#{null}"/>
-                    <f:selectItems value="#{controladorIngreso.obtenerCadenasKiosko()}" var="cadena"
-                                   itemLabel="#{cadena.descripcion}" itemValue="#{cadena.id}" />
-                </p:selectOneMenu>
-                <p:column/>
-                <p:commandButton value="#{!controladorIngreso.ingresoExitoso ? 'Ingresar' : 'Cerrar Sesión'}" 
-                                 actionListener="#{controladorIngreso.ingresar()}" 
-                                 style="float: right" update="pnlIngreso"/>
-            </p:panelGrid>
+            <p:dialog id="dlgPrimerIngreso" header="Primer ingreso" widgetVar="dlgPrimerIngreso"
+                      resizable="false" draggable="false" modal="true"  closable="false" width="500">
+                <p:panelGrid columns="2"  styleClass="noBorders">
+                    <h:graphicImage value="resources/imagenes/primerIngreso.jpg" width="90" height="70"  />
+
+                    <h:outputText value="Hemos detectado que es la primera vez que ingresa al modúlo Kiosko, 
+                                  antes de continuar es importante registrar algunas preguntas de seguridad 
+                                  y posteriormente asignar una nueva contraseña." style="text-align: justify"/>
+                    <p:column/>
+                    <p:commandButton value="Continuar" onclick="PF('dlgPrimerIngreso').hide();" 
+                                     style="float: right" process="@this" action="primerIngreso"/>
+                </p:panelGrid>
+            </p:dialog>
+
+            <p:dialog id="dlgAlertaIntentos" header="¡Atención!" widgetVar="dlgAlertaIntentos"
+                      resizable="false" draggable="false" modal="true"  closable="false" width="500">
+                <p:panelGrid columns="2"  styleClass="noBorders">
+                    <h:graphicImage value="resources/imagenes/alerta.jpg" width="90" height="70"  />
+
+                    <h:outputText value="Se ha ingresado una contraseña invalida por segunda vez,
+                                  recuerde que al tercer intento la cuenta sera bloqueada. 
+                                  Se recomienda ingresar por la opcion ¿Olvido su clave?, para cambiar la contraseña." style="text-align: justify"/>
+                    <p:column/>
+                    <p:commandButton value="Continuar" onclick="PF('dlgAlertaIntentos').hide();" 
+                                     style="float: right" process="@this"/>
+                </p:panelGrid>
+            </p:dialog>
         </h:form>
     </h:body>
 </html>

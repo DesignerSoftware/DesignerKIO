@@ -11,6 +11,7 @@
             <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
             <property name="eclipselink.cache.shared.default" value="false"/>
             <property name="eclipselink.cache.type.default" value="NONE"/>
+            <property name="eclipselink.canonicalmodel.subpackage" value="one"/>
         </properties>
     </persistence-unit>
     <persistence-unit name="DEFAULT2" transaction-type="RESOURCE_LOCAL">
@@ -24,6 +25,7 @@
             <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
             <property name="eclipselink.cache.shared.default" value="false"/>
             <property name="eclipselink.cache.type.default" value="NONE"/>
+            <property name="eclipselink.canonicalmodel.subpackage" value="two"/>
         </properties>
     </persistence-unit>
     <persistence-unit name="DEFAULT3" transaction-type="RESOURCE_LOCAL">
@@ -37,6 +39,7 @@
             <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
             <property name="eclipselink.cache.shared.default" value="false"/>
             <property name="eclipselink.cache.type.default" value="NONE"/>
+            <property name="eclipselink.canonicalmodel.subpackage" value="three"/>
         </properties>
     </persistence-unit>
 </persistence>

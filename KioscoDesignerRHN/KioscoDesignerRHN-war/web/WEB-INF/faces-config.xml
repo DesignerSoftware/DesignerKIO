@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config version="2.0"
+    xmlns="http://java.sun.com/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+    <navigation-rule>
+        <from-view-id>/Ingreso/ingreso.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>primerIngreso</from-outcome>
+            <to-view-id>/Ingreso/primerIngreso.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>inicio</from-outcome>
+            <to-view-id>/Kiosko/inicioKiosko.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>olvidoClave</from-outcome>
+            <to-view-id>/Ingreso/olvidoClave.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Ingreso/primerIngreso.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>ingreso</from-outcome>
+            <to-view-id>/Ingreso/ingreso.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Kiosko/inicioKiosko.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>cerrarSesion</from-outcome>
+            <to-view-id>/Ingreso/ingreso.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Ingreso/olvidoClave.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>ingreso</from-outcome>
+            <to-view-id>/Ingreso/ingreso.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+</faces-config>

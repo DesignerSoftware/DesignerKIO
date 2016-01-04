@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <link href="././resources/css/estilosPersonalizados.css" rel="stylesheet" type="text/css" />
+        <title>Inicio Kiosko Designer RHN</title>
+    </h:head>
+    <h:body>
+        <h:form styleClass="centrado">
+            <h1>BIENVENIDO</h1>
+            <h1 style="font-weight: bold; color: #08088A"> #{controladorInicioKiosko.empleado.persona.nombreCompleto}</h1>
+            <h2>Numero de identificación: #{controladorInicioKiosko.empleado.persona.numerodocumento}</h2>
+            <p:commandButton value="Salir" actionListener="#{controladorIngreso.ingresar()}"
+                             process="@this" action="cerrarSesion"/>
+        </h:form>
+    </h:body>
+</html>
+
