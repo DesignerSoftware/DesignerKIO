@@ -79,7 +79,7 @@ public class ControladorIngreso implements Serializable {
                                         administrarIngreso.bloquearUsuario(usuario);
                                         intento = 0;
                                     }
-                                    //administrarIngreso.getEm().getEntityManagerFactory().close();
+                                    administrarIngreso.getEm().getEntityManagerFactory().close();
                                     ingresoExitoso = false;
                                 }
                             } else {
@@ -93,7 +93,7 @@ public class ControladorIngreso implements Serializable {
                             ingresoExitoso = true;
                             PrimefacesContextUI.ejecutar("PF('dlgPrimerIngreso').show()");
                         }
-                        administrarIngreso.getEm().getEntityManagerFactory().close();
+              //          administrarIngreso.getEm().getEntityManagerFactory().close();
                     } else {
                         //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
                         MensajesUI.error("El usuario " + usuario + " no existe ó no pertenece a la empresa seleccionada.");
