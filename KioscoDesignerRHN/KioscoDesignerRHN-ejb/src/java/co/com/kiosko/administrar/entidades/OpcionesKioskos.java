@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "OpcionesKioskos.findAll", query = "SELECT o FROM OpcionesKioskos o")})
 public class OpcionesKioskos implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @NotNull
@@ -57,14 +58,14 @@ public class OpcionesKioskos implements Serializable {
     @Size(max = 10)
     @Column(name = "EXTENSION")
     private String extension;
-    @OneToMany(mappedBy = "opcionkioskopadre")
-    private List<OpcionesKioskos> opcionesKioskosList;
     @JoinColumn(name = "OPCIONKIOSKOPADRE", referencedColumnName = "SECUENCIA")
     @ManyToOne
     private OpcionesKioskos opcionkioskopadre;
     @JoinColumn(name = "EMPRESA", referencedColumnName = "SECUENCIA")
     @ManyToOne
     private Empresas empresa;
+    @Transient
+    private List<OpcionesKioskos> opcionesHijas;
 
     public OpcionesKioskos() {
     }
@@ -144,15 +145,6 @@ public class OpcionesKioskos implements Serializable {
         this.extension = extension;
     }
 
-    @XmlTransient
-    public List<OpcionesKioskos> getOpcionesKioskosList() {
-        return opcionesKioskosList;
-    }
-
-    public void setOpcionesKioskosList(List<OpcionesKioskos> opcionesKioskosList) {
-        this.opcionesKioskosList = opcionesKioskosList;
-    }
-
     public OpcionesKioskos getOpcionkioskopadre() {
         return opcionkioskopadre;
     }
@@ -167,6 +159,14 @@ public class OpcionesKioskos implements Serializable {
 
     public void setEmpresa(Empresas empresa) {
         this.empresa = empresa;
+    }
+
+    public List<OpcionesKioskos> getOpcionesHijas() {
+        return opcionesHijas;
+    }
+
+    public void setOpcionesHijas(List<OpcionesKioskos> opcionesHijas) {
+        this.opcionesHijas = opcionesHijas;
     }
 
     @Override
@@ -193,5 +193,4 @@ public class OpcionesKioskos implements Serializable {
     public String toString() {
         return "co.com.kiosko.administrar.entidades.OpcionesKioskos[ secuencia=" + secuencia + " ]";
     }
-    
 }

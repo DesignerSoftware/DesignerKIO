@@ -4,13 +4,16 @@ import co.com.kiosko.administrar.interfaz.IAdministrarIngreso;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.clasesAyuda.CadenasKioskos;
 import co.com.kiosko.clasesAyuda.LeerArchivoXML;
+import co.com.kiosko.controlador.autenticacion.Util;
 import co.com.kiosko.utilidadesUI.MensajesUI;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -38,7 +41,7 @@ public class ControladorIngreso implements Serializable {
         return (new LeerArchivoXML()).leerArchivoEmpresasKiosko();
     }
 
-    public String ingresar() {
+    public String ingresar() throws IOException {
         FacesContext contexto = FacesContext.getCurrentInstance();
         HttpSession ses = (HttpSession) contexto.getExternalContext().getSession(false);
         if (!ingresoExitoso) {
@@ -61,7 +64,8 @@ public class ControladorIngreso implements Serializable {
                                     administrarSesiones.consultarSessionesActivas();
                                     ingresoExitoso = true;
                                     intento = 0;
-                                    return "inicio";
+                                    //return "inicio";
+                                    return "opcionesKiosko";
                                 } else {
                                     // LA CONTRASEÑA ES INCORRECTA.
                                     if (bckUsuario == null || bckUsuario.equals(usuario)) {
@@ -93,7 +97,7 @@ public class ControladorIngreso implements Serializable {
                             ingresoExitoso = true;
                             PrimefacesContextUI.ejecutar("PF('dlgPrimerIngreso').show()");
                         }
-              //          administrarIngreso.getEm().getEntityManagerFactory().close();
+                        //          administrarIngreso.getEm().getEntityManagerFactory().close();
                     } else {
                         //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
                         MensajesUI.error("El usuario " + usuario + " no existe ó no pertenece a la empresa seleccionada.");
@@ -112,6 +116,14 @@ public class ControladorIngreso implements Serializable {
             administrarIngreso.cerrarSession(ses.getId());
             administrarSesiones.consultarSessionesActivas();
             ingresoExitoso = false;
+
+            HttpSession session = Util.getSession();
+            session.invalidate();
+
+            FacesContext context = FacesContext.getCurrentInstance();
+            ExternalContext ec = context.getExternalContext();
+            ec.invalidateSession();
+            ec.redirect(ec.getRequestContextPath());
         }
         return "";
     }

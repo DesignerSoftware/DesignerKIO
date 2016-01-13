@@ -31,4 +31,14 @@ public class AdministrarInicioKiosko implements IAdministrarInicioKiosko {
     public Empleados consultarEmpleado(BigInteger codigoEmpleado) {
         return persistenciaEmpleados.consultarEmpleado(em, codigoEmpleado);
     }
+
+    /*
+     * public String fotoEmpleado(Empleados empleado) { String rutaFoto;
+     * //general = persistenciaGenerales.obtenerRutas(em); //if (general !=
+     * null) { if (empleado.getPersona().getPathfoto() == null ||
+     * empleado.getPersona().getPathfoto().equalsIgnoreCase("N")) { //rutaFoto =
+     * general.getPathfoto() + "sinFoto.jpg"; } else { //rutaFoto =
+     * general.getPathfoto() + empleado.getPersona().getNumerodocumento() +
+     * ".jpg"; } return rutaFoto; /* } else { return null; }
+     */
 }

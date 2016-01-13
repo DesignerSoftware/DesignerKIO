@@ -23,7 +23,7 @@ public class ControladorOlvidoClave implements Serializable {
     @EJB
     private IAdministrarOlvidoClave administrarOlvidoClave;
     private ConexionesKioskos conexion;
-    private String clave, confirmacion, respuesta1, respuesta2;
+    private String claveActual, clave, confirmacion, respuesta1, respuesta2;
     //VALORES INGRESO
     String usuario;
 
@@ -45,6 +45,34 @@ public class ControladorOlvidoClave implements Serializable {
     }
 
     public void cambiarClave() {
+        if (respuesta1 != null && !respuesta1.isEmpty()
+                && respuesta2 != null && !respuesta2.isEmpty()
+                && claveActual != null && !claveActual.isEmpty()
+                && clave != null && !clave.isEmpty()
+                && confirmacion != null && !confirmacion.isEmpty()) {
+            if (administrarOlvidoClave.validarRespuestas(respuesta1, respuesta2,
+                    conexion.getRespuesta1(), conexion.getRespuesta2())) {
+                if (claveActual.equals(administrarOlvidoClave.desEncriptar(conexion.getPwd()))) {
+                    if (clave.equals(confirmacion)) {
+                        conexion.setPwd(administrarOlvidoClave.encriptar(clave));
+                        if (administrarOlvidoClave.cambiarClave(conexion)) {
+                            PrimefacesContextUI.ejecutar("PF('dlgProcesoFinalizado').show()");
+                        }
+                    } else {
+                        MensajesUI.warn("La contraseña no coincide.");
+                    }
+                } else {
+                    MensajesUI.warn("La contraseña actual es incorrecta, por favor verifique.");
+                }
+            } else {
+                MensajesUI.warn("Respuestas incorrectas, por favor verifique.");
+            }
+        } else {
+            MensajesUI.warn("Todos los campos son obligatorios.");
+        }
+    }
+
+    public void cambiarClaveOlvido() {
         if (respuesta1 != null && !respuesta1.isEmpty()
                 && respuesta2 != null && !respuesta2.isEmpty()
                 && clave != null && !clave.isEmpty()
@@ -106,5 +134,13 @@ public class ControladorOlvidoClave implements Serializable {
 
     public void setRespuesta2(String respuesta2) {
         this.respuesta2 = respuesta2;
+    }
+
+    public String getClaveActual() {
+        return claveActual;
+    }
+
+    public void setClaveActual(String claveActual) {
+        this.claveActual = claveActual;
     }
 }

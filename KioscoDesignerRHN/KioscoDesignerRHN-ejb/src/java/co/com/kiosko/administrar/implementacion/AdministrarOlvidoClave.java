@@ -49,6 +49,11 @@ public class AdministrarOlvidoClave implements IAdministrarOlvidoClave {
     }
 
     @Override
+    public String desEncriptar(byte[] valor) {
+        return persistenciaUtilidadesBD.desencriptar(em, valor);
+    }
+
+    @Override
     public boolean cambiarClave(ConexionesKioskos ck) {
         return persistenciaConexionesKioskos.registrarConexion(em, ck);
     }

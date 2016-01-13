@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    template="/Plantilla/plantilla.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <h2 align="center">#{controladorOpcionesKiosko.opcionActual.descripcion}</h2>
+        <div align="center">
+            <p:panelGrid columns="4" styleClass="noBorders">
+                <ui:repeat value="#{controladorOpcionesKiosko.opcionActual.opcionesHijas}" var="opcion">
+                    <p:commandButton value="#{opcion.descripcion}" style="width: 200px; height: 200px; border-radius: 100px;
+                                     background-color: #3196E3; color: black; font-weight: bold"
+                                     action="#{controladorOpcionesKiosko.seleccionOpcion(opcion)}"
+                                     process="@this"/>
+                </ui:repeat>
+            </p:panelGrid>
+        </div>
+        <p:commandButton value="Volver" actionListener="#{controladorOpcionesKiosko.volver()}" 
+                         process="@this" style="float: right; display: #{controladorOpcionesKiosko.navegacionOpciones.size() == 0 ? 'none' : ''}"/>
+    </ui:define>
+</ui:composition>
+

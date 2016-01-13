@@ -20,6 +20,10 @@
             <from-outcome>olvidoClave</from-outcome>
             <to-view-id>/Ingreso/olvidoClave.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>opcionesKiosko</from-outcome>
+            <to-view-id>/Kiosko/opcionesKiosko.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/Ingreso/primerIngreso.xhtml</from-view-id>
@@ -34,12 +38,38 @@
             <from-outcome>cerrarSesion</from-outcome>
             <to-view-id>/Ingreso/ingreso.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>cambiarClave</from-outcome>
+            <to-view-id>/Ingreso/cambiarClave.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/Ingreso/olvidoClave.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>ingreso</from-outcome>
             <to-view-id>/Ingreso/ingreso.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Ingreso/cambiarClave.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>inicio</from-outcome>
+            <to-view-id>/Kiosko/inicioKiosko.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>opciones</from-outcome>
+            <to-view-id>/Kiosko/opcionesKiosko.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Kiosko/opcionesKiosko.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>cerrarSesion</from-outcome>
+            <to-view-id>/Ingreso/ingreso.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cambiarClave</from-outcome>
+            <to-view-id>/Ingreso/cambiarClave.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>

@@ -2,7 +2,6 @@
 .noBorders tr, .noBorders td {
     background: none !important;
     border: none !important;
-    max-width: 400px;
 }
 
 .centrado {
@@ -10,4 +9,34 @@
     position:absolute;
     top:35%;
     left:30%;
+}
+
+.ui-fileupload{
+    position: absolute;
+    left: 20px;
+    top: 50px;
+}
+.ui-fileupload .start {
+    display: none;
+}
+.ui-fileupload .cancel {
+    display: none;
+}
+.ui-fileupload .progress {
+    display: none;
+}
+.ui-fileupload .files {
+    margin: 0px;
+    display: none;
+    visibility: hidden;
+}
+.ui-fileupload .fileupload-content {
+    display: none;
+    visibility: hidden;
+}
+
+.ui-fileupload .fileinput-button {
+    position: absolute;
+    left: -5px;
+    top: -5px;
 }

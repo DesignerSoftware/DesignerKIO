@@ -15,6 +15,8 @@ public interface IAdministrarOlvidoClave {
     public boolean cambiarClave(co.com.kiosko.administrar.entidades.ConexionesKioskos ck);
 
     public byte[] encriptar(java.lang.String valor);
+
+    public java.lang.String desEncriptar(byte[] valor);
     
     
 }
