@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    template="/Plantilla/plantilla.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <p:remoteCommand name="validarDescargaReporte" actionListener="#{controladorGenerarReporte.validarDescargaReporte()}"/>
+        <p:remoteCommand name="generarReporte" actionListener="#{controladorGenerarReporte.generarReporte()}"/>
+        <p:remoteCommand name="validarEnvioCorreo" actionListener="#{controladorGenerarReporte.validarEnviaCorreo()}"/>
+        <p:panel header="Generar reporte - #{controladorGenerarReporte.reporte.descripcion}">
+            <p:panelGrid columns="3" styleClass="noBorders" style="padding: 20px">
+                <p:column>
+                    <h:graphicImage value="resources/imagenes/reporte.png" width="200" height="200"/>
+                </p:column>
+                <p:column>
+                    <p:panelGrid columns="1" styleClass="noBorders" style="width: content-box">
+                        <p:panelGrid id="pnlFechas" columns="4" styleClass="noBorders">
+                            <p:outputLabel for="desde" value="Fecha Desde: " />
+                            <p:calendar id="desde" value="#{controladorGenerarReporte.conexionEmpleado.fechadesde}"
+                                        pattern="dd/MM/yyyy" mask="true" locale="es"/>
+                            <p:outputLabel for="hasta" value="Fecha Hasta: " />
+                            <p:calendar id="hasta" value="#{controladorGenerarReporte.conexionEmpleado.fechahasta}"
+                                        pattern="dd/MM/yyyy" mask="true" locale="es"/>
+                        </p:panelGrid>
+
+                        <p:panelGrid id="pnlEnvioCorreo" columns="2" styleClass="noBorders">
+                            <p:outputLabel for="enviarCorreo" value="¿Desea enviar el reporte por correo?: " />
+                            <p:selectBooleanCheckbox id="enviarCorreo" value="#{controladorGenerarReporte.conexionEmpleado.envioCorreo}" >
+                                <p:ajax update=":principalForm:pnlEnvioCorreo" />
+                            </p:selectBooleanCheckbox>
+                            <p:column>
+                                <p:outputLabel for="correoDestino" value="E-mail: " style="display: #{controladorGenerarReporte.conexionEmpleado.envioCorreo ? '' : 'none'}"/>
+                                <p:inputText id="correoDestino" value="#{controladorGenerarReporte.email}" style="display: #{controladorGenerarReporte.conexionEmpleado.envioCorreo ? '' : 'none'}"/>
+                            </p:column>
+                        </p:panelGrid>
+
+                        <p:panelGrid id="pnlInfoAdicional" columns="2" styleClass="noBorders">
+                            <p:outputLabel for="dirigiada" value="Constancia dirigia a: " />
+                            <p:inputText id="dirigiada" value="#{controladorGenerarReporte.conexionEmpleado.dirigidoa}"/>
+                            <p:outputLabel for="area" value="Constancia al area de:" />
+                            <p:inputText id="area" value="#{controladorGenerarReporte.areaDe}"/>
+                        </p:panelGrid>
+
+                        <p:panelGrid columns="2" styleClass="noBorders" style="float: right">
+                            <p:commandButton value="Generar reporte" icon="ui-icon-gear"
+                                             actionListener="#{controladorGenerarReporte.validar()}"/>
+                            <p:commandButton value="Cancelar" action="opciones"
+                                             icon="ui-icon-closethick" actionListener="#{controladorGenerarReporte.cerrarControlador()}"/>
+                        </p:panelGrid>
+                    </p:panelGrid>
+                </p:column>
+                <p:column>
+                    <p:panelGrid id="pnlInfoReporte" columns="1" styleClass="noBorders" style="width: 350px;">
+                        <h:outputText value="Información sobre el reporte: " style="font-weight: bold; font-size: 16px; "/>
+                        <p align="justify">
+                            #{controladorGenerarReporte.reporte.ayuda}"
+                        </p>
+                    </p:panelGrid>
+                </p:column>
+            </p:panelGrid>
+        </p:panel>
+
+
+        <p:dialog id="generandoReporte" header="Información" widgetVar="generandoReporte"  resizable="false" draggable="false" modal="true" height="85" width="350px" style="font-size: 12px" closable="false">  
+            <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50" style="position: absolute; left: 15px; top: 20px;"  />
+            <h:outputText value="Generando reporte, esto puede tardar algunos segundos..." style="position: absolute; left: 80px; top: 20px; width: 240px; text-align: justify" />
+        </p:dialog>
+        <p:dialog id="errorGenerandoReporte" header="Error generando el reporte" widgetVar="errorGenerandoReporte"  resizable="false" draggable="false" modal="true" height="90" width="350px" style="font-size: 12px">  
+            <p:inputTextarea value="#{controladorGenerarReporte.pathReporteGenerado}" style="position: absolute; left: 10px; top: 20px; width: 300px; height: 70px; overflow: auto;" readonly="true" />
+        </p:dialog>
+
+        <p:dialog header="Reporte generado" id="verReportePDF" widgetVar="verReportePDF" width="1024px" height="530px" resizable="false" draggable="false" modal="true" onHide="reiniciarStreamedContent();">
+            <p:media value="#{controladorGenerarReporte.reporteGenerado}" width="100%" height="500px" player="pdf" rendered="#{controladorGenerarReporte.reporteGenerado != null}" styleClass="curr_file"/>
+        </p:dialog>
+
+        <p:remoteCommand name="reiniciarStreamedContent" actionListener="#{controladorGenerarReporte.reiniciarStreamedContent()}"/>
+    </ui:define>
+</ui:composition>
+

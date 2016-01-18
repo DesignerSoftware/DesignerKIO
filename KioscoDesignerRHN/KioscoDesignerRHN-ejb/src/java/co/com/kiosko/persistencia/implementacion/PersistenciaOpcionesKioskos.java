@@ -16,19 +16,20 @@ import javax.persistence.Query;
 public class PersistenciaOpcionesKioskos implements IPersistenciaOpcionesKioskos {
 
     @Override
-    public List<OpcionesKioskos> consultarOpcionesPorPadre(EntityManager eManager, BigDecimal secuenciaPadre) {
+    public List<OpcionesKioskos> consultarOpcionesPorPadre(EntityManager eManager, BigDecimal secuenciaPadre, BigDecimal secuenciaEmpresa) {
         try {
             eManager.getTransaction().begin();
             String sqlQuery = "SELECT ok FROM OpcionesKioskos ok ";
             Query query;
             if (secuenciaPadre == null) {
-                sqlQuery += "WHERE ok.opcionkioskopadre IS NULL";
+                sqlQuery += "WHERE ok.opcionkioskopadre IS NULL AND ok.empresa.secuencia = :secuenciaEmpresa";
                 query = eManager.createQuery(sqlQuery);
             } else {
-                sqlQuery += "WHERE ok.opcionkioskopadre.secuencia = :secuenciaPadre";
+                sqlQuery += "WHERE ok.opcionkioskopadre.secuencia = :secuenciaPadre AND ok.empresa.secuencia = :secuenciaEmpresa";
                 query = eManager.createQuery(sqlQuery);
                 query.setParameter("secuenciaPadre", secuenciaPadre);
             }
+            query.setParameter("secuenciaEmpresa", secuenciaEmpresa);
             List<OpcionesKioskos> lok = query.getResultList();
             eManager.getTransaction().commit();
             return lok;

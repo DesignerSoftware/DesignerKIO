@@ -13,7 +13,7 @@
             <p:panel header="Primer ingreso - Kiosko Designer RHN" >
                 <p:messages id="mensaje" showDetail="true" autoUpdate="true" closable="true" />
 
-                <p:commandButton value="Cerrras sesión" actionListener="#{controladorIngreso.ingresar()}" style="float: right" action="ingreso"/>
+                <p:commandButton value="Salir" actionListener="#{controladorIngreso.ingresar()}" style="float: right" action="ingreso" icon="ui-icon-home"/>
                 <p:panelGrid columns="2" styleClass="noBorders">
                     <p:column>
                         <h:graphicImage value="resources/imagenes/preguntasSeguridad.jpg"  />
@@ -49,7 +49,8 @@
 
                             <p:column/>
                             <p:commandButton value="Continuar" actionListener="#{controladorPrimerIngreso.continuar()}" 
-                                             style="float: right" update="pnlPreguntas, pnlNuevaClave, informacion" process="pnlPreguntas"/>
+                                             style="float: right" update="pnlPreguntas, pnlNuevaClave, informacion" process="pnlPreguntas"
+                                             icon="ui-icon-check"/>
                         </p:panelGrid>
 
                         <p:panelGrid id="pnlNuevaClave" columns="2" style="#{controladorPrimerIngreso.cssPanelClave}" styleClass="noBorders">
@@ -58,10 +59,14 @@
 
                             <h:outputText value="Confirmar contraseña: " style="font-weight: bold"/>
                             <p:password value="#{controladorPrimerIngreso.confirmacion}" redisplay="true"/>
-
-                            <p:commandButton value="Atras" actionListener="#{controladorPrimerIngreso.atras()}" 
-                                             style="float: right" update="pnlPreguntas, pnlNuevaClave, informacion"/>
-                            <p:commandButton value="Finalizar" style="float: right"  actionListener="#{controladorPrimerIngreso.finalizar()}"/>
+                            <p:column/>
+                            <p:column>
+                                <p:commandButton value="Finalizar" style="float: right"  actionListener="#{controladorPrimerIngreso.finalizar()}"
+                                                 icon="ui-icon-check"/>
+                                <p:commandButton value="Atras" actionListener="#{controladorPrimerIngreso.atras()}" 
+                                                 style="float: right" update="pnlPreguntas, pnlNuevaClave, informacion"
+                                                 icon="ui-icon-arrowreturnthick-1-w"/>
+                            </p:column>
                         </p:panelGrid>
                     </p:column>
                 </p:panelGrid>
@@ -72,14 +77,16 @@
                       resizable="false" draggable="false" modal="true"  closable="false" width="500">
                 <p:panelGrid columns="2"  styleClass="noBorders">
                     <h:graphicImage value="resources/imagenes/registroExitoso.jpg" width="90" height="80"  />
-
-                    <h:outputText value="¡Felicitaciones!, las respuestas a las preguntas seleccionadas 
-                                  junto con su contraseña han sido guardadas exitosamente,
-                                  ahora puede ingresar al Kiosko con su nueva contraseña." style="text-align: justify"/>
+                    <p align="justify">
+                        ¡Felicitaciones!, las respuestas a las preguntas seleccionadas 
+                        junto con su contraseña han sido guardadas exitosamente,
+                        ahora puede ingresar al Kiosko con su nueva contraseña.
+                    </p>
                     <p:column/>
                     <p:commandButton value="Continuar" onclick="PF('dlgProcesoFinalizado').hide();" 
                                      actionListener="#{controladorIngreso.ingresar()}"
-                                     style="float: right" process="@this" action="ingreso"/>
+                                     style="float: right" process="@this" action="ingreso"
+                                     icon="ui-icon-check"/>
                 </p:panelGrid>
             </p:dialog>
         </h:form>

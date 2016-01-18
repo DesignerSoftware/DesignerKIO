@@ -12,9 +12,7 @@
 }
 
 .ui-fileupload{
-    position: absolute;
-    left: 20px;
-    top: 50px;
+    border: none;
 }
 .ui-fileupload .start {
     display: none;
@@ -40,3 +38,22 @@
     left: -5px;
     top: -5px;
 }
+
+
+.ui-button-opciones{
+    width: 200px; 
+    height: 200px; 
+    border-radius: 100px;
+    font-weight: bold; 
+    background-color: #DCDCDC
+}
+
+html { 
+    background-image: url(../imagenes/fondoIngreso.png); background-repeat: repeat-y; background-size: 200% 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+

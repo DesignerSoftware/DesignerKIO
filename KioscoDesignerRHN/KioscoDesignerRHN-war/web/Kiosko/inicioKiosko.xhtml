@@ -2,33 +2,45 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <h:body style="font-size: 14px">
-        <h:form enctype="multipart/form-data">
-            <p:panelGrid columns="3" styleClass="noBorders" style="width: 100%">
-                <p:column>
-                    <!--<h:graphicImage value="resources/imagenes/sinFoto.jpg" width="120" height="140" />-->
-                    <p:graphicImage value="#{controladorInicioKiosko.fotoEmpleado}" height="120" width="105" alt="Foto empleado" onclick="PF('subirFoto').show();"/>
-                </p:column>
-                <p:column>
-                    <h3>BIENVENIDO</h3>
-                    <h3 style="font-weight: bold; color: #08088A"> #{controladorInicioKiosko.empleado.persona.nombreCompleto}</h3>
-                    <h4>Numero de identificación: #{controladorInicioKiosko.empleado.persona.numerodocumento}</h4>
-                </p:column>
-                <p:column>
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body style="font-size: 14px;">
+        <p:panelGrid columns="2" styleClass="noBorders" style="width: 100%;">
+            <p:column>
+                <p:panelGrid columns="2" styleClass="noBorders">
+                    <p:column>
+                        <p:graphicImage value="#{controladorInicioKiosko.fotoEmpleado}" height="91" width="80" alt="Foto empleado" onclick="PF('subirFoto').show();"
+                                        cache="false"/>
+                    </p:column>
+                    <p:column>
+                        <h3>BIENVENIDO</h3>
+                        <h3 style="font-weight: bold; color: #08088A"> #{controladorInicioKiosko.conexionEmpleado.empleado.persona.nombreCompleto}</h3>
+                        <h4>Numero de identificación: #{controladorInicioKiosko.conexionEmpleado.empleado.persona.numerodocumento}</h4>
+                    </p:column>
+                </p:panelGrid>
+            </p:column>
+            <p:column>
+                <p:panelGrid columns="1" style="float: right; font-size: 16px; font-weight: bold">
+                    <p:column>
+                        <h:outputText value="Ultima conexión: "/>
+                        <h:outputText value="#{controladorInicioKiosko.ultimaConexionEmpleado}">
+                            <f:convertDateTime pattern="dd/MM/yyyy  -  hh:mm a"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:commandLink value="Cambiar contraseña" process="@this" action="cambiarClave" style="color: #013ADF; float: right;"/>
                     <p:commandLink value=" Salir" actionListener="#{controladorIngreso.ingresar()}"
-                                   process="@this" action="cerrarSesion" style="color: #B40404; float: right"/>
-                    <br/>
-                    <p:commandLink value="Cambiar contraseña " process="@this" action="cambiarClave" style="color: #013ADF; float: right"/>
-                </p:column>
-            </p:panelGrid>
+                                   process="@this" action="cerrarSesion" style="color: #B40404; float: right;"/>
+                </p:panelGrid>
+            </p:column>
+        </p:panelGrid>
 
-            <p:dialog id="subirFoto" header="Cargar foto" widgetVar="subirFoto"  resizable="false" draggable="false" modal="true" height="80" width="450"  closable="true">  
-                <h:outputText value="Por favor seleccione una imagen con extención (.JPG) y con un tamaño no mayor a 150 KB." style="position:  absolute; top: 10px; left: 8px; font-weight: bold; width: 335px"/>
-                <p:fileUpload  id="FileUp" mode="advanced" style="font-size: 11px;" fileUploadListener="#{controladorInicioKiosko.subirFotoEmpleado}" process="@this"
-                               label="Examinar..." auto="true" styleClass="ui-fileupload"/>
-            </p:dialog>
-        </h:form>
+        <p:dialog id="subirFoto" header="Cargar foto" widgetVar="subirFoto"  resizable="false" draggable="false" modal="true" closable="true">  
+            <p:panelGrid columns="2" styleClass="noBorders">
+                <h:outputText value="Por favor seleccione una imagen con extención (.JPG) y con un tamaño no mayor a 150 KB." style="font-weight: bold; width: 335px; color: black"/>
+                <p:fileUpload  id="FileUp" mode="advanced" style="font-size: 11px; border: none" fileUploadListener="#{controladorInicioKiosko.subirFotoEmpleado}"
+                               label="Examinar..." auto="true" styleClass="ui-fileupload" />
+            </p:panelGrid>
+        </p:dialog>
     </h:body>
 </html>
 

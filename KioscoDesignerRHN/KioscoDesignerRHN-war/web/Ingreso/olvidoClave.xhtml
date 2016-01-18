@@ -12,7 +12,9 @@
             <p:panel header="Recuperar contraseña">
                 <p:messages id="mensaje" showDetail="true" autoUpdate="true" closable="true" />
 
-                <p:commandButton value="Cerrar sesión" actionListener="#{controladorIngreso.ingresar()}" style="float: right" action="ingreso"/>
+                <p:commandButton value="Salir" actionListener="#{controladorIngreso.ingresar()}" 
+                                 style="float: right" action="ingreso"
+                                 icon="ui-icon-home"/>
                 <p:panelGrid id="pnlOlvidoClave" columns="2" styleClass="noBorders">
                     <h:outputText value="Pregunta 1:"/>
                     <h:outputText value="#{controladorOlvidoClave.conexion.pregunta1.pregunta}"/>
@@ -30,7 +32,8 @@
 
                     <p:column/>
                     <p:commandButton value="Cambiar contraseña" actionListener="#{controladorOlvidoClave.cambiarClaveOlvido()}"
-                                     style="float: right" process="pnlOlvidoClave"/>
+                                     style="float: right" process="pnlOlvidoClave"
+                                     icon="ui-icon-key"/>
                 </p:panelGrid>
             </p:panel>
         </h:form>
@@ -45,7 +48,8 @@
                     <p:column/>
                     <p:commandButton value="Finalizar" onclick="PF('dlgProcesoFinalizado').hide();" 
                                      actionListener="#{controladorIngreso.ingresar()}"
-                                     style="float: right" process="@this" action="ingreso"/>
+                                     style="float: right" process="@this" action="ingreso"
+                                     icon="ui-icon-check"/>
                 </p:panelGrid>
             </p:dialog>
         </h:form>

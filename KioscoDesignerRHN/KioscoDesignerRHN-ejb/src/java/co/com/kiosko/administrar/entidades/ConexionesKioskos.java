@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "CONEXIONESKIOSKOS")
 @XmlRootElement
-@NamedQueries({
+@NamedQueries({ 
     @NamedQuery(name = "ConexionesKioskos.findAll", query = "SELECT c FROM ConexionesKioskos c")})
 public class ConexionesKioskos implements Serializable {
 
@@ -72,6 +72,8 @@ public class ConexionesKioskos implements Serializable {
     private String respuesta1UI;
     @Transient
     private String respuesta2UI;
+    @Transient
+    private boolean envioCorreo;
 
     public ConexionesKioskos() {
     }
@@ -214,6 +216,24 @@ public class ConexionesKioskos implements Serializable {
 
     public void setRespuesta2UI(String respuesta2UI) {
         this.respuesta2UI = respuesta2UI;
+    }
+
+    public boolean isEnvioCorreo() {
+        if (enviocorreo != null && enviocorreo.equalsIgnoreCase("S")) {
+            envioCorreo = true;
+        } else {
+            envioCorreo = false;
+        }
+        return envioCorreo;
+    }
+
+    public void setEnvioCorreo(boolean envioCorreo) {
+        if (envioCorreo) {
+            enviocorreo = "S";
+        } else {
+            enviocorreo = "N";
+        }
+        this.envioCorreo = envioCorreo;
     }
 
     @Override

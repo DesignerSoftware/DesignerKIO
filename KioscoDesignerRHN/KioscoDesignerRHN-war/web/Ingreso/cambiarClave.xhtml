@@ -1,45 +1,50 @@
 <?xml version='1.0' encoding='ISO-8859-1' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <link href="././resources/css/estilosPersonalizados.css" rel="stylesheet" type="text/css" />
-        <title>Cambiar clave</title>
-    </h:head>
-    <h:body style="font-size: 14px;">
-        <h:form>
-            <p:panel header="Cambiar contraseña">
-                <p:messages id="mensaje" showDetail="true" autoUpdate="true" closable="true" />
+<ui:composition
+    template="/Plantilla/plantilla.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-                <p:commandButton value="Cerrar sesión" actionListener="#{controladorIngreso.ingresar()}" style="float: right" action="ingreso"/>
-                <p:panelGrid id="pnlCambiarClave" columns="2" styleClass="noBorders">
-                    <h:outputText value="Pregunta 1:"/>
-                    <h:outputText value="#{controladorOlvidoClave.conexion.pregunta1.pregunta}"/>
-                    <h:outputText value="Respuesta:"/>
-                    <p:password value="#{controladorOlvidoClave.respuesta1}"/>
-                    <h:outputText value="Pregunta 2:"/>
-                    <h:outputText value="#{controladorOlvidoClave.conexion.pregunta2.pregunta}"/>
-                    <h:outputText value="Respuesta:"/>
-                    <p:password value="#{controladorOlvidoClave.respuesta2}"/>
+    <ui:define name="content">
+        <p:panel header="Cambiar contraseña">
+            <p:panelGrid id="pnlCambiarClave" columns="2" styleClass="noBorders" style="padding: 20px">
+                <p:column>
+                    <h:graphicImage value="resources/imagenes/cambioClave.png"  />
+                </p:column>
+                <p:column>
+                    <p:panelGrid columns="2" styleClass="noBorders">
+                        <h:outputText value="Pregunta 1:"/>
+                        <h:outputText value="#{controladorOlvidoClave.conexion.pregunta1.pregunta}"/>
+                        <h:outputText value="Respuesta:"/>
+                        <p:password value="#{controladorOlvidoClave.respuesta1}"/>
+                        <h:outputText value="Pregunta 2:"/>
+                        <h:outputText value="#{controladorOlvidoClave.conexion.pregunta2.pregunta}"/>
+                        <h:outputText value="Respuesta:"/>
+                        <p:password value="#{controladorOlvidoClave.respuesta2}"/>
 
 
-                    <h:outputText value="Contraseña actual:"/>
-                    <p:password value="#{controladorOlvidoClave.claveActual}"/>
-                    <h:outputText value="Nueva contraseña:"/>
-                    <p:password value="#{controladorOlvidoClave.clave}"/>
-                    <h:outputText value="Confirmar contraseña:"/>
-                    <p:password value="#{controladorOlvidoClave.confirmacion}"/>
+                        <h:outputText value="Contraseña actual:"/>
+                        <p:password value="#{controladorOlvidoClave.claveActual}"/>
+                        <h:outputText value="Nueva contraseña:"/>
+                        <p:password value="#{controladorOlvidoClave.clave}"/>
+                        <h:outputText value="Confirmar contraseña:"/>
+                        <p:password value="#{controladorOlvidoClave.confirmacion}"/>
 
-                    <p:column/>
-                    <p:column>
-                        <p:commandButton value="Cancelar" action="opciones"/>
-                        <p:commandButton value="Cambiar contraseña" actionListener="#{controladorOlvidoClave.cambiarClave()}"
-                                         style="float: right" process="pnlCambiarClave"/>
-                    </p:column>
-                </p:panelGrid>
-            </p:panel>
-        </h:form>
+                        <p:column/>
+                        <p:column>
+                            <p:commandButton value="Cambiar contraseña" actionListener="#{controladorOlvidoClave.cambiarClave()}"
+                                             process="pnlCambiarClave"
+                                             icon="ui-icon-key"/>
+                            <p:commandButton value="Cancelar" action="opciones" icon="ui-icon-closethick"/>
+                        </p:column>
+                    </p:panelGrid>
+                </p:column>
+            </p:panelGrid>
+        </p:panel>
         <h:form>
             <p:dialog id="dlgProcesoFinalizado" header="Contraseña cambiada..." widgetVar="dlgProcesoFinalizado"
                       resizable="false" draggable="false" modal="true"  closable="false" width="500">
@@ -49,10 +54,11 @@
                     <h:outputText value="La contraseña ha sido cambiada exitosamente." style="text-align: justify"/>
                     <p:column/>
                     <p:commandButton value="Finalizar" onclick="PF('dlgProcesoFinalizado').hide();" 
-                                     style="float: right" process="@this" action="opciones"/>
+                                     style="float: right" process="@this" action="opciones"
+                                     icon="ui-icon-check"/>
                 </p:panelGrid>
             </p:dialog>
         </h:form>
-    </h:body>
-</html>
+    </ui:define>
+</ui:composition>
 

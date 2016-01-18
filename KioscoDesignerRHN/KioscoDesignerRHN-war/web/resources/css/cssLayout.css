@@ -1,13 +1,11 @@
 
 #top {
-    position: relative;
-    padding: 5px;
+    padding: 0px;
     margin: 0px 0px 10px 0px;
 }
 
 .center_content {
-    position: relative;
-    padding: 5px;
+    padding: 0px;
 }
 
 #top a:link, #top a:visited {

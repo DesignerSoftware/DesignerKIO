@@ -23,4 +23,8 @@ public interface IAdministrarIngreso {
     public boolean bloquearUsuario(java.lang.String codigoEmpleado);
 
     public javax.persistence.EntityManager getEm();
+
+    public co.com.kiosko.administrar.entidades.ConexionesKioskos obtenerConexionEmpelado(java.lang.String codigoEmpleado);
+
+    public void modificarUltimaConexion(co.com.kiosko.administrar.entidades.ConexionesKioskos cnx);
 }

@@ -1,12 +1,13 @@
 package co.com.kiosko.controlador.kiosko;
 
-import co.com.kiosko.administrar.entidades.Empleados;
+import co.com.kiosko.administrar.entidades.ConexionesKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarInicioKiosko;
 import co.com.kiosko.controlador.ingreso.ControladorIngreso;
 import co.com.kiosko.utilidadesUI.MensajesUI;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
 import java.io.*;
 import java.math.BigInteger;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -29,11 +30,12 @@ public class ControladorInicioKiosko implements Serializable {
     @EJB
     private IAdministrarInicioKiosko administrarInicioKiosko;
     private String usuario;
-    private Empleados empleado;
+    private ConexionesKioskos conexionEmpleado;
+    private Date ultimaConexionEmpleado;
     //FOTO EMPLEADO
     private FileInputStream fis;
     private StreamedContent fotoEmpleado;
-    private String destino;
+    private String pathFoto;
     private BigInteger identificacionEmpleado;
 
     public ControladorInicioKiosko() {
@@ -45,8 +47,9 @@ public class ControladorInicioKiosko implements Serializable {
             FacesContext x = FacesContext.getCurrentInstance();
             HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
             administrarInicioKiosko.obtenerConexion(ses.getId());
-            usuario = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getUsuario();
-            empleado = administrarInicioKiosko.consultarEmpleado(new BigInteger(usuario));
+            conexionEmpleado = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getConexionEmpleado();
+            ultimaConexionEmpleado = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getUltimaConexion();
+            pathFoto = administrarInicioKiosko.fotoEmpleado();
             obtenerFotoEmpleado();
         } catch (Exception e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
@@ -55,17 +58,16 @@ public class ControladorInicioKiosko implements Serializable {
     }
 
     public void obtenerFotoEmpleado() {
-        String rutaFoto = "C:\\DesignerRHN\\Basico\\Fotos_Empleados\\" + empleado.getCodigoempleado() + ".jpg";
+        String rutaFoto = pathFoto + conexionEmpleado.getEmpleado().getCodigoempleado() + ".jpg";
         if (rutaFoto != null) {
             try {
                 fis = new FileInputStream(new File(rutaFoto));
                 fotoEmpleado = new DefaultStreamedContent(fis, "image/jpg");
             } catch (IOException e) {
                 try {
-                    System.out.println("ENTRO");
-                    fis = new FileInputStream(new File("C:\\DesignerRHN\\Basico\\Fotos_Empleados\\sinFoto.jpg"));
+                    fis = new FileInputStream(new File(pathFoto + "sinFoto.jpg"));
                     fotoEmpleado = new DefaultStreamedContent(fis, "image/jpg");
-                    //System.out.println("Foto del empleado no encontrada. \n" + e);
+                    System.out.println("Foto del empleado no encontrada. \n" + e);
                 } catch (Exception ex) {
                     System.out.println("ERROR. \n" + e);
                 }
@@ -75,26 +77,17 @@ public class ControladorInicioKiosko implements Serializable {
 
     //SUBIR FOTO EMPLEADO
     public void subirFotoEmpleado(FileUploadEvent event) throws IOException {
-        System.out.println("pasa1");
         RequestContext context = RequestContext.getCurrentInstance();
-        String extencion = event.getFile().getFileName().split("[.]")[1];
+        String extension = event.getFile().getFileName().split("[.]")[1];
         Long tamanho = event.getFile().getSize();
-        if (extencion.equals("jpg") || extencion.equals("JPG")) {
-            System.out.println("pasa2");
+        if (extension.equals("jpg") || extension.equals("JPG")) {
             if (tamanho <= 153600) {
-                System.out.println("pasa3");
-                //Generales general = administrarEmpleadoIndividual.obtenerRutaFoto();
-                //if (general != null && persona != null) {
-                destino = "C:\\DesignerRHN\\Basico\\Fotos_Empleados\\";
-                identificacionEmpleado = empleado.getPersona().getNumerodocumento();
+                identificacionEmpleado = conexionEmpleado.getEmpleado().getPersona().getNumerodocumento();
                 transformarArchivo(tamanho, event.getFile().getInputstream());
+                obtenerFotoEmpleado();
                 PrimefacesContextUI.ejecutar("PF('subirFoto').hide()");
                 PrimefacesContextUI.actualizar("principalForm");
-                MensajesUI.error("Archivo cargado con éxito.");
-                /*
-                 * } else { MensajesUI.error("Ruta generales ó empleado,
-                 * nulo."); }
-                 */
+                MensajesUI.info("Foto cargada con éxito.");
             } else {
                 MensajesUI.error("El tamaño maximo permitido es de 150 KB.");
             }
@@ -105,7 +98,7 @@ public class ControladorInicioKiosko implements Serializable {
 
     public void transformarArchivo(long size, InputStream in) {
         try {
-            OutputStream out = new FileOutputStream(new File(destino + identificacionEmpleado + ".jpg"));
+            OutputStream out = new FileOutputStream(new File(pathFoto + identificacionEmpleado + ".jpg"));
             int reader = 0;
             byte[] bytes = new byte[(int) size];
             while ((reader = in.read(bytes)) != -1) {
@@ -120,15 +113,26 @@ public class ControladorInicioKiosko implements Serializable {
     }
 
     //GETTER AND SETTER
-    public Empleados getEmpleado() {
-        return empleado;
+    public ConexionesKioskos getConexionEmpleado() {
+        return conexionEmpleado;
     }
 
     public StreamedContent getFotoEmpleado() {
+        if (fotoEmpleado != null) {
+            try {
+                fotoEmpleado.getStream().available();
+            } catch (Exception e) {
+                obtenerFotoEmpleado();
+            }
+        }
         return fotoEmpleado;
     }
 
     public void setFotoEmpleado(StreamedContent fotoEmpleado) {
         this.fotoEmpleado = fotoEmpleado;
+    }
+
+    public Date getUltimaConexionEmpleado() {
+        return ultimaConexionEmpleado;
     }
 }

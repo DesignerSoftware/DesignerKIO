@@ -7,6 +7,8 @@ import co.com.kiosko.clasesAyuda.SessionEntityManager;
 import co.com.kiosko.conexionFuente.implementacion.SesionEntityManagerFactory;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionInicial;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;
+import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
@@ -24,6 +26,8 @@ public class AdministrarIngreso implements IAdministrarIngreso {
     private IAdministrarSesiones administrarSessiones;
     @EJB
     private IPersistenciaConexionesKioskos persistenciaConexionesKioskos;
+    @EJB
+    private IPersistenciaEmpleados persistenciaEmpleados;
     private EntityManager em;
     private final SesionEntityManagerFactory sessionEMF;
 
@@ -123,10 +127,21 @@ public class AdministrarIngreso implements IAdministrarIngreso {
     }
 
     @Override
+    public ConexionesKioskos obtenerConexionEmpelado(String codigoEmpleado) {
+        return persistenciaConexionesKioskos.consultarConexionEmpleado(em, codigoEmpleado);
+    }
+
+    @Override
     public boolean bloquearUsuario(String codigoEmpleado) {
-        ConexionesKioskos cnx = persistenciaConexionesKioskos.consultarConexionEmpleado(em, codigoEmpleado);
+        ConexionesKioskos cnx = obtenerConexionEmpelado(codigoEmpleado);
         cnx.setActivo("N");
         return persistenciaConexionesKioskos.registrarConexion(em, cnx);
+    }
+
+    @Override
+    public void modificarUltimaConexion(ConexionesKioskos cnx) {
+        cnx.setUltimaconexion(new Date());
+        persistenciaConexionesKioskos.registrarConexion(em, cnx);
     }
 
     @Override

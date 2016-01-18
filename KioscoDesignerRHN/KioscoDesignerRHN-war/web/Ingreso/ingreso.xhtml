@@ -3,23 +3,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      >
     <h:head>
         <link href="././resources/css/estilosPersonalizados.css" rel="stylesheet" type="text/css" />
         <title>Inicio Kiosko - Designer RHN</title>
     </h:head>
     <h:body style="font-size: 14px;">
         <h:form styleClass="centrado">
-            <fieldset style="border-radius: 10px; box-shadow: 5px 5px 12px #000000; padding-top: 15px;">
+            <fieldset style="border-radius: 10px; box-shadow: 5px 5px 12px #000000; padding-top: 15px; background: #F8F8F8">
                 <p:messages id="mensaje" showDetail="true" autoUpdate="true" closable="true" />
                 <p:panelGrid id="pnlIngreso" columns="2"  styleClass="noBorders">
-                    <h:outputText value="Usuario:" style="font-weight: bold"/>
+                    <h:outputText value="* Usuario:" style="font-weight: bold"/>
                     <p:inputText value="#{controladorIngreso.usuario}" 
                                  disabled="#{controladorIngreso.ingresoExitoso ? 'true' : 'false'}"/>
-                    <h:outputText value="Contraseña:" style="font-weight: bold"/>
+                    <h:outputText value="* Contraseña:" style="font-weight: bold"/>
                     <p:password value="#{controladorIngreso.clave}" 
                                 disabled="#{controladorIngreso.ingresoExitoso ? 'true' : 'false'}"/>
-                    <h:outputText value="Empresa:" style="font-weight: bold"/>
+                    <h:outputText value="* Empresa:" style="font-weight: bold"/>
                     <p:selectOneMenu value="#{controladorIngreso.unidadPersistenciaIngreso}" 
                                      disabled="#{controladorIngreso.obtenerCadenasKiosko().size() == 1 ?  'true' : controladorIngreso.ingresoExitoso ? 'true' : 'false'}">
                         <f:selectItem itemLabel="Seleccione una empresa" itemValue="#{null}"/>
@@ -30,8 +31,8 @@
                     <p:commandLink value="¿Olvido su clave?" action="#{controladorIngreso.olvidoClave()}"/>
                     <p:column/>
                     <p:commandButton value="#{!controladorIngreso.ingresoExitoso ? 'Ingresar' : 'Cerrar Sesión'}" 
-                                     action="#{controladorIngreso.ingresar()}" 
-                                     style="float: right" update="pnlIngreso"/>
+                                     action="#{controladorIngreso.ingresar()}" onclick="PF('estadoSesion').show()"
+                                     style="float: right" update="pnlIngreso" icon="ui-icon-carat-1-e" iconPos="right"/>
                 </p:panelGrid>
             </fieldset>
         </h:form>
@@ -40,13 +41,21 @@
                       resizable="false" draggable="false" modal="true"  closable="false" width="500">
                 <p:panelGrid columns="2"  styleClass="noBorders">
                     <h:graphicImage value="resources/imagenes/primerIngreso.jpg" width="90" height="70"  />
-
-                    <h:outputText value="Hemos detectado que es la primera vez que ingresa al modúlo Kiosko, 
-                                  antes de continuar es importante registrar algunas preguntas de seguridad 
-                                  y posteriormente asignar una nueva contraseña." style="text-align: justify"/>
+                    <p align="justify">
+                        Hemos detectado que es la primera vez que ingresa al modúlo Kiosko, 
+                        antes de continuar es importante registrar algunas preguntas de seguridad 
+                        y posteriormente asignar una nueva contraseña.
+                    </p>
                     <p:column/>
-                    <p:commandButton value="Continuar" onclick="PF('dlgPrimerIngreso').hide();" 
-                                     style="float: right" process="@this" action="primerIngreso"/>
+                    <p:column>
+                        <p:commandButton value="Cancelar" onclick="PF('dlgAlertaIntentos').hide();" 
+                                         style="float: right" process="@this"
+                                         action="#{controladorIngreso.ingresar()}"
+                                         icon="ui-icon-closethick"/>
+                        <p:commandButton value="Continuar" onclick="PF('dlgPrimerIngreso').hide();" 
+                                         style="float: right" process="@this" action="primerIngreso"
+                                         icon="ui-icon-check"/>
+                    </p:column>
                 </p:panelGrid>
             </p:dialog>
 
@@ -54,13 +63,22 @@
                       resizable="false" draggable="false" modal="true"  closable="false" width="500">
                 <p:panelGrid columns="2"  styleClass="noBorders">
                     <h:graphicImage value="resources/imagenes/alerta.jpg" width="90" height="70"  />
-
-                    <h:outputText value="Se ha ingresado una contraseña invalida por segunda vez,
-                                  recuerde que al tercer intento la cuenta sera bloqueada. 
-                                  Se recomienda ingresar por la opcion ¿Olvido su clave?, para cambiar la contraseña." style="text-align: justify"/>
+                    <p align="justify">
+                        Se ha ingresado una contraseña invalida por segunda vez,
+                        recuerde que al tercer intento la cuenta sera bloqueada. 
+                        Se recomienda ingresar por la opcion ¿Olvido su clave?, para cambiar la contraseña.
+                    </p>
                     <p:column/>
                     <p:commandButton value="Continuar" onclick="PF('dlgAlertaIntentos').hide();" 
-                                     style="float: right" process="@this"/>
+                                     style="float: right" process="@this"
+                                     icon="ui-icon-check"/>
+                </p:panelGrid>
+            </p:dialog>
+
+            <p:dialog id="estadoSesion" header="Iniciando Sesión" widgetVar="estadoSesion"  resizable="false" draggable="false" modal="true" height="65" width="350" closable="false">  
+                <p:panelGrid columns="2" styleClass="noBorders">
+                    <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50"/>
+                    <h:outputText value="Iniciando sesión, por favor espere." style="width: 240px; text-align: justify; font-weight:bold;" />
                 </p:panelGrid>
             </p:dialog>
         </h:form>

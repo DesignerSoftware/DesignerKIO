@@ -1,7 +1,9 @@
 package co.com.kiosko.administrar.implementacion;
 
+import co.com.kiosko.administrar.entidades.Empleados;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.clasesAyuda.SessionEntityManager;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Singleton;
