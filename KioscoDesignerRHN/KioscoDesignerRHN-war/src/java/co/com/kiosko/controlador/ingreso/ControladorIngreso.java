@@ -1,7 +1,6 @@
 package co.com.kiosko.controlador.ingreso;
 
 import co.com.kiosko.administrar.entidades.ConexionesKioskos;
-import co.com.kiosko.administrar.entidades.Empleados;
 import co.com.kiosko.administrar.interfaz.IAdministrarIngreso;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.clasesAyuda.CadenasKioskos;
@@ -11,7 +10,6 @@ import co.com.kiosko.utilidadesUI.MensajesUI;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
 import java.io.IOException;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -67,13 +65,14 @@ public class ControladorIngreso implements Serializable {
                             if (administrarIngreso.validarEstadoUsuario(usuario)) {
                                 if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave)) {
                                     administrarIngreso.adicionarConexionUsuario(ses.getId());
-                                    administrarSesiones.consultarSessionesActivas();
                                     ingresoExitoso = true;
                                     intento = 0;
                                     //return "inicio";
                                     conexionEmpleado = administrarIngreso.obtenerConexionEmpelado(usuario);
                                     ultimaConexion = conexionEmpleado.getUltimaconexion();
                                     administrarIngreso.modificarUltimaConexion(conexionEmpleado);
+                                    HttpSession session = Util.getSession();
+                                    session.setAttribute("idUsuario", usuario);
                                     return "opcionesKiosko";
                                 } else {
                                     // LA CONTRASEÑA ES INCORRECTA.
@@ -102,8 +101,9 @@ public class ControladorIngreso implements Serializable {
                             }
                         } else {
                             administrarIngreso.adicionarConexionUsuario(ses.getId());
-                            administrarSesiones.consultarSessionesActivas();
                             ingresoExitoso = true;
+                            HttpSession session = Util.getSession();
+                            session.setAttribute("idUsuario", usuario);
                             PrimefacesContextUI.ejecutar("PF('dlgPrimerIngreso').show()");
                         }
                         //          administrarIngreso.getEm().getEntityManagerFactory().close();
@@ -123,7 +123,7 @@ public class ControladorIngreso implements Serializable {
             }
         } else {
             administrarIngreso.cerrarSession(ses.getId());
-            administrarSesiones.consultarSessionesActivas();
+            
             ingresoExitoso = false;
             conexionEmpleado = null;
 
@@ -156,8 +156,9 @@ public class ControladorIngreso implements Serializable {
                     if (administrarIngreso.validarUsuarioRegistrado(usuario)) {
                         if (administrarIngreso.validarEstadoUsuario(usuario)) {
                             administrarIngreso.adicionarConexionUsuario(ses.getId());
-                            administrarSesiones.consultarSessionesActivas();
                             ingresoExitoso = true;
+                            HttpSession session = Util.getSession();
+                            session.setAttribute("idUsuario", usuario);
                             return "olvidoClave";
                         } else {
                             //USUARIO BLOQUEADO

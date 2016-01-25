@@ -6,7 +6,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author 908036
+ * @author Felipe Triviño
  */
 public class Util {
 

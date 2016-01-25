@@ -5,7 +5,7 @@ import javax.persistence.EntityManager;
 
 /**
  *
- * @author Administrator
+ * @author Felipe Triviño
  */
 public interface IniciarReporteInterface {
 

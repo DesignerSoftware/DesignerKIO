@@ -5,7 +5,7 @@ import javax.persistence.EntityManager;
 
 /**
  *
- * @author Administrador
+ * @author Felipe Triviño
  */
 public interface IAdministrarSesiones {
 

@@ -84,7 +84,7 @@ public class EnvioCorreo {
             // Cierre de la conexion.
             t.close();
 
-            System.out.println("CORREO ENVIADO EXITOSAMENTE");
+            //System.out.println("CORREO ENVIADO EXITOSAMENTE");
             return true;
         } catch (Exception e) {
             System.out.println("Error enviarCorreo: " + e);

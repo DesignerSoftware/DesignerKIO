@@ -75,10 +75,32 @@
         </p:dialog>
 
         <p:dialog header="Reporte generado" id="verReportePDF" widgetVar="verReportePDF" width="1024px" height="530px" resizable="false" draggable="false" modal="true" onHide="reiniciarStreamedContent();">
-            <p:media value="#{controladorGenerarReporte.reporteGenerado}" width="100%" height="500px" player="pdf" rendered="#{controladorGenerarReporte.reporteGenerado != null}" styleClass="curr_file"/>
+            <p:media value="#{controladorGenerarReporte.reporteGenerado}" width="100%" height="500px" player="pdf" rendered="#{controladorGenerarReporte.reporteGenerado != null}" styleClass="curr_file"
+                     cache="false"/>
         </p:dialog>
 
         <p:remoteCommand name="reiniciarStreamedContent" actionListener="#{controladorGenerarReporte.reiniciarStreamedContent()}"/>
+
+        <p:dialog id="dlgVerificarFechas" header="Verificar fechas" widgetVar="dlgVerificarFechas"
+                  resizable="false" draggable="false" modal="true"  closable="false" width="500">
+            <p:panelGrid columns="2"  styleClass="noBorders">
+                <h:graphicImage value="resources/imagenes/alerta.jpg" width="90" height="70"  />
+                <p align="justify">
+                    Para generar el certificado de ingresos y retenciones se 
+                    sugiere que las fechas desde y hasta indiquen el inicio y 
+                    el fin de un mismo año.
+                </p>
+                <p:column/>
+                <p:column>
+                    <p:commandButton value="Cancelar" onclick="PF('dlgVerificarFechas').hide();" 
+                                     style="float: right" process="@this"
+                                     icon="ui-icon-closethick"/>
+                    <p:commandButton value="Continuar" onclick="PF('dlgVerificarFechas').hide(); PF('generandoReporte').show(); generarReporte();" 
+                                     style="float: right" process="@this"
+                                     icon="ui-icon-check"/>
+                </p:column>
+            </p:panelGrid>
+        </p:dialog>
     </ui:define>
 </ui:composition>
 

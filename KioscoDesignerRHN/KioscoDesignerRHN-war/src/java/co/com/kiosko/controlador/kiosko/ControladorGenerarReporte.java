@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -76,8 +76,13 @@ public class ControladorGenerarReporte implements Serializable {
 
     public void validar() {
         if (validarCampos()) {
-            PrimefacesContextUI.ejecutar("PF('generandoReporte').show();");
-            PrimefacesContextUI.ejecutar("generarReporte();");
+            if ((reporte.getNombrearchivo().equalsIgnoreCase("kio_certificadoIngresos") || reporte.getDescripcion().toUpperCase().contains("RETEN"))
+                    ? validarFechasCertificadoIngresosRetenciones() : true) {
+                PrimefacesContextUI.ejecutar("PF('generandoReporte').show();");
+                PrimefacesContextUI.ejecutar("generarReporte();");
+            } else {
+                PrimefacesContextUI.ejecutar("PF('dlgVerificarFechas').show();");
+            }
         }
     }
 
@@ -86,7 +91,7 @@ public class ControladorGenerarReporte implements Serializable {
         context.execute("PF('generandoReporte').hide();");
         if (pathReporteGenerado != null && !pathReporteGenerado.startsWith("Error:")) {
             try {
-                System.out.println("pathReporteGenerado: " + pathReporteGenerado);
+                //System.out.println("pathReporteGenerado: " + pathReporteGenerado);
                 File archivo = new File(pathReporteGenerado);
                 fis = new FileInputStream(archivo);
                 reporteGenerado = new DefaultStreamedContent(fis, "application/pdf");
@@ -146,6 +151,26 @@ public class ControladorGenerarReporte implements Serializable {
                 MensajesUI.error("No fue posible enviar el correo, por favor comuniquese con soporte.");
             }
         }
+    }
+
+    public boolean validarFechasCertificadoIngresosRetenciones() {
+        SimpleDateFormat formatoDia, formatoMes, formatoAnio;
+        String dia, mes, anio;
+        formatoDia = new SimpleDateFormat("dd");
+        formatoMes = new SimpleDateFormat("MM");
+        formatoAnio = new SimpleDateFormat("yyyy");
+        dia = formatoDia.format(conexionEmpleado.getFechadesde());
+        mes = formatoMes.format(conexionEmpleado.getFechadesde());
+        anio = formatoAnio.format(conexionEmpleado.getFechadesde());
+
+        if (dia.equals("01") && mes.equals("01")) {
+            dia = formatoDia.format(conexionEmpleado.getFechahasta());
+            mes = formatoMes.format(conexionEmpleado.getFechahasta());
+            if (dia.equals("31") && mes.equals("12") && anio.equals(formatoAnio.format(conexionEmpleado.getFechahasta()))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void reiniciarStreamedContent() {

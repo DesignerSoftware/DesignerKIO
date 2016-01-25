@@ -67,7 +67,7 @@ public class ControladorInicioKiosko implements Serializable {
                 try {
                     fis = new FileInputStream(new File(pathFoto + "sinFoto.jpg"));
                     fotoEmpleado = new DefaultStreamedContent(fis, "image/jpg");
-                    System.out.println("Foto del empleado no encontrada. \n" + e);
+                    //System.out.println("Foto del empleado no encontrada. \n" + e);
                 } catch (Exception ex) {
                     System.out.println("ERROR. \n" + e);
                 }

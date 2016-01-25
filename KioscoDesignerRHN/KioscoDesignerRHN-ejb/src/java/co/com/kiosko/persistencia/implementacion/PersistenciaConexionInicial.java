@@ -31,10 +31,10 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
             Integer instancia = retorno.intValueExact();
             eManager.getTransaction().commit();
             if (instancia > 0) {
-                System.out.println("El usuario existe y corresponde a la empresa seleccionada.");
+                //System.out.println("El usuario existe y corresponde a la empresa seleccionada.");
                 return true;
             } else {
-                System.out.println("El usuario no existe ó no corresponde a la empresa seleccionada.");
+                //System.out.println("El usuario no existe ó no corresponde a la empresa seleccionada.");
                 eManager.getEntityManagerFactory().close();
                 return false;
             }
@@ -55,10 +55,10 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
             Integer instancia = retorno.intValueExact();
             eManager.getTransaction().commit();
             if (instancia > 0) {
-                System.out.println("El usuario está registrado.");
+                //System.out.println("El usuario está registrado.");
                 return true;
             } else {
-                System.out.println("El usuario no esta registrado");
+                //System.out.println("El usuario no esta registrado");
                 return false;
             }
         } catch (Exception e) {
@@ -78,10 +78,10 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
             Integer instancia = retorno.intValueExact();
             eManager.getTransaction().commit();
             if (instancia > 0) {
-                System.out.println("El usuario esta bloqueado.");
+                //System.out.println("El usuario esta bloqueado.");
                 return false;
             } else {
-                System.out.println("El usuario esta activo");
+                //System.out.println("El usuario esta activo");
                 return true;
             }
         } catch (Exception e) {
@@ -102,10 +102,10 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
             Integer instancia = retorno.intValueExact();
             eManager.getTransaction().commit();
             if (instancia > 0) {
-                System.out.println("El usuario y clave son correctos.");
+                //System.out.println("El usuario y clave son correctos.");
                 return true;
             } else {
-                System.out.println("El usuario o clave son incorrectos");
+                //System.out.println("El usuario o clave son incorrectos");
                 return false;
             }
         } catch (Exception e) {

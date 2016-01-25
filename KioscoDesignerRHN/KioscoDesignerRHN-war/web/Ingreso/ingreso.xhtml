@@ -13,6 +13,9 @@
         <h:form styleClass="centrado">
             <fieldset style="border-radius: 10px; box-shadow: 5px 5px 12px #000000; padding-top: 15px; background: #F8F8F8">
                 <p:messages id="mensaje" showDetail="true" autoUpdate="true" closable="true" />
+                <center>
+                    <h1 style="color: #245EDA; text-decoration: underline">Kiosko Designer RHN</h1>
+                </center>
                 <p:panelGrid id="pnlIngreso" columns="2"  styleClass="noBorders">
                     <h:outputText value="* Usuario:" style="font-weight: bold"/>
                     <p:inputText value="#{controladorIngreso.usuario}" 
@@ -48,7 +51,7 @@
                     </p>
                     <p:column/>
                     <p:column>
-                        <p:commandButton value="Cancelar" onclick="PF('dlgAlertaIntentos').hide();" 
+                        <p:commandButton value="Cancelar" onclick="PF('dlgPrimerIngreso').hide();" 
                                          style="float: right" process="@this"
                                          action="#{controladorIngreso.ingresar()}"
                                          icon="ui-icon-closethick"/>

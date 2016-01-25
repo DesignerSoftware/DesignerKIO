@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package co.com.kiosko.administrar.entidades;
 
 import java.io.Serializable;
@@ -13,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author 908036
+ * @author Felipe Triviño
  */
 @Entity
 @Table(name = "CONFICORREOKIOSKO")
