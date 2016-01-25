@@ -36,6 +36,7 @@ public class ControladorIngreso implements Serializable {
     private boolean ingresoExitoso;
     private int intento;
     private ConexionesKioskos conexionEmpleado;
+    private String nit;
 
     public ControladorIngreso() {
         intento = 0;
@@ -64,11 +65,12 @@ public class ControladorIngreso implements Serializable {
                         if (administrarIngreso.validarUsuarioRegistrado(usuario)) {
                             if (administrarIngreso.validarEstadoUsuario(usuario)) {
                                 if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave)) {
+                                    nit = cadena.getNit();
                                     administrarIngreso.adicionarConexionUsuario(ses.getId());
                                     ingresoExitoso = true;
                                     intento = 0;
                                     //return "inicio";
-                                    conexionEmpleado = administrarIngreso.obtenerConexionEmpelado(usuario);
+                                    conexionEmpleado = administrarIngreso.obtenerConexionEmpelado(usuario, nit);
                                     ultimaConexion = conexionEmpleado.getUltimaconexion();
                                     administrarIngreso.modificarUltimaConexion(conexionEmpleado);
                                     HttpSession session = Util.getSession();
@@ -88,7 +90,7 @@ public class ControladorIngreso implements Serializable {
                                     if (intento == 2) {
                                         PrimefacesContextUI.ejecutar("PF('dlgAlertaIntentos').show()");
                                     } else if (intento == 3) {
-                                        administrarIngreso.bloquearUsuario(usuario);
+                                        administrarIngreso.bloquearUsuario(usuario, nit);
                                         intento = 0;
                                     }
                                     administrarIngreso.getEm().getEntityManagerFactory().close();
@@ -123,10 +125,10 @@ public class ControladorIngreso implements Serializable {
             }
         } else {
             administrarIngreso.cerrarSession(ses.getId());
-            
+
             ingresoExitoso = false;
             conexionEmpleado = null;
-
+            nit = null;
             HttpSession session = Util.getSession();
             session.invalidate();
 
@@ -183,7 +185,7 @@ public class ControladorIngreso implements Serializable {
     }
 
     public void actualizarConexionEmpleado() {
-        conexionEmpleado = administrarIngreso.obtenerConexionEmpelado(usuario);
+        conexionEmpleado = administrarIngreso.obtenerConexionEmpelado(usuario, nit);
     }
     //GETTER AND SETTER
 
@@ -227,5 +229,9 @@ public class ControladorIngreso implements Serializable {
 
     public Date getUltimaConexion() {
         return ultimaConexion;
+    }
+
+    public String getNit() {
+        return nit;
     }
 }

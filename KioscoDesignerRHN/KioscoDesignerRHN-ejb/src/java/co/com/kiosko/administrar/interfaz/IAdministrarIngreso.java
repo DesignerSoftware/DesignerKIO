@@ -20,11 +20,11 @@ public interface IAdministrarIngreso {
 
     public boolean validarEstadoUsuario(java.lang.String usuario);
 
-    public boolean bloquearUsuario(java.lang.String codigoEmpleado);
+    public boolean bloquearUsuario(java.lang.String codigoEmpleado, String nitEmpresa);
 
     public javax.persistence.EntityManager getEm();
 
-    public co.com.kiosko.administrar.entidades.ConexionesKioskos obtenerConexionEmpelado(java.lang.String codigoEmpleado);
+    public co.com.kiosko.administrar.entidades.ConexionesKioskos obtenerConexionEmpelado(java.lang.String codigoEmpleado, String nitEmpresa);
 
     public void modificarUltimaConexion(co.com.kiosko.administrar.entidades.ConexionesKioskos cnx);
 }

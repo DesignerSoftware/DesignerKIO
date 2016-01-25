@@ -25,7 +25,7 @@ public class ControladorOlvidoClave implements Serializable {
     private ConexionesKioskos conexion;
     private String claveActual, clave, confirmacion, respuesta1, respuesta2;
     //VALORES INGRESO
-    String usuario;
+    private String usuario, nit;
 
     public ControladorOlvidoClave() {
     }
@@ -37,7 +37,8 @@ public class ControladorOlvidoClave implements Serializable {
             HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
             administrarOlvidoClave.obtenerConexion(ses.getId());
             usuario = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getUsuario();
-            conexion = administrarOlvidoClave.obtenerConexionEmpleado(usuario);
+            nit = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit();
+            conexion = administrarOlvidoClave.obtenerConexionEmpleado(usuario, nit);
         } catch (Exception e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
             System.out.println("Causa: " + e.getCause());

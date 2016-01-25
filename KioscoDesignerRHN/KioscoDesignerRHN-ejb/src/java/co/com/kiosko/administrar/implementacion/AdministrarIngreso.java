@@ -127,13 +127,13 @@ public class AdministrarIngreso implements IAdministrarIngreso {
     }
 
     @Override
-    public ConexionesKioskos obtenerConexionEmpelado(String codigoEmpleado) {
-        return persistenciaConexionesKioskos.consultarConexionEmpleado(em, codigoEmpleado);
+    public ConexionesKioskos obtenerConexionEmpelado(String codigoEmpleado, String nitEmpresa) {
+        return persistenciaConexionesKioskos.consultarConexionEmpleado(em, codigoEmpleado, Long.parseLong(nitEmpresa));
     }
 
     @Override
-    public boolean bloquearUsuario(String codigoEmpleado) {
-        ConexionesKioskos cnx = obtenerConexionEmpelado(codigoEmpleado);
+    public boolean bloquearUsuario(String codigoEmpleado, String nitEmpresa) {
+        ConexionesKioskos cnx = obtenerConexionEmpelado(codigoEmpleado, nitEmpresa);
         cnx.setActivo("N");
         return persistenciaConexionesKioskos.registrarConexion(em, cnx);
     }

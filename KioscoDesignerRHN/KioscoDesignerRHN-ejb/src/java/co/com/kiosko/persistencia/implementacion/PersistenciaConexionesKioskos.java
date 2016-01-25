@@ -34,12 +34,13 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
     }
 
     @Override
-    public ConexionesKioskos consultarConexionEmpleado(EntityManager eManager, String codigoEmpleado) {
+    public ConexionesKioskos consultarConexionEmpleado(EntityManager eManager, String codigoEmpleado, long nitEmpresa) {
         try {
             eManager.getTransaction().begin();
-            String sqlQuery = "SELECT ck FROM ConexionesKioskos ck WHERE ck.empleado.codigoempleado = :codigoEmpleado";
+            String sqlQuery = "SELECT ck FROM ConexionesKioskos ck WHERE ck.empleado.codigoempleado = :codigoEmpleado and ck.empleado.empresa.nit = :nitEmpresa";
             Query query = eManager.createQuery(sqlQuery);
             query.setParameter("codigoEmpleado", new BigInteger(codigoEmpleado));
+            query.setParameter("nitEmpresa", nitEmpresa);
             eManager.getTransaction().commit();
             return (ConexionesKioskos) query.getSingleResult();
         } catch (Exception e) {

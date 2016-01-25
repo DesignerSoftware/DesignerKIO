@@ -216,10 +216,10 @@ public class ControladorGenerarReporte implements Serializable {
     }
 
     public StreamedContent getReporteGenerado() {
-        FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        /*FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Pragma", "no-cache");
         FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Expires", "0");
-        FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Expires", "Mon, 8 Aug 1980 10:00:00 GMT");
+        FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Expires", "Mon, 8 Aug 1980 10:00:00 GMT");*/
         return reporteGenerado;
     }
 }

@@ -30,8 +30,8 @@ public class AdministrarOlvidoClave implements IAdministrarOlvidoClave {
     }
 
     @Override
-    public ConexionesKioskos obtenerConexionEmpleado(String codigoEmpleado) {
-        return persistenciaConexionesKioskos.consultarConexionEmpleado(em, codigoEmpleado);
+    public ConexionesKioskos obtenerConexionEmpleado(String codigoEmpleado, String nitEmpresa) {
+        return persistenciaConexionesKioskos.consultarConexionEmpleado(em, codigoEmpleado, Long.parseLong(nitEmpresa));
     }
 
     @Override
