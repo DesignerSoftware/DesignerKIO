@@ -71,13 +71,16 @@ public class ControladorGenerarReporte implements Serializable {
             if (pathReporteGenerado != null) {
                 PrimefacesContextUI.ejecutar("validarDescargaReporte();");
             }
+        }else{
+            PrimefacesContextUI.ejecutar("PF('generandoReporte').hide();");
+            MensajesUI.error("El reporte no se pudo generar. Comuniquese con soporte.");
         }
     }
 
     public void validar() {
         if (validarCampos()) {
             if ((reporte.getNombrearchivo().equalsIgnoreCase("kio_certificadoIngresos") || reporte.getDescripcion().toUpperCase().contains("RETEN"))
-                    ? validarFechasCertificadoIngresosRetenciones() : true) {
+                    ? (conexionEmpleado.getFechadesde() != null && conexionEmpleado.getFechahasta() != null) ? validarFechasCertificadoIngresosRetenciones() : true : true) {
                 PrimefacesContextUI.ejecutar("PF('generandoReporte').show();");
                 PrimefacesContextUI.ejecutar("generarReporte();");
             } else {
