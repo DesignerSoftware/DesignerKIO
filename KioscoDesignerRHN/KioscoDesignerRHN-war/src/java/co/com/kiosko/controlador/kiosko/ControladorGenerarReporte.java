@@ -150,8 +150,10 @@ public class ControladorGenerarReporte implements Serializable {
                     "Reporte Kiosko - " + reporte.getDescripcion(), "Mensaje enviado automaticamente, por favor no responda a este correo.",
                     pathReporteGenerado)) {
                 MensajesUI.info("El reporte a sido enviado exitosamente.");
+                PrimefacesContextUI.actualizar("principalForm:growl");
             } else {
                 MensajesUI.error("No fue posible enviar el correo, por favor comuniquese con soporte.");
+                PrimefacesContextUI.actualizar("principalForm:growl");
             }
         }
     }
