@@ -175,6 +175,7 @@ public class ControladorGenerarReporte implements Serializable {
 
     public void reiniciarStreamedContent() {
         reporteGenerado = null;
+        pathReporteGenerado = null;
     }
 
     public void cerrarControlador() {
@@ -216,10 +217,18 @@ public class ControladorGenerarReporte implements Serializable {
     }
 
     public StreamedContent getReporteGenerado() {
-        /*FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Pragma", "no-cache");
         FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Expires", "0");
-        FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Expires", "Mon, 8 Aug 1980 10:00:00 GMT");*/
+        FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Expires", "Mon, 8 Aug 1980 10:00:00 GMT");
+        try {
+            File archivo = new File(pathReporteGenerado);
+            fis = new FileInputStream(archivo);
+            reporteGenerado = new DefaultStreamedContent(fis, "application/pdf");
+        } catch (Exception e) {
+            reporteGenerado = null;
+        }
+
         return reporteGenerado;
     }
 }
