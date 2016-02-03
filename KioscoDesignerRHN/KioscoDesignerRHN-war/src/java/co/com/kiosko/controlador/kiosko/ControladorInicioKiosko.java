@@ -89,10 +89,10 @@ public class ControladorInicioKiosko implements Serializable {
                 PrimefacesContextUI.actualizar("principalForm");
                 MensajesUI.info("Foto cargada con éxito.");
             } else {
-                MensajesUI.error("El tamaño maximo permitido es de 150 KB.");
+                MensajesUI.error("El tamaño máximo permitido es de 150 KB.");
             }
         } else {
-            MensajesUI.error("Solo se admiten imagenes con formato (.JPG).");
+            MensajesUI.error("Solo se admiten imágenes con formato (.JPG).");
         }
     }
 

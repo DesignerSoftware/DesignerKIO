@@ -6,7 +6,7 @@
       xmlns:p="http://primefaces.org/ui"
       >
     <h:head>
-        <link href="././resources/css/estilosPersonalizados.css" rel="stylesheet" type="text/css" />
+        <link href="././resources/css/estiloLogin.css" rel="stylesheet" type="text/css" />
         <title>Inicio Kiosko - Designer RHN</title>
     </h:head>
     <h:body style="font-size: 14px;">
@@ -14,10 +14,14 @@
             <fieldset style="border-radius: 10px; box-shadow: 5px 5px 12px #000000; padding-top: 15px; background: #F8F8F8">
                 <p:messages id="mensaje" showDetail="true" autoUpdate="true" closable="true" />
                 <center>
-                    <h1 style="color: #245EDA; text-decoration: underline">Kiosko Designer RHN</h1>
-                </center>
+                    <strong style="text-shadow: 1px 1px 0 #303030, -1px -1px #303030, 1px -1px #303030, -1px 1px #303030, 0 1px #303030, 1px 0 #303030, -1px 0 #303030, 0 -1px #303030;">
+                        <em>
+                            <h:outputText value="Kiosko Designer.NOM" style="font-family: Arial; font-size: 28px; color: #3287D6; font-weight: bold;"/>
+                        </em>
+                    </strong>
+                </center><br/>
                 <p:panelGrid id="pnlIngreso" columns="2"  styleClass="noBorders">
-                    <h:outputText value="* Usuario:" style="font-weight: bold"/>
+                    <h:outputText value="* Empleado:" style="font-weight: bold"/>
                     <p:inputText value="#{controladorIngreso.usuario}" 
                                  disabled="#{controladorIngreso.ingresoExitoso ? 'true' : 'false'}"/>
                     <h:outputText value="* Contraseña:" style="font-weight: bold"/>
@@ -45,7 +49,7 @@
                 <p:panelGrid columns="2"  styleClass="noBorders">
                     <h:graphicImage value="resources/imagenes/primerIngreso.jpg" width="90" height="70"  />
                     <p align="justify">
-                        Hemos detectado que es la primera vez que ingresa al modúlo Kiosko, 
+                        Hemos detectado que es la primera vez que ingresa al módulo Kiosko, 
                         antes de continuar es importante registrar algunas preguntas de seguridad 
                         y posteriormente asignar una nueva contraseña.
                     </p>
@@ -67,9 +71,10 @@
                 <p:panelGrid columns="2"  styleClass="noBorders">
                     <h:graphicImage value="resources/imagenes/alerta.jpg" width="90" height="70"  />
                     <p align="justify">
-                        Se ha ingresado una contraseña invalida por segunda vez,
-                        recuerde que al tercer intento la cuenta sera bloqueada. 
-                        Se recomienda ingresar por la opcion ¿Olvido su clave?, para cambiar la contraseña.
+                        Se ha ingresado una contraseña inválida por segunda vez, 
+                        recuerde que al tercer intento la cuenta será bloqueada. 
+                        Se recomienda ingresar por la opción ¿Olvido su clave?, 
+                        para cambiar la contraseña.
                     </p>
                     <p:column/>
                     <p:commandButton value="Continuar" onclick="PF('dlgAlertaIntentos').hide();" 

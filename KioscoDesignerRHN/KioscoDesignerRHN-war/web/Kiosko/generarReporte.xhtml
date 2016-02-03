@@ -40,9 +40,9 @@
                         </p:panelGrid>
 
                         <p:panelGrid id="pnlInfoAdicional" columns="2" styleClass="noBorders">
-                            <p:outputLabel for="dirigiada" value="Constancia dirigia a: " />
-                            <p:inputText id="dirigiada" value="#{controladorGenerarReporte.conexionEmpleado.dirigidoa}"/>
-                            <p:outputLabel for="area" value="Constancia al area de:" />
+                            <p:outputLabel for="dirigida" value="Constancia dirigida a: " />
+                            <p:inputText id="dirigida" value="#{controladorGenerarReporte.conexionEmpleado.dirigidoa}"/>
+                            <p:outputLabel for="area" value="Constancia al área de:" />
                             <p:inputText id="area" value="#{controladorGenerarReporte.areaDe}"/>
                         </p:panelGrid>
 
@@ -51,7 +51,7 @@
                                              actionListener="#{controladorGenerarReporte.validar()}"/>
                             <p:commandButton value="Cancelar" action="opciones"
                                              icon="ui-icon-closethick" actionListener="#{controladorGenerarReporte.cerrarControlador()}"/>
-                        </p:panelGrid>
+                        </p:panelGrid> 
                     </p:panelGrid>
                 </p:column>
                 <p:column>

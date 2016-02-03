@@ -8,14 +8,14 @@
         <p:panelGrid columns="2" styleClass="noBorders" style="width: 100%;">
             <p:column>
                 <p:panelGrid columns="2" styleClass="noBorders">
-                    <p:column>
+                    <p:column> 
                         <p:graphicImage value="#{controladorInicioKiosko.fotoEmpleado}" height="91" width="80" alt="Foto empleado" onclick="PF('subirFoto').show();"
                                         cache="false"/>
                     </p:column>
                     <p:column>
                         <h3>BIENVENIDO</h3>
                         <h3 style="font-weight: bold; color: #08088A"> #{controladorInicioKiosko.conexionEmpleado.empleado.persona.nombreCompleto}</h3>
-                        <h4>Numero de identificación: #{controladorInicioKiosko.conexionEmpleado.empleado.persona.numerodocumento}</h4>
+                        <h4>Número de identificación: #{controladorInicioKiosko.conexionEmpleado.empleado.persona.numerodocumento}</h4>
                     </p:column>
                 </p:panelGrid>
             </p:column>
@@ -36,10 +36,10 @@
 
         <p:dialog id="subirFoto" header="Cargar foto" widgetVar="subirFoto"  resizable="false" draggable="false" modal="true" closable="true">  
             <p:panelGrid columns="2" styleClass="noBorders">
-                <h:outputText value="Por favor seleccione una imagen con extención (.JPG) y con un tamaño no mayor a 150 KB." style="font-weight: bold; width: 335px; color: black"/>
+                <h:outputText value="Por favor seleccione una imagen con extensión (.JPG) y con un tamaño no mayor a 150 KB." style="font-weight: bold; width: 335px; color: black"/>
                 <p:fileUpload  id="FileUp" mode="advanced" style="font-size: 11px; border: none" fileUploadListener="#{controladorInicioKiosko.subirFotoEmpleado}"
                                label="Examinar..." auto="true" styleClass="ui-fileupload" />
-            </p:panelGrid>
+            </p:panelGrid> 
         </p:dialog>
     </h:body>
 </html>

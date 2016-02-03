@@ -1,0 +1,19 @@
+html { 
+    background-image: url(../imagenes/fondoIngreso.png); background-repeat: no-repeat; background-size: 100% 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.noBorders tr, .noBorders td {
+    background: none !important;
+    border: none !important;
+}
+
+.centrado {
+    padding:10px;
+    position:absolute;
+    top:35%;
+    left:30%;
+}

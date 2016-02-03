@@ -55,6 +55,7 @@ public class ControladorGenerarReporte implements Serializable {
             controladorIngreso = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class));
             conexionEmpleado = controladorIngreso.getConexionEmpleado();
             reporte = ((ControladorOpcionesKiosko) x.getApplication().evaluateExpressionGet(x, "#{controladorOpcionesKiosko}", ControladorOpcionesKiosko.class)).getOpcionReporte();
+            email = conexionEmpleado.getEmpleado().getPersona().getEmail();
         } catch (Exception e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
             System.out.println("Causa: " + e.getCause());
@@ -73,7 +74,7 @@ public class ControladorGenerarReporte implements Serializable {
             }
         }else{
             PrimefacesContextUI.ejecutar("PF('generandoReporte').hide();");
-            MensajesUI.error("El reporte no se pudo generar. Comuniquese con soporte.");
+            MensajesUI.error("El reporte no se pudo generar. Comuníquese con soporte.");
         }
     }
 
@@ -147,12 +148,12 @@ public class ControladorGenerarReporte implements Serializable {
     public void validarEnviaCorreo() {
         if (conexionEmpleado.isEnvioCorreo()) {
             if (administrarGenerarReporte.enviarCorreo(conexionEmpleado.getEmpleado().getEmpresa().getSecuencia(), email,
-                    "Reporte Kiosko - " + reporte.getDescripcion(), "Mensaje enviado automaticamente, por favor no responda a este correo.",
+                    "Reporte Kiosko - " + reporte.getDescripcion(), "Mensaje enviado automáticamente, por favor no responda a este correo.",
                     pathReporteGenerado)) {
-                MensajesUI.info("El reporte a sido enviado exitosamente.");
+                MensajesUI.info("El reporte ha sido enviado exitosamente.");
                 PrimefacesContextUI.actualizar("principalForm:growl");
             } else {
-                MensajesUI.error("No fue posible enviar el correo, por favor comuniquese con soporte.");
+                MensajesUI.error("No fue posible enviar el correo, por favor comuníquese con soporte.");
                 PrimefacesContextUI.actualizar("principalForm:growl");
             }
         }
