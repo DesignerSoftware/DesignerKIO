@@ -16,4 +16,6 @@ public interface IAdministrarSesiones {
     public EntityManager obtenerConexionSesion(String idSesion);
 
     public void borrarSesion(String idSesion);
+
+    public boolean borrarSesiones();
 }

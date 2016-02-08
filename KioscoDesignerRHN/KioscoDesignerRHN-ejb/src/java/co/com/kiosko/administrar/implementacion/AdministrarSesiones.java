@@ -54,4 +54,22 @@ public class AdministrarSesiones implements IAdministrarSesiones {
             }
         }
     }
+
+    @Override
+    public boolean borrarSesiones() {
+        try {
+            if (!sessionesActivas.isEmpty()) {
+                for (int i = 0; i < sessionesActivas.size(); i++) {
+                    if (sessionesActivas.get(i).getEm().isOpen() && sessionesActivas.get(i).getEm().getEntityManagerFactory().isOpen()) {
+                        sessionesActivas.get(i).getEm().getEntityManagerFactory().close();
+                    }
+                }
+                sessionesActivas.removeAll(sessionesActivas);
+            }
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error AdministrarSesiones.borrarSesiones: (BORRADO DIARIO): " + e);
+            return false;
+        }
+    }
 }

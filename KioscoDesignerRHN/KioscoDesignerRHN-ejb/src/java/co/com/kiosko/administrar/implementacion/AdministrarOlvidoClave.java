@@ -1,9 +1,11 @@
 package co.com.kiosko.administrar.implementacion;
 
 import co.com.kiosko.administrar.entidades.ConexionesKioskos;
+import co.com.kiosko.administrar.entidades.ParametrizaClave;
 import co.com.kiosko.administrar.interfaz.IAdministrarOlvidoClave;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;
+import co.com.kiosko.persistencia.interfaz.IPersistenciaParametrizaClave;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaUtilidadesBD;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
@@ -22,6 +24,8 @@ public class AdministrarOlvidoClave implements IAdministrarOlvidoClave {
     private IPersistenciaConexionesKioskos persistenciaConexionesKioskos;
     @EJB
     private IPersistenciaUtilidadesBD persistenciaUtilidadesBD;
+    @EJB
+    private IPersistenciaParametrizaClave persistenciaParametrizaClave;
     private EntityManager em;
 
     @Override
@@ -56,5 +60,10 @@ public class AdministrarOlvidoClave implements IAdministrarOlvidoClave {
     @Override
     public boolean cambiarClave(ConexionesKioskos ck) {
         return persistenciaConexionesKioskos.registrarConexion(em, ck);
+    }
+
+    @Override
+    public ParametrizaClave obtenerFormatoClave(long nitEmpresa) {
+        return persistenciaParametrizaClave.obtenerFormatoClave(em, nitEmpresa);
     }
 }

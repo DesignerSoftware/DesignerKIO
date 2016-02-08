@@ -7,7 +7,7 @@ import co.com.kiosko.clasesAyuda.SessionEntityManager;
 import co.com.kiosko.conexionFuente.implementacion.SesionEntityManagerFactory;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionInicial;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;
-import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;
+import co.com.kiosko.persistencia.interfaz.IPersistenciaParametrizaClave;
 import java.util.Date;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
@@ -26,8 +26,6 @@ public class AdministrarIngreso implements IAdministrarIngreso {
     private IAdministrarSesiones administrarSessiones;
     @EJB
     private IPersistenciaConexionesKioskos persistenciaConexionesKioskos;
-    @EJB
-    private IPersistenciaEmpleados persistenciaEmpleados;
     private EntityManager em;
     private final SesionEntityManagerFactory sessionEMF;
 

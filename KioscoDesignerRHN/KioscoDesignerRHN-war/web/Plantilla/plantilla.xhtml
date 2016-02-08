@@ -24,8 +24,10 @@
                             autoUpdate="true" closable="true"/>
                 
             </div>
-            <div id="content" class="center_content">
-                <ui:insert name="content"/>
+            <div class="center_content">
+                <ui:insert id="content" name="content">
+                    <ui:include src="#{controlNavegacion.urlNavegation}" />
+                </ui:insert>
             </div>
         </h:form>
     </h:body>

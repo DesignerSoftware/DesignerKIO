@@ -3,9 +3,9 @@
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 
 <faces-config version="2.0"
-    xmlns="http://java.sun.com/xml/ns/javaee" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+              xmlns="http://java.sun.com/xml/ns/javaee" 
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
     <navigation-rule>
         <from-view-id>/Ingreso/ingreso.xhtml</from-view-id>
         <navigation-case>
@@ -13,16 +13,12 @@
             <to-view-id>/Ingreso/primerIngreso.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
-            <from-outcome>inicio</from-outcome>
-            <to-view-id>/Kiosko/inicioKiosko.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
             <from-outcome>olvidoClave</from-outcome>
             <to-view-id>/Ingreso/olvidoClave.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
-            <from-outcome>opcionesKiosko</from-outcome>
-            <to-view-id>/Kiosko/opcionesKiosko.xhtml</to-view-id>
+            <from-outcome>plantilla</from-outcome>
+            <to-view-id>/Plantilla/plantilla.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
@@ -31,56 +27,12 @@
             <from-outcome>ingreso</from-outcome>
             <to-view-id>/Ingreso/ingreso.xhtml</to-view-id>
         </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/Kiosko/inicioKiosko.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>cerrarSesion</from-outcome>
-            <to-view-id>/Ingreso/ingreso.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>cambiarClave</from-outcome>
-            <to-view-id>/Ingreso/cambiarClave.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
+    </navigation-rule>    
     <navigation-rule>
         <from-view-id>/Ingreso/olvidoClave.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>ingreso</from-outcome>
             <to-view-id>/Ingreso/ingreso.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/Ingreso/cambiarClave.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>inicio</from-outcome>
-            <to-view-id>/Kiosko/inicioKiosko.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>opciones</from-outcome>
-            <to-view-id>/Kiosko/opcionesKiosko.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/Kiosko/opcionesKiosko.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>cerrarSesion</from-outcome>
-            <to-view-id>/Ingreso/ingreso.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>cambiarClave</from-outcome>
-            <to-view-id>/Ingreso/cambiarClave.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>reporte</from-outcome>
-            <to-view-id>/Kiosko/generarReporte.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/Kiosko/generarReporte.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>opciones</from-outcome>
-            <to-view-id>/Kiosko/opcionesKiosko.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>

@@ -72,7 +72,8 @@ public class ControladorIngreso implements Serializable {
                                     administrarIngreso.modificarUltimaConexion(conexionEmpleado);
                                     HttpSession session = Util.getSession();
                                     session.setAttribute("idUsuario", usuario);
-                                    return "opcionesKiosko";
+                                    //return "opcionesKiosko";
+                                    return "plantilla";
                                 } else {
                                     // LA CONTRASEÑA ES INCORRECTA.
                                     if (bckUsuario == null || bckUsuario.equals(usuario)) {

@@ -27,9 +27,10 @@
                             <f:convertDateTime pattern="dd/MM/yyyy  -  hh:mm a"/>
                         </h:outputText>
                     </p:column>
-                    <p:commandLink value="Cambiar contraseña" process="@this" action="cambiarClave" style="color: #013ADF; float: right;"/>
+                    <p:commandLink value="Cambiar contraseña" process="@this" actionListener="#{controlNavegacion.configuracionAction_CambiarClave}"
+                                   update=":principalForm" style="color: #013ADF; float: right;"/>
                     <p:commandLink value=" Salir" actionListener="#{controladorIngreso.ingresar()}"
-                                   process="@this" action="cerrarSesion" style="color: #B40404; float: right;"/>
+                                   process="@this" style="color: #B40404; float: right;"/>
                 </p:panelGrid>
             </p:column>
         </p:panelGrid>

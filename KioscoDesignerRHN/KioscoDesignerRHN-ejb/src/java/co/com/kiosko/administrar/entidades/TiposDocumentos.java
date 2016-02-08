@@ -1,8 +1,11 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package co.com.kiosko.administrar.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -10,14 +13,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Felipe Triviño
+ * @author 908036
  */
 @Entity
-@Table(name = "KIOSCOS")
+@Table(name = "TIPOSDOCUMENTOS")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Kioscos.findAll", query = "SELECT k FROM Kioscos k")})
-public class Kioscos implements Serializable {
+    @NamedQuery(name = "TiposDocumentos.findAll", query = "SELECT t FROM TiposDocumentos t")})
+public class TiposDocumentos implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -27,31 +30,23 @@ public class Kioscos implements Serializable {
     private BigDecimal secuencia;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "CODIGO")
-    private BigInteger codigo;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "AYUDA")
-    private String ayuda;
+    @Size(min = 1, max = 30)
+    @Column(name = "NOMBRELARGO")
+    private String nombrelargo;
+    @Size(max = 3)
+    @Column(name = "NOMBRECORTO")
+    private String nombrecorto;
 
-    public Kioscos() {
+    public TiposDocumentos() {
     }
 
-    public Kioscos(BigDecimal secuencia) {
+    public TiposDocumentos(BigDecimal secuencia) {
         this.secuencia = secuencia;
     }
 
-    public Kioscos(BigDecimal secuencia, BigInteger codigo, String descripcion, String ayuda) {
+    public TiposDocumentos(BigDecimal secuencia, String nombrelargo) {
         this.secuencia = secuencia;
-        this.codigo = codigo;
-        this.descripcion = descripcion;
-        this.ayuda = ayuda;
+        this.nombrelargo = nombrelargo;
     }
 
     public BigDecimal getSecuencia() {
@@ -62,28 +57,20 @@ public class Kioscos implements Serializable {
         this.secuencia = secuencia;
     }
 
-    public BigInteger getCodigo() {
-        return codigo;
+    public String getNombrelargo() {
+        return nombrelargo;
     }
 
-    public void setCodigo(BigInteger codigo) {
-        this.codigo = codigo;
+    public void setNombrelargo(String nombrelargo) {
+        this.nombrelargo = nombrelargo;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getNombrecorto() {
+        return nombrecorto;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void setAyuda(String ayuda) {
-        this.ayuda = ayuda;
+    public void setNombrecorto(String nombrecorto) {
+        this.nombrecorto = nombrecorto;
     }
 
     @Override
@@ -96,10 +83,10 @@ public class Kioscos implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Kioscos)) {
+        if (!(object instanceof TiposDocumentos)) {
             return false;
         }
-        Kioscos other = (Kioscos) object;
+        TiposDocumentos other = (TiposDocumentos) object;
         if ((this.secuencia == null && other.secuencia != null) || (this.secuencia != null && !this.secuencia.equals(other.secuencia))) {
             return false;
         }
@@ -108,7 +95,7 @@ public class Kioscos implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.kiosko.administrar.entidades.Kioscos[ secuencia=" + secuencia + " ]";
+        return "co.com.kiosko.administrar.entidades.TiposDocumentos[ secuencia=" + secuencia + " ]";
     }
     
 }

@@ -59,16 +59,19 @@ public class ControladorOpcionesKiosko implements Serializable {
         opcionesPrincipales = administrarOpcionesKiosko.obtenerOpcionesKiosko(empleado.getEmpresa().getSecuencia());
     }
 
-    public String seleccionOpcion(OpcionesKioskos opc) {
+    public void seleccionOpcion(OpcionesKioskos opc) {
         if (opc.getOpcionesHijas() != null && !opc.getOpcionesHijas().isEmpty()) {
             navegacionOpciones.add(opc);
             opcionActual = opc;
             PrimefacesContextUI.actualizarLista(actualizar);
         } else {
             opcionReporte = opc;
-            return "reporte";
+            if (opc.getClase().equals("PANTALLA")) {
+                PrimefacesContextUI.ejecutar("pantallaDinamica();");
+            } else if (opc.getClase().equals("REPORTE")) {
+                PrimefacesContextUI.ejecutar("reporte();");
+            }
         }
-        return "";
     }
 
     public void volver() {

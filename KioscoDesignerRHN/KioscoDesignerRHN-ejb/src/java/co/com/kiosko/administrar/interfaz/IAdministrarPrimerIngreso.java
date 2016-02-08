@@ -19,5 +19,7 @@ public interface IAdministrarPrimerIngreso {
     public byte[] encriptar(java.lang.String valor);
 
     public java.lang.String desencriptar(byte[] valor);
+
+    public co.com.kiosko.administrar.entidades.ParametrizaClave obtenerFormatoClave(long nitEmpresa);
     
 }

@@ -2,11 +2,13 @@ package co.com.kiosko.administrar.implementacion;
 
 import co.com.kiosko.administrar.entidades.ConexionesKioskos;
 import co.com.kiosko.administrar.entidades.Empleados;
+import co.com.kiosko.administrar.entidades.ParametrizaClave;
 import co.com.kiosko.administrar.entidades.PreguntasKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarPrimerIngreso;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;
+import co.com.kiosko.persistencia.interfaz.IPersistenciaParametrizaClave;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaPreguntasKioskos;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaUtilidadesBD;
 import java.math.BigDecimal;
@@ -33,6 +35,8 @@ public class AdministrarPrimerIngreso implements IAdministrarPrimerIngreso {
     private IPersistenciaEmpleados persistenciaEmpleados;
     @EJB
     private IPersistenciaUtilidadesBD persistenciaUtilidadesBD;
+    @EJB
+    private IPersistenciaParametrizaClave persistenciaParametrizaClave;
     private EntityManager em;
 
     @Override
@@ -68,5 +72,10 @@ public class AdministrarPrimerIngreso implements IAdministrarPrimerIngreso {
     @Override
     public String desencriptar(byte[] valor) {
         return persistenciaUtilidadesBD.desencriptar(em, valor);
+    }
+
+    @Override
+    public ParametrizaClave obtenerFormatoClave(long nitEmpresa) {
+        return persistenciaParametrizaClave.obtenerFormatoClave(em, nitEmpresa);
     }
 }

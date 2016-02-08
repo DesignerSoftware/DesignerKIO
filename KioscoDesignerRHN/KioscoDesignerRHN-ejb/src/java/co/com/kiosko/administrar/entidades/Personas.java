@@ -101,6 +101,12 @@ public class Personas implements Serializable {
     @Size(max = 30)
     @Column(name = "SEGUNDONOMBRE")
     private String segundonombre;
+    @JoinColumn(name = "CIUDADNACIMIENTO", referencedColumnName = "SECUENCIA")
+    private Ciudades  ciudadNacimiento;
+    @JoinColumn(name = "CIUDADDOCUMENTO", referencedColumnName = "SECUENCIA")
+    private Ciudades  ciudadDocumento;
+    @JoinColumn(name = "TIPODOCUMENTO", referencedColumnName = "SECUENCIA")
+    private TiposDocumentos  tipoDocumento;
     @Transient
     private String nombreCompleto;
 
@@ -167,6 +173,9 @@ public class Personas implements Serializable {
     }
 
     public String getNombre() {
+        if (nombre == null) {
+            return "";
+        }
         return nombre;
     }
 
@@ -183,6 +192,9 @@ public class Personas implements Serializable {
     }
 
     public String getPrimerapellido() {
+        if (primerapellido == null) {
+            return "";
+        }
         return primerapellido;
     }
 
@@ -191,6 +203,9 @@ public class Personas implements Serializable {
     }
 
     public String getSegundoapellido() {
+        if (segundoapellido == null) {
+            return "";
+        }
         return segundoapellido;
     }
 
@@ -336,6 +351,30 @@ public class Personas implements Serializable {
         } else {
             this.nombreCompleto = nombreCompleto;
         }
+    }
+
+    public Ciudades getCiudadDocumento() {
+        return ciudadDocumento;
+    }
+
+    public void setCiudadDocumento(Ciudades ciudadDocumento) {
+        this.ciudadDocumento = ciudadDocumento;
+    }
+
+    public Ciudades getCiudadNacimiento() {
+        return ciudadNacimiento;
+    }
+
+    public void setCiudadNacimiento(Ciudades ciudadNacimiento) {
+        this.ciudadNacimiento = ciudadNacimiento;
+    }
+
+    public TiposDocumentos getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(TiposDocumentos tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
 
     @Override

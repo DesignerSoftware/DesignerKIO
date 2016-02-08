@@ -1,10 +1,13 @@
 package co.com.kiosko.controlador.ingreso;
 
 import co.com.kiosko.administrar.entidades.ConexionesKioskos;
+import co.com.kiosko.administrar.entidades.ParametrizaClave;
 import co.com.kiosko.administrar.interfaz.IAdministrarOlvidoClave;
 import co.com.kiosko.utilidadesUI.MensajesUI;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
 import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -26,6 +29,8 @@ public class ControladorOlvidoClave implements Serializable {
     private String claveActual, clave, confirmacion, respuesta1, respuesta2;
     //VALORES INGRESO
     private String usuario, nit;
+    //FORMATO CLAVE
+    private ParametrizaClave pc;
 
     public ControladorOlvidoClave() {
     }
@@ -38,6 +43,7 @@ public class ControladorOlvidoClave implements Serializable {
             administrarOlvidoClave.obtenerConexion(ses.getId());
             usuario = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getUsuario();
             nit = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit();
+            pc = administrarOlvidoClave.obtenerFormatoClave(Long.parseLong(nit));
             conexion = administrarOlvidoClave.obtenerConexionEmpleado(usuario, nit);
         } catch (Exception e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
@@ -55,9 +61,11 @@ public class ControladorOlvidoClave implements Serializable {
                     conexion.getRespuesta1(), conexion.getRespuesta2())) {
                 if (claveActual.equals(administrarOlvidoClave.desEncriptar(conexion.getPwd()))) {
                     if (clave.equals(confirmacion)) {
-                        conexion.setPwd(administrarOlvidoClave.encriptar(clave));
-                        if (administrarOlvidoClave.cambiarClave(conexion)) {
-                            PrimefacesContextUI.ejecutar("PF('dlgProcesoFinalizado').show()");
+                        if (validarClave(clave)) {
+                            conexion.setPwd(administrarOlvidoClave.encriptar(clave));
+                            if (administrarOlvidoClave.cambiarClave(conexion)) {
+                                PrimefacesContextUI.ejecutar("PF('dlgProcesoFinalizado').show()");
+                            }
                         }
                     } else {
                         MensajesUI.warn("La contraseña no coincide.");
@@ -81,9 +89,11 @@ public class ControladorOlvidoClave implements Serializable {
             if (administrarOlvidoClave.validarRespuestas(respuesta1, respuesta2,
                     conexion.getRespuesta1(), conexion.getRespuesta2())) {
                 if (clave.equals(confirmacion)) {
-                    conexion.setPwd(administrarOlvidoClave.encriptar(clave));
-                    if (administrarOlvidoClave.cambiarClave(conexion)) {
-                        PrimefacesContextUI.ejecutar("PF('dlgProcesoFinalizado').show()");
+                    if (validarClave(clave)) {
+                        conexion.setPwd(administrarOlvidoClave.encriptar(clave));
+                        if (administrarOlvidoClave.cambiarClave(conexion)) {
+                            PrimefacesContextUI.ejecutar("PF('dlgProcesoFinalizado').show()");
+                        }
                     }
                 } else {
                     MensajesUI.warn("La contraseña no coincide.");
@@ -94,6 +104,31 @@ public class ControladorOlvidoClave implements Serializable {
         } else {
             MensajesUI.warn("Todos los campos son obligatorios.");
         }
+    }
+
+    // (			# Start of group
+    // (?=.*\d)                 #   must contains one digit from 0-9
+    // (?=.*[a-z])		#   must contains one lowercase characters
+    // (?=.*[A-Z])		#   must contains one uppercase characters
+    // (?=.*[@#$%])		#   must contains one special symbols in the list "@#$%"
+    //            .		#     match anything with previous condition checking
+    //             {6,20}	#        length at least 6 characters and maximum of 20	
+    // )    			# End of group
+    public boolean validarClave(String clave) {
+        try {
+            String PATTERN_PASSWORD = pc.getFormato();
+            Pattern pattern = Pattern.compile(PATTERN_PASSWORD);
+            Matcher matcher = pattern.matcher(clave);
+            if (matcher.matches()) {
+                return true;
+            } else {
+                MensajesUI.error("Contraseña inválida: " + pc.getMensajevalidacion());
+            }
+        } catch (Exception e) {
+            MensajesUI.error("Error en el formato de clave. Por favor contacte a soporte.");
+        }
+
+        return false;
     }
 
     //GETTER AND SETTER

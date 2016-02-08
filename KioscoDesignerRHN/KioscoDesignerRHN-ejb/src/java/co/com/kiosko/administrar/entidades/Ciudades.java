@@ -1,8 +1,11 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package co.com.kiosko.administrar.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -10,14 +13,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Felipe Triviño
+ * @author 908036
  */
 @Entity
-@Table(name = "KIOSCOS")
+@Table(name = "CIUDADES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Kioscos.findAll", query = "SELECT k FROM Kioscos k")})
-public class Kioscos implements Serializable {
+    @NamedQuery(name = "Ciudades.findAll", query = "SELECT c FROM Ciudades c")})
+public class Ciudades implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -25,33 +28,27 @@ public class Kioscos implements Serializable {
     @NotNull
     @Column(name = "SECUENCIA")
     private BigDecimal secuencia;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "CODIGO")
-    private BigInteger codigo;
+    private Short codigo;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "AYUDA")
-    private String ayuda;
+    @Size(min = 1, max = 30)
+    @Column(name = "NOMBRE")
+    private String nombre;
+    @Size(max = 4)
+    @Column(name = "CODIGOALTERNATIVO")
+    private String codigoalternativo;
 
-    public Kioscos() {
+    public Ciudades() {
     }
 
-    public Kioscos(BigDecimal secuencia) {
+    public Ciudades(BigDecimal secuencia) {
         this.secuencia = secuencia;
     }
 
-    public Kioscos(BigDecimal secuencia, BigInteger codigo, String descripcion, String ayuda) {
+    public Ciudades(BigDecimal secuencia, String nombre) {
         this.secuencia = secuencia;
-        this.codigo = codigo;
-        this.descripcion = descripcion;
-        this.ayuda = ayuda;
+        this.nombre = nombre;
     }
 
     public BigDecimal getSecuencia() {
@@ -62,28 +59,28 @@ public class Kioscos implements Serializable {
         this.secuencia = secuencia;
     }
 
-    public BigInteger getCodigo() {
+    public Short getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(BigInteger codigo) {
+    public void setCodigo(Short codigo) {
         this.codigo = codigo;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public String getAyuda() {
-        return ayuda;
+    public String getCodigoalternativo() {
+        return codigoalternativo;
     }
 
-    public void setAyuda(String ayuda) {
-        this.ayuda = ayuda;
+    public void setCodigoalternativo(String codigoalternativo) {
+        this.codigoalternativo = codigoalternativo;
     }
 
     @Override
@@ -96,10 +93,10 @@ public class Kioscos implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Kioscos)) {
+        if (!(object instanceof Ciudades)) {
             return false;
         }
-        Kioscos other = (Kioscos) object;
+        Ciudades other = (Ciudades) object;
         if ((this.secuencia == null && other.secuencia != null) || (this.secuencia != null && !this.secuencia.equals(other.secuencia))) {
             return false;
         }
@@ -108,7 +105,7 @@ public class Kioscos implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.kiosko.administrar.entidades.Kioscos[ secuencia=" + secuencia + " ]";
+        return "co.com.kiosko.administrar.entidades.Ciudades[ secuencia=" + secuencia + " ]";
     }
     
 }

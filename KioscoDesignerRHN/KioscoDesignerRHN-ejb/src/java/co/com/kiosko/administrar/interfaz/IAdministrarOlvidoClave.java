@@ -17,6 +17,8 @@ public interface IAdministrarOlvidoClave {
     public byte[] encriptar(java.lang.String valor);
 
     public java.lang.String desEncriptar(byte[] valor);
+
+    public co.com.kiosko.administrar.entidades.ParametrizaClave obtenerFormatoClave(long nitEmpresa);
     
     
 }

@@ -1,64 +1,62 @@
 <?xml version='1.0' encoding='ISO-8859-1' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition
-    template="/Plantilla/plantilla.xhtml"
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
     xmlns:c="http://java.sun.com/jsp/jstl/core">
-
-    <ui:define name="content">
-        <p:panel header="Cambiar contraseña">
-            <p:panelGrid id="pnlCambiarClave" columns="2" styleClass="noBorders" style="padding: 20px">
-                <p:column>
-                    <h:graphicImage value="resources/imagenes/cambioClave.png"  />
-                </p:column>
-                <p:column>
-                    <p:panelGrid columns="2" styleClass="noBorders">
-                        <h:outputText value="Pregunta 1:"/>
-                        <h:outputText value="#{controladorOlvidoClave.conexion.pregunta1.pregunta}"/>
-                        <h:outputText value="Respuesta:"/>
-                        <p:password value="#{controladorOlvidoClave.respuesta1}"/>
-                        <h:outputText value="Pregunta 2:"/>
-                        <h:outputText value="#{controladorOlvidoClave.conexion.pregunta2.pregunta}"/>
-                        <h:outputText value="Respuesta:"/>
-                        <p:password value="#{controladorOlvidoClave.respuesta2}"/>
+    <p:panel header="Cambiar contraseña">
+        <p:panelGrid id="pnlCambiarClave" columns="2" styleClass="noBorders" style="padding: 20px">
+            <p:column>
+                <h:graphicImage value="resources/imagenes/cambioClave.png"  />
+            </p:column>
+            <p:column>
+                <p:panelGrid columns="2" styleClass="noBorders">
+                    <h:outputText value="Pregunta 1:"/>
+                    <h:outputText value="#{controladorOlvidoClave.conexion.pregunta1.pregunta}"/>
+                    <h:outputText value="Respuesta:"/>
+                    <p:password value="#{controladorOlvidoClave.respuesta1}"/>
+                    <h:outputText value="Pregunta 2:"/>
+                    <h:outputText value="#{controladorOlvidoClave.conexion.pregunta2.pregunta}"/>
+                    <h:outputText value="Respuesta:"/>
+                    <p:password value="#{controladorOlvidoClave.respuesta2}"/>
 
 
-                        <h:outputText value="Contraseña actual:"/>
-                        <p:password value="#{controladorOlvidoClave.claveActual}"/>
-                        <h:outputText value="Nueva contraseña:"/>
-                        <p:password value="#{controladorOlvidoClave.clave}"/>
-                        <h:outputText value="Confirmar contraseña:"/>
-                        <p:password value="#{controladorOlvidoClave.confirmacion}"/>
+                    <h:outputText value="Contraseña actual:"/>
+                    <p:password value="#{controladorOlvidoClave.claveActual}"/>
+                    <h:outputText value="Nueva contraseña:"/>
+                    <p:password value="#{controladorOlvidoClave.clave}"/>
+                    <h:outputText value="Confirmar contraseña:"/>
+                    <p:password value="#{controladorOlvidoClave.confirmacion}"/>
 
-                        <p:column/>
-                        <p:column>
-                            <p:commandButton value="Cambiar contraseña" actionListener="#{controladorOlvidoClave.cambiarClave()}"
-                                             process="pnlCambiarClave"
-                                             icon="ui-icon-key"/>
-                            <p:commandButton value="Cancelar" action="opciones" icon="ui-icon-closethick"/>
-                        </p:column>
-                    </p:panelGrid>
-                </p:column>
-            </p:panelGrid>
-        </p:panel>
-        <h:form>
-            <p:dialog id="dlgProcesoFinalizado" header="Contraseña cambiada..." widgetVar="dlgProcesoFinalizado"
-                      resizable="false" draggable="false" modal="true"  closable="false" width="500">
-                <p:panelGrid columns="2"  styleClass="noBorders">
-                    <h:graphicImage value="resources/imagenes/registroExitoso.jpg" width="90" height="80"  />
-
-                    <h:outputText value="La contraseña ha sido cambiada exitosamente." style="text-align: justify"/>
                     <p:column/>
-                    <p:commandButton value="Finalizar" onclick="PF('dlgProcesoFinalizado').hide();" 
-                                     style="float: right" process="@this" action="opciones"
-                                     icon="ui-icon-check"/>
+                    <p:column>
+                        <p:commandButton value="Cambiar contraseña" actionListener="#{controladorOlvidoClave.cambiarClave()}"
+                                         process="pnlCambiarClave"
+                                         icon="ui-icon-key"/>
+                        <p:commandButton value="Cancelar" actionListener="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
+                                         update=":principalForm" process="@this" icon="ui-icon-closethick"/>
+                    </p:column>
                 </p:panelGrid>
-            </p:dialog>
-        </h:form>
-    </ui:define>
+            </p:column>
+        </p:panelGrid>
+    </p:panel>
+    <h:form>
+        <p:dialog id="dlgProcesoFinalizado" header="Contraseña cambiada..." widgetVar="dlgProcesoFinalizado"
+                  resizable="false" draggable="false" modal="true"  closable="false" width="500">
+            <p:panelGrid columns="2"  styleClass="noBorders">
+                <h:graphicImage value="resources/imagenes/registroExitoso.jpg" width="90" height="80"  />
+
+                <h:outputText value="La contraseña ha sido cambiada exitosamente." style="text-align: justify"/>
+                <p:column/>
+                <p:commandButton value="Finalizar" onclick="PF('dlgProcesoFinalizado').hide();" 
+                                 style="float: right" process="@this" actionListener="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
+                                 update=":principalForm"
+                                 icon="ui-icon-check"/>
+            </p:panelGrid>
+        </p:dialog>
+    </h:form>
 </ui:composition>
 
