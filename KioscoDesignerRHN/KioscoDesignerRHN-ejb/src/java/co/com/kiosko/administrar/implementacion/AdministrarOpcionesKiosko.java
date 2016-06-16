@@ -1,6 +1,6 @@
 package co.com.kiosko.administrar.implementacion;
 
-import co.com.kiosko.administrar.entidades.OpcionesKioskos;
+import co.com.kiosko.entidades.OpcionesKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarOpcionesKiosko;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaOpcionesKioskos;

@@ -10,12 +10,14 @@ public class CadenasKioskos {
     private String descripcion;
     private String cadena;
     private String nit;
+    private String fondo;
 
-    public CadenasKioskos(String id, String descripcion, String cadena, String nit) {
+    public CadenasKioskos(String id, String descripcion, String cadena, String nit, String fondo) {
         this.id = id;
         this.descripcion = descripcion;
         this.cadena = cadena;
         this.nit = nit;
+        this.fondo = fondo;
     }
 
     public String getCadena() {
@@ -49,4 +51,13 @@ public class CadenasKioskos {
     public void setNit(String nit) {
         this.nit = nit;
     }
+
+    public String getFondo() {
+        return fondo;
+    }
+
+    public void setFondo(String fondo) {
+        this.fondo = fondo;
+    }
+    
 }

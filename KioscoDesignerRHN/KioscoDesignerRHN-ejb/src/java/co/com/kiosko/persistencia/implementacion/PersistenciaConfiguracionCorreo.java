@@ -1,6 +1,6 @@
 package co.com.kiosko.persistencia.implementacion;
 
-import co.com.kiosko.administrar.entidades.ConfiguracionCorreo;
+import co.com.kiosko.entidades.ConfiguracionCorreo;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConfiguracionCorreo;
 import java.math.BigDecimal;
 import javax.ejb.Stateless;

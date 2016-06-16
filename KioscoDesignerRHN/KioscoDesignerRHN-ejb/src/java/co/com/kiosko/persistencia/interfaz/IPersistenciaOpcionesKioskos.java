@@ -6,6 +6,6 @@ package co.com.kiosko.persistencia.interfaz;
  */
 public interface IPersistenciaOpcionesKioskos {
 
-    public java.util.List<co.com.kiosko.administrar.entidades.OpcionesKioskos> consultarOpcionesPorPadre(javax.persistence.EntityManager eManager, java.math.BigDecimal secuenciaPadre, java.math.BigDecimal secuenciaEmpresa);
+    public java.util.List<co.com.kiosko.entidades.OpcionesKioskos> consultarOpcionesPorPadre(javax.persistence.EntityManager eManager, java.math.BigDecimal secuenciaPadre, java.math.BigDecimal secuenciaEmpresa);
     
 }

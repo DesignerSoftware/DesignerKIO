@@ -1,11 +1,13 @@
-package co.com.kiosko.reportes.Correo;
+package co.com.kiosko.correo;
 
-import co.com.kiosko.administrar.entidades.ConfiguracionCorreo;
+import co.com.kiosko.entidades.ConfiguracionCorreo;
 import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.mail.BodyPart;
 import javax.mail.Message;
+import javax.mail.MessagingException;
+//import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -29,16 +31,25 @@ public class EnvioCorreo {
             propiedadesConexion.setProperty("mail.smtp.host", cfc.getServidorSmtp()); //IP DEL SERVIDOR SMTP
             propiedadesConexion.setProperty("mail.smtp.port", cfc.getPuerto());
 
+            if (cfc.getUsarssl().equalsIgnoreCase("S")) {
+                propiedadesConexion.put("mail.smtp.socketFactory.port", cfc.getPuerto());
+                propiedadesConexion.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            }
             if (cfc.getStarttls().equalsIgnoreCase("S")) {
                 propiedadesConexion.setProperty("mail.smtp.starttls.enable", "true");
             }
-
             if (cfc.getAutenticado().equalsIgnoreCase("S")) {
                 propiedadesConexion.setProperty("mail.smtp.auth", "true");
             }
 
             // Preparamos la sesion
             Session session = Session.getDefaultInstance(propiedadesConexion);
+            /*Session session = Session.getDefaultInstance(propiedadesConexion, new javax.mail.Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(cfc.getRemitente(), cfc.getClave());
+                }
+            });*/
 
             //Mensaje que va en el correo
             BodyPart texto = new MimeBodyPart();
@@ -86,8 +97,8 @@ public class EnvioCorreo {
 
             //System.out.println("CORREO ENVIADO EXITOSAMENTE");
             return true;
-        } catch (Exception e) {
-            System.out.println("Error enviarCorreo: " + e);
+        } catch (MessagingException e) {
+            System.out.println("Error enviarCorreo: " + e.getMessage());
             return false;
         }
     }

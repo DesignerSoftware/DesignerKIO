@@ -1,4 +1,4 @@
-package co.com.kiosko.administrar.entidades;
+package co.com.kiosko.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,11 +13,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Felipe Triviño
  */
 @Entity
-@Table(name = "KIOSCOS")
+@Table(name = "PREGUNTASKIOSKOS")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Kioscos.findAll", query = "SELECT k FROM Kioscos k")})
-public class Kioscos implements Serializable {
+    @NamedQuery(name = "PreguntasKioskos.findAll", query = "SELECT p FROM PreguntasKioskos p")})
+public class PreguntasKioskos implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -25,33 +25,17 @@ public class Kioscos implements Serializable {
     @NotNull
     @Column(name = "SECUENCIA")
     private BigDecimal secuencia;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "CODIGO")
     private BigInteger codigo;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "AYUDA")
-    private String ayuda;
+    @Size(max = 50)
+    @Column(name = "PREGUNTA")
+    private String pregunta;
 
-    public Kioscos() {
+    public PreguntasKioskos() {
     }
 
-    public Kioscos(BigDecimal secuencia) {
+    public PreguntasKioskos(BigDecimal secuencia) {
         this.secuencia = secuencia;
-    }
-
-    public Kioscos(BigDecimal secuencia, BigInteger codigo, String descripcion, String ayuda) {
-        this.secuencia = secuencia;
-        this.codigo = codigo;
-        this.descripcion = descripcion;
-        this.ayuda = ayuda;
     }
 
     public BigDecimal getSecuencia() {
@@ -70,20 +54,12 @@ public class Kioscos implements Serializable {
         this.codigo = codigo;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getPregunta() {
+        return pregunta;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void setAyuda(String ayuda) {
-        this.ayuda = ayuda;
+    public void setPregunta(String pregunta) {
+        this.pregunta = pregunta;
     }
 
     @Override
@@ -96,10 +72,10 @@ public class Kioscos implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Kioscos)) {
+        if (!(object instanceof PreguntasKioskos)) {
             return false;
         }
-        Kioscos other = (Kioscos) object;
+        PreguntasKioskos other = (PreguntasKioskos) object;
         if ((this.secuencia == null && other.secuencia != null) || (this.secuencia != null && !this.secuencia.equals(other.secuencia))) {
             return false;
         }
@@ -108,7 +84,7 @@ public class Kioscos implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.kiosko.administrar.entidades.Kioscos[ secuencia=" + secuencia + " ]";
+        return "co.com.kiosko.administrar.entidades.PreguntasKioskos[ secuencia=" + secuencia + " ]";
     }
     
 }

@@ -1,6 +1,6 @@
 package co.com.kiosko.controlador.kiosko;
 
-import co.com.kiosko.administrar.entidades.ConexionesKioskos;
+import co.com.kiosko.entidades.ConexionesKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarInicioKiosko;
 import co.com.kiosko.controlador.ingreso.ControladorIngreso;
 import co.com.kiosko.utilidadesUI.MensajesUI;
@@ -10,14 +10,16 @@ import java.math.BigInteger;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.el.ELException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import co.com.kiosko.clasesAyuda.CadenasKioskos;
+import co.com.kiosko.clasesAyuda.LeerArchivoXML;
 
 /**
  *
@@ -35,41 +37,48 @@ public class ControladorInicioKiosko implements Serializable {
     //FOTO EMPLEADO
     private FileInputStream fis;
     private StreamedContent fotoEmpleado;
+    private StreamedContent logoEmpresa;
     private String pathFoto;
     private BigInteger identificacionEmpleado;
+    private String nitEmpresa;
+    private String fondoEmpresa;
 
     public ControladorInicioKiosko() {
     }
 
     @PostConstruct
     public void inicializarAdministrador() {
+        System.out.println("ControladorInicioKiosko.inicializarAdministrador");
         try {
             FacesContext x = FacesContext.getCurrentInstance();
             HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
             administrarInicioKiosko.obtenerConexion(ses.getId());
             conexionEmpleado = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getConexionEmpleado();
             ultimaConexionEmpleado = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getUltimaConexion();
+            nitEmpresa = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit();
             pathFoto = administrarInicioKiosko.fotoEmpleado();
             obtenerFotoEmpleado();
-        } catch (Exception e) {
+            System.out.println("Inicializado");
+        } catch (ELException e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
             System.out.println("Causa: " + e.getCause());
         }
     }
 
     public void obtenerFotoEmpleado() {
+        String formatoFotoEmpleado="image/jpg";
         String rutaFoto = pathFoto + conexionEmpleado.getEmpleado().getCodigoempleado() + ".jpg";
         if (rutaFoto != null) {
             try {
                 fis = new FileInputStream(new File(rutaFoto));
-                fotoEmpleado = new DefaultStreamedContent(fis, "image/jpg");
-            } catch (IOException e) {
+                fotoEmpleado = new DefaultStreamedContent(fis, formatoFotoEmpleado);
+            } catch (FileNotFoundException e) {
                 try {
                     fis = new FileInputStream(new File(pathFoto + "sinFoto.jpg"));
-                    fotoEmpleado = new DefaultStreamedContent(fis, "image/jpg");
+                    fotoEmpleado = new DefaultStreamedContent(fis, formatoFotoEmpleado);
                     //System.out.println("Foto del empleado no encontrada. \n" + e);
-                } catch (Exception ex) {
-                    System.out.println("ERROR. \n" + e);
+                } catch (FileNotFoundException ex) {
+                    System.out.println("ERROR. \n" + ex);
                 }
             }
         }
@@ -77,12 +86,13 @@ public class ControladorInicioKiosko implements Serializable {
 
     //SUBIR FOTO EMPLEADO
     public void subirFotoEmpleado(FileUploadEvent event) throws IOException {
-        RequestContext context = RequestContext.getCurrentInstance();
+        //RequestContext context = RequestContext.getCurrentInstance();
         String extension = event.getFile().getFileName().split("[.]")[1];
         Long tamanho = event.getFile().getSize();
         if (extension.equals("jpg") || extension.equals("JPG")) {
             if (tamanho <= 153600) {
-                identificacionEmpleado = conexionEmpleado.getEmpleado().getPersona().getNumerodocumento();
+                //identificacionEmpleado = conexionEmpleado.getEmpleado().getPersona().getNumerodocumento();
+                identificacionEmpleado = conexionEmpleado.getEmpleado().getCodigoempleado();
                 transformarArchivo(tamanho, event.getFile().getInputstream());
                 obtenerFotoEmpleado();
                 PrimefacesContextUI.ejecutar("PF('subirFoto').hide()");
@@ -92,7 +102,7 @@ public class ControladorInicioKiosko implements Serializable {
                 MensajesUI.error("El tamaño máximo permitido es de 150 KB.");
             }
         } else {
-            MensajesUI.error("Solo se admiten imágenes con formato (.JPG).");
+            MensajesUI.error("Solo se admiten imagenes con formato (.JPG).");
         }
     }
 
@@ -112,6 +122,41 @@ public class ControladorInicioKiosko implements Serializable {
         }
     }
 
+    public void obtenerLogoEmpresa() {
+        String formatoFotoEmpleado="image/png";
+        String logo = conexionEmpleado.getEmpleado().getEmpresa().getLogo().substring(0,conexionEmpleado.getEmpleado().getEmpresa().getLogo().length()-4);
+        String rutaLogo = pathFoto + logo+".png";
+        if (rutaLogo != null) {
+            try {
+                fis = new FileInputStream(new File(rutaLogo));
+                logoEmpresa = new DefaultStreamedContent(fis, formatoFotoEmpleado, logo);
+            } catch (FileNotFoundException e) {
+                try {
+                    rutaLogo=pathFoto+"sinLogo.png";
+                    fis = new FileInputStream(new File(rutaLogo));
+                    logoEmpresa = new DefaultStreamedContent(fis, formatoFotoEmpleado, rutaLogo);
+                } catch (FileNotFoundException ex) {
+                    System.out.println("ERROR. No se encontro el logo de la empresa. \n");
+                    System.out.println("ruta: "+rutaLogo);
+                    System.out.println("execption: "+ex);
+                }
+            }
+        }
+    }
+    /*private void consultaNitEmpresa(){
+        nitEmpresa = String.valueOf(conexionEmpleado.getEmpleado().getEmpresa().getNit());
+    }*/
+    
+    public void obtenerFondoEmpresa(){
+        //String rutaFondo = null;
+        //consultaNitEmpresa();
+        for (CadenasKioskos elemento : (new LeerArchivoXML()).leerArchivoEmpresasKiosko()) {
+            if ( elemento.getNit().equals( nitEmpresa ) ){
+                fondoEmpresa = elemento.getFondo();
+            }
+        }
+    }
+
     //GETTER AND SETTER
     public ConexionesKioskos getConexionEmpleado() {
         return conexionEmpleado;
@@ -121,7 +166,7 @@ public class ControladorInicioKiosko implements Serializable {
         if (fotoEmpleado != null) {
             try {
                 fotoEmpleado.getStream().available();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 obtenerFotoEmpleado();
             }
         }
@@ -135,4 +180,39 @@ public class ControladorInicioKiosko implements Serializable {
     public Date getUltimaConexionEmpleado() {
         return ultimaConexionEmpleado;
     }
+
+    public StreamedContent getLogoEmpresa() {
+        if (logoEmpresa != null) {
+            try {
+                logoEmpresa.getStream().available();
+            } catch (IOException e) {
+                obtenerLogoEmpresa();
+            }
+        } else {
+            obtenerLogoEmpresa();
+        }
+        return logoEmpresa;
+    }
+
+    public void setLogoEmpresa(StreamedContent logoEmpresa) {
+        this.logoEmpresa = logoEmpresa;
+    }
+
+    public String getNitEmpresa() {
+        return nitEmpresa;
+    }
+
+    public String getFondoEmpresa() {
+        System.out.println("ControladorInicioKiosko.getFondoEmpresa");
+        if (fondoEmpresa == null) {
+            obtenerFondoEmpresa();
+        }
+        System.out.println("fondoEmpresa: "+fondoEmpresa);
+        return fondoEmpresa;
+    }
+
+    public void setFondoEmpresa(String fondoEmpresa) {
+        this.fondoEmpresa = fondoEmpresa;
+    }
+
 }

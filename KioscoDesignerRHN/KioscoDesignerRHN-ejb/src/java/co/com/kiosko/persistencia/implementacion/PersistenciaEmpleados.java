@@ -1,6 +1,6 @@
 package co.com.kiosko.persistencia.implementacion;
 
-import co.com.kiosko.administrar.entidades.Empleados;
+import co.com.kiosko.entidades.Empleados;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;
 import java.math.BigInteger;
 import javax.ejb.Stateless;

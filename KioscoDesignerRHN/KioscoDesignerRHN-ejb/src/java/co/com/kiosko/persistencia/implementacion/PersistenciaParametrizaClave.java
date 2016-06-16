@@ -1,6 +1,6 @@
 package co.com.kiosko.persistencia.implementacion;
 
-import co.com.kiosko.administrar.entidades.ParametrizaClave;
+import co.com.kiosko.entidades.ParametrizaClave;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaParametrizaClave;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

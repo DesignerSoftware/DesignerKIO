@@ -6,14 +6,44 @@
       xmlns:p="http://primefaces.org/ui">
 
     <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link href="././resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
         <link href="././resources/css/estilosPersonalizados.css" rel="stylesheet" type="text/css" />
+        <link href="././resources/imagenes/favicon.ico" rel="shortcut icon"/>
         <script src="./resources/js/scriptPersonalizado.js"/>
-        <title>Kiosko Recursos Humanos</title>
+        <title>..::Designer.Kio::..</title>
+        <script type="text/javascript">
+            var connected = true;
+            function refresh() {
+                if (connected) {
+                    var div = document.getElementById('online');
+                    div.style.display = "block";
+                    setTimeout('document.location.reload()', 1200000);
+                } else {
+                    var div = document.getElementById('offline');
+                    div.style.display = 'block';
+                    setTimeout('document.location.reload()', 5000);
+                }
+            }
+
+            function offline() {
+                connected = false;
+                refresh();
+            }
+            function start() {
+                PF('statusDialog').show();
+            }
+
+            function stop() {
+                PF('statusDialog').hide();
+            }
+        </script>
     </h:head>
 
     <h:body>
         <h:form id="principalForm" enctype="multipart/form-data">
+            <p:growl id="growl" widgetVar="growl" showDetail="true" autoUpdate="true"/>
             <div id="top" class="top">
                 <ui:insert name="top">
                     <ui:include src="/Kiosko/inicioKiosko.xhtml" />
@@ -22,7 +52,7 @@
             <div id="messagesout" class="top">
                 <p:messages id="messagessgeneral" showDetail="true"
                             autoUpdate="true" closable="true"/>
-                
+
             </div>
             <div class="center_content">
                 <ui:insert id="content" name="content">

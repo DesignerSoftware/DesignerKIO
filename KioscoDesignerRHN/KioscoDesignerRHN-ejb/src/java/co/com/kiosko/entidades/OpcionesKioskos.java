@@ -1,4 +1,4 @@
-package co.com.kiosko.administrar.entidades;
+package co.com.kiosko.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -7,7 +7,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -126,7 +125,11 @@ public class OpcionesKioskos implements Serializable {
     }
 
     public String getNombrearchivo() {
-        return nombrearchivo;
+        if (this.clase.equalsIgnoreCase("PANTALLA")) {
+            return "/Kiosko/" + nombrearchivo.toLowerCase() + ".xhtml";
+        } else {
+            return nombrearchivo;
+        }
     }
 
     public void setNombrearchivo(String nombrearchivo) {

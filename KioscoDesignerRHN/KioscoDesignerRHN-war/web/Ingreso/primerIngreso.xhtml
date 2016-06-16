@@ -6,11 +6,11 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <link href="././resources/css/estilosPersonalizados.css" rel="stylesheet" type="text/css" />
-        <title>Primer Ingreso Kiosko - Designer RHN</title>
+        <title>..::Kiosco - Designer.NOM::..</title>
     </h:head>
     <h:body style="font-size: 14px;">
         <h:form>
-            <p:panel header="Primer ingreso - Kiosko Designer RHN" >
+            <p:panel header="Primer ingreso - Kiosko - Designer.NOM" style="min-width: 618px;">
                 <p:messages id="mensaje" showDetail="true" autoUpdate="true" closable="true" />
 
                 <p:commandButton value="Salir" actionListener="#{controladorIngreso.ingresar()}" style="float: right" action="ingreso" icon="ui-icon-home"/>
@@ -20,14 +20,15 @@
                     </p:column>
                     <p:column>
                         <p:panelGrid columns="1" styleClass="noBorders" style="max-width: 850px" >
-                            <h:outputText id="informacion" value="**Es importante que memorice las respuestas de las preguntas que seleccione, 
-                                          ya que solo así podrá generar una nueva contraseña en caso de que la olvide." 
-                                          style="font-weight: bold; color: #BF1A1A; #{controladorPrimerIngreso.cssPanelPreguntas}"/>
+                            <h:outputText id="informacion" value="Es importante que memorice las respuestas de las preguntas que seleccione, 
+                                          ya que solo as&iacute; podr&aacute; generar una nueva contrase&ntilde;a en caso de que la olvide." 
+                                          style="color: #BF1A1A;"/>
                         </p:panelGrid>
-                        <p:panelGrid id="pnlPreguntas" columns="2" style="#{controladorPrimerIngreso.cssPanelPreguntas}" styleClass="noBorders" >
+                        <p:panelGrid id="pnlPreguntas" columns="2" styleClass="noBorders" >
                             <h:outputText value="Pregunta No 1*:" style="font-weight: bold"/>
                             <p:selectOneMenu value="#{controladorPrimerIngreso.nuevoIngreso.pregunta1}" 
-                                             converter="#{convertidorPreguntasKiosko}">
+                                             converter="#{convertidorPreguntasKiosko}"
+                                             style="position: relative; width: 200px;">
                                 <f:selectItem itemLabel="Seleccione una pregunta" itemValue="#{null}"/>
                                 <f:selectItems value="#{controladorPrimerIngreso.lstPreguntasKiosko}" var="pregunta1"
                                                itemLabel="#{pregunta1.pregunta}" itemValue="#{pregunta1}" />
@@ -38,7 +39,8 @@
 
                             <h:outputText value="Pregunta No 2*:" style="font-weight: bold"/>
                             <p:selectOneMenu value="#{controladorPrimerIngreso.nuevoIngreso.pregunta2}" 
-                                             converter="#{convertidorPreguntasKiosko}">
+                                             converter="#{convertidorPreguntasKiosko}"
+                                             style="position: relative; width: 200px;">
                                 <f:selectItem itemLabel="Seleccione una pregunta" itemValue="#{null}"/>
                                 <f:selectItems value="#{controladorPrimerIngreso.lstPreguntasKiosko}" var="pregunta2"
                                                itemLabel="#{pregunta2.pregunta}" itemValue="#{pregunta2}" />
@@ -53,23 +55,45 @@
                                              icon="ui-icon-check"/>
                         </p:panelGrid>
 
-                        <p:panelGrid id="pnlNuevaClave" columns="2" style="#{controladorPrimerIngreso.cssPanelClave}" styleClass="noBorders">
-                            <h:outputText value="Nueva contraseña: " style="font-weight: bold"/>
-                            <p:password value="#{controladorPrimerIngreso.clave}" redisplay="true"/>
-
-                            <h:outputText value="Confirmar contraseña: " style="font-weight: bold"/>
-                            <p:password value="#{controladorPrimerIngreso.confirmacion}" redisplay="true"/>
-                            <p:column/>
-                            <p:column>
-                                <p:commandButton value="Finalizar" style="float: right"  actionListener="#{controladorPrimerIngreso.finalizar()}"
-                                                 icon="ui-icon-check"/>
-                                <p:commandButton value="Atras" actionListener="#{controladorPrimerIngreso.atras()}" 
-                                                 style="float: right" update="pnlPreguntas, pnlNuevaClave, informacion"
-                                                 icon="ui-icon-arrowreturnthick-1-w"/>
-                            </p:column>
+                        <p:panelGrid id="pnlNuevaClave" style="#{controladorPrimerIngreso.cssPanelClave}" styleClass="noBorders">
+                            <p:row>
+                                <p:column colspan="2">
+                                    <h:outputText value="La contrase&ntilde;a: #{controladorPrimerIngreso.pc.mensajevalidacion}" style="font-weight: bold"/>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <!-- <h:outputText value="Nueva contrase&ntilde;a: " style="font-weight: bold"/> -->
+                                    <h:outputLabel for="pwd1" value="Nueva contrase&ntilde;a: " style="font-weight: bold"/>
+                                </p:column>
+                                <p:column>
+                                    <p:password id="pwd1" value="#{controladorPrimerIngreso.clave}" label="Nueva contrase&ntilde;a: " match="pwd2" redisplay="true"/>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <!-- <h:outputText value="Confirmar contrase&ntilde;a: " style="font-weight: bold"/> -->
+                                    <h:outputLabel for="pwd2" value="Confirmar contrase&ntilde;a: " style="font-weight: bold" />
+                                </p:column>
+                                <p:column>
+                                    <p:password id="pwd2" value="#{controladorPrimerIngreso.confirmacion}" label="Confirmar contrase&ntilde;a: " redisplay="true"/>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:commandButton value="Atras" actionListener="#{controladorPrimerIngreso.atras()}" 
+                                                     style="float: right" update="pnlPreguntas, pnlNuevaClave, informacion"
+                                                     icon="ui-icon-arrowreturnthick-1-w"/>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton id="btnFinalizar" value="Finalizar" style="float: right"  actionListener="#{controladorPrimerIngreso.finalizar()}"
+                                                     icon="ui-icon-check"/>
+                                </p:column>
+                            </p:row>
                         </p:panelGrid>
                     </p:column>
                 </p:panelGrid>
+                <p:defaultCommand target="btnFinalizar" />
             </p:panel>
         </h:form>
         <h:form>
@@ -79,8 +103,8 @@
                     <h:graphicImage value="resources/imagenes/registroExitoso.jpg" width="90" height="80"  />
                     <p align="justify">
                         ¡Felicitaciones!, las respuestas a las preguntas seleccionadas 
-                        junto con su contraseña han sido guardadas exitosamente,
-                        ahora puede ingresar al Kiosko con su nueva contraseña.
+                        junto con su contrase&ntilde;a han sido guardadas exitosamente,
+                        ahora puede ingresar al Kiosko con su nueva contrase&ntilde;a.
                     </p>
                     <p:column/>
                     <p:commandButton value="Continuar" onclick="PF('dlgProcesoFinalizado').hide();" 

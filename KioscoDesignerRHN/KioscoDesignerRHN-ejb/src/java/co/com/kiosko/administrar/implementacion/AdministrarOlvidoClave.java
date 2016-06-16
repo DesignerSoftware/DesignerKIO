@@ -1,7 +1,7 @@
 package co.com.kiosko.administrar.implementacion;
 
-import co.com.kiosko.administrar.entidades.ConexionesKioskos;
-import co.com.kiosko.administrar.entidades.ParametrizaClave;
+import co.com.kiosko.entidades.ConexionesKioskos;
+import co.com.kiosko.entidades.ParametrizaClave;
 import co.com.kiosko.administrar.interfaz.IAdministrarOlvidoClave;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;

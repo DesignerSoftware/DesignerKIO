@@ -1,6 +1,6 @@
 package co.com.kiosko.convertidor;
 
-import co.com.kiosko.administrar.entidades.PreguntasKioskos;
+import co.com.kiosko.entidades.PreguntasKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaPreguntasKioskos;
 import java.math.BigDecimal;

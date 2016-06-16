@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <conexiones>
     <cadenaKiosko id="1">
-        <descripcion>MINDSHARE DE COLOMBIA</descripcion>
+        <descripcion>DESIGNER SOFTWARE LTDA</descripcion>
         <cadena>DEFAULT1</cadena>
-        <nit>830058081</nit>
+        <nit>830045567</nit>
+        <fondo>fondoMenu.png</fondo>
     </cadenaKiosko>
     <cadenaKiosko id="2">
         <descripcion>GROUPM TRADING COLOMBIA SAS</descripcion>
         <cadena>DEFAULT1</cadena>
         <nit>900426105</nit>
+        <fondo>fondoMenu.png</fondo>
     </cadenaKiosko>
     <cadenaKiosko id="3">
         <descripcion>MEDIAEDGE</descripcion>
         <cadena>DEFAULT2</cadena>
         <nit>830060529</nit>
+        <fondo>fondoMenu.png</fondo>
     </cadenaKiosko>
     <cadenaKiosko id="4">
         <descripcion>COMPET DE COLOMBIA LTDA</descripcion>
         <cadena>DEFAULT3</cadena>
         <nit>900406133</nit>
+        <fondo>fondoMenu.png</fondo>
     </cadenaKiosko>
 </conexiones>

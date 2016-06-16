@@ -6,6 +6,6 @@ package co.com.kiosko.persistencia.interfaz;
  */
 public interface IPersistenciaParametrizaClave {
 
-    public co.com.kiosko.administrar.entidades.ParametrizaClave obtenerFormatoClave(javax.persistence.EntityManager eManager, long nitEmpresa);
+    public co.com.kiosko.entidades.ParametrizaClave obtenerFormatoClave(javax.persistence.EntityManager eManager, long nitEmpresa);
     
 }

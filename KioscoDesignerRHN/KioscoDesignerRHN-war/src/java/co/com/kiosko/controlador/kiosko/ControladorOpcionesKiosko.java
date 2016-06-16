@@ -1,7 +1,7 @@
 package co.com.kiosko.controlador.kiosko;
 
-import co.com.kiosko.administrar.entidades.Empleados;
-import co.com.kiosko.administrar.entidades.OpcionesKioskos;
+import co.com.kiosko.entidades.Empleados;
+import co.com.kiosko.entidades.OpcionesKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarOpcionesKiosko;
 import co.com.kiosko.controlador.ingreso.ControladorIngreso;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.el.ELException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -49,7 +50,7 @@ public class ControladorOpcionesKiosko implements Serializable {
             requerirOpciones();
             opcionActual = opcionesPrincipales;
             navegacionOpciones.add(opcionActual);
-        } catch (Exception e) {
+        } catch (ELException e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
             System.out.println("Causa: " + e.getCause());
         }

@@ -1,8 +1,8 @@
 package co.com.kiosko.controlador.ingreso;
 
-import co.com.kiosko.administrar.entidades.ConexionesKioskos;
-import co.com.kiosko.administrar.entidades.ParametrizaClave;
-import co.com.kiosko.administrar.entidades.PreguntasKioskos;
+import co.com.kiosko.entidades.ConexionesKioskos;
+import co.com.kiosko.entidades.ParametrizaClave;
+import co.com.kiosko.entidades.PreguntasKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarPrimerIngreso;
 import co.com.kiosko.utilidadesUI.MensajesUI;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
@@ -14,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.el.ELException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -41,7 +42,7 @@ public class ControladorPrimerIngreso implements Serializable {
 
     public ControladorPrimerIngreso() {
         nuevoIngreso = new ConexionesKioskos();
-        cssPanelPreguntas = "";
+        cssPanelPreguntas = "resources/css/panelpreguntas.css";
         cssPanelClave = "display: none";
     }
 
@@ -55,7 +56,11 @@ public class ControladorPrimerIngreso implements Serializable {
             nit = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit();
             pc = administrarPrimerIngreso.obtenerFormatoClave(Long.parseLong(nit));
             requerirPreguntasSeguridad();
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
+            System.out.println("Error postconstruct. Texto no esta en formato numérico.");
+            System.out.println(this.getClass().getName() + ": "+ e);
+            System.out.println("Causa: " + e.getCause());
+        } catch (ELException e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
             System.out.println("Causa: " + e.getCause());
         }
@@ -184,4 +189,13 @@ public class ControladorPrimerIngreso implements Serializable {
     public void setCssPanelPreguntas(String cssPanelPreguntas) {
         this.cssPanelPreguntas = cssPanelPreguntas;
     }
+
+    public ParametrizaClave getPc() {
+        return pc;
+    }
+
+    public void setPc(ParametrizaClave pc) {
+        this.pc = pc;
+    }
+    
 }

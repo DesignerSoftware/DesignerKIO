@@ -1,6 +1,7 @@
 package co.com.kiosko.controlador.kiosko;
 
-import co.com.kiosko.administrar.entidades.Empleados;
+import co.com.kiosko.entidades.Empleados;
+//import co.com.kiosko.clasesAyuda.NavegationPageURL;
 import co.com.kiosko.controlador.ingreso.ControladorIngreso;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
@@ -14,11 +15,12 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean
 @ViewScoped
-public class ControladorPantallaPrueba implements Serializable {
+public class ControladorKio_DatoPersonal implements Serializable {
 
     private Empleados empleado;
+    private String urlMenuNavegation;
 
-    public ControladorPantallaPrueba() {
+    public ControladorKio_DatoPersonal() {
     }
 
     @PostConstruct

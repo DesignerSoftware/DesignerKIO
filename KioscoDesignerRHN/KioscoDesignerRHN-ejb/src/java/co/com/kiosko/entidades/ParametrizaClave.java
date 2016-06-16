@@ -1,4 +1,4 @@
-package co.com.kiosko.administrar.entidades;
+package co.com.kiosko.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -12,11 +12,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Felipe Triviño
  */
 @Entity
-@Table(name = "GENERALES")
+@Table(name = "PARAMETRIZACLAVE")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Generales.findAll", query = "SELECT g FROM Generales g")})
-public class Generales implements Serializable {
+    @NamedQuery(name = "ParametrizaClave.findAll", query = "SELECT p FROM ParametrizaClave p")})
+public class ParametrizaClave implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -24,28 +24,31 @@ public class Generales implements Serializable {
     @NotNull
     @Column(name = "SECUENCIA")
     private BigDecimal secuencia;
+    @JoinColumn(name = "EMPRESA", referencedColumnName = "SECUENCIA")
+    @ManyToOne(optional = false)
+    private Empresas empresa;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "PATHREPORTES")
-    private String pathreportes;
-    @Size(max = 100)
-    @Column(name = "UBICAREPORTES")
-    private String ubicareportes;
-    @Size(max = 200)
-    @Column(name = "PATHFOTO")
-    private String pathfoto;
+    @Size(min = 1, max = 200)
+    @Column(name = "FORMATO")
+    private String formato;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 250)
+    @Column(name = "MENSAJEVALIDACION")
+    private String mensajevalidacion;
 
-    public Generales() {
+    public ParametrizaClave() {
     }
 
-    public Generales(BigDecimal secuencia) {
+    public ParametrizaClave(BigDecimal secuencia) {
         this.secuencia = secuencia;
     }
 
-    public Generales(BigDecimal secuencia, String pathreportes) {
+    public ParametrizaClave(BigDecimal secuencia, String formato, String mensajevalidacion) {
         this.secuencia = secuencia;
-        this.pathreportes = pathreportes;
+        this.formato = formato;
+        this.mensajevalidacion = mensajevalidacion;
     }
 
     public BigDecimal getSecuencia() {
@@ -56,31 +59,29 @@ public class Generales implements Serializable {
         this.secuencia = secuencia;
     }
 
-    public String getPathreportes() {
-        return pathreportes;
+    public Empresas getEmpresa() {
+        return empresa;
     }
 
-    public void setPathreportes(String pathreportes) {
-        this.pathreportes = pathreportes;
+    public void setEmpresa(Empresas empresa) {
+        this.empresa = empresa;
     }
 
-    public String getUbicareportes() {
-        return ubicareportes;
+    public String getFormato() {
+        return formato;
     }
 
-    public void setUbicareportes(String ubicareportes) {
-        this.ubicareportes = ubicareportes;
+    public void setFormato(String formato) {
+        this.formato = formato;
     }
 
-    public String getPathfoto() {
-        return pathfoto;
+    public String getMensajevalidacion() {
+        return mensajevalidacion;
     }
 
-    public void setPathfoto(String pathfoto) {
-        this.pathfoto = pathfoto;
+    public void setMensajevalidacion(String mensajevalidacion) {
+        this.mensajevalidacion = mensajevalidacion;
     }
-
-    
 
     @Override
     public int hashCode() {
@@ -92,10 +93,10 @@ public class Generales implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Generales)) {
+        if (!(object instanceof ParametrizaClave)) {
             return false;
         }
-        Generales other = (Generales) object;
+        ParametrizaClave other = (ParametrizaClave) object;
         if ((this.secuencia == null && other.secuencia != null) || (this.secuencia != null && !this.secuencia.equals(other.secuencia))) {
             return false;
         }
@@ -104,7 +105,7 @@ public class Generales implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.kiosko.administrar.entidades.Generales[ secuencia=" + secuencia + " ]";
+        return "co.com.kiosko.administrar.entidades.ParametrizaClave[ secuencia=" + secuencia + " ]";
     }
     
 }

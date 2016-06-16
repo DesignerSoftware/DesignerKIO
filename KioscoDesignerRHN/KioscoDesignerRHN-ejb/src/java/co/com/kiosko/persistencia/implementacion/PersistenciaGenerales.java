@@ -1,6 +1,6 @@
 package co.com.kiosko.persistencia.implementacion;
 
-import co.com.kiosko.administrar.entidades.Generales;
+import co.com.kiosko.entidades.Generales;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaGenerales;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

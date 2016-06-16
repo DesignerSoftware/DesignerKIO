@@ -1,7 +1,7 @@
 package co.com.kiosko.controlador.ingreso;
 
-import co.com.kiosko.administrar.entidades.ConexionesKioskos;
-import co.com.kiosko.administrar.entidades.ParametrizaClave;
+import co.com.kiosko.entidades.ConexionesKioskos;
+import co.com.kiosko.entidades.ParametrizaClave;
 import co.com.kiosko.administrar.interfaz.IAdministrarOlvidoClave;
 import co.com.kiosko.utilidadesUI.MensajesUI;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;

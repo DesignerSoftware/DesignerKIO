@@ -1,9 +1,9 @@
 package co.com.kiosko.administrar.implementacion;
 
-import co.com.kiosko.administrar.entidades.ConexionesKioskos;
-import co.com.kiosko.administrar.entidades.Empleados;
-import co.com.kiosko.administrar.entidades.ParametrizaClave;
-import co.com.kiosko.administrar.entidades.PreguntasKioskos;
+import co.com.kiosko.entidades.ConexionesKioskos;
+import co.com.kiosko.entidades.Empleados;
+import co.com.kiosko.entidades.ParametrizaClave;
+import co.com.kiosko.entidades.PreguntasKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarPrimerIngreso;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;

@@ -1,4 +1,4 @@
-package co.com.kiosko.administrar.entidades;
+package co.com.kiosko.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

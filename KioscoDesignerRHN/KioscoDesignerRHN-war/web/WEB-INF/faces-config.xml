@@ -35,4 +35,11 @@
             <to-view-id>/Ingreso/ingreso.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Kiosko/generarReporte.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>opciones</from-outcome>
+            <to-view-id>/Kiosko/opcionesKiosko.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 </faces-config>

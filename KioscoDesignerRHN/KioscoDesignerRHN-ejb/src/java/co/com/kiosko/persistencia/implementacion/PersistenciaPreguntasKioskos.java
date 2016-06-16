@@ -1,6 +1,6 @@
 package co.com.kiosko.persistencia.implementacion;
 
-import co.com.kiosko.administrar.entidades.PreguntasKioskos;
+import co.com.kiosko.entidades.PreguntasKioskos;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaPreguntasKioskos;
 import java.math.BigDecimal;
 import java.util.List;

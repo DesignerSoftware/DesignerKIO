@@ -1,4 +1,8 @@
-package co.com.kiosko.administrar.entidades;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package co.com.kiosko.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -9,14 +13,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Felipe Triviño
+ * @author 908036
  */
 @Entity
-@Table(name = "PERFILES")
+@Table(name = "CIUDADES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Perfiles.findAll", query = "SELECT p FROM Perfiles p")})
-public class Perfiles implements Serializable {
+    @NamedQuery(name = "Ciudades.findAll", query = "SELECT c FROM Ciudades c")})
+public class Ciudades implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -24,30 +28,27 @@ public class Perfiles implements Serializable {
     @NotNull
     @Column(name = "SECUENCIA")
     private BigDecimal secuencia;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "CODIGO")
-    private short codigo;
+    private Short codigo;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
-    @Size(max = 50)
-    @Column(name = "PWD")
-    private String pwd;
+    @Column(name = "NOMBRE")
+    private String nombre;
+    @Size(max = 4)
+    @Column(name = "CODIGOALTERNATIVO")
+    private String codigoalternativo;
 
-    public Perfiles() {
+    public Ciudades() {
     }
 
-    public Perfiles(BigDecimal secuencia) {
+    public Ciudades(BigDecimal secuencia) {
         this.secuencia = secuencia;
     }
 
-    public Perfiles(BigDecimal secuencia, short codigo, String descripcion) {
+    public Ciudades(BigDecimal secuencia, String nombre) {
         this.secuencia = secuencia;
-        this.codigo = codigo;
-        this.descripcion = descripcion;
+        this.nombre = nombre;
     }
 
     public BigDecimal getSecuencia() {
@@ -58,28 +59,28 @@ public class Perfiles implements Serializable {
         this.secuencia = secuencia;
     }
 
-    public short getCodigo() {
+    public Short getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(short codigo) {
+    public void setCodigo(Short codigo) {
         this.codigo = codigo;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public String getPwd() {
-        return pwd;
+    public String getCodigoalternativo() {
+        return codigoalternativo;
     }
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
+    public void setCodigoalternativo(String codigoalternativo) {
+        this.codigoalternativo = codigoalternativo;
     }
 
     @Override
@@ -92,10 +93,10 @@ public class Perfiles implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Perfiles)) {
+        if (!(object instanceof Ciudades)) {
             return false;
         }
-        Perfiles other = (Perfiles) object;
+        Ciudades other = (Ciudades) object;
         if ((this.secuencia == null && other.secuencia != null) || (this.secuencia != null && !this.secuencia.equals(other.secuencia))) {
             return false;
         }
@@ -104,7 +105,7 @@ public class Perfiles implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.kiosko.administrar.entidades.Perfiles[ secuencia=" + secuencia + " ]";
+        return "co.com.kiosko.administrar.entidades.Ciudades[ secuencia=" + secuencia + " ]";
     }
     
 }

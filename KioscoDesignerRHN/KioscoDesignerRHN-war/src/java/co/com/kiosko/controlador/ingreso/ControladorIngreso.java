@@ -1,6 +1,6 @@
 package co.com.kiosko.controlador.ingreso;
 
-import co.com.kiosko.administrar.entidades.ConexionesKioskos;
+import co.com.kiosko.entidades.ConexionesKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarIngreso;
 import co.com.kiosko.clasesAyuda.CadenasKioskos;
 import co.com.kiosko.clasesAyuda.LeerArchivoXML;
@@ -34,9 +34,11 @@ public class ControladorIngreso implements Serializable {
     private int intento;
     private ConexionesKioskos conexionEmpleado;
     private String nit;
+    private final String logo;
 
     public ControladorIngreso() {
         intento = 0;
+        logo = "logonominadesignertrans.png";
     }
 
     public List<CadenasKioskos> obtenerCadenasKiosko() {
@@ -44,6 +46,7 @@ public class ControladorIngreso implements Serializable {
     }
 
     public String ingresar() throws IOException {
+        String retorno=null;
         FacesContext contexto = FacesContext.getCurrentInstance();
         HttpSession ses = (HttpSession) contexto.getExternalContext().getSession(false);
         if (!ingresoExitoso) {
@@ -72,8 +75,12 @@ public class ControladorIngreso implements Serializable {
                                     administrarIngreso.modificarUltimaConexion(conexionEmpleado);
                                     HttpSession session = Util.getSession();
                                     session.setAttribute("idUsuario", usuario);
+                                    if (session != null){
+                                        System.out.println("Conectado a: "+session.getId());
+                                    }
                                     //return "opcionesKiosko";
-                                    return "plantilla";
+                                    //return "plantilla";
+                                    retorno = "plantilla";
                                 } else {
                                     // LA CONTRASEÑA ES INCORRECTA.
                                     if (bckUsuario == null || bckUsuario.equals(usuario)) {
@@ -137,7 +144,8 @@ public class ControladorIngreso implements Serializable {
             ec.redirect(ec.getRequestContextPath());
         }
         PrimefacesContextUI.ejecutar("PF('estadoSesion').hide()");
-        return "";
+        //return "";
+        return retorno;
     }
 
     public String olvidoClave() {
@@ -187,6 +195,20 @@ public class ControladorIngreso implements Serializable {
     public void actualizarConexionEmpleado() {
         conexionEmpleado = administrarIngreso.obtenerConexionEmpelado(usuario, nit);
     }
+
+    public String entrar() throws IOException {
+        String retorno;
+        if (ingresoExitoso) {
+            retorno = "plantilla";
+        } else {
+            try {
+                retorno = ingresar();
+            } catch (IOException ioe) {
+                throw ioe;
+            }
+        }
+        return retorno;
+    }
     //GETTER AND SETTER
 
     public String getClave() {
@@ -233,5 +255,9 @@ public class ControladorIngreso implements Serializable {
 
     public String getNit() {
         return nit;
+    }
+
+    public String getLogo() {
+        return logo;
     }
 }

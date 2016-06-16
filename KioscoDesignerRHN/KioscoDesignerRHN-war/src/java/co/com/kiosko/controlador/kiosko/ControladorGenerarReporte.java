@@ -1,7 +1,7 @@
 package co.com.kiosko.controlador.kiosko;
 
-import co.com.kiosko.administrar.entidades.ConexionesKioskos;
-import co.com.kiosko.administrar.entidades.OpcionesKioskos;
+import co.com.kiosko.entidades.ConexionesKioskos;
+import co.com.kiosko.entidades.OpcionesKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarGenerarReporte;
 import co.com.kiosko.controlador.ingreso.ControladorIngreso;
 import co.com.kiosko.utilidadesUI.MensajesUI;
@@ -17,9 +17,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.el.ELException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+//import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
@@ -42,6 +45,9 @@ public class ControladorGenerarReporte implements Serializable {
     private String pathReporteGenerado;
     private StreamedContent reporteGenerado;
     private FileInputStream fis;
+    private boolean enviocorreo;
+    ExternalContext externalContext;
+    String userAgent;
 
     public ControladorGenerarReporte() {
     }
@@ -51,13 +57,16 @@ public class ControladorGenerarReporte implements Serializable {
         try {
             FacesContext x = FacesContext.getCurrentInstance();
             HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
+            externalContext = x.getExternalContext();
+            userAgent = externalContext.getRequestHeaderMap().get("User-Agent");
             administrarGenerarReporte.obtenerConexion(ses.getId());
             controladorIngreso = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class));
             conexionEmpleado = controladorIngreso.getConexionEmpleado();
             reporte = ((ControladorOpcionesKiosko) x.getApplication().evaluateExpressionGet(x, "#{controladorOpcionesKiosko}", ControladorOpcionesKiosko.class)).getOpcionReporte();
             email = conexionEmpleado.getEmpleado().getPersona().getEmail();
-        } catch (Exception e) {
-            System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
+            //System.out.println("contexto: " + userAgent);
+        } catch (ELException e) {
+            System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e.getMessage());
             System.out.println("Causa: " + e.getCause());
         }
     }
@@ -72,7 +81,7 @@ public class ControladorGenerarReporte implements Serializable {
             if (pathReporteGenerado != null) {
                 PrimefacesContextUI.ejecutar("validarDescargaReporte();");
             }
-        }else{
+        } else {
             PrimefacesContextUI.ejecutar("PF('generandoReporte').hide();");
             MensajesUI.error("El reporte no se pudo generar. Comuníquese con soporte.");
         }
@@ -104,8 +113,14 @@ public class ControladorGenerarReporte implements Serializable {
                 reporteGenerado = null;
             }
             if (reporteGenerado != null) {
-                context.update("principalForm:verReportePDF");
-                context.execute("PF('verReportePDF').show();");
+                if (userAgent.toUpperCase().contains("Mobile".toUpperCase()) || userAgent.toUpperCase().contains("Tablet".toUpperCase())) {
+                    //System.out.println("Acceso por mobiles.");
+                    context.update("principalForm:dwlReportePDF");
+                    context.execute("PF('dwlReportePDF').show();");
+                } else {
+                    context.update("principalForm:verReportePDF");
+                    context.execute("PF('verReportePDF').show();");
+                }
                 context.execute("validarEnvioCorreo();");
             }
             //pathReporteGenerado = null;
@@ -116,16 +131,22 @@ public class ControladorGenerarReporte implements Serializable {
     }
 
     public boolean validarCampos() {
+        boolean retorno = false;
         if (conexionEmpleado.getFechadesde() != null && conexionEmpleado.getFechahasta() != null) {
             if (conexionEmpleado.getFechadesde().compareTo(conexionEmpleado.getFechahasta()) < 0) {
-                return validarCorreo();
+                retorno = true;
             } else {
                 MensajesUI.error("La fecha hasta debe ser mayor a la fecha desde.");
+                retorno = false;
             }
         } else {
-            return validarCorreo();
+            MensajesUI.error("Es necesario colocar las fechas.");
+            retorno = false;
         }
-        return false;
+        if (retorno) {
+            retorno = validarCorreo();
+        }
+        return retorno;
     }
 
     public boolean validarCorreo() {
@@ -137,7 +158,7 @@ public class ControladorGenerarReporte implements Serializable {
             if (matcher.matches()) {
                 return true;
             } else {
-                MensajesUI.error("Correo invalido, por favor verifique.");
+                MensajesUI.error("Correo inválido, por favor verifique.");
             }
         } else {
             return true;
@@ -177,6 +198,10 @@ public class ControladorGenerarReporte implements Serializable {
             }
         }
         return false;
+    }
+
+    public boolean validarConfigSMTP() {
+        return administrarGenerarReporte.comprobarConfigCorreo(conexionEmpleado.getEmpleado().getEmpresa().getSecuencia());
     }
 
     public void reiniciarStreamedContent() {
@@ -236,5 +261,25 @@ public class ControladorGenerarReporte implements Serializable {
         }
 
         return reporteGenerado;
+    }
+
+    public boolean isEnviocorreo() {
+        boolean retorno;
+        retorno = validarConfigSMTP() && conexionEmpleado.isEnvioCorreo();
+        return retorno;
+    }
+
+    public void setEnviocorreo(boolean enviocorreo) {
+        if (enviocorreo) {
+            if (validarConfigSMTP()) {
+                conexionEmpleado.setEnvioCorreo(enviocorreo);
+                this.enviocorreo = conexionEmpleado.isEnvioCorreo();
+            } else {
+                MensajesUI.error("Configuración de Servidor SMTP inválida.");
+            }
+        } else {
+            conexionEmpleado.setEnvioCorreo(enviocorreo);
+            this.enviocorreo = conexionEmpleado.isEnvioCorreo();
+        }
     }
 }

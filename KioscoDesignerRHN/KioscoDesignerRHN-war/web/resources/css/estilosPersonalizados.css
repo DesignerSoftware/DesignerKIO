@@ -1,3 +1,10 @@
+html { 
+    background-image: url(../imagenes/fondoMenu.png); background-repeat: no-repeat; background-size: 100% 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
 
 .noBorders tr, .noBorders td {
     background: none !important;
@@ -48,12 +55,5 @@
     background-color: #DCDCDC
 }
 
-html { 
-    background-image: url(../imagenes/fondoMenu.png); background-repeat: no-repeat; background-size: 100% 100%;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-}
 
 

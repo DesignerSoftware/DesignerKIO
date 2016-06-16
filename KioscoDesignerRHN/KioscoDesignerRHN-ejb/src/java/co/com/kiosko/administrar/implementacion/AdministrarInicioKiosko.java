@@ -1,7 +1,7 @@
 package co.com.kiosko.administrar.implementacion;
 
-import co.com.kiosko.administrar.entidades.Empleados;
-import co.com.kiosko.administrar.entidades.Generales;
+import co.com.kiosko.entidades.Empleados;
+import co.com.kiosko.entidades.Generales;
 import co.com.kiosko.administrar.interfaz.IAdministrarInicioKiosko;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;

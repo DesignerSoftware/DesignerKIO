@@ -6,8 +6,8 @@ package co.com.kiosko.persistencia.interfaz;
  */
 public interface IPersistenciaPreguntasKioskos {
 
-    public java.util.List<co.com.kiosko.administrar.entidades.PreguntasKioskos> obtenerPreguntasSeguridad(javax.persistence.EntityManager eManager);
+    public java.util.List<co.com.kiosko.entidades.PreguntasKioskos> obtenerPreguntasSeguridad(javax.persistence.EntityManager eManager);
 
-    public co.com.kiosko.administrar.entidades.PreguntasKioskos consultarPreguntaSeguridad(javax.persistence.EntityManager eManager, java.math.BigDecimal secuencia);
+    public co.com.kiosko.entidades.PreguntasKioskos consultarPreguntaSeguridad(javax.persistence.EntityManager eManager, java.math.BigDecimal secuencia);
     
 }

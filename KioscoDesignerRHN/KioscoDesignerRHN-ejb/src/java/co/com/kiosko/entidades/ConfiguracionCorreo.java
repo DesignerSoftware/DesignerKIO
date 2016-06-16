@@ -1,4 +1,4 @@
-package co.com.kiosko.administrar.entidades;
+package co.com.kiosko.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -40,6 +40,9 @@ public class ConfiguracionCorreo implements Serializable {
     @Size(max = 1)
     @Column(name = "STARTTLS")
     private String starttls;
+    @Size(max = 1)
+    @Column(name = "USARSSL")
+    private String usarssl;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 1)
@@ -107,6 +110,14 @@ public class ConfiguracionCorreo implements Serializable {
 
     public void setStarttls(String starttls) {
         this.starttls = starttls;
+    }
+
+    public String getUsarssl() {
+        return usarssl;
+    }
+
+    public void setUsarssl(String usarssl) {
+        this.usarssl = usarssl;
     }
 
     public String getAutenticado() {

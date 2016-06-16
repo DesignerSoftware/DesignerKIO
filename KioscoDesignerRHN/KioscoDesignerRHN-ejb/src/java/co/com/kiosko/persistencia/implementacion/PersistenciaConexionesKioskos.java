@@ -1,8 +1,9 @@
 package co.com.kiosko.persistencia.implementacion;
 
-import co.com.kiosko.administrar.entidades.ConexionesKioskos;
+import co.com.kiosko.entidades.ConexionesKioskos;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;
 import java.math.BigInteger;
+import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -17,6 +18,7 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
 
     @Override
     public boolean registrarConexion(EntityManager eManager, ConexionesKioskos cnk) {
+        cnk.setUltimaconexion(new Date());
         eManager.clear();
         EntityTransaction tx = eManager.getTransaction();
         try {

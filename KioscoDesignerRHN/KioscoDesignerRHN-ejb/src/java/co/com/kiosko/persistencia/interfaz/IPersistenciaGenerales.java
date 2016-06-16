@@ -6,6 +6,6 @@ package co.com.kiosko.persistencia.interfaz;
  */
 public interface IPersistenciaGenerales {
 
-    public co.com.kiosko.administrar.entidades.Generales consultarRutasGenerales(javax.persistence.EntityManager eManager);
+    public co.com.kiosko.entidades.Generales consultarRutasGenerales(javax.persistence.EntityManager eManager);
     
 }

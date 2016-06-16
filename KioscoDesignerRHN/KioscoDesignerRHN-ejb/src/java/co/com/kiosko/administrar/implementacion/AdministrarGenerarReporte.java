@@ -1,14 +1,14 @@
 package co.com.kiosko.administrar.implementacion;
 
-import co.com.kiosko.administrar.entidades.ConexionesKioskos;
-import co.com.kiosko.administrar.entidades.ConfiguracionCorreo;
-import co.com.kiosko.administrar.entidades.Generales;
+import co.com.kiosko.entidades.ConexionesKioskos;
+import co.com.kiosko.entidades.ConfiguracionCorreo;
+import co.com.kiosko.entidades.Generales;
 import co.com.kiosko.administrar.interfaz.IAdministrarGenerarReporte;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConfiguracionCorreo;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaGenerales;
-import co.com.kiosko.reportes.Correo.EnvioCorreo;
+import co.com.kiosko.correo.EnvioCorreo;
 import co.com.kiosko.reportes.IniciarReporteInterface;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -88,5 +88,25 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte {
         ConfiguracionCorreo cc = persistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo(em, secuenciaEmpresa);
         EnvioCorreo enviarCorreo = new EnvioCorreo();
         return enviarCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
+    }
+
+    @Override
+    public boolean comprobarConfigCorreo(BigDecimal secuenciaEmpresa) {
+        boolean retorno=false;
+        try {
+            ConfiguracionCorreo cc = persistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo(em, secuenciaEmpresa);
+            if (cc.getServidorSmtp().length()!=0){
+                retorno=true;
+            }else{
+                retorno=false;
+            }
+        } catch (NullPointerException npe) {
+            retorno=false;
+        } catch (Exception e){
+            System.out.println("AdministrarGenerarReporte.comprobarConfigCorreo");
+            System.out.println("Error validando configuracion");
+            System.out.println("ex: " + e);
+        }
+        return retorno;
     }
 }
