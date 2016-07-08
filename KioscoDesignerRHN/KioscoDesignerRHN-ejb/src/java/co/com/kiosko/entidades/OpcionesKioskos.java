@@ -1,7 +1,8 @@
 package co.com.kiosko.entidades;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.math.BigInteger;
+//import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -35,7 +36,7 @@ public class OpcionesKioskos implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "SECUENCIA")
-    private BigDecimal secuencia;
+    private BigInteger secuencia;
     @Size(max = 1000)
     @Column(name = "AYUDA")
     private String ayuda;
@@ -65,11 +66,11 @@ public class OpcionesKioskos implements Serializable {
     public OpcionesKioskos() {
     }
 
-    public OpcionesKioskos(BigDecimal secuencia) {
+    public OpcionesKioskos(BigInteger secuencia) {
         this.secuencia = secuencia;
     }
 
-    public OpcionesKioskos(BigDecimal secuencia, String codigo, String descripcion, String clase) {
+    public OpcionesKioskos(BigInteger secuencia, String codigo, String descripcion, String clase) {
         this.secuencia = secuencia;
         this.codigo = codigo;
         this.descripcion = descripcion;
@@ -92,11 +93,11 @@ public class OpcionesKioskos implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public BigDecimal getSecuencia() {
+    public BigInteger getSecuencia() {
         return secuencia;
     }
 
-    public void setSecuencia(BigDecimal secuencia) {
+    public void setSecuencia(BigInteger secuencia) {
         this.secuencia = secuencia;
     }
 

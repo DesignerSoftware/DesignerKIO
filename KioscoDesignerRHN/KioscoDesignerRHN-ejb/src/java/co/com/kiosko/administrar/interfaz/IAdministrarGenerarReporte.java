@@ -1,6 +1,6 @@
 package co.com.kiosko.administrar.interfaz;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  *
@@ -14,8 +14,8 @@ public interface IAdministrarGenerarReporte {
 
     public boolean modificarConexionKisko(co.com.kiosko.entidades.ConexionesKioskos cnx);
 
-    public boolean enviarCorreo(java.math.BigDecimal secuenciaEmpresa, java.lang.String destinatario, java.lang.String asunto, java.lang.String mensaje, java.lang.String pathAdjunto);
+    public boolean enviarCorreo(java.math.BigInteger secuenciaEmpresa, java.lang.String destinatario, java.lang.String asunto, java.lang.String mensaje, java.lang.String pathAdjunto);
     
-    public boolean comprobarConfigCorreo(BigDecimal secuenciaEmpresa);
+    public boolean comprobarConfigCorreo(BigInteger secuenciaEmpresa);
     
 }

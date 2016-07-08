@@ -3,6 +3,7 @@ package co.com.kiosko.persistencia.implementacion;
 import co.com.kiosko.entidades.OpcionesKioskos;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaOpcionesKioskos;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -16,7 +17,7 @@ import javax.persistence.Query;
 public class PersistenciaOpcionesKioskos implements IPersistenciaOpcionesKioskos {
 
     @Override
-    public List<OpcionesKioskos> consultarOpcionesPorPadre(EntityManager eManager, BigDecimal secuenciaPadre, BigDecimal secuenciaEmpresa) {
+    public List<OpcionesKioskos> consultarOpcionesPorPadre(EntityManager eManager, BigInteger secuenciaPadre, BigInteger secuenciaEmpresa) {
         try {
             eManager.getTransaction().begin();
             String sqlQuery = "SELECT ok FROM OpcionesKioskos ok ";

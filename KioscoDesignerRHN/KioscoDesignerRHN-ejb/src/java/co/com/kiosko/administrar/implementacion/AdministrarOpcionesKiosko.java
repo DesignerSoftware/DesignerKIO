@@ -4,7 +4,7 @@ import co.com.kiosko.entidades.OpcionesKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarOpcionesKiosko;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaOpcionesKioskos;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
@@ -28,7 +28,7 @@ public class AdministrarOpcionesKiosko implements IAdministrarOpcionesKiosko {
     }
 
     @Override
-    public OpcionesKioskos obtenerOpcionesKiosko(BigDecimal secuenciaEmpresa) {
+    public OpcionesKioskos obtenerOpcionesKiosko(BigInteger secuenciaEmpresa) {
         // try {
         OpcionesKioskos opciones;
         opciones = persistenciaOpcionesKioskos.consultarOpcionesPorPadre(em, null, secuenciaEmpresa).get(0);

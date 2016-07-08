@@ -6,6 +6,6 @@ package co.com.kiosko.persistencia.interfaz;
  */
 public interface IPersistenciaConfiguracionCorreo {
 
-    public co.com.kiosko.entidades.ConfiguracionCorreo consultarConfiguracionServidorCorreo(javax.persistence.EntityManager eManager, java.math.BigDecimal secuenciaEmpresa);
+    public co.com.kiosko.entidades.ConfiguracionCorreo consultarConfiguracionServidorCorreo(javax.persistence.EntityManager eManager, java.math.BigInteger secuenciaEmpresa);
     
 }

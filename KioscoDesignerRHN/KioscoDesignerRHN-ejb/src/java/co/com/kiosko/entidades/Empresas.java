@@ -1,7 +1,8 @@
 package co.com.kiosko.entidades;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+//import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,7 +25,7 @@ public class Empresas implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "SECUENCIA")
-    private BigDecimal secuencia;
+    private BigInteger secuencia;
     @Basic(optional = false)
     @NotNull
     @Column(name = "CODIGO")
@@ -54,22 +55,22 @@ public class Empresas implements Serializable {
     public Empresas() {
     }
 
-    public Empresas(BigDecimal secuencia) {
+    public Empresas(BigInteger secuencia) {
         this.secuencia = secuencia;
     }
 
-    public Empresas(BigDecimal secuencia, short codigo, long nit, String nombre) {
+    public Empresas(BigInteger secuencia, short codigo, long nit, String nombre) {
         this.secuencia = secuencia;
         this.codigo = codigo;
         this.nit = nit;
         this.nombre = nombre;
     }
 
-    public BigDecimal getSecuencia() {
+    public BigInteger getSecuencia() {
         return secuencia;
     }
 
-    public void setSecuencia(BigDecimal secuencia) {
+    public void setSecuencia(BigInteger secuencia) {
         this.secuencia = secuencia;
     }
 

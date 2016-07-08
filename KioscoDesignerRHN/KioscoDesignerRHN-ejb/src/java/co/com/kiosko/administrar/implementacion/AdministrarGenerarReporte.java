@@ -11,6 +11,7 @@ import co.com.kiosko.persistencia.interfaz.IPersistenciaGenerales;
 import co.com.kiosko.correo.EnvioCorreo;
 import co.com.kiosko.reportes.IniciarReporteInterface;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -47,10 +48,19 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte {
         try {
             Generales general = persistenciaGenerales.consultarRutasGenerales(em);
             String pathReporteGenerado = null;
+            BigDecimal secuenciaempleado = null;
+            String nombreArchivo;
             if (general != null) {
-                SimpleDateFormat formato = new SimpleDateFormat("ddMMyyyyhhmmss");
+                if (parametros.containsKey("secuenciaempleado")) {
+                    secuenciaempleado = (BigDecimal) parametros.get("secuenciaempleado");
+                }
+                SimpleDateFormat formato = new SimpleDateFormat("yyyyMMddhhmmss");
                 String fechaActual = formato.format(new Date());
-                String nombreArchivo = "KSK_" + nombreReporte + "_" + fechaActual;
+                if (secuenciaempleado != null) {
+                    nombreArchivo = "KSK_" + nombreReporte + "_" + secuenciaempleado.toString() + "_" + fechaActual;
+                } else {
+                    nombreArchivo = "KSK_" + nombreReporte + "_" + fechaActual;
+                }
                 String rutaReporte = general.getPathreportes();
                 String rutaGenerado = general.getUbicareportes();
                 if (tipoReporte.equals("PDF")) {
@@ -84,25 +94,25 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte {
     }
 
     @Override
-    public boolean enviarCorreo(BigDecimal secuenciaEmpresa, String destinatario, String asunto, String mensaje, String pathAdjunto) {
+    public boolean enviarCorreo(BigInteger secuenciaEmpresa, String destinatario, String asunto, String mensaje, String pathAdjunto) {
         ConfiguracionCorreo cc = persistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo(em, secuenciaEmpresa);
         EnvioCorreo enviarCorreo = new EnvioCorreo();
         return enviarCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
     }
 
     @Override
-    public boolean comprobarConfigCorreo(BigDecimal secuenciaEmpresa) {
-        boolean retorno=false;
+    public boolean comprobarConfigCorreo(BigInteger secuenciaEmpresa) {
+        boolean retorno = false;
         try {
             ConfiguracionCorreo cc = persistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo(em, secuenciaEmpresa);
-            if (cc.getServidorSmtp().length()!=0){
-                retorno=true;
-            }else{
-                retorno=false;
+            if (cc.getServidorSmtp().length() != 0) {
+                retorno = true;
+            } else {
+                retorno = false;
             }
         } catch (NullPointerException npe) {
-            retorno=false;
-        } catch (Exception e){
+            retorno = false;
+        } catch (Exception e) {
             System.out.println("AdministrarGenerarReporte.comprobarConfigCorreo");
             System.out.println("Error validando configuracion");
             System.out.println("ex: " + e);

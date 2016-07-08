@@ -26,18 +26,18 @@ public class Personas implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "SECUENCIA")
-    private BigDecimal secuencia;
+    private BigInteger secuencia;
     @Size(max = 1)
     @Column(name = "FACTORRH")
     private String factorrh;
     @Column(name = "FECHANACIMIENTO")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechanacimiento;
     @Column(name = "FECHAVENCIMIENTOCERTIFICADO")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechavencimientocertificado;
     @Column(name = "FECHAFALLECIMIENTO")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechafallecimiento;
     @Size(max = 2)
     @Column(name = "GRUPOSANGUINEO")
@@ -88,7 +88,7 @@ public class Personas implements Serializable {
     @Column(name = "NUMEROMATRICULAPROF")
     private String numeromatriculaprof;
     @Column(name = "FECHAEXPMATRICULA")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaexpmatricula;
     @Column(name = "DIGITOVERIFICACIONDOCUMENTO")
     private Short digitoverificaciondocumento;
@@ -102,10 +102,13 @@ public class Personas implements Serializable {
     @Column(name = "SEGUNDONOMBRE")
     private String segundonombre;
     @JoinColumn(name = "CIUDADNACIMIENTO", referencedColumnName = "SECUENCIA")
+    @ManyToOne
     private Ciudades  ciudadNacimiento;
     @JoinColumn(name = "CIUDADDOCUMENTO", referencedColumnName = "SECUENCIA")
+    @ManyToOne
     private Ciudades  ciudadDocumento;
     @JoinColumn(name = "TIPODOCUMENTO", referencedColumnName = "SECUENCIA")
+    @ManyToOne
     private TiposDocumentos  tipoDocumento;
     @Transient
     private String nombreCompleto;
@@ -113,22 +116,22 @@ public class Personas implements Serializable {
     public Personas() {
     }
 
-    public Personas(BigDecimal secuencia) {
+    public Personas(BigInteger secuencia) {
         this.secuencia = secuencia;
     }
 
-    public Personas(BigDecimal secuencia, String nombre, BigInteger numerodocumento, String primerapellido) {
+    public Personas(BigInteger secuencia, String nombre, BigInteger numerodocumento, String primerapellido) {
         this.secuencia = secuencia;
         this.nombre = nombre;
         this.numerodocumento = numerodocumento;
         this.primerapellido = primerapellido;
     }
 
-    public BigDecimal getSecuencia() {
+    public BigInteger getSecuencia() {
         return secuencia;
     }
 
-    public void setSecuencia(BigDecimal secuencia) {
+    public void setSecuencia(BigInteger secuencia) {
         this.secuencia = secuencia;
     }
 

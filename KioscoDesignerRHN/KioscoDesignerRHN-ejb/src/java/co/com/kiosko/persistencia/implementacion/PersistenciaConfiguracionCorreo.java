@@ -3,6 +3,7 @@ package co.com.kiosko.persistencia.implementacion;
 import co.com.kiosko.entidades.ConfiguracionCorreo;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConfiguracionCorreo;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -15,7 +16,7 @@ import javax.persistence.Query;
 public class PersistenciaConfiguracionCorreo implements IPersistenciaConfiguracionCorreo {
 
     @Override
-    public ConfiguracionCorreo consultarConfiguracionServidorCorreo(EntityManager eManager, BigDecimal secuenciaEmpresa) {
+    public ConfiguracionCorreo consultarConfiguracionServidorCorreo(EntityManager eManager, BigInteger secuenciaEmpresa) {
         try {
             eManager.getTransaction().begin();
             String sqlQuery = "SELECT cc FROM ConfiguracionCorreo cc WHERE cc.empresa.secuencia = :secuenciaEmpresa";
