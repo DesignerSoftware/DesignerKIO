@@ -8,14 +8,16 @@ import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaGenerales;
 import java.math.BigInteger;
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+//import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 
 /**
  *
  * @author Felipe Triviño
  */
-@Stateful
+//@Stateful
+@Stateless
 public class AdministrarInicioKiosko implements IAdministrarInicioKiosko {
 
     @EJB
@@ -38,7 +40,7 @@ public class AdministrarInicioKiosko implements IAdministrarInicioKiosko {
 
     @Override
     public String fotoEmpleado() {
-        String rutaFoto;
+        //String rutaFoto;
         Generales general = persistenciaGenerales.consultarRutasGenerales(em);
         if (general != null) {
             return general.getPathfoto();

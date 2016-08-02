@@ -6,7 +6,7 @@
       xmlns:f="http://java.sun.com/jsf/core">
     <h:body style="font-size: 14px;">
         <p:panelGrid id="gridSuperior" columns="3" styleClass="noBorders" style="width: 100%;">
-            <p:column id="supleft" width="40%">
+            <p:column id="supleft" width="50%">
                 <p:panelGrid id="gridSupInt1" columns="2" styleClass="noBorders">
                     <p:column> 
                         <p:graphicImage value="#{controladorInicioKiosko.fotoEmpleado}" width="91" alt="Foto empleado" onclick="PF('subirFoto').show();"
@@ -26,7 +26,7 @@
                                     cache="false" style="height: 91px;"/>
                 </center>
             </p:column>
-            <p:column id="supright" width="40%">
+            <p:column id="supright" width="50%">
                 <p:panelGrid id="gridSupInt2" columns="1" style="float: right; font-size: 16px; font-weight: bold;">
                     <p:column>
                         <h:outputText value="Ultima conexión: "/>

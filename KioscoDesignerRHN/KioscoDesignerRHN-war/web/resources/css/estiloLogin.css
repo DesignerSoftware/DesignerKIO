@@ -1,5 +1,5 @@
 html { 
-    background-image: url(../imagenes/fondoMenu.png); background-repeat: no-repeat; background-size: 100% 100%;
+    background-image: url(../imagenes/fondoMenu.png); background-repeat: repeat-y;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;

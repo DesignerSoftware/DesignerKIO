@@ -7,16 +7,18 @@ import co.com.kiosko.clasesAyuda.SessionEntityManager;
 import co.com.kiosko.conexionFuente.implementacion.SesionEntityManagerFactory;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionInicial;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;
-import java.util.Date;
+//import java.util.Date;
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+//import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 
 /**
  *
  * @author Felipe Triviño
  */
-@Stateful
+//@Stateful
+@Stateless
 public class AdministrarIngreso implements IAdministrarIngreso {
 
     @EJB

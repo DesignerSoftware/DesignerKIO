@@ -6,14 +6,16 @@ import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaOpcionesKioskos;
 import java.math.BigInteger;
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+//import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 
 /**
  *
  * @author Felipe Triviño
  */
-@Stateful
+//@Stateful
+@Stateless
 public class AdministrarOpcionesKiosko implements IAdministrarOpcionesKiosko {
 
     @EJB

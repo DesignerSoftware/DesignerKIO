@@ -15,12 +15,15 @@
         <title>..::Designer.Kio::..</title>
     </h:head>
     <h:body style="font-size: 14px;" >
+        <f:metadata>
+            <f:viewParam name="grupo" value="#{controladorIngreso.grupo}" />
+        </f:metadata>
         <h:form id="fprincipal" style="position: absolute; left: 0px; top: 0px; width: 100%">
             <p:focus context="pnlIngreso"/>
             <center>
                 <div class="centrado">
                     <fieldset style="border-radius: 10px; background: transparent; width: 50px; border:none;">
-                        <p:graphicImage value="resources/imagenes/logodesignerkio.png" alt="Designer logo" />
+                        <p:graphicImage value="resources/imagenes/logodesignerkio.png" alt="Designer logo" style=" max-width: 275px; " />
                     </fieldset>
                     <h:outputText value="M&oacute;dulo de autogesti&oacute;n N&oacute;mina Designer" style="font-family: Arial; font-size: 20px; color:#000;"/>
                     <fieldset style="border-radius: 10px; box-shadow: 5px 5px 12px #000000; padding-top: 15px; background: #F8F8F8; width: 405px; position: relative; top: 5px;">
@@ -28,7 +31,8 @@
                         <center>
                             <strong style="text-shadow: 1px 1px 0 #303030, -1px -1px #303030, 1px -1px #303030, -1px 1px #303030, 0 1px #303030, 1px 0 #303030, -1px 0 #303030, 0 -1px #303030;">
                                 <em>
-                                    <h:outputText value="Kiosco Designer.NOM" style="font-family: Arial; font-size: 28px; color:#0080cd;" styleClass="sombra5"/>
+                                    <!-- <h:outputText value="Kiosco Designer.NOM" style="font-family: Arial; font-size: 28px; color:#0080cd;" styleClass="sombra5"/> -->
+                                    <h:outputText value="Designer.KIO" style="font-family: Arial; font-size: 28px; color:#0080cd;" styleClass="sombra5"/>
                                 </em>
                             </strong>
                             <br/>
@@ -98,15 +102,15 @@
                             </p:row>
                             <p:row>
                                 <p:column colspan="2" style="text-align:center;">
-                                    <a href="http://www.facebook.com/nominads" target="_blank" style="color:#FFF">
+                                    <a href="http://www.facebook.com/nominads" target="_blank" style="color:#FFF" title="nominads">
                                         <p:graphicImage value="resources/imagenes/facebook.png" alt="facebook" style="height: 30px; vertical-align: middle;"/>
                                     </a>
                                     <p:spacer/>
-                                    <a href="https://www.youtube.com/user/nominads" target="_blank" style="color:#FFF">
+                                    <a href="https://www.youtube.com/user/nominads" target="_blank" style="color:#FFF" title="nominads">
                                         <p:graphicImage value="resources/imagenes/youtube.png" alt="youtube" style="height: 30px; vertical-align: middle;"/>
                                     </a>
                                     <p:spacer/>
-                                    <a href="https://twitter.com/#!/NominaDesigner" target="_blank" style="color:#FFF">
+                                    <a href="https://twitter.com/#!/NominaDesigner" target="_blank" style="color:#FFF" title="NominaDesigner">
                                         <p:graphicImage value="resources/imagenes/twiter.png" alt="twiter" style="height: 30px; vertical-align: middle;"/>
                                     </a>
                                 </p:column>
@@ -142,14 +146,14 @@
             </p:dialog>
         </h:form>
         <h:form>
-            <p:dialog id="dlgAlertaIntentos" header="¡Atención!" widgetVar="dlgAlertaIntentos"
+            <p:dialog id="dlgAlertaIntentos" header="&iexcl;Atenci&oacute;n!" widgetVar="dlgAlertaIntentos"
                       resizable="false" draggable="true" modal="true"  closable="false" width="500">
                 <p:panelGrid columns="2"  styleClass="noBorders">
                     <h:graphicImage value="resources/imagenes/alerta.jpg" width="90" height="70"  />
                     <p align="justify">
-                        Se ha ingresado una contraseña inv&aacute;lida por segunda vez, 
+                        Se ha ingresado una contrase&ntilde;a inv&aacute;lida por segunda vez, 
                         recuerde que al tercer intento la cuenta ser&aacute; bloqueada. 
-                        Se recomienda ingresar por la opci&oacute;n ¿Olvid&oacute; su clave?, 
+                        Se recomienda ingresar por la opci&oacute;n &iquest;Olvid&oacute; su clave?, 
                         para cambiar la contrase&ntilde;a.
                     </p>
                     <p:column/>
@@ -164,6 +168,32 @@
                 <p:panelGrid columns="2" styleClass="noBorders">
                     <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50"/>
                     <h:outputText value="Iniciando sesi&oacute;n, por favor espere." style="width: 240px; text-align: justify; font-weight:bold;" />
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+        <h:form>
+            <p:dialog id="dlgSolicitudGrupo" header="&iexcl;Atenci&oacute;n!" widgetVar="dlgSolicitudGrupo"
+                      resizable="false" draggable="true" modal="true" closable="false" width="500">
+                <p:panelGrid columns="2"  styleClass="noBorders">
+                    <h:graphicImage value="resources/imagenes/alerta.jpg" width="90" height="70"  />
+                    <p:column>
+                        <p align="justify" style=" margin: 0px;">
+                            El enlace no es correcto, falta asociar el grupo empresarial.
+                            <br/>Seleccione el grupo al que desea ingresar.
+                        </p>
+                        <h:outputText value="Grupo:" style="font-weight: bold"/>
+                        <p:selectOneMenu id="seGrupo" value="#{controladorIngreso.grupoSeleccionado}" 
+                                         style="width: 89%">
+                            <f:selectItem itemLabel="Seleccione un grupo" itemValue="#{null}"/>
+                            <f:selectItems value="#{controladorIngreso.listaGrupos}" />
+                            <p:ajax event="change" update="@this" />
+                        </p:selectOneMenu>
+                        <br/>
+                        <p:commandButton value="Continuar" 
+                                         style="float: right" process="@this"
+                                         icon="ui-icon-check"
+                                         actionListener="#{controladorIngreso.obtenerParametroURL}"/>
+                    </p:column>
                 </p:panelGrid>
             </p:dialog>
         </h:form>

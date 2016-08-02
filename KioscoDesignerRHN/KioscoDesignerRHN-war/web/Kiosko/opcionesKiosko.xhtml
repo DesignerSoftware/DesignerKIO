@@ -11,7 +11,7 @@
                      process="@this" update=":principalForm"/>
     <p:remoteCommand name="pantallaDinamica" actionListener="#{controlNavegacion.pantallaDinamica(controladorOpcionesKiosko.opcionReporte.nombrearchivo)}"
                      process="@this" update=":principalForm"/>
-    <p:panel id="pnlOpciones" style="border: none; padding: 0px; margin: 0px; background: transparent">
+    <p:panel id="pnlOpciones" style="border: none; padding: 0px; margin: 0px; background: transparent; min-width: 745px;">
         <p:breadCrumb id="historialNavegacion">
             <c:forEach items="#{controladorOpcionesKiosko.navegacionOpciones}" var="opcionNavegada">
                 <p:menuitem value="#{opcionNavegada.descripcion}" actionListener="#{controladorOpcionesKiosko.volverOpcionNavegada(opcionNavegada)}" />

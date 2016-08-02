@@ -9,13 +9,16 @@ import co.com.kiosko.utilidadesUI.MensajesUI;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -35,18 +38,51 @@ public class ControladorIngreso implements Serializable {
     private ConexionesKioskos conexionEmpleado;
     private String nit;
     private final String logo;
+    private String grupo;
+    private List<SelectItem> listaGrupos;
+    private String grupoSeleccionado;
 
     public ControladorIngreso() {
         intento = 0;
         logo = "logonominadesignertrans.png";
     }
 
+    @PostConstruct
+    public void inicializarAdministrador() {
+        validarGrupo();
+    }
+
     public List<CadenasKioskos> obtenerCadenasKiosko() {
-        return (new LeerArchivoXML()).leerArchivoEmpresasKiosko();
+        //return (new LeerArchivoXML()).leerArchivoEmpresasKiosko();
+        return obtenerCadenasKioskoGrupo();
+    }
+
+    public List<CadenasKioskos> obtenerCadenasKioskoGrupo() {
+        List<CadenasKioskos> listaResultado;
+        boolean resultadoValidacion = false;
+        if ((grupo != null)) {
+            if (!grupo.isEmpty()) {
+                resultadoValidacion = true;
+            }
+        }
+        if (resultadoValidacion) {
+            return (new LeerArchivoXML()).leerArchivoEmpresasKioskoGrupo(this.grupo);
+        } else {
+            return (new LeerArchivoXML()).leerArchivoEmpresasKioskoGrupo("0");
+        }
+    }
+
+    public List<SelectItem> obtenerGruposCadenasKiosko() {
+        List<String> listaOriginal = (new LeerArchivoXML()).obtenerGruposEmpresasKiosko();
+        List<SelectItem> listaRetorno = new ArrayList<SelectItem>();
+        for (int i =0; i< listaOriginal.size(); i++) {
+            listaRetorno.add(new SelectItem(listaOriginal.get(i), listaOriginal.get(i)));
+        }
+        return listaRetorno;
     }
 
     public String ingresar() throws IOException {
-        String retorno=null;
+        String retorno = null;
         FacesContext contexto = FacesContext.getCurrentInstance();
         HttpSession ses = (HttpSession) contexto.getExternalContext().getSession(false);
         if (!ingresoExitoso) {
@@ -75,8 +111,8 @@ public class ControladorIngreso implements Serializable {
                                     administrarIngreso.modificarUltimaConexion(conexionEmpleado);
                                     HttpSession session = Util.getSession();
                                     session.setAttribute("idUsuario", usuario);
-                                    if (session != null){
-                                        System.out.println("Conectado a: "+session.getId());
+                                    if (session != null) {
+                                        System.out.println("Conectado a: " + session.getId());
                                     }
                                     //return "opcionesKiosko";
                                     //return "plantilla";
@@ -117,12 +153,12 @@ public class ControladorIngreso implements Serializable {
                         //          administrarIngreso.getEm().getEntityManagerFactory().close();
                     } else {
                         //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
-                        MensajesUI.error("El empleado " + usuario + " no existe o no pertenece a la empresa seleccionada.");
+                        MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de soporte.");
                         ingresoExitoso = false;
                     }
                 } else {
                     //UNIDAD DE PERSISTENCIA INVALIDA - REVISAR ARCHIVO DE CONFIGURACION
-                    MensajesUI.fatal("Unidad de persistencia invalida, por favor contactar al área de soporte.");
+                    MensajesUI.fatal("Unidad de persistencia inválida, por favor contactar al área de soporte.");
                     ingresoExitoso = false;
                 }
             } else {
@@ -141,7 +177,8 @@ public class ControladorIngreso implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             ExternalContext ec = context.getExternalContext();
             ec.invalidateSession();
-            ec.redirect(ec.getRequestContextPath());
+            //ec.redirect(ec.getRequestContextPath());
+            ec.redirect(ec.getRequestContextPath() + "/" + "?grupo=" + grupoSeleccionado);
         }
         PrimefacesContextUI.ejecutar("PF('estadoSesion').hide()");
         //return "";
@@ -180,11 +217,11 @@ public class ControladorIngreso implements Serializable {
                     administrarIngreso.getEm().getEntityManagerFactory().close();
                 } else {
                     //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
-                    MensajesUI.error("El empleado " + usuario + " no existe o no pertenece a la empresa seleccionada.");
+                    MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");
                 }
             } else {
                 //UNIDAD DE PERSISTENCIA INVALIDA - REVISAR ARCHIVO DE CONFIGURACION
-                MensajesUI.fatal("Unidad de persistencia invalida, por favor contactar al área de soporte.");
+                MensajesUI.fatal("Unidad de persistencia inválida, por favor contactar al área de soporte.");
             }
         } else {
             MensajesUI.error("Para recuperar su clave, es necesario ingresar el numero de empleado y empresa.");
@@ -260,4 +297,68 @@ public class ControladorIngreso implements Serializable {
     public String getLogo() {
         return logo;
     }
+
+    public String getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(String grupo) {
+        this.grupo = grupo;
+        validarGrupo();
+    }
+
+    private boolean validarGrupo() {
+        //FacesContext x = FacesContext.getCurrentInstance();
+        //HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
+        boolean respuesta = false;
+        if ((this.grupo == null) || (this.grupo.isEmpty())) {
+            System.out.println("El grupo esta nulo.");
+            PrimefacesContextUI.ejecutar("PF('dlgSolicitudGrupo').show();");
+            respuesta = false;
+        } else {
+            System.out.println("El grupo es: " + this.grupo);
+            PrimefacesContextUI.ejecutar("PF('dlgSolicitudGrupo').hide();");
+            this.grupoSeleccionado=this.grupo;
+            respuesta = true;
+        }
+        return respuesta;
+    }
+
+    public String getGrupoSeleccionado() {
+        System.out.println("getGrupoSeleccionado: " + this.grupoSeleccionado);
+        return grupoSeleccionado;
+    }
+
+    public void setGrupoSeleccionado(String grupoSeleccionado) {
+        System.out.println("setGrupoSeleccionado: " + grupoSeleccionado);
+        this.grupoSeleccionado = grupoSeleccionado;
+    }
+
+    public void obtenerParametroURL() {
+        String ruta;
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext ec = context.getExternalContext();
+        System.out.println("aplicacion: " + ec.getRequestContextPath());
+        ruta = ec.getRequestContextPath() + "/" + "?grupo=" + grupoSeleccionado;
+        System.out.println("ruta: " + ruta);
+        try {
+            ec.redirect(ruta);
+        } catch (IOException ex) {
+            System.out.println("error al redireccionar");
+            ex.printStackTrace();
+        }
+        //return ruta;
+    }
+
+    public List<SelectItem> getListaGrupos() {
+        System.out.println("getListaGrupos");
+        listaGrupos = obtenerGruposCadenasKiosko();
+        return listaGrupos;
+    }
+
+    public void setListaGrupos(List<SelectItem> listaGrupos) {
+        System.out.println("setListaGrupos");
+        this.listaGrupos = listaGrupos;
+    }
+
 }

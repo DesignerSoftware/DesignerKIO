@@ -2,7 +2,7 @@ package co.com.kiosko.persistencia.implementacion;
 
 import co.com.kiosko.entidades.ConfiguracionCorreo;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConfiguracionCorreo;
-import java.math.BigDecimal;
+//import java.math.BigDecimal;
 import java.math.BigInteger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

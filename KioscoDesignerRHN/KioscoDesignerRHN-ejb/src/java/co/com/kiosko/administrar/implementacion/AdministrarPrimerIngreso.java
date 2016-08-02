@@ -15,14 +15,16 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+//import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 
 /**
  *
  * @author Felipe Triviño
  */
-@Stateful
+//@Stateful
+@Stateless
 public class AdministrarPrimerIngreso implements IAdministrarPrimerIngreso {
 
     @EJB

@@ -80,10 +80,10 @@ public class ControladorGenerarReporte implements Serializable {
             pathReporteGenerado = administrarGenerarReporte.generarReporte(reporte.getNombrearchivo(), "PDF", parametros);
             if (pathReporteGenerado != null) {
                 PrimefacesContextUI.ejecutar("validarDescargaReporte();");
-            }else{
-				PrimefacesContextUI.ejecutar("PF('generandoReporte').hide();");
-				MensajesUI.error("El reporte no se pudo generar.");
-			}
+            } else {
+                PrimefacesContextUI.ejecutar("PF('generandoReporte').hide();");
+                MensajesUI.error("El reporte no se pudo generar.");
+            }
         } else {
             PrimefacesContextUI.ejecutar("PF('generandoReporte').hide();");
             MensajesUI.error("Se generó un error registrando la conexión.");
@@ -125,10 +125,10 @@ public class ControladorGenerarReporte implements Serializable {
                     context.execute("PF('verReportePDF').show();");
                 }
                 context.execute("validarEnvioCorreo();");
-            }else{
-				context.update("principalForm:errorGenerandoReporte");
-				context.execute("PF('errorGenerandoReporte').show();");
-			}
+            } else {
+                context.update("principalForm:errorGenerandoReporte");
+                context.execute("PF('errorGenerandoReporte').show();");
+            }
             //pathReporteGenerado = null;
         } else {
             context.update("principalForm:errorGenerandoReporte");

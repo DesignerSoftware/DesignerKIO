@@ -35,7 +35,13 @@ public class LeerArchivoXML {
                 Node nNode = nList.item(temp);
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
-                    listaCadenas.add(new CadenasKioskos(eElement.getAttribute("id"), eElement.getElementsByTagName("descripcion").item(0).getTextContent(), eElement.getElementsByTagName("cadena").item(0).getTextContent(), eElement.getElementsByTagName("nit").item(0).getTextContent(), eElement.getElementsByTagName("fondo").item(0).getTextContent()));
+                    listaCadenas.add(new CadenasKioskos(eElement.getAttribute("id"),
+                            eElement.getElementsByTagName("descripcion").item(0).getTextContent(),
+                            eElement.getElementsByTagName("cadena").item(0).getTextContent(),
+                            eElement.getElementsByTagName("nit").item(0).getTextContent(),
+                            eElement.getElementsByTagName("fondo").item(0).getTextContent(),
+                            eElement.getElementsByTagName("grupo").item(0).getTextContent()
+                    ));
                 }
             }
             return listaCadenas;
@@ -56,5 +62,42 @@ public class LeerArchivoXML {
             System.out.println("Error en DOM. " + e);
             return null;
         }
+    }
+
+    public List<CadenasKioskos> leerArchivoEmpresasKioskoGrupo(String grupo) {
+        List<CadenasKioskos> listaCadenasResultado = new ArrayList<CadenasKioskos>();
+        List<CadenasKioskos> listaCadenas;
+        listaCadenas = leerArchivoEmpresasKiosko();
+        if (grupo != null) {
+            if (!grupo.isEmpty()) {
+                for (int i = 0; i < listaCadenas.size(); i++) {
+                    if (listaCadenas.get(i).getGrupo().equalsIgnoreCase(grupo)) {
+                        listaCadenasResultado.add(listaCadenas.get(i));
+                    }
+                }
+                listaCadenas = listaCadenasResultado;
+            }
+        }
+        //System.out.println("lista de XML: "+listaCadenas);
+        return listaCadenas;
+    }
+
+    public List<String> obtenerGruposEmpresasKiosko() {
+        List<String> listaGrupos = new ArrayList<String>();
+        List<CadenasKioskos> listaCadenas;
+        listaCadenas = leerArchivoEmpresasKiosko();
+        int contador;
+        for (int i = 0; i < listaCadenas.size(); i++) {
+            contador=0;
+            for (int j=0; j< listaGrupos.size(); j++){
+                if (listaCadenas.get(i).getGrupo().equalsIgnoreCase( listaGrupos.get(j) ) ){
+                    contador++;
+                }
+            }
+            if (contador == 0){
+                listaGrupos.add(listaCadenas.get(i).getGrupo());
+            }
+        }
+        return listaGrupos;
     }
 }

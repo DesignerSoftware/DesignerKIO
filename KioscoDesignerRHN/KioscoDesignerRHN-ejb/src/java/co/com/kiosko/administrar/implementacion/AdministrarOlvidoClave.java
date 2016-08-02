@@ -8,14 +8,16 @@ import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaParametrizaClave;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaUtilidadesBD;
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+//import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 
 /**
  *
  * @author Felipe Triviño
  */
-@Stateful
+//@Stateful
+@Stateless
 public class AdministrarOlvidoClave implements IAdministrarOlvidoClave {
 
     @EJB
@@ -40,11 +42,10 @@ public class AdministrarOlvidoClave implements IAdministrarOlvidoClave {
 
     @Override
     public boolean validarRespuestas(String respuesta1, String respuesta2, byte[] respuestaC1, byte[] respuestaC2) {
-        if (respuesta1.toUpperCase().equals(persistenciaUtilidadesBD.desencriptar(em, respuestaC1))
-                && respuesta2.toUpperCase().equals(persistenciaUtilidadesBD.desencriptar(em, respuestaC2))) {
-            return true;
-        }
-        return false;
+        boolean respuesta;
+        respuesta =(respuesta1.toUpperCase().equals(persistenciaUtilidadesBD.desencriptar(em, respuestaC1))
+                && respuesta2.toUpperCase().equals(persistenciaUtilidadesBD.desencriptar(em, respuestaC2)));
+        return respuesta;
     }
 
     @Override
