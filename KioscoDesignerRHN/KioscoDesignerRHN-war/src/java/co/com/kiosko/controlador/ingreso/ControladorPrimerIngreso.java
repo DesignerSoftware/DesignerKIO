@@ -90,7 +90,7 @@ public class ControladorPrimerIngreso implements Serializable {
         if (clave != null && !clave.isEmpty() && confirmacion != null && !confirmacion.isEmpty()) {
             if (clave.equals(confirmacion)) {
                 if (validarClave(clave)) {
-                    nuevoIngreso.setEmpleado(administrarPrimerIngreso.consultarEmpleado(new BigInteger(usuario)));
+                    nuevoIngreso.setEmpleado(administrarPrimerIngreso.consultarEmpleado(new BigInteger(usuario), Long.parseLong(nit)));
                     nuevoIngreso.setPwd(administrarPrimerIngreso.encriptar(clave));
                     byte[] rsp1, rsp2;
                     nuevoIngreso.setRespuesta1(administrarPrimerIngreso.encriptar(nuevoIngreso.getRespuesta1UI().toUpperCase()));

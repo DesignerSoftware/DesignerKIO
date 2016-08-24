@@ -37,6 +37,9 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
 
     @Override
     public ConexionesKioskos consultarConexionEmpleado(EntityManager eManager, String codigoEmpleado, long nitEmpresa) {
+        System.out.println("eManager: "+eManager);
+        System.out.println("codigoEmpleado: "+codigoEmpleado);
+        System.out.println("nitEmpresa: "+nitEmpresa);
         try {
             eManager.getTransaction().begin();
             String sqlQuery = "SELECT ck FROM ConexionesKioskos ck WHERE ck.empleado.codigoempleado = :codigoEmpleado and ck.empleado.empresa.nit = :nitEmpresa";

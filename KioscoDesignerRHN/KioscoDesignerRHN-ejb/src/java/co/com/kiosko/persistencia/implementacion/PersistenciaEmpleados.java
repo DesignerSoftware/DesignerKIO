@@ -5,6 +5,7 @@ import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;
 import java.math.BigInteger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
 /**
@@ -15,7 +16,7 @@ import javax.persistence.Query;
 public class PersistenciaEmpleados implements IPersistenciaEmpleados {
 
     @Override
-    public Empleados consultarEmpleado(EntityManager eManager, BigInteger codigoEmpleado) {
+    public Empleados consultarEmpleado(EntityManager eManager, BigInteger codigoEmpleado, long nit) {
         try {
             eManager.getTransaction().begin();
             String sqlQuery = "SELECT e FROM Empleados e WHERE e.codigoempleado = :codigoEmpleado";
@@ -24,8 +25,27 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
             Empleados emp = (Empleados) query.getSingleResult();
             eManager.getTransaction().commit();
             return emp;
-        } catch (Exception e) {
-            System.out.println("Error PersistenciaEmpleados.consultarEmpleado: " + e);
+        } catch (NonUniqueResultException nure) {
+            System.out.println("Hay más de un empleado con el mismo código.");
+            System.out.println("Error PersistenciaEmpleados.consultarEmpleado: " + nure);
+            eManager.getTransaction().rollback();
+            try {
+                eManager.getTransaction().begin();
+                String sqlQuery = "SELECT e FROM Empleados e WHERE e.codigoempleado = :codigoEmpleado AND e.empresa.nit = :nit ";
+                Query query = eManager.createQuery(sqlQuery);
+                query.setParameter("codigoEmpleado", codigoEmpleado);
+                query.setParameter("nit", nit);
+                Empleados emp = (Empleados) query.getSingleResult();
+                eManager.getTransaction().commit();
+                return emp;
+            } catch (Exception e) {
+                System.out.println("Error PersistenciaEmpleados.consultarEmpleado: " + e);
+                eManager.getTransaction().rollback();
+                return null;
+            }
+        } catch (NullPointerException npe) {
+            System.out.println("No hay empleado con el código dado.");
+            System.out.println("Error PersistenciaEmpleados.consultarEmpleado: " + npe);
             eManager.getTransaction().rollback();
             return null;
         }

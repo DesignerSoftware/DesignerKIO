@@ -2,7 +2,7 @@ package co.com.kiosko.persistencia.implementacion;
 
 import co.com.kiosko.entidades.OpcionesKioskos;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaOpcionesKioskos;
-import java.math.BigDecimal;
+//import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.Stateless;

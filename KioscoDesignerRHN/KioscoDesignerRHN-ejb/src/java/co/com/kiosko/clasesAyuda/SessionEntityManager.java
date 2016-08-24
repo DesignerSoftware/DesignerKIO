@@ -18,6 +18,10 @@ public class SessionEntityManager {
         this.emf = emf;
     }
 
+    public void cerrarEMF() {
+        emf.close();
+    }
+
     public String getIdSession() {
         return idSession;
     }
@@ -27,7 +31,9 @@ public class SessionEntityManager {
     }
 
     public EntityManager getEm() {
-        em = emf.createEntityManager();
+        if (emf.isOpen()) {
+            em = emf.createEntityManager();
+        }
         return em;
     }
 

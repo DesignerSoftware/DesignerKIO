@@ -62,8 +62,8 @@ public class AdministrarPrimerIngreso implements IAdministrarPrimerIngreso {
     }
 
     @Override
-    public Empleados consultarEmpleado(BigInteger codigoEmpleado) {
-        return persistenciaEmpleados.consultarEmpleado(em, codigoEmpleado);
+    public Empleados consultarEmpleado(BigInteger codigoEmpleado, long nit) {
+        return persistenciaEmpleados.consultarEmpleado(em, codigoEmpleado, nit);
     }
 
     @Override

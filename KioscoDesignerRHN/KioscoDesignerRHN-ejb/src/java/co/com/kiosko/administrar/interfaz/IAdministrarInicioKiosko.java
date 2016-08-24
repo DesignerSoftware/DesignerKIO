@@ -1,14 +1,17 @@
 package co.com.kiosko.administrar.interfaz;
 
+import co.com.kiosko.entidades.Empleados;
+import java.math.BigInteger;
+
 /**
  *
  * @author Felipe Triviño
  */
 public interface IAdministrarInicioKiosko {
 
-    public void obtenerConexion(java.lang.String idSesion);
+    public void obtenerConexion(String idSesion);
 
-    public co.com.kiosko.entidades.Empleados consultarEmpleado(java.math.BigInteger codigoEmpleado);
+    public Empleados consultarEmpleado(BigInteger codigoEmpleado, long nit);
 
-    public java.lang.String fotoEmpleado();
+    public String fotoEmpleado();
 }

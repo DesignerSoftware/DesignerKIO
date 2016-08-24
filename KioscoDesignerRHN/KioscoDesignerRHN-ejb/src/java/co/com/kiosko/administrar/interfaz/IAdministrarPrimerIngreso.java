@@ -1,5 +1,12 @@
 package co.com.kiosko.administrar.interfaz;
 
+import co.com.kiosko.entidades.ConexionesKioskos;
+import co.com.kiosko.entidades.Empleados;
+import co.com.kiosko.entidades.ParametrizaClave;
+import co.com.kiosko.entidades.PreguntasKioskos;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 /**
  *
  * @author Felipe Triviño
@@ -10,16 +17,16 @@ public interface IAdministrarPrimerIngreso {
 
     public java.util.List<co.com.kiosko.entidades.PreguntasKioskos> obtenerPreguntasSeguridad();
 
-    public boolean registrarConexionKiosko(co.com.kiosko.entidades.ConexionesKioskos cnk);
+    public boolean registrarConexionKiosko(ConexionesKioskos cnk);
 
-    public co.com.kiosko.entidades.PreguntasKioskos consultarPreguntaSeguridad(java.math.BigDecimal secuencia);
+    public PreguntasKioskos consultarPreguntaSeguridad(BigDecimal secuencia);
 
-    public co.com.kiosko.entidades.Empleados consultarEmpleado(java.math.BigInteger codigoEmpleado);
+    public Empleados consultarEmpleado(BigInteger codigoEmpleado, long nit);
 
-    public byte[] encriptar(java.lang.String valor);
+    public byte[] encriptar(String valor);
 
-    public java.lang.String desencriptar(byte[] valor);
+    public String desencriptar(byte[] valor);
 
-    public co.com.kiosko.entidades.ParametrizaClave obtenerFormatoClave(long nitEmpresa);
+    public ParametrizaClave obtenerFormatoClave(long nitEmpresa);
     
 }

@@ -70,4 +70,32 @@
             <property name="eclipselink.canonicalmodel.subpackage" value="five"/>
         </properties>
     </persistence-unit>
+    <persistence-unit name="DEFAULT6" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <validation-mode>NONE</validation-mode>
+        <properties>
+            <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@nominasaas2:1521:SOPORTE"/>
+            <property name="javax.persistence.jdbc.user" value="LIPESA"/>
+            <property name="javax.persistence.jdbc.password" value="LIPESA"/>
+            <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+            <property name="eclipselink.cache.shared.default" value="false"/>
+            <property name="eclipselink.cache.type.default" value="NONE"/>
+            <property name="eclipselink.canonicalmodel.subpackage" value="six"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="DEFAULT7" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <validation-mode>NONE</validation-mode>
+        <properties>
+            <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@nominasaas2:1521:SOPORTE"/>
+            <property name="javax.persistence.jdbc.user" value="IPS"/>
+            <property name="javax.persistence.jdbc.password" value="IPS"/>
+            <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+            <property name="eclipselink.cache.shared.default" value="false"/>
+            <property name="eclipselink.cache.type.default" value="NONE"/>
+            <property name="eclipselink.canonicalmodel.subpackage" value="seven"/>
+        </properties>
+    </persistence-unit>
 </persistence>

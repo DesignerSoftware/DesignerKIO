@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.el.ELException;
@@ -103,14 +104,29 @@ public class ControladorGenerarReporte implements Serializable {
     }
 
     public void validarDescargaReporte() {
+        String nombrearchivo = "reporte.pdf";
+        String[] arregloruta = new String[1];
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('generandoReporte').hide();");
         if (pathReporteGenerado != null && !pathReporteGenerado.startsWith("Error:")) {
+            //System.out.println("ruta: "+pathReporteGenerado);
+            try {
+                arregloruta = pathReporteGenerado.split(Pattern.quote("\\"));
+            } catch (PatternSyntaxException pse) {
+                System.out.println("Error en la fragmentación de la ruta.");
+                pse.printStackTrace();
+            }
+            /*for (int i = 0; i < arregloruta.length; i++) {
+             System.out.println("pos" + i + ": " + arregloruta[i]);
+             }*/
+            nombrearchivo = arregloruta[arregloruta.length - 1];
+            //System.out.println("nombre de archivo: " + nombrearchivo);
             try {
                 //System.out.println("pathReporteGenerado: " + pathReporteGenerado);
                 File archivo = new File(pathReporteGenerado);
                 fis = new FileInputStream(archivo);
-                reporteGenerado = new DefaultStreamedContent(fis, "application/pdf");
+                //reporteGenerado = new DefaultStreamedContent(fis, "application/pdf");
+                reporteGenerado = new DefaultStreamedContent(fis, "application/pdf", nombrearchivo);
             } catch (FileNotFoundException ex) {
                 System.out.println(ex.getCause());
                 reporteGenerado = null;
@@ -254,14 +270,33 @@ public class ControladorGenerarReporte implements Serializable {
     }
 
     public StreamedContent getReporteGenerado() {
+        String nombrearchivo = "reporte.pdf";
+        String[] arregloruta = new String[1];
         FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Pragma", "no-cache");
         FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Expires", "0");
         FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Expires", "Mon, 8 Aug 1980 10:00:00 GMT");
+        if (pathReporteGenerado != null) {
+            try {
+                arregloruta = pathReporteGenerado.split(Pattern.quote("\\"));
+            } catch (PatternSyntaxException pse) {
+                System.out.println("Error en la fragmentación de la ruta.");
+                pse.printStackTrace();
+            }
+            /*for (int i = 0; i < arregloruta.length; i++) {
+             System.out.println("pos" + i + ": " + arregloruta[i]);
+             }*/
+            nombrearchivo = arregloruta[arregloruta.length - 1];
+            //System.out.println("nombre de archivo: " + nombrearchivo);
+        }
         try {
             File archivo = new File(pathReporteGenerado);
             fis = new FileInputStream(archivo);
-            reporteGenerado = new DefaultStreamedContent(fis, "application/pdf");
+            if (pathReporteGenerado != null) {
+                reporteGenerado = new DefaultStreamedContent(fis, "application/pdf", nombrearchivo);
+            } else {
+                reporteGenerado = new DefaultStreamedContent(fis, "application/pdf");
+            }
         } catch (Exception e) {
             reporteGenerado = null;
         }

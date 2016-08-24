@@ -33,12 +33,18 @@ public class AdministrarSesiones implements IAdministrarSesiones {
 
     @Override
     public EntityManager obtenerConexionSesion(String idSesion) {
-        if (!sessionesActivas.isEmpty()) {
-            for (int i = 0; i < sessionesActivas.size(); i++) {
-                if (sessionesActivas.get(i).getIdSession().equals(idSesion)) {
-                    return sessionesActivas.get(i).getEm();
+        System.out.println(this.getClass().getName()+"."+"obtenerConexionSesion"+"()");
+        try {
+            if (!sessionesActivas.isEmpty()) {
+                for (int i = 0; i < sessionesActivas.size(); i++) {
+                    if (sessionesActivas.get(i).getIdSession().equals(idSesion)) {
+                        return sessionesActivas.get(i).getEm();
+                    }
                 }
             }
+        } catch (Exception e) {
+            System.out.println("error en "+"obtenerConexionSesion");
+            e.printStackTrace();
         }
         return null;
     }
@@ -48,6 +54,8 @@ public class AdministrarSesiones implements IAdministrarSesiones {
         if (!sessionesActivas.isEmpty()) {
             for (int i = 0; i < sessionesActivas.size(); i++) {
                 if (sessionesActivas.get(i).getIdSession().equals(idSesion)) {
+                    //sessionesActivas.get(i).cerrarEMF();
+                    sessionesActivas.get(i).setIdSession("");
                     sessionesActivas.remove(sessionesActivas.get(i));
                     break;
                 }

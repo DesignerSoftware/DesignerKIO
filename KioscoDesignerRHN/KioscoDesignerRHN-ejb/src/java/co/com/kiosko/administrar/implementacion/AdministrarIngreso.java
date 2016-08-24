@@ -127,6 +127,15 @@ public class AdministrarIngreso implements IAdministrarIngreso {
 
     @Override
     public ConexionesKioskos obtenerConexionEmpelado(String codigoEmpleado, String nitEmpresa) {
+        System.out.println(this.getClass().getName() + "." + "obtenerConexionEmpelado" + "()");
+        System.out.println("codigoEmpleado: " + codigoEmpleado);
+        System.out.println("nitEmpresa: " + nitEmpresa);
+        try {
+            long nit = Long.parseLong(nitEmpresa);
+            System.out.println("nit: " + nit);
+        } catch (NumberFormatException nfe) {
+            System.out.println("Excepcion por NumberFormatException.");
+        }
         return persistenciaConexionesKioskos.consultarConexionEmpleado(em, codigoEmpleado, Long.parseLong(nitEmpresa));
     }
 
@@ -145,9 +154,13 @@ public class AdministrarIngreso implements IAdministrarIngreso {
 
     @Override
     public void cerrarSession(String idSesion) {
-        if (em.isOpen()) {
-            em.getEntityManagerFactory().close();
-            administrarSessiones.borrarSesion(idSesion);
+        if (em == null) {
+           administrarSessiones.borrarSesion(idSesion);
+        }else{
+            if (em.isOpen()) {
+                em.getEntityManagerFactory().close();
+                administrarSessiones.borrarSesion(idSesion);
+            }
         }
     }
 

@@ -66,19 +66,31 @@ public class ControladorIngreso implements Serializable {
             }
         }
         if (resultadoValidacion) {
-            return (new LeerArchivoXML()).leerArchivoEmpresasKioskoGrupo(this.grupo);
+            listaResultado = (new LeerArchivoXML()).leerArchivoEmpresasKioskoGrupo(this.grupo);
         } else {
-            return (new LeerArchivoXML()).leerArchivoEmpresasKioskoGrupo("0");
+            listaResultado = (new LeerArchivoXML()).leerArchivoEmpresasKioskoGrupo("0");
         }
+        return listaResultado;
     }
 
     public List<SelectItem> obtenerGruposCadenasKiosko() {
         List<String> listaOriginal = (new LeerArchivoXML()).obtenerGruposEmpresasKiosko();
         List<SelectItem> listaRetorno = new ArrayList<SelectItem>();
-        for (int i =0; i< listaOriginal.size(); i++) {
+        for (int i = 0; i < listaOriginal.size(); i++) {
             listaRetorno.add(new SelectItem(listaOriginal.get(i), listaOriginal.get(i)));
         }
         return listaRetorno;
+    }
+
+    private CadenasKioskos validarUnidadPersistencia(String unidadP) {
+        CadenasKioskos resultado=null;
+        for (CadenasKioskos elemento : (new LeerArchivoXML()).leerArchivoEmpresasKiosko()) {
+            if (elemento.getId().equals(unidadP)) {
+                resultado = elemento;
+                break;
+            }
+        }
+        return resultado;
     }
 
     public String ingresar() throws IOException {
@@ -87,21 +99,17 @@ public class ControladorIngreso implements Serializable {
         HttpSession ses = (HttpSession) contexto.getExternalContext().getSession(false);
         if (!ingresoExitoso) {
             CadenasKioskos cadena = null;
-            for (CadenasKioskos elemento : (new LeerArchivoXML()).leerArchivoEmpresasKiosko()) {
-                if (elemento.getId().equals(unidadPersistenciaIngreso)) {
-                    cadena = elemento;
-                    break;
-                }
-            }
+            cadena = validarUnidadPersistencia(unidadPersistenciaIngreso);
             if (usuario != null && !usuario.isEmpty()
                     && clave != null && !clave.isEmpty()
                     && cadena != null) {
+                nit = cadena.getNit();
                 if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
                     if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit())) {
                         if (administrarIngreso.validarUsuarioRegistrado(usuario)) {
                             if (administrarIngreso.validarEstadoUsuario(usuario)) {
                                 if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave)) {
-                                    nit = cadena.getNit();
+                                    //nit = cadena.getNit();
                                     administrarIngreso.adicionarConexionUsuario(ses.getId());
                                     ingresoExitoso = true;
                                     intento = 0;
@@ -130,7 +138,7 @@ public class ControladorIngreso implements Serializable {
 
                                     if (intento == 2) {
                                         PrimefacesContextUI.ejecutar("PF('dlgAlertaIntentos').show()");
-                                    } else if (intento == 3) {
+                                    } else if (intento >= 3) {
                                         administrarIngreso.bloquearUsuario(usuario, nit);
                                         intento = 0;
                                     }
@@ -153,7 +161,7 @@ public class ControladorIngreso implements Serializable {
                         //          administrarIngreso.getEm().getEntityManagerFactory().close();
                     } else {
                         //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
-                        MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de soporte.");
+                        MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");
                         ingresoExitoso = false;
                     }
                 } else {
@@ -190,13 +198,9 @@ public class ControladorIngreso implements Serializable {
         HttpSession ses = (HttpSession) contexto.getExternalContext().getSession(false);
 
         CadenasKioskos cadena = null;
-        for (CadenasKioskos elemento : (new LeerArchivoXML()).leerArchivoEmpresasKiosko()) {
-            if (elemento.getId().equals(unidadPersistenciaIngreso)) {
-                cadena = elemento;
-                break;
-            }
-        }
+        cadena = validarUnidadPersistencia(unidadPersistenciaIngreso);
         if (usuario != null && clave != null && cadena != null) {
+            nit = cadena.getNit();
             if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
                 if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit())) {
                     if (administrarIngreso.validarUsuarioRegistrado(usuario)) {
@@ -205,7 +209,7 @@ public class ControladorIngreso implements Serializable {
                             ingresoExitoso = true;
                             HttpSession session = Util.getSession();
                             session.setAttribute("idUsuario", usuario);
-                            nit = cadena.getNit();
+                            //nit = cadena.getNit();
                             return "olvidoClave";
                         } else {
                             //USUARIO BLOQUEADO
@@ -246,8 +250,42 @@ public class ControladorIngreso implements Serializable {
         }
         return retorno;
     }
-    //GETTER AND SETTER
 
+    private boolean validarGrupo() {
+        //FacesContext x = FacesContext.getCurrentInstance();
+        //HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
+        boolean respuesta = false;
+        if ((this.grupo == null) || (this.grupo.isEmpty())) {
+            //System.out.println("El grupo esta nulo.");
+            PrimefacesContextUI.ejecutar("PF('dlgSolicitudGrupo').show();");
+            respuesta = false;
+        } else {
+            //System.out.println("El grupo es: " + this.grupo);
+            PrimefacesContextUI.ejecutar("PF('dlgSolicitudGrupo').hide();");
+            this.grupoSeleccionado = this.grupo;
+            respuesta = true;
+        }
+        return respuesta;
+    }
+
+    public void obtenerParametroURL() {
+        String ruta;
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext ec = context.getExternalContext();
+        System.out.println("aplicacion: " + ec.getRequestContextPath());
+        ruta = ec.getRequestContextPath() + "/" + "?grupo=" + grupoSeleccionado;
+        System.out.println("ruta: " + ruta);
+        try {
+            ec.redirect(ruta);
+        } catch (IOException ex) {
+            System.out.println("error al redireccionar");
+            ex.printStackTrace();
+        }
+        //return ruta;
+    }
+
+    //GETTER AND SETTER
+    
     public String getClave() {
         return clave;
     }
@@ -307,23 +345,6 @@ public class ControladorIngreso implements Serializable {
         validarGrupo();
     }
 
-    private boolean validarGrupo() {
-        //FacesContext x = FacesContext.getCurrentInstance();
-        //HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
-        boolean respuesta = false;
-        if ((this.grupo == null) || (this.grupo.isEmpty())) {
-            System.out.println("El grupo esta nulo.");
-            PrimefacesContextUI.ejecutar("PF('dlgSolicitudGrupo').show();");
-            respuesta = false;
-        } else {
-            System.out.println("El grupo es: " + this.grupo);
-            PrimefacesContextUI.ejecutar("PF('dlgSolicitudGrupo').hide();");
-            this.grupoSeleccionado=this.grupo;
-            respuesta = true;
-        }
-        return respuesta;
-    }
-
     public String getGrupoSeleccionado() {
         System.out.println("getGrupoSeleccionado: " + this.grupoSeleccionado);
         return grupoSeleccionado;
@@ -332,22 +353,6 @@ public class ControladorIngreso implements Serializable {
     public void setGrupoSeleccionado(String grupoSeleccionado) {
         System.out.println("setGrupoSeleccionado: " + grupoSeleccionado);
         this.grupoSeleccionado = grupoSeleccionado;
-    }
-
-    public void obtenerParametroURL() {
-        String ruta;
-        FacesContext context = FacesContext.getCurrentInstance();
-        ExternalContext ec = context.getExternalContext();
-        System.out.println("aplicacion: " + ec.getRequestContextPath());
-        ruta = ec.getRequestContextPath() + "/" + "?grupo=" + grupoSeleccionado;
-        System.out.println("ruta: " + ruta);
-        try {
-            ec.redirect(ruta);
-        } catch (IOException ex) {
-            System.out.println("error al redireccionar");
-            ex.printStackTrace();
-        }
-        //return ruta;
     }
 
     public List<SelectItem> getListaGrupos() {
