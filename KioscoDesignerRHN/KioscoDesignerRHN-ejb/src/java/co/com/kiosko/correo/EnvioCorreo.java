@@ -7,6 +7,7 @@ import javax.activation.FileDataSource;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.NoSuchProviderException;
 //import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -25,32 +26,32 @@ public class EnvioCorreo {
     }
 
     public boolean enviarCorreo(ConfiguracionCorreo cfc, String destinatario, String asunto, String mensaje, String pathAdjunto) {
-        try {
-            // Propiedades de la conexión
-            Properties propiedadesConexion = new Properties();
-            propiedadesConexion.setProperty("mail.smtp.host", cfc.getServidorSmtp()); //IP DEL SERVIDOR SMTP
-            propiedadesConexion.setProperty("mail.smtp.port", cfc.getPuerto());
+//        try {
+        boolean resEnvio = false;
+        // Propiedades de la conexión
+        Properties propiedadesConexion = new Properties();
+        propiedadesConexion.setProperty("mail.smtp.host", cfc.getServidorSmtp()); //IP DEL SERVIDOR SMTP
+        propiedadesConexion.setProperty("mail.smtp.port", cfc.getPuerto());
 
+        if (cfc.getAutenticado().equalsIgnoreCase("S")) {
+            propiedadesConexion.setProperty("mail.smtp.auth", "true");
             if (cfc.getUsarssl().equalsIgnoreCase("S")) {
                 propiedadesConexion.put("mail.smtp.socketFactory.port", cfc.getPuerto());
                 propiedadesConexion.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-            }
-            if (cfc.getStarttls().equalsIgnoreCase("S")) {
+            }else if (cfc.getStarttls().equalsIgnoreCase("S")) {
                 propiedadesConexion.setProperty("mail.smtp.starttls.enable", "true");
             }
-            if (cfc.getAutenticado().equalsIgnoreCase("S")) {
-                propiedadesConexion.setProperty("mail.smtp.auth", "true");
-            }
+        }
 
-            // Preparamos la sesion
-            Session session = Session.getDefaultInstance(propiedadesConexion);
-            /*Session session = Session.getDefaultInstance(propiedadesConexion, new javax.mail.Authenticator() {
+        // Preparamos la sesion
+        Session session = Session.getDefaultInstance(propiedadesConexion);
+        /*Session session = Session.getDefaultInstance(propiedadesConexion, new javax.mail.Authenticator() {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(cfc.getRemitente(), cfc.getClave());
                 }
             });*/
-
+        try {
             //Mensaje que va en el correo
             BodyPart texto = new MimeBodyPart();
             texto.setText(mensaje);
@@ -96,10 +97,15 @@ public class EnvioCorreo {
             t.close();
 
             //System.out.println("CORREO ENVIADO EXITOSAMENTE");
-            return true;
+//            return true;
+            resEnvio = true;
+        } catch (NoSuchProviderException nspe) {
+            System.out.println("Error enviarCorreo: " + nspe.getMessage());
+            resEnvio = false;
         } catch (MessagingException e) {
             System.out.println("Error enviarCorreo: " + e.getMessage());
-            return false;
+            resEnvio = false;
         }
+        return resEnvio;
     }
 }

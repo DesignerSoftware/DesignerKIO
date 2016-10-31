@@ -105,11 +105,12 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte {
         boolean retorno = false;
         try {
             ConfiguracionCorreo cc = persistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo(em, secuenciaEmpresa);
-            if (cc.getServidorSmtp().length() != 0) {
-                retorno = true;
-            } else {
-                retorno = false;
-            }
+//            if (cc.getServidorSmtp().length() != 0) {
+//                retorno = true;
+//            } else {
+//                retorno = false;
+//            }
+            retorno = cc.getServidorSmtp().length() != 0;
         } catch (NullPointerException npe) {
             retorno = false;
         } catch (Exception e) {

@@ -73,15 +73,21 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     }
 
     @Override
-    public boolean validarUsuarioRegistrado(EntityManager eManager, String usuario) {
+    public boolean validarUsuarioRegistrado(EntityManager eManager, String usuario, String nitEmpresa) {
         boolean resultado=false;
         try {
             eManager.getTransaction().begin();
-            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e "
+//            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e "
+//                    + "WHERE ck.EMPLEADO = e.SECUENCIA "
+//                    + "AND e.codigoempleado = ?";
+            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e, EMPRESAS em "
                     + "WHERE ck.EMPLEADO = e.SECUENCIA "
-                    + "AND e.codigoempleado = ?";
+                    + "AND e.empresa = em.secuencia "
+                    + "AND e.codigoempleado = ? "
+                    + "AND em.nit = ? ";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.setParameter(1, usuario);
+            query.setParameter(2, nitEmpresa);
             BigDecimal retorno = (BigDecimal) query.getSingleResult();
             Integer instancia = retorno.intValueExact();
             eManager.getTransaction().commit();
@@ -101,16 +107,23 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     }
 
     @Override
-    public boolean validarEstadoUsuario(EntityManager eManager, String usuario) {
+    public boolean validarEstadoUsuario(EntityManager eManager, String usuario, String nitEmpresa) {
         boolean resultado= false;
         try {
             eManager.getTransaction().begin();
-            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e "
+//            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e "
+//                    + "WHERE ck.EMPLEADO = e.SECUENCIA "
+//                    + "AND e.codigoempleado = ? "
+//                    + "AND ck.activo = 'N'";
+            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e, EMPRESAS em "
                     + "WHERE ck.EMPLEADO = e.SECUENCIA "
+                    + "AND e.empresa = em.secuencia "
+                    + "AND ck.activo = 'N' "
                     + "AND e.codigoempleado = ? "
-                    + "AND ck.activo = 'N'";
+                    + "AND em.nit = ? ";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.setParameter(1, usuario);
+            query.setParameter(2, nitEmpresa);
             BigDecimal retorno = (BigDecimal) query.getSingleResult();
             Integer instancia = retorno.intValueExact();
             eManager.getTransaction().commit();
@@ -130,17 +143,24 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     }
 
     @Override
-    public boolean validarIngresoUsuarioRegistrado(EntityManager eManager, String usuario, String clave) {
+    public boolean validarIngresoUsuarioRegistrado(EntityManager eManager, String usuario, String clave, String nitEmpresa) {
         boolean resultado = false;
         try {
             eManager.getTransaction().begin();
-            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e "
+//            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e "
+//                    + "WHERE ck.EMPLEADO = e.SECUENCIA "
+//                    + "AND e.codigoempleado = ? "
+//                    + "AND ck.PWD = GENERALES_PKG.ENCRYPT(?)";
+            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e, EMPRESAS em "
                     + "WHERE ck.EMPLEADO = e.SECUENCIA "
+                    + "AND e.empresa = em.secuencia "
                     + "AND e.codigoempleado = ? "
-                    + "AND ck.PWD = GENERALES_PKG.ENCRYPT(?)";
+                    + "AND ck.PWD = GENERALES_PKG.ENCRYPT(?) "
+                    + "AND em.nit = ? ";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.setParameter(1, usuario);
             query.setParameter(2, clave);
+            query.setParameter(3, nitEmpresa);
             BigDecimal retorno = (BigDecimal) query.getSingleResult();
             Integer instancia = retorno.intValueExact();
             eManager.getTransaction().commit();
@@ -152,11 +172,13 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
                 return false;
             }*/
             resultado = instancia >0 ;
-            return resultado;
+//            return resultado;
         } catch (Exception e) {
             System.out.println("Error PersistenciaConexionInicial.validarIngresoUsuarioRegistrado: " + e);
-            return false;
+//            return false;
+            resultado = false;
         } 
+        return resultado;
     }
 
     @Override

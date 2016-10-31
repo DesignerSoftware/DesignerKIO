@@ -9,12 +9,12 @@ public interface IPersistenciaConexionInicial {
 
     public boolean validarUsuarioyEmpresa(EntityManager eManager, String usuario, String nitEmpresa);
 
-    public boolean validarUsuarioRegistrado(EntityManager eManager, String usuario);
+    public boolean validarUsuarioRegistrado(EntityManager eManager, String usuario, String nitEmpresa);
 
-    public boolean validarIngresoUsuarioRegistrado(EntityManager eManager, String usuario, String clave);
+    public boolean validarIngresoUsuarioRegistrado(EntityManager eManager, String usuario, String clave, String nitEmpresa);
 
     public EntityManager validarConexionUsuario(EntityManagerFactory emf);
 
-    public boolean validarEstadoUsuario(javax.persistence.EntityManager eManager, java.lang.String usuario);
+    public boolean validarEstadoUsuario(EntityManager eManager, String usuario, String nitEmpresa);
 
 }

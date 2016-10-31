@@ -69,10 +69,10 @@ public class AdministrarIngreso implements IAdministrarIngreso {
     }
 
     @Override
-    public boolean validarUsuarioRegistrado(String usuario) {
+    public boolean validarUsuarioRegistrado(String usuario, String nitEmpresa) {
         try {
             if (em != null) {
-                return persistenciaConexionInicial.validarUsuarioRegistrado(em, usuario);
+                return persistenciaConexionInicial.validarUsuarioRegistrado(em, usuario, nitEmpresa);
             }
             return false;
         } catch (Exception e) {
@@ -82,10 +82,10 @@ public class AdministrarIngreso implements IAdministrarIngreso {
     }
 
     @Override
-    public boolean validarEstadoUsuario(String usuario) {
+    public boolean validarEstadoUsuario(String usuario, String nitEmpresa) {
         try {
             if (em != null) {
-                return persistenciaConexionInicial.validarEstadoUsuario(em, usuario);
+                return persistenciaConexionInicial.validarEstadoUsuario(em, usuario, nitEmpresa);
             }
             return false;
         } catch (Exception e) {
@@ -95,10 +95,10 @@ public class AdministrarIngreso implements IAdministrarIngreso {
     }
 
     @Override
-    public boolean validarIngresoUsuarioRegistrado(String usuario, String clave) {
+    public boolean validarIngresoUsuarioRegistrado(String usuario, String clave, String nitEmpresa) {
         try {
             if (em != null) {
-                return persistenciaConexionInicial.validarIngresoUsuarioRegistrado(em, usuario, clave);
+                return persistenciaConexionInicial.validarIngresoUsuarioRegistrado(em, usuario, clave, nitEmpresa);
             }
             return false;
         } catch (Exception e) {
@@ -114,7 +114,6 @@ public class AdministrarIngreso implements IAdministrarIngreso {
                 if (em.isOpen()) {
                     SessionEntityManager sem = new SessionEntityManager(idSesion, sessionEMF.getEmf());
                     administrarSessiones.adicionarSesion(sem);
-
                     return true;
                 }
             }

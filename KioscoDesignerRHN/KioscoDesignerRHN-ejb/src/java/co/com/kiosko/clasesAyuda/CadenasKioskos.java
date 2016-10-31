@@ -4,7 +4,7 @@ package co.com.kiosko.clasesAyuda;
  *
  * @author Felipe Triviño
  */
-public class CadenasKioskos {
+public class CadenasKioskos implements Comparable{
 
     private String id;
     private String descripcion;
@@ -68,6 +68,20 @@ public class CadenasKioskos {
 
     public void setGrupo(String grupo) {
         this.grupo = grupo;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        int resultado;
+        CadenasKioskos ck = (CadenasKioskos) o;
+        if (this.getId().equalsIgnoreCase(ck.getId())){
+            resultado = 0;
+        } else if (Integer.parseInt(this.getId()) < Integer.parseInt(ck.getId())){
+            resultado=-1;
+        } else {
+            resultado = 1;
+        }
+        return resultado;
     }
     
 }

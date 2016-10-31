@@ -4,8 +4,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/persistencia/implementacion/PersistenciaEmpleados.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/entidades/Empleados.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/conf/persistence.xml</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/persistencia/interfaz/IPersistenciaConexionInicial.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/clasesAyuda/CadenasKioskos.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/archivosConfiguracion/cadenasKioskos.xml</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/persistencia/implementacion/PersistenciaConexionInicial.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/administrar/interfaz/IAdministrarIngreso.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/administrar/implementacion/AdministrarIngreso.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/clasesAyuda/LeerArchivoXML.java</file>
         </group>
     </open-files>
 </project-private>

@@ -83,7 +83,7 @@ public class ControladorIngreso implements Serializable {
     }
 
     private CadenasKioskos validarUnidadPersistencia(String unidadP) {
-        CadenasKioskos resultado=null;
+        CadenasKioskos resultado = null;
         for (CadenasKioskos elemento : (new LeerArchivoXML()).leerArchivoEmpresasKiosko()) {
             if (elemento.getId().equals(unidadP)) {
                 resultado = elemento;
@@ -106,9 +106,9 @@ public class ControladorIngreso implements Serializable {
                 nit = cadena.getNit();
                 if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
                     if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit())) {
-                        if (administrarIngreso.validarUsuarioRegistrado(usuario)) {
-                            if (administrarIngreso.validarEstadoUsuario(usuario)) {
-                                if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave)) {
+                        if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
+                            if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
+                                if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave, cadena.getNit())) {
                                     //nit = cadena.getNit();
                                     administrarIngreso.adicionarConexionUsuario(ses.getId());
                                     ingresoExitoso = true;
@@ -120,7 +120,7 @@ public class ControladorIngreso implements Serializable {
                                     HttpSession session = Util.getSession();
                                     session.setAttribute("idUsuario", usuario);
                                     if (session != null) {
-                                        System.out.println("Conectado a: " + session.getId());
+                                        imprimir("Conectado a: " + session.getId());
                                     }
                                     //return "opcionesKiosko";
                                     //return "plantilla";
@@ -203,8 +203,8 @@ public class ControladorIngreso implements Serializable {
             nit = cadena.getNit();
             if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
                 if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit())) {
-                    if (administrarIngreso.validarUsuarioRegistrado(usuario)) {
-                        if (administrarIngreso.validarEstadoUsuario(usuario)) {
+                    if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
+                        if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
                             administrarIngreso.adicionarConexionUsuario(ses.getId());
                             ingresoExitoso = true;
                             HttpSession session = Util.getSession();
@@ -272,20 +272,19 @@ public class ControladorIngreso implements Serializable {
         String ruta;
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext ec = context.getExternalContext();
-        System.out.println("aplicacion: " + ec.getRequestContextPath());
+        imprimir("aplicacion: " + ec.getRequestContextPath());
         ruta = ec.getRequestContextPath() + "/" + "?grupo=" + grupoSeleccionado;
-        System.out.println("ruta: " + ruta);
+        imprimir("ruta: " + ruta);
         try {
             ec.redirect(ruta);
         } catch (IOException ex) {
-            System.out.println("error al redireccionar");
+            imprimir("error al redireccionar");
             ex.printStackTrace();
         }
         //return ruta;
     }
 
     //GETTER AND SETTER
-    
     public String getClave() {
         return clave;
     }
@@ -304,11 +303,12 @@ public class ControladorIngreso implements Serializable {
 
     public String getUnidadPersistenciaIngreso() {
         List<CadenasKioskos> cadenas = obtenerCadenasKiosko();
-        if (cadenas.size() == 1) {
-            unidadPersistenciaIngreso = cadenas.get(0).getId();
-        } else {
-            unidadPersistenciaIngreso = null;
-        }
+//        if (cadenas.size() == 1) {
+//            unidadPersistenciaIngreso = cadenas.get(0).getId();
+//        } else {
+//            unidadPersistenciaIngreso = null;
+//        }
+        unidadPersistenciaIngreso = (cadenas.size() == 1) ? cadenas.get(0).getId() : null;
         return unidadPersistenciaIngreso;
     }
 
@@ -346,24 +346,29 @@ public class ControladorIngreso implements Serializable {
     }
 
     public String getGrupoSeleccionado() {
-        System.out.println("getGrupoSeleccionado: " + this.grupoSeleccionado);
+        imprimir("getGrupoSeleccionado: " + this.grupoSeleccionado);
         return grupoSeleccionado;
     }
 
     public void setGrupoSeleccionado(String grupoSeleccionado) {
-        System.out.println("setGrupoSeleccionado: " + grupoSeleccionado);
+        imprimir("setGrupoSeleccionado: " + grupoSeleccionado);
         this.grupoSeleccionado = grupoSeleccionado;
     }
 
     public List<SelectItem> getListaGrupos() {
-        System.out.println("getListaGrupos");
+        imprimir("getListaGrupos");
         listaGrupos = obtenerGruposCadenasKiosko();
         return listaGrupos;
     }
 
     public void setListaGrupos(List<SelectItem> listaGrupos) {
-        System.out.println("setListaGrupos");
+        imprimir("setListaGrupos");
         this.listaGrupos = listaGrupos;
     }
 
+    private void imprimir(String mensajeConsola) {
+        if (true) {
+            System.out.println(mensajeConsola);
+        }
+    }
 }

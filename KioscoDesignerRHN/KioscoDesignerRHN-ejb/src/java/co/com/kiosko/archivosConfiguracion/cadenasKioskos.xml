@@ -40,7 +40,7 @@
         <cadena>DEFAULT5</cadena>
         <nit>900330500</nit>
         <fondo>fondoMenu.png</fondo>
-        <grupo>GrupoEmpresarial4</grupo>
+        <grupo>GrupoEmpresarial7</grupo>
     </cadenaKiosko>
     <cadenaKiosko id="7">
         <descripcion>LIPESA</descripcion>
@@ -146,5 +146,12 @@
         <nit>900929599</nit>
         <fondo>fondoMenu.png</fondo>
         <grupo>GrupoEmpresarial6</grupo>
+    </cadenaKiosko>
+    <cadenaKiosko id="22">
+        <descripcion>DESPEGAR COLOMBIA</descripcion>
+        <cadena>DEFAULT5</cadena>
+        <nit>900610518</nit>
+        <fondo>fondoMenu.png</fondo>
+        <grupo>GrupoEmpresarial7</grupo>
     </cadenaKiosko>
 </conexiones>
