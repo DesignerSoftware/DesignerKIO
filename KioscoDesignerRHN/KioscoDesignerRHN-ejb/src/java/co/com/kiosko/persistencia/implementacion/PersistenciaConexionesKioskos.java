@@ -28,8 +28,12 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
             return true;
         } catch (Exception e) {
             System.out.println("Error PersistenciaConexionesKioskos.registrarConexion: " + e);
-            if (tx.isActive()) {
-                tx.rollback();
+            try {
+                if (tx.isActive()) {
+                    tx.rollback();
+                }
+            } catch (NullPointerException npe) {
+                System.out.println("Transacción nula.");
             }
             return false;
         }
@@ -37,9 +41,9 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
 
     @Override
     public ConexionesKioskos consultarConexionEmpleado(EntityManager eManager, String codigoEmpleado, long nitEmpresa) {
-        System.out.println("eManager: "+eManager);
-        System.out.println("codigoEmpleado: "+codigoEmpleado);
-        System.out.println("nitEmpresa: "+nitEmpresa);
+        System.out.println("eManager: " + eManager);
+        System.out.println("codigoEmpleado: " + codigoEmpleado);
+        System.out.println("nitEmpresa: " + nitEmpresa);
         try {
             eManager.getTransaction().begin();
             String sqlQuery = "SELECT ck FROM ConexionesKioskos ck WHERE ck.empleado.codigoempleado = :codigoEmpleado and ck.empleado.empresa.nit = :nitEmpresa";
@@ -50,7 +54,11 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
             return (ConexionesKioskos) query.getSingleResult();
         } catch (Exception e) {
             System.out.println("Error PersistenciaConexionesKioskos.consultarConexionEmpleado: " + e);
-            eManager.getTransaction().rollback();
+            try {
+                eManager.getTransaction().rollback();
+            } catch (NullPointerException npe) {
+                System.out.println("La transacción es nula.");
+            }
             return null;
         }
     }

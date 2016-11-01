@@ -9,7 +9,9 @@ import co.com.kiosko.utilidadesUI.MensajesUI;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -75,6 +77,7 @@ public class ControladorIngreso implements Serializable {
 
     public List<SelectItem> obtenerGruposCadenasKiosko() {
         List<String> listaOriginal = (new LeerArchivoXML()).obtenerGruposEmpresasKiosko();
+        Collections.sort(listaOriginal);
         List<SelectItem> listaRetorno = new ArrayList<SelectItem>();
         for (int i = 0; i < listaOriginal.size(); i++) {
             listaRetorno.add(new SelectItem(listaOriginal.get(i), listaOriginal.get(i)));
@@ -100,12 +103,13 @@ public class ControladorIngreso implements Serializable {
         if (!ingresoExitoso) {
             CadenasKioskos cadena = null;
             cadena = validarUnidadPersistencia(unidadPersistenciaIngreso);
+            usuario = usuario.trim();
             if (usuario != null && !usuario.isEmpty()
                     && clave != null && !clave.isEmpty()
                     && cadena != null) {
                 nit = cadena.getNit();
                 if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
-                    if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit())) {
+                    if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit()) && validarCodigoUsuario() ) {
                         if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
                             if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
                                 if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave, cadena.getNit())) {
@@ -191,6 +195,19 @@ public class ControladorIngreso implements Serializable {
         PrimefacesContextUI.ejecutar("PF('estadoSesion').hide()");
         //return "";
         return retorno;
+    }
+
+    private boolean validarCodigoUsuario() {
+        boolean resultado;
+        BigInteger numUsuario;
+        try {
+            numUsuario = new BigInteger(usuario);
+            resultado = true;
+        } catch (NumberFormatException nfe) {
+//            usuario = "-9999";
+            resultado = false;
+        }
+        return resultado;
     }
 
     public String olvidoClave() {

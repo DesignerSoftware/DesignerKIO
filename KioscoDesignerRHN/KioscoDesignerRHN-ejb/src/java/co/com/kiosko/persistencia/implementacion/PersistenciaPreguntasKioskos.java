@@ -25,7 +25,11 @@ public class PersistenciaPreguntasKioskos implements IPersistenciaPreguntasKiosk
             return query.getResultList();
         } catch (Exception e) {
             System.out.println("Error PersistenciaPreguntasKioskos.obtenerPreguntasSeguridad: " + e);
-            eManager.getTransaction().rollback();
+            try {
+                eManager.getTransaction().rollback();
+            } catch (NullPointerException npe) {
+                System.out.println("Error de nulo en la transacción.");
+            }
             return null;
         }
     }
@@ -41,7 +45,11 @@ public class PersistenciaPreguntasKioskos implements IPersistenciaPreguntasKiosk
             return (PreguntasKioskos) query.getSingleResult();
         } catch (Exception e) {
             System.out.println("Error PersistenciaPreguntasKioskos.consultarPreguntaSeguridad: " + e);
-            eManager.getTransaction().rollback();
+            try {
+                eManager.getTransaction().rollback();
+            } catch (NullPointerException npe) {
+                System.out.println("Error de nulo en la transacción.");
+            }
             return null;
         }
     }

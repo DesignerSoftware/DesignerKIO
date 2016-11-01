@@ -103,6 +103,8 @@ public class ControladorPrimerIngreso implements Serializable {
                     } else {
                         MensajesUI.error("Se ha generado un error inesperado, por favor contacte a soporte.");
                     }
+                }else{
+                    MensajesUI.warn("Problema con el formato de la contraseña ya que no coincide con el formato definito.");
                 }
             } else {
                 MensajesUI.warn("La contraseña no coincide, por favor verifique.");
@@ -140,7 +142,7 @@ public class ControladorPrimerIngreso implements Serializable {
     public void requerirPreguntasSeguridad() {
         lstPreguntasKiosko = administrarPrimerIngreso.obtenerPreguntasSeguridad();
     }
-
+    
     //GETTER AND SETTER
     public List<PreguntasKioskos> getLstPreguntasKiosko() {
         return lstPreguntasKiosko;
@@ -196,6 +198,6 @@ public class ControladorPrimerIngreso implements Serializable {
 
     public void setPc(ParametrizaClave pc) {
         this.pc = pc;
-    }
+    }    
     
 }

@@ -27,7 +27,11 @@ public class PersistenciaConfiguracionCorreo implements IPersistenciaConfiguraci
             return cc;
         } catch (Exception e) {
             System.out.println("Error PersistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo: " + e);
+            try{
             eManager.getTransaction().rollback();
+            } catch (NullPointerException npe){
+                System.out.println("error de nulo en la transacción.");
+            }
             return null;
         }
     }

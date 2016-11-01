@@ -40,13 +40,21 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
                 return emp;
             } catch (Exception e) {
                 System.out.println("Error PersistenciaEmpleados.consultarEmpleado: " + e);
-                eManager.getTransaction().rollback();
+                try {
+                    eManager.getTransaction().rollback();
+                } catch (NullPointerException npe) {
+                    System.out.println("Error de nulo en la transacción.");
+                }
                 return null;
             }
         } catch (NullPointerException npe) {
             System.out.println("No hay empleado con el código dado.");
             System.out.println("Error PersistenciaEmpleados.consultarEmpleado: " + npe);
-            eManager.getTransaction().rollback();
+            try {
+                eManager.getTransaction().rollback();
+            } catch (NullPointerException npe2) {
+                System.out.println("Error 2 de nulo en la transacción");
+            }
             return null;
         }
     }

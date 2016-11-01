@@ -67,7 +67,9 @@
                                     <h:outputLabel for="pwd1" value="Nueva contrase&ntilde;a: " style="font-weight: bold"/>
                                 </p:column>
                                 <p:column>
-                                    <p:password id="pwd1" value="#{controladorPrimerIngreso.clave}" label="Nueva contrase&ntilde;a: " match="pwd2" redisplay="true"/>
+                                    <div>
+                                        <p:password id="pwd1" value="#{controladorPrimerIngreso.clave}" label="Nueva contrase&ntilde;a: " match="pwd2" redisplay="true""/>
+                                    </div>
                                 </p:column>
                             </p:row>
                             <p:row>
@@ -76,7 +78,9 @@
                                     <h:outputLabel for="pwd2" value="Confirmar contrase&ntilde;a: " style="font-weight: bold" />
                                 </p:column>
                                 <p:column>
-                                    <p:password id="pwd2" value="#{controladorPrimerIngreso.confirmacion}" label="Confirmar contrase&ntilde;a: " redisplay="true"/>
+                                    <div>
+                                        <p:password id="pwd2" value="#{controladorPrimerIngreso.confirmacion}" label="Confirmar contrase&ntilde;a: " redisplay="true"/>
+                                    </div>
                                 </p:column>
                             </p:row>
                             <p:row>
@@ -86,7 +90,7 @@
                                                      icon="ui-icon-arrowreturnthick-1-w"/>
                                 </p:column>
                                 <p:column>
-                                    <p:commandButton id="btnFinalizar" value="Finalizar" style="float: right"  actionListener="#{controladorPrimerIngreso.finalizar()}"
+                                    <p:commandButton id="btnFinalizar" value="Finalizar" style="float: right;"  actionListener="#{controladorPrimerIngreso.finalizar()}"
                                                      icon="ui-icon-check"/>
                                 </p:column>
                             </p:row>

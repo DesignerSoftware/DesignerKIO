@@ -36,7 +36,11 @@ public class PersistenciaOpcionesKioskos implements IPersistenciaOpcionesKioskos
             return lok;
         } catch (Exception e) {
             System.out.println("Error PersistenciaOpcionesKioskos.consultarOpcionesPorPadre: " + e);
-            eManager.getTransaction().rollback();
+            try {
+                eManager.getTransaction().rollback();
+            } catch (NullPointerException npe) {
+                System.out.println("Error de nulo en la transacción.");
+            }
             return null;
         }
     }

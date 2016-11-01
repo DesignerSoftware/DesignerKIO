@@ -24,7 +24,11 @@ public class PersistenciaGenerales implements IPersistenciaGenerales {
             return g;
         } catch (Exception e) {
             System.out.println("Error PersistenciaGenerales.consultarRutasGenerales: " + e);
-            eManager.getTransaction().rollback();
+            try {
+                eManager.getTransaction().rollback();
+            } catch (NullPointerException npe) {
+                System.out.println("error de nulo en la transacción.");
+            }
             return null;
         }
     }
