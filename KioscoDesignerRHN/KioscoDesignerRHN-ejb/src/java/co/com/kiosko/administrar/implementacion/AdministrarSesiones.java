@@ -4,6 +4,7 @@ import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.clasesAyuda.SessionEntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 
@@ -44,7 +45,8 @@ public class AdministrarSesiones implements IAdministrarSesiones {
             }
         } catch (Exception e) {
             System.out.println("error en "+"obtenerConexionSesion");
-            e.printStackTrace();
+            System.out.println("Causa: "+e);
+            //e.printStackTrace();
         }
         return null;
     }
@@ -57,7 +59,8 @@ public class AdministrarSesiones implements IAdministrarSesiones {
                     //sessionesActivas.get(i).cerrarEMF();
                     sessionesActivas.get(i).setIdSession("");
                     sessionesActivas.remove(sessionesActivas.get(i));
-                    break;
+                    //break;
+                    i=sessionesActivas.size();
                 }
             }
         }
@@ -80,4 +83,10 @@ public class AdministrarSesiones implements IAdministrarSesiones {
             return false;
         }
     }
+	@PreDestroy
+	public void destruct(){
+		for (int i=0; i< sessionesActivas.size(); i++){
+			sessionesActivas.get(i).destruct();
+		}
+	}
 }

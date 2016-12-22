@@ -25,7 +25,7 @@ public class EnvioCorreo {
     public EnvioCorreo() {
     }
 
-    public boolean enviarCorreo(ConfiguracionCorreo cfc, String destinatario, String asunto, String mensaje, String pathAdjunto) {
+    public static boolean enviarCorreo(ConfiguracionCorreo cfc, String destinatario, String asunto, String mensaje, String pathAdjunto) {
 //        try {
         boolean resEnvio = false;
         // Propiedades de la conexión

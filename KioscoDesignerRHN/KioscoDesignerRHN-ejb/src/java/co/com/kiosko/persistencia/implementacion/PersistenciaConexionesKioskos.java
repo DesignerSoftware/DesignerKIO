@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import javax.persistence.RollbackException;
 
 /**
  *
@@ -18,6 +19,7 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
 
     @Override
     public boolean registrarConexion(EntityManager eManager, ConexionesKioskos cnk) {
+        boolean resp;
         cnk.setUltimaconexion(new Date());
         eManager.clear();
         EntityTransaction tx = eManager.getTransaction();
@@ -25,18 +27,32 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
             tx.begin();
             eManager.merge(cnk);
             tx.commit();
-            return true;
-        } catch (Exception e) {
-            System.out.println("Error PersistenciaConexionesKioskos.registrarConexion: " + e);
+            resp = true;
+        } catch (RollbackException re){
+            System.out.println("PersistenciaConexionesKioskos.registrarConexion");
+            System.out.println("Error RollbackException: " + re);
             try {
                 if (tx.isActive()) {
                     tx.rollback();
                 }
             } catch (NullPointerException npe) {
-                System.out.println("Transacción nula.");
+                System.out.println("Transacción nula 1.");
             }
-            return false;
+            resp = false;
         }
+        catch (Exception e) {
+            System.out.println("PersistenciaConexionesKioskos.registrarConexion");
+            System.out.println("Error generico: " + e);
+            try {
+                if (tx.isActive()) {
+                    tx.rollback();
+                }
+            } catch (NullPointerException npe) {
+                System.out.println("Transacción nula 2.");
+            }
+            resp = false;
+        }
+        return resp;
     }
 
     @Override

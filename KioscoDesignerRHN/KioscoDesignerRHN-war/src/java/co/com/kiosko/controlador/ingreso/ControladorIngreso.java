@@ -101,7 +101,8 @@ public class ControladorIngreso implements Serializable {
         FacesContext contexto = FacesContext.getCurrentInstance();
         HttpSession ses = (HttpSession) contexto.getExternalContext().getSession(false);
         if (!ingresoExitoso) {
-            CadenasKioskos cadena = null;
+//            CadenasKioskos cadena = null;
+            CadenasKioskos cadena;
             cadena = validarUnidadPersistencia(unidadPersistenciaIngreso);
             usuario = usuario.trim();
             if (usuario != null && !usuario.isEmpty()
@@ -109,7 +110,7 @@ public class ControladorIngreso implements Serializable {
                     && cadena != null) {
                 nit = cadena.getNit();
                 if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
-                    if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit()) && validarCodigoUsuario() ) {
+                    if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit()) && validarCodigoUsuario()) {
                         if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
                             if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
                                 if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave, cadena.getNit())) {
@@ -123,9 +124,9 @@ public class ControladorIngreso implements Serializable {
                                     administrarIngreso.modificarUltimaConexion(conexionEmpleado);
                                     HttpSession session = Util.getSession();
                                     session.setAttribute("idUsuario", usuario);
-                                    if (session != null) {
-                                        imprimir("Conectado a: " + session.getId());
-                                    }
+//                                    if (session != null) {
+                                    imprimir("Conectado a: " + session.getId());
+//                                    }
                                     //return "opcionesKiosko";
                                     //return "plantilla";
                                     retorno = "plantilla";
@@ -178,18 +179,27 @@ public class ControladorIngreso implements Serializable {
                 ingresoExitoso = false;
             }
         } else {
-            administrarIngreso.cerrarSession(ses.getId());
-
+            usuario = "";
+            HttpSession session = Util.getSession();
+            System.out.println("la session con "+session.getAttribute("idUsuario")+" termino.");
+            session.setAttribute("idUsuario", "");
+            session.removeAttribute("idUsuario");
+//            session.invalidate();
             ingresoExitoso = false;
             conexionEmpleado = null;
             nit = null;
-            HttpSession session = Util.getSession();
-            session.invalidate();
 
             FacesContext context = FacesContext.getCurrentInstance();
             ExternalContext ec = context.getExternalContext();
-            ec.invalidateSession();
+
+            try {
+                ec.invalidateSession();
+            } catch (NullPointerException npe) {
+                System.out.println("ExternalContext vacio");
+            }
             //ec.redirect(ec.getRequestContextPath());
+
+            administrarIngreso.cerrarSession(ses.getId());
             ec.redirect(ec.getRequestContextPath() + "/" + "?grupo=" + grupoSeleccionado);
         }
         PrimefacesContextUI.ejecutar("PF('estadoSesion').hide()");

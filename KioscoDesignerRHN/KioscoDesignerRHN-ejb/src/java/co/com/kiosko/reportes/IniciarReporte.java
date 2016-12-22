@@ -3,6 +3,7 @@ package co.com.kiosko.reportes;
 import java.io.File;
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,17 +22,25 @@ import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 @Stateless
 public class IniciarReporte implements IniciarReporteInterface, Serializable {
 
-    Connection conexion = null;
+    
 
-    @Override
-    public void inicarC(EntityManager em) {
-        em.getTransaction().begin();
-        conexion = em.unwrap(java.sql.Connection.class);
-        em.getTransaction().commit();
+    //@Override
+    private Connection inicarC(EntityManager em) {
+        Connection conexion = null;
+        try{
+            em.getTransaction().begin();
+            conexion = em.unwrap(java.sql.Connection.class);
+            em.getTransaction().commit();
+        } catch (Exception e){
+            System.out.println("Error: "+this.getClass().getName()+".iniciarC()");
+            System.out.println("Causa: "+e);
+        }
+        return conexion;
     }
 
     @Override
     public String ejecutarReporte(String nombreReporte, String rutaReporte, String rutaGenerado, String nombreArchivo, String tipoReporte, Map parametros, EntityManager em) {
+        Connection conexion = null;
         try {
             /*
              * System.out.println("Valores: " + parametros.values());
@@ -44,7 +53,7 @@ public class IniciarReporte implements IniciarReporteInterface, Serializable {
              * System.out.println("INICIARREPORTE parametros: " + parametros);
              */
             File archivo = new File(rutaReporte + nombreReporte + ".jasper");
-            inicarC(em);
+            conexion = inicarC(em);
             JasperReport masterReport;
             masterReport = (JasperReport) JRLoader.loadObject(archivo);
             JasperPrint imprimir = JasperFillManager.fillReport(masterReport, parametros, conexion);
@@ -77,13 +86,17 @@ public class IniciarReporte implements IniciarReporteInterface, Serializable {
         }
     }
 
-    @Override
+    /*@Override
     public void cerrarConexion() {
+        Connection conexion = null;
         try {
             conexion.close();
-        } catch (Exception e) {
-            System.out.println("Error cerrar: " + e);
+        } catch (SQLException se) {
+            System.out.println("Error SQL al cerrar: " + se);
+            System.out.println("Error causa: " + se.getCause());
+        } catch (Exception e){
+            System.out.println("Error general al cerrar: " + e);
             System.out.println("Error causa: " + e.getCause());
         }
-    }
+    }*/
 }

@@ -1,5 +1,6 @@
 package co.com.kiosko.clasesAyuda;
 
+import javax.annotation.PreDestroy;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -40,4 +41,8 @@ public class SessionEntityManager {
     public void setEm(EntityManager em) {
         this.em = em;
     }
+	@PreDestroy
+	public void destruct(){
+		emf.close();
+	}
 }

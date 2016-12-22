@@ -17,19 +17,26 @@ public class PersistenciaConfiguracionCorreo implements IPersistenciaConfiguraci
 
     @Override
     public ConfiguracionCorreo consultarConfiguracionServidorCorreo(EntityManager eManager, BigInteger secuenciaEmpresa) {
+        ConfiguracionCorreo cc;
         try {
-            eManager.getTransaction().begin();
-            String sqlQuery = "SELECT cc FROM ConfiguracionCorreo cc WHERE cc.empresa.secuencia = :secuenciaEmpresa";
-            Query query = eManager.createQuery(sqlQuery);
-            query.setParameter("secuenciaEmpresa", secuenciaEmpresa);
-            ConfiguracionCorreo cc = (ConfiguracionCorreo) query.getSingleResult();
-            eManager.getTransaction().commit();
+            if (eManager.isOpen()) {
+                eManager.getTransaction().begin();
+                String sqlQuery = "SELECT cc FROM ConfiguracionCorreo cc WHERE cc.empresa.secuencia = :secuenciaEmpresa";
+                Query query = eManager.createQuery(sqlQuery);
+                query.setParameter("secuenciaEmpresa", secuenciaEmpresa);
+                cc = (ConfiguracionCorreo) query.getSingleResult();
+                eManager.getTransaction().commit();
+            } else {
+                cc = null;
+                System.out.println("error PersistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo.");
+                System.out.println("entityManager cerrado.");
+            }
             return cc;
         } catch (Exception e) {
             System.out.println("Error PersistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo: " + e);
-            try{
-            eManager.getTransaction().rollback();
-            } catch (NullPointerException npe){
+            try {
+                eManager.getTransaction().rollback();
+            } catch (NullPointerException npe) {
                 System.out.println("error de nulo en la transacción.");
             }
             return null;

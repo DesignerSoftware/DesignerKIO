@@ -2,6 +2,7 @@ package co.com.kiosko.conexionFuente.implementacion;
 
 import co.com.kiosko.conexionFuente.interfaz.ISesionEntityManagerFactory;
 import java.io.Serializable;
+import javax.annotation.PreDestroy;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -35,4 +36,9 @@ public class SesionEntityManagerFactory implements ISesionEntityManagerFactory, 
     public void setEmf(EntityManagerFactory emf) {
         this.emf = emf;
     }
+	
+	@PreDestroy
+	public void destruct(){
+		emf.close();
+	}
 }

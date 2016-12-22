@@ -47,8 +47,8 @@ public class ControladorGenerarReporte implements Serializable {
     private StreamedContent reporteGenerado;
     private FileInputStream fis;
     private boolean enviocorreo;
-    ExternalContext externalContext;
-    String userAgent;
+    private ExternalContext externalContext;
+    private String userAgent;
 
     public ControladorGenerarReporte() {
     }
@@ -114,7 +114,7 @@ public class ControladorGenerarReporte implements Serializable {
                 arregloruta = pathReporteGenerado.split(Pattern.quote("\\"));
             } catch (PatternSyntaxException pse) {
                 System.out.println("Error en la fragmentación de la ruta.");
-                pse.printStackTrace();
+                System.out.println("Causa: "+pse);
             }
             /*for (int i = 0; i < arregloruta.length; i++) {
              System.out.println("pos" + i + ": " + arregloruta[i]);
@@ -233,6 +233,7 @@ public class ControladorGenerarReporte implements Serializable {
 
     public void cerrarControlador() {
         FacesContext context = FacesContext.getCurrentInstance();
+        System.out.println( context.getExternalContext().getSessionMap().get("controladorGenerarReporte"));
         context.getExternalContext().getSessionMap().remove("controladorGenerarReporte");
     }
     //GETTER AND SETTER
