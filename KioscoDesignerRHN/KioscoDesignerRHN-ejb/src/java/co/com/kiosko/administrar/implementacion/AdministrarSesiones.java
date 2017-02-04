@@ -19,11 +19,13 @@ public class AdministrarSesiones implements IAdministrarSesiones {
 
     @Override
     public void adicionarSesion(SessionEntityManager session) {
+        System.out.println(this.getClass().getName() + "." + "adicionarSesion" + "()");
         sessionesActivas.add(session);
     }
 
     @Override
     public void consultarSessionesActivas() {
+        System.out.println(this.getClass().getName() + "." + "consultarSessionesActivas" + "()");
         if (!sessionesActivas.isEmpty()) {
             for (int i = 0; i < sessionesActivas.size(); i++) {
                 System.out.println("Id Sesion: " + sessionesActivas.get(i).getIdSession() + " - Entity Manager " + sessionesActivas.get(i).getEm().toString());
@@ -34,7 +36,7 @@ public class AdministrarSesiones implements IAdministrarSesiones {
 
     @Override
     public EntityManager obtenerConexionSesion(String idSesion) {
-        System.out.println(this.getClass().getName()+"."+"obtenerConexionSesion"+"()");
+        System.out.println(this.getClass().getName() + "." + "obtenerConexionSesion" + "()");
         try {
             if (!sessionesActivas.isEmpty()) {
                 for (int i = 0; i < sessionesActivas.size(); i++) {
@@ -44,8 +46,8 @@ public class AdministrarSesiones implements IAdministrarSesiones {
                 }
             }
         } catch (Exception e) {
-            System.out.println("error en "+"obtenerConexionSesion");
-            System.out.println("Causa: "+e);
+            System.out.println("error en " + "obtenerConexionSesion");
+            System.out.println("Causa: " + e);
             //e.printStackTrace();
         }
         return null;
@@ -53,6 +55,7 @@ public class AdministrarSesiones implements IAdministrarSesiones {
 
     @Override
     public void borrarSesion(String idSesion) {
+        System.out.println(this.getClass().getName() + "." + "borrarSesion" + "()");
         if (!sessionesActivas.isEmpty()) {
             for (int i = 0; i < sessionesActivas.size(); i++) {
                 if (sessionesActivas.get(i).getIdSession().equals(idSesion)) {
@@ -60,7 +63,7 @@ public class AdministrarSesiones implements IAdministrarSesiones {
                     sessionesActivas.get(i).setIdSession("");
                     sessionesActivas.remove(sessionesActivas.get(i));
                     //break;
-                    i=sessionesActivas.size();
+                    i = sessionesActivas.size();
                 }
             }
         }
@@ -68,6 +71,7 @@ public class AdministrarSesiones implements IAdministrarSesiones {
 
     @Override
     public boolean borrarSesiones() {
+        System.out.println(this.getClass().getName() + "." + "borrarSesiones" + "()");
         try {
             if (!sessionesActivas.isEmpty()) {
                 for (int i = 0; i < sessionesActivas.size(); i++) {
@@ -83,10 +87,12 @@ public class AdministrarSesiones implements IAdministrarSesiones {
             return false;
         }
     }
-	@PreDestroy
-	public void destruct(){
-		for (int i=0; i< sessionesActivas.size(); i++){
-			sessionesActivas.get(i).destruct();
-		}
-	}
+
+    @PreDestroy
+    public void destruct() {
+        System.out.println(this.getClass().getName() + "." + "destruct" + "()");
+        for (int i = 0; i < sessionesActivas.size(); i++) {
+            sessionesActivas.get(i).destruct();
+        }
+    }
 }

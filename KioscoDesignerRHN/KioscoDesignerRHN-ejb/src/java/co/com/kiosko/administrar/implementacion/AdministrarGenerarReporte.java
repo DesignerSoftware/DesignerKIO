@@ -36,10 +36,13 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte {
     private IPersistenciaConfiguracionCorreo persistenciaConfiguracionCorreo;
     @EJB
     private IniciarReporteInterface reporte;
+    
     private EntityManager em;
+    private String idSesion;
 
     @Override
     public void obtenerConexion(String idSesion) {
+        this.idSesion = idSesion;
         em = administrarSesiones.obtenerConexionSesion(idSesion);
     }
 
@@ -78,7 +81,12 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte {
                 }
 
                 parametros.put("pathImagenes", rutaReporte);
-                pathReporteGenerado = reporte.ejecutarReporte(nombreReporte, rutaReporte, rutaGenerado, nombreArchivo, tipoReporte, parametros, em);
+//                pathReporteGenerado = reporte.ejecutarReporte(nombreReporte, 
+//                        rutaReporte, rutaGenerado, nombreArchivo, tipoReporte, 
+//                        parametros, em);
+                pathReporteGenerado = reporte.ejecutarReporte(nombreReporte, 
+                        rutaReporte, rutaGenerado, nombreArchivo, tipoReporte, 
+                        parametros, administrarSesiones.obtenerConexionSesion(idSesion));
                 return pathReporteGenerado;
             }
             return pathReporteGenerado;
@@ -96,8 +104,9 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte {
     @Override
     public boolean enviarCorreo(BigInteger secuenciaEmpresa, String destinatario, String asunto, String mensaje, String pathAdjunto) {
         ConfiguracionCorreo cc = persistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo(em, secuenciaEmpresa);
-        EnvioCorreo enviarCorreo = new EnvioCorreo();
-        return enviarCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
+//        EnvioCorreo enviarCorreo = new EnvioCorreo();
+//        return enviarCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
+        return EnvioCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
     }
 
     @Override

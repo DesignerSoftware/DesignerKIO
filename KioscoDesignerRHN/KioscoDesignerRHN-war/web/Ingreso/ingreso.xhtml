@@ -176,7 +176,7 @@
         </h:form>
         <h:form>
             <p:dialog id="dlgSolicitudGrupo" header="&iexcl;Atenci&oacute;n!" widgetVar="dlgSolicitudGrupo"
-                      resizable="false" draggable="true" modal="true" closable="false" width="500">
+                      resizable="false" draggable="true" modal="true" closable="false" width="350">
                 <p:panelGrid columns="2"  styleClass="noBorders">
                     <h:graphicImage value="resources/imagenes/alerta.jpg" width="90" height="70"  />
                     <p:column>
@@ -184,16 +184,16 @@
                             El enlace no es correcto, falta asociar el grupo empresarial.
                             <br/>Seleccione el grupo al que desea ingresar.
                         </p>
-                        <h:outputText value="Grupo:" style="font-weight: bold"/>
+                        <h:outputText value="Grupo:" style="font-weight: bold;"/>
                         <p:selectOneMenu id="seGrupo" value="#{controladorIngreso.grupoSeleccionado}" 
-                                         style="width: 89%">
+                                         style="width: 89%;">
                             <f:selectItem itemLabel="Seleccione un grupo" itemValue="#{null}"/>
                             <f:selectItems value="#{controladorIngreso.listaGrupos}" />
                             <p:ajax event="change" update="@this" />
                         </p:selectOneMenu>
                         <br/>
                         <p:commandButton value="Continuar" 
-                                         style="float: right" process="@this"
+                                         style="float: right;" process="@this"
                                          icon="ui-icon-check"
                                          actionListener="#{controladorIngreso.obtenerParametroURL}"/>
                     </p:column>

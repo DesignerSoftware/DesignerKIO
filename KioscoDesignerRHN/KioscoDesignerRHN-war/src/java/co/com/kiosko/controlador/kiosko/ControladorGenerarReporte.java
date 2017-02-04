@@ -39,6 +39,7 @@ public class ControladorGenerarReporte implements Serializable {
 
     @EJB
     private IAdministrarGenerarReporte administrarGenerarReporte;
+
     private OpcionesKioskos reporte;
     private ConexionesKioskos conexionEmpleado;
     private String email, areaDe;
@@ -55,6 +56,7 @@ public class ControladorGenerarReporte implements Serializable {
 
     @PostConstruct
     public void inicializarAdministrador() {
+        System.out.println(this.getClass().getName() + "." + "inicializarAdministrador" + "()");
         try {
             FacesContext x = FacesContext.getCurrentInstance();
             HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
@@ -73,6 +75,7 @@ public class ControladorGenerarReporte implements Serializable {
     }
 
     public void generarReporte() {
+        System.out.println(this.getClass().getName() + "." + "generarReporte" + "()");
         if (administrarGenerarReporte.modificarConexionKisko(conexionEmpleado)) {
             controladorIngreso.actualizarConexionEmpleado();
             conexionEmpleado = controladorIngreso.getConexionEmpleado();
@@ -92,6 +95,7 @@ public class ControladorGenerarReporte implements Serializable {
     }
 
     public void validar() {
+        System.out.println(this.getClass().getName() + "." + "validar" + "()");
         if (validarCampos()) {
             if ((reporte.getNombrearchivo().equalsIgnoreCase("kio_certificadoIngresos") || reporte.getDescripcion().toUpperCase().contains("RETEN"))
                     ? (conexionEmpleado.getFechadesde() != null && conexionEmpleado.getFechahasta() != null) ? validarFechasCertificadoIngresosRetenciones() : true : true) {
@@ -104,6 +108,7 @@ public class ControladorGenerarReporte implements Serializable {
     }
 
     public void validarDescargaReporte() {
+        System.out.println(this.getClass().getName() + "." + "validarDescargaReporte" + "()");
         String nombrearchivo = "reporte.pdf";
         String[] arregloruta = new String[1];
         RequestContext context = RequestContext.getCurrentInstance();
@@ -114,7 +119,7 @@ public class ControladorGenerarReporte implements Serializable {
                 arregloruta = pathReporteGenerado.split(Pattern.quote("\\"));
             } catch (PatternSyntaxException pse) {
                 System.out.println("Error en la fragmentación de la ruta.");
-                System.out.println("Causa: "+pse);
+                System.out.println("Causa: " + pse);
             }
             /*for (int i = 0; i < arregloruta.length; i++) {
              System.out.println("pos" + i + ": " + arregloruta[i]);
@@ -153,6 +158,7 @@ public class ControladorGenerarReporte implements Serializable {
     }
 
     public boolean validarCampos() {
+        System.out.println(this.getClass().getName() + "." + "validarCampos" + "()");
         boolean retorno = false;
         if (conexionEmpleado.getFechadesde() != null && conexionEmpleado.getFechahasta() != null) {
             if (conexionEmpleado.getFechadesde().compareTo(conexionEmpleado.getFechahasta()) < 0) {
@@ -172,6 +178,7 @@ public class ControladorGenerarReporte implements Serializable {
     }
 
     public boolean validarCorreo() {
+        System.out.println(this.getClass().getName() + "." + "validarCorreo" + "()");
         if (conexionEmpleado.isEnvioCorreo()) {
             String PATTERN_EMAIL = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                     + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -189,6 +196,7 @@ public class ControladorGenerarReporte implements Serializable {
     }
 
     public void validarEnviaCorreo() {
+        System.out.println(this.getClass().getName() + "." + "validarEnviaCorreo" + "()");
         if (conexionEmpleado.isEnvioCorreo()) {
             if (administrarGenerarReporte.enviarCorreo(conexionEmpleado.getEmpleado().getEmpresa().getSecuencia(), email,
                     "Reporte Kiosko - " + reporte.getDescripcion(), "Mensaje enviado automáticamente, por favor no responda a este correo.",
@@ -203,6 +211,7 @@ public class ControladorGenerarReporte implements Serializable {
     }
 
     public boolean validarFechasCertificadoIngresosRetenciones() {
+        System.out.println(this.getClass().getName() + "." + "validarFechasCertificadoIngresosRetenciones" + "()");
         SimpleDateFormat formatoDia, formatoMes, formatoAnio;
         String dia, mes, anio;
         formatoDia = new SimpleDateFormat("dd");
@@ -223,54 +232,66 @@ public class ControladorGenerarReporte implements Serializable {
     }
 
     public boolean validarConfigSMTP() {
+        System.out.println(this.getClass().getName() + "." + "validarConfigSMTP" + "()");
         return administrarGenerarReporte.comprobarConfigCorreo(conexionEmpleado.getEmpleado().getEmpresa().getSecuencia());
     }
 
     public void reiniciarStreamedContent() {
+        System.out.println(this.getClass().getName() + "reiniciarStreamedContent" + "()");
         reporteGenerado = null;
         pathReporteGenerado = null;
     }
 
     public void cerrarControlador() {
+        System.out.println(this.getClass().getName() + "." + "cerrarControlador" + "()");
         FacesContext context = FacesContext.getCurrentInstance();
-        System.out.println( context.getExternalContext().getSessionMap().get("controladorGenerarReporte"));
+        System.out.println(context.getExternalContext().getSessionMap().get("controladorGenerarReporte"));
         context.getExternalContext().getSessionMap().remove("controladorGenerarReporte");
     }
-    //GETTER AND SETTER
 
+    //GETTER AND SETTER
     public OpcionesKioskos getReporte() {
+        System.out.println(this.getClass().getName() + "." + "getReporte" + "()");
         return reporte;
     }
 
     public ConexionesKioskos getConexionEmpleado() {
+        System.out.println(this.getClass().getName() + "." + "getConexionEmpleado" + "()");
         return conexionEmpleado;
     }
 
     public void setConexionEmpleado(ConexionesKioskos conexionEmpleado) {
+        System.out.println(this.getClass().getName() + "." + "setConexionEmpleado" + "()");
         this.conexionEmpleado = conexionEmpleado;
     }
 
     public String getEmail() {
+        System.out.println(this.getClass().getName() + "." + "getEmail" + "()");
         return email;
     }
 
     public void setEmail(String email) {
+        System.out.println(this.getClass().getName() + "." + "setEmail" + "()");
         this.email = email;
     }
 
     public String getAreaDe() {
+        System.out.println(this.getClass().getName() + "." + "getAreaDe" + "()");
         return areaDe;
     }
 
     public void setAreaDe(String areaDe) {
+        System.out.println(this.getClass().getName() + "." + "setAreaDe" + "()");
         this.areaDe = areaDe;
     }
 
     public String getPathReporteGenerado() {
+        System.out.println(this.getClass().getName() + "." + "getPathReporteGenerado" + "()");
         return pathReporteGenerado;
     }
 
     public StreamedContent getReporteGenerado() {
+        System.out.println(this.getClass().getName() + "." + "getReporteGenerado" + "()");
         String nombrearchivo = "reporte.pdf";
         String[] arregloruta = new String[1];
         FacesContext.getCurrentInstance().getExternalContext().setResponseHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -299,6 +320,8 @@ public class ControladorGenerarReporte implements Serializable {
                 reporteGenerado = new DefaultStreamedContent(fis, "application/pdf");
             }
         } catch (Exception e) {
+            System.out.println("ERROR: "+ e);
+            System.out.println("reporte nulo");
             reporteGenerado = null;
         }
 
@@ -306,12 +329,14 @@ public class ControladorGenerarReporte implements Serializable {
     }
 
     public boolean isEnviocorreo() {
+        System.out.println(this.getClass().getName() + "." + "isEnviocorreo" + "()");
         boolean retorno;
         retorno = validarConfigSMTP() && conexionEmpleado.isEnvioCorreo();
         return retorno;
     }
 
     public void setEnviocorreo(boolean enviocorreo) {
+        System.out.println(this.getClass().getName() + "." + "setEnviocorreo" + "()");
         if (enviocorreo) {
             if (validarConfigSMTP()) {
                 conexionEmpleado.setEnvioCorreo(enviocorreo);

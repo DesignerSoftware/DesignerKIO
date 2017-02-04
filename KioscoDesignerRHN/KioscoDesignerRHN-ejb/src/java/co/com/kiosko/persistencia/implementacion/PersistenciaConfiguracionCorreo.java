@@ -17,9 +17,12 @@ public class PersistenciaConfiguracionCorreo implements IPersistenciaConfiguraci
 
     @Override
     public ConfiguracionCorreo consultarConfiguracionServidorCorreo(EntityManager eManager, BigInteger secuenciaEmpresa) {
-        ConfiguracionCorreo cc;
+        System.out.println(this.getClass().getName()+"."+"consultarConfiguracionServidorCorreo"+"()");
+        ConfiguracionCorreo cc = null;
         try {
-            if (eManager.isOpen()) {
+//            if (eManager.isOpen()) {
+//            if (eManager != null) {
+            if (eManager != null && eManager.isOpen()) {
                 eManager.getTransaction().begin();
                 String sqlQuery = "SELECT cc FROM ConfiguracionCorreo cc WHERE cc.empresa.secuencia = :secuenciaEmpresa";
                 Query query = eManager.createQuery(sqlQuery);
@@ -28,18 +31,23 @@ public class PersistenciaConfiguracionCorreo implements IPersistenciaConfiguraci
                 eManager.getTransaction().commit();
             } else {
                 cc = null;
-                System.out.println("error PersistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo.");
-                System.out.println("entityManager cerrado.");
+                System.out.println("entityManager nulo.");
             }
-            return cc;
+//            return cc;
+        } catch (IllegalStateException ise){
+            System.out.println("ERROR: "+ ise.getMessage());
         } catch (Exception e) {
             System.out.println("Error PersistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo: " + e);
             try {
-                eManager.getTransaction().rollback();
+                if (eManager.getTransaction().isActive()) {
+                    eManager.getTransaction().rollback();
+                    cc = null;
+                }
             } catch (NullPointerException npe) {
                 System.out.println("error de nulo en la transacción.");
             }
-            return null;
+//            return null;
         }
+        return cc;
     }
 }
