@@ -20,8 +20,8 @@
         <validation-mode>NONE</validation-mode>
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@181.49.129.134:1701:SOPORTE"/>
-            <property name="javax.persistence.jdbc.user" value="PRONAL"/>
-            <property name="javax.persistence.jdbc.password" value="PRONAL"/>
+            <property name="javax.persistence.jdbc.user" value="KIOSKO"/>
+            <property name="javax.persistence.jdbc.password" value="KSK"/>
             <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
             <property name="eclipselink.cache.shared.default" value="false"/>
             <property name="eclipselink.cache.type.default" value="NONE"/>

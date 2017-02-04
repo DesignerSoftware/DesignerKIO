@@ -54,6 +54,9 @@ public class OpcionesKioskos implements Serializable {
     @Size(max = 10)
     @Column(name = "EXTENSION")
     private String extension;
+    @Size(max = 1)
+    @Column(name = "REQDESTINO")
+    private String reqDestino;
     @JoinColumn(name = "OPCIONKIOSKOPADRE", referencedColumnName = "SECUENCIA")
     @ManyToOne
     private OpcionesKioskos opcionkioskopadre;
@@ -62,6 +65,8 @@ public class OpcionesKioskos implements Serializable {
     private Empresas empresa;
     @Transient
     private List<OpcionesKioskos> opcionesHijas;
+    @Transient
+    private boolean destino;
 
     public OpcionesKioskos() {
     }
@@ -145,6 +150,14 @@ public class OpcionesKioskos implements Serializable {
         this.extension = extension;
     }
 
+    public String getReqDestino() {
+        return reqDestino;
+    }
+
+    public void setReqDestino(String reqDestino) {
+        this.reqDestino = reqDestino;
+    }
+    
     public OpcionesKioskos getOpcionkioskopadre() {
         return opcionkioskopadre;
     }
@@ -169,6 +182,21 @@ public class OpcionesKioskos implements Serializable {
         this.opcionesHijas = opcionesHijas;
     }
 
+    public boolean isDestino() {
+        /*if ("S".equalsIgnoreCase(reqDestino)){
+            this.destino=true;
+        }else{
+            this.destino=false;
+        }*/
+        destino = "S".equalsIgnoreCase(reqDestino);
+        return destino;
+    }
+
+    public void setDestino(boolean destino) {
+        //this.destino = destino;
+        this.reqDestino = (destino ? "S" : "N");
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

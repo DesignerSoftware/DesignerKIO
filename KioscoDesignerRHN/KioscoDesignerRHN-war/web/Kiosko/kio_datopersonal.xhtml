@@ -7,96 +7,113 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
     xmlns:c="http://java.sun.com/jsp/jstl/core">
-    <p:panel header="Informaci&oacute;n personal" style="border: none; padding: 0px; margin: 0px; background: transparent" styleClass="noBorders">
+    <p:focus context=":principalForm:pnlInfoEmpresa" />
+    <!--<p:focus context=":principalForm:btnvolver" />-->
+    <p:panel header="Informaci&oacute;n personal" style="border: none; padding: 0px; margin: 0px; background: transparent;" styleClass="noBorders">
         <center>
             <p:panelGrid columns="4">
                 <p:column>
                     <h:outputText value="Primer apellido:" style="font-weight: bold" />
                     <br/>
-                    <h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.primerapellido}" />
+                    <!--<h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.primerapellido}" />-->
+                    <p:inputText styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.persona.primerapellido}" readonly="true"/>
                 </p:column>
                 <p:column>
                     <h:outputText value="Segundo apellido:" style="font-weight: bold"/>
                     <br/>
-                    <h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.segundoapellido}" />
+                    <!--<h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.segundoapellido}" />-->
+                    <p:inputText styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.persona.segundoapellido}" readonly="true"/>
                 </p:column>
                 <p:column>
                     <h:outputText value="Nombres:" style="font-weight: bold"/>
                     <br/>
-                    <h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.nombre}" />
+                    <!--<h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.nombre}" />-->
+                    <p:inputText styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.persona.nombre}" readonly="true"/>
                 </p:column>
                 <p:column>
                     <h:outputText value="Sexo:" style="font-weight: bold"/>
                     <br/>
-                    <h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.sexo}" />
+                    <!--<h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.descSexo}" />-->
+                    <p:inputText styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.persona.descSexo}" readonly="true"/>
                 </p:column>
                 <p:column>
                     <h:outputText value="Fecha nacimiento:" style="font-weight: bold"/>
                     <br/>
-                    <h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.fechanacimiento}" >
-                        <br/>
-                        <f:convertDateTime pattern="dd/MM/yyyy"/>
-                    </h:outputText>
+                    <!--<h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.fechanacimiento}" >-->
+                    <!--<br/>-->
+                    <!--<f:convertDateTime pattern="dd/MM/yyyy"/>-->
+                    <!--</h:outputText>-->
+                    <p:calendar styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.persona.fechanacimiento}" pattern="dd/MM/yyyy" locale="es" readonly="true" showOn="none" />
                 </p:column>
                 <p:column>
                     <h:outputText value="Lugar de nacimiento:" style="font-weight: bold"/>
                     <br/>
-                    <h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.ciudadNacimiento.nombre}" />
+                    <!--<h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.ciudadNacimiento.nombre}" />-->
+                    <p:inputText styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.persona.ciudadNacimiento.nombre}" readonly="true"/>
                 </p:column>
                 <p:column>
                     <h:outputText value="Grupo sanguineo:" style="font-weight: bold"/>
                     <br/>
-                    <h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.gruposanguineo}" />
+                    <!--<h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.gruposanguineo}" />-->
+                    <p:inputText styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.persona.gruposanguineo}" readonly="true"/>
                 </p:column>
                 <p:column>
                     <h:outputText value="Factor RH:" style="font-weight: bold"/>
                     <br/>
-                    <h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.factorrh}" />
+                    <!--<h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.descFactorRH}" />-->
+                    <p:inputText styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.persona.descFactorRH}" readonly="true"/>
                 </p:column>
                 <p:column>
                     <h:outputText value="Tipo documento:" style="font-weight: bold" />
                     <br/>
-                    <h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.tipoDocumento.nombrelargo}" />
+                    <!--<h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.tipoDocumento.nombrelargo}" />-->
+                    <p:inputText styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.persona.tipoDocumento.nombrelargo}" readonly="true"/>
                 </p:column>
                 <p:column>
                     <h:outputText value="Numero documento:" style="font-weight: bold"/>
                     <br/>
-                    <h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.numerodocumento}" />
+                    <!--<h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.numerodocumento}" />-->
+                    <p:inputText styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.persona.numerodocumento}" readonly="true"/>
                 </p:column>
                 <p:column>
                     <h:outputText value="Lugar de expedición:" style="font-weight: bold"/>
                     <br/>
-                    <h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.ciudadDocumento.nombre}" />
+                    <!--<h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.ciudadDocumento.nombre}" />-->
+                    <p:inputText styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.persona.ciudadDocumento.nombre}" readonly="true"/>
                 </p:column>
                 <p:column>
                     <h:outputText value="Email:" style="font-weight: bold"/>
                     <br/>
                     <h:outputText value="#{controladorKio_DatoPersonal.empleado.persona.email}" />
+                    <!--<p:inputText styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.persona.email}" readonly="true"/>-->
                 </p:column>            
             </p:panelGrid>
         </center>
     </p:panel>
 
-    <p:panel header="Informaci&oacute;n empresa:" style="border: none; padding: 0px; margin: 0px; background: transparent" styleClass="noBorders">
+    <p:panel id="pnlInfoEmpresa" header="Informaci&oacute;n empresa:" style="border: none; padding: 0px; margin: 0px; background: transparent;" styleClass="noBorders">
         <center>
             <p:panelGrid columns="4">
                 <p:column>
                     <h:outputText value="Codigo:" style="font-weight: bold"/>
                     <br/>
-                    <h:outputText value="#{controladorKio_DatoPersonal.empleado.empresa.codigo}" />
+                    <!--<h:outputText value="#{controladorKio_DatoPersonal.empleado.empresa.codigo}" />-->
+                    <p:inputText styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.empresa.codigo}" readonly="true"/>
                 </p:column>
                 <p:column>
                     <h:outputText value="Nit:" style="font-weight: bold"/>
                     <br/>
-                    <h:outputText value="#{controladorKio_DatoPersonal.empleado.empresa.nit}" />
+                    <!--<h:outputText value="#{controladorKio_DatoPersonal.empleado.empresa.nit}" />-->
+                    <p:inputText styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.empresa.nit}" readonly="true"/>
                 </p:column>
                 <p:column>
                     <h:outputText value="Nombre:" style="font-weight: bold"/>
                     <br/>
-                    <h:outputText value="#{controladorKio_DatoPersonal.empleado.empresa.nombre}" />
+                    <!--<h:outputText value="#{controladorKio_DatoPersonal.empleado.empresa.nombre}" />-->
+                    <p:inputText styleClass="cajaLectura" value="#{controladorKio_DatoPersonal.empleado.empresa.nombre}" readonly="true" />
                 </p:column> 
             </p:panelGrid>
-            <p:commandButton value="Volver" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
+            <p:commandButton id="btnvolver" value="Volver" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
                              update=":principalForm" process="@this" icon="ui-icon-closethick"/>
         </center>
     </p:panel>

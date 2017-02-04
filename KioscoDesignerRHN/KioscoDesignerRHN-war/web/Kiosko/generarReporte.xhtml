@@ -37,15 +37,17 @@
                                 <p:inputText id="correoDestino" value="#{controladorGenerarReporte.email}" style="display: #{controladorGenerarReporte.conexionEmpleado.envioCorreo ? '' : 'none'}"/>
                             </p:column>
                         </p:panelGrid>
-                        <!--
-                        <p:panelGrid id="pnlInfoAdicional" columns="2" styleClass="noBorders">
+                        
+                        <p:panelGrid id="pnlInfoAdicional" columns="2" styleClass="noBorders" rendered="#{controladorGenerarReporte.reporte.destino}">
                             <p:outputLabel for="dirigida" value="Constancia dirigida a: " />
                             <p:inputText id="dirigida" value="#{controladorGenerarReporte.conexionEmpleado.dirigidoa}"/>
+                            <!--
                             <p:outputLabel for="area" value="Constancia al área de:" />
-                            <p:inputText id="area" value="#{controladorGenerarReporte.areaDe}"/>
+                            <p:inputText id="area" value="#{controladorGenerarReporte.areaDe}"/> 
+                            -->
                         </p:panelGrid>
-                        -->
-                        <p:panelGrid columns="2" styleClass="noBorders" style="float: right">
+                        
+                        <p:panelGrid columns="2" styleClass="noBorders" style="float: right;">
                             <p:commandButton value="Generar reporte" icon="ui-icon-gear"
                                              actionListener="#{controladorGenerarReporte.validar()}"/>
                             <p:commandButton value="Cancelar" action="opciones" oncomplete="opciones();"
@@ -68,7 +70,7 @@
     </p:panel>
 
 
-    <p:dialog id="generandoReporte" header="Informaci&oacute;n" widgetVar="generandoReporte"  resizable="false" draggable="false" modal="true" height="85" width="350px" style="font-size: 12px" closable="true">  
+    <p:dialog id="generandoReporte" header="Informaci&oacute;n" widgetVar="generandoReporte"  resizable="false" draggable="false" modal="true" height="85" width="350px" style="font-size: 12px;" closable="true">  
         <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50" style="position: absolute; left: 15px; top: 20px;"  />
         <h:outputText value="Generando reporte, esto puede tardar un poco..." style="position: absolute; left: 80px; top: 20px; width: 240px; text-align: justify" />
     </p:dialog>

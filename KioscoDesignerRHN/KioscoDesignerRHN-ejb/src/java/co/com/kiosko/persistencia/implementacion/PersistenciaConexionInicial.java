@@ -12,9 +12,10 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
 
     @Override
     public void setearKiosko(EntityManager eManager) {
+        System.out.println(this.getClass().getName()+"."+"setearKiosko"+"()");
         try {
             eManager.getTransaction().begin();
-            String sqlQuery = "SET ROLE ROLKIOSKO IDENTIFIED BY RLKSK";
+            String sqlQuery = "SET ROLE ROLKIOSKO IDENTIFIED BY RLKSK ";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.executeUpdate();
             eManager.getTransaction().commit();

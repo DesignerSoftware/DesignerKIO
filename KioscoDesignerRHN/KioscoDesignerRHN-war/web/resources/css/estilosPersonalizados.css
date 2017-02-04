@@ -55,5 +55,9 @@ html {
     background-color: #DCDCDC
 }
 
+.cajaLectura {
+    background-color: transparent;
+    border: none;
+}
 
 

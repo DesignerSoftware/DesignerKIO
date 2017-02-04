@@ -1,7 +1,6 @@
 package co.com.kiosko.entidades;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.*;
@@ -112,6 +111,10 @@ public class Personas implements Serializable {
     private TiposDocumentos  tipoDocumento;
     @Transient
     private String nombreCompleto;
+    @Transient
+    private String descSexo;
+    @Transient
+    private String descFactorRH;
 
     public Personas() {
     }
@@ -380,6 +383,67 @@ public class Personas implements Serializable {
         this.tipoDocumento = tipoDocumento;
     }
 
+    public String getDescSexo() {
+        if (this.sexo == null){
+            descSexo = "";
+        }else if (this.sexo.isEmpty()){
+            descSexo = "";
+        }else if ("M".equalsIgnoreCase(this.sexo)){
+            descSexo = "MASCULINO";
+        }else if ("F".equalsIgnoreCase(this.sexo)){
+            descSexo = "FEMENINO";
+        }else {
+            descSexo = "";
+        }
+        return descSexo;
+    }
+
+    public void setDescSexo(String descSexo) {
+        this.descSexo = descSexo;
+        if (this.descSexo == null){
+            this.sexo = "";
+        }else if (this.descSexo.isEmpty()){
+            this.sexo = "";
+        }else if ("MASCULINO".equalsIgnoreCase(this.descSexo)){
+            this.sexo = "M";
+        }else if ("FEMENINO".equalsIgnoreCase(this.descSexo)){
+            this.sexo = "F";
+        }else {
+            this.sexo = "";
+        }
+    }
+
+    public String getDescFactorRH() {
+        if (this.factorrh == null){
+            descFactorRH = "";
+        }else if (this.factorrh.isEmpty()){
+            descFactorRH = "";
+        }else if ("P".equalsIgnoreCase(this.factorrh)){
+            descFactorRH = "POSITIVO";
+        }else if ("N".equalsIgnoreCase(this.factorrh)){
+            descFactorRH = "NEGATIVO";
+        }else {
+            descFactorRH = "";
+        }
+        return descFactorRH;
+    }
+
+    public void setDescFactorRH(String descFactorRH) {
+        this.descFactorRH = descFactorRH;
+        if (this.descFactorRH == null){
+            this.factorrh = "";
+        }else if (this.descFactorRH.isEmpty()){
+            this.factorrh = "";
+        }else if ("POSITIVO".equalsIgnoreCase(this.descFactorRH)){
+            this.factorrh = "P";
+        }else if ("NEGATIVO".equalsIgnoreCase(this.descFactorRH)){
+            this.factorrh = "N";
+        }else {
+            this.factorrh = "";
+        }
+    }
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;
