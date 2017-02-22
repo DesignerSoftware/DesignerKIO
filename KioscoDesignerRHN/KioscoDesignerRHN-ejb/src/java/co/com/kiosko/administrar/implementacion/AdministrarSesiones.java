@@ -7,6 +7,8 @@ import java.util.List;
 import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -37,20 +39,25 @@ public class AdministrarSesiones implements IAdministrarSesiones {
     @Override
     public EntityManager obtenerConexionSesion(String idSesion) {
         System.out.println(this.getClass().getName() + "." + "obtenerConexionSesion" + "()");
-        try {
-            if (!sessionesActivas.isEmpty()) {
-                for (int i = 0; i < sessionesActivas.size(); i++) {
-                    if (sessionesActivas.get(i).getIdSession().equals(idSesion)) {
-                        return sessionesActivas.get(i).getEm();
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("error en " + "obtenerConexionSesion");
-            System.out.println("Causa: " + e);
-            //e.printStackTrace();
-        }
-        return null;
+//        try {
+//            if (!sessionesActivas.isEmpty()) {
+//                for (int i = 0; i < sessionesActivas.size(); i++) {
+//                    if (sessionesActivas.get(i).getIdSession().equals(idSesion)) {
+//                        return sessionesActivas.get(i).getEm();
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//            System.out.println("error en " + "obtenerConexionSesion");
+//            System.out.println("Causa: " + e);
+//            //e.printStackTrace();
+//        }
+        EntityManagerFactory eManagerFact = Persistence.createEntityManagerFactory("DEFAULT1");
+        EntityManager eManager = eManagerFact.createEntityManager();
+        System.out.println("Se creó entityManager.");
+        System.out.println("eManager"+eManager.toString());
+        return eManager;
+//        return null;
     }
 
     @Override

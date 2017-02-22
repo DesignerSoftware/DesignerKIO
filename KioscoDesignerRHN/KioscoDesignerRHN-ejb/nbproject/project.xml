@@ -12,10 +12,10 @@
             <included-library dirs="200">file.reference.commons-logging-1.1.3.jar</included-library>
             <included-library dirs="200">file.reference.groovy-all-2.1.7.jar</included-library>
             <included-library dirs="200">file.reference.itext-2.1.7.jar</included-library>
-            <included-library dirs="200">file.reference.jasperreports-6.1.0.jar</included-library>
-            <included-library dirs="200">file.reference.jasperreports-functions-6.1.0.jar</included-library>
-            <included-library dirs="200">file.reference.jasperreports-javaflow-6.1.0.jar</included-library>
+            <included-library dirs="200">file.reference.jasperreports-6.3.1.jar</included-library>
+            <included-library dirs="200">file.reference.jasperreports-functions-6.3.1.jar</included-library>
             <included-library dirs="200">file.reference.joda-time-2.4.jar</included-library>
+            <included-library dirs="200">file.reference.jasperreports-javaflow-6.3.1.jar</included-library>
             <included-library dirs="200">file.reference.Fuentes_Reportes.jar</included-library>
             <source-roots>
                 <root id="src.dir"/>

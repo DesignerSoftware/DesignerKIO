@@ -84,9 +84,11 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte {
 //                pathReporteGenerado = reporte.ejecutarReporte(nombreReporte, 
 //                        rutaReporte, rutaGenerado, nombreArchivo, tipoReporte, 
 //                        parametros, em);
+EntityManager em2 = administrarSesiones.obtenerConexionSesion(idSesion);
                 pathReporteGenerado = reporte.ejecutarReporte(nombreReporte, 
                         rutaReporte, rutaGenerado, nombreArchivo, tipoReporte, 
-                        parametros, administrarSesiones.obtenerConexionSesion(idSesion));
+                        parametros, em2);
+                em2.close();
                 return pathReporteGenerado;
             }
             return pathReporteGenerado;

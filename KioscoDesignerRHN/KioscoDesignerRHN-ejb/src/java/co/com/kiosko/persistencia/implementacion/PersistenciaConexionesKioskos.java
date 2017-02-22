@@ -6,7 +6,9 @@ import java.math.BigInteger;
 import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.RollbackException;
 
@@ -20,13 +22,19 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
     @Override
     public boolean registrarConexion(EntityManager eManager, ConexionesKioskos cnk) {
         boolean resp;
+        EntityManagerFactory eManagerFact = Persistence.createEntityManagerFactory("DEFAULT1");
+        eManager = eManagerFact.createEntityManager();
+        System.out.println(this.getClass().getName()+".registrarConexion()");
+        System.out.println("Se creó entityManager.");
+        System.out.println("eManager"+eManager.toString());
         cnk.setUltimaconexion(new Date());
-        eManager.clear();
+//        eManager.clear();
         EntityTransaction tx = eManager.getTransaction();
         try {
             tx.begin();
             eManager.merge(cnk);
             tx.commit();
+            eManager.close();
             resp = true;
         } catch (RollbackException re){
             System.out.println("PersistenciaConexionesKioskos.registrarConexion");

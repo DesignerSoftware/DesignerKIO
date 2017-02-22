@@ -4,8 +4,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/entidades/Personas.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/entidades/Empleados.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/conf/persistence.xml</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/persistencia/implementacion/PersistenciaConexionesKioskos.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/conexionFuente/implementacion/SesionEntityManagerFactory.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/persistencia/implementacion/PersistenciaConexionInicial.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/administrar/implementacion/AdministrarIngreso.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/administrar/implementacion/AdministrarSesiones.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/administrar/implementacion/AdministrarGenerarReporte.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/persistencia/interfaz/IPersistenciaConexionesKioskos.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Kiosko_DesignerRHN/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/reportes/IniciarReporte.java</file>
         </group>
     </open-files>
 </project-private>

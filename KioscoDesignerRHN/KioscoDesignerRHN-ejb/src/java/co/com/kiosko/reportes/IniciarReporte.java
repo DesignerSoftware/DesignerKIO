@@ -22,18 +22,16 @@ import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 @Stateless
 public class IniciarReporte implements IniciarReporteInterface, Serializable {
 
-    
-
     //@Override
     private Connection inicarC(EntityManager em) {
         Connection conexion = null;
-        try{
+        try {
             em.getTransaction().begin();
             conexion = em.unwrap(java.sql.Connection.class);
             em.getTransaction().commit();
-        } catch (Exception e){
-            System.out.println("Error: "+this.getClass().getName()+".iniciarC()");
-            System.out.println("Causa: "+e);
+        } catch (Exception e) {
+            System.out.println("Error: " + this.getClass().getName() + ".iniciarC()");
+            System.out.println("Causa: " + e);
         }
         return conexion;
     }
@@ -72,6 +70,10 @@ public class IniciarReporte implements IniciarReporteInterface, Serializable {
                 exporter.exportReport();
             }
             //cerrarConexion();
+            if (em.getTransaction().isActive()) {
+                System.out.println("Cerrando Transaccion reporte.");
+                em.getTransaction().commit();
+            }
             return outFileName;
         } catch (JRException e) {
             System.out.println("Error: IniciarReporte.ejecutarReporte: " + e);

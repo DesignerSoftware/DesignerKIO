@@ -36,9 +36,9 @@ public class SesionEntityManagerFactory implements ISesionEntityManagerFactory, 
     public void setEmf(EntityManagerFactory emf) {
         this.emf = emf;
     }
-	
-	@PreDestroy
-	public void destruct(){
-		emf.close();
-	}
+
+    @PreDestroy
+    public void destruct() {
+        emf.close();
+    }
 }
