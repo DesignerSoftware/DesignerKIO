@@ -11,6 +11,7 @@ import javax.ejb.EJB;
 //import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -26,26 +27,33 @@ public class AdministrarInicioKiosko implements IAdministrarInicioKiosko {
     private IPersistenciaEmpleados persistenciaEmpleados;
     @EJB
     private IPersistenciaGenerales persistenciaGenerales;
-    private EntityManager em;
+    private EntityManagerFactory emf;
 
     @Override
     public void obtenerConexion(String idSesion) {
-        em = administrarSesiones.obtenerConexionSesion(idSesion);
+        emf = administrarSesiones.obtenerConexionSesion(idSesion);
     }
 
     @Override
     public Empleados consultarEmpleado(BigInteger codigoEmpleado, long nit) {
-        return persistenciaEmpleados.consultarEmpleado(em, codigoEmpleado, nit);
+        EntityManager em = emf.createEntityManager();
+        Empleados empl = persistenciaEmpleados.consultarEmpleado(em, codigoEmpleado, nit);
+        em.close();
+        return empl;
     }
 
     @Override
     public String fotoEmpleado() {
-        //String rutaFoto;
+        String rutaFoto = null;
+        EntityManager em = emf.createEntityManager();
         Generales general = persistenciaGenerales.consultarRutasGenerales(em);
         if (general != null) {
-            return general.getPathfoto();
+//            return general.getPathfoto();
+            rutaFoto = general.getPathfoto();
         } else {
-            return null;
+//            return null;
+            rutaFoto = null;
         }
+        return rutaFoto;
     }
 }

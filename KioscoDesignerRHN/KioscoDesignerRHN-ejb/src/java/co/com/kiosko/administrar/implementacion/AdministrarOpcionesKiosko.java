@@ -6,32 +6,34 @@ import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaOpcionesKioskos;
 import java.math.BigInteger;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
-//import javax.ejb.Stateful;
+//import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
  * @author Felipe Triviño
  */
-//@Stateful
-@Stateless
+@Stateful
+//@Stateless
 public class AdministrarOpcionesKiosko implements IAdministrarOpcionesKiosko {
 
     @EJB
     private IAdministrarSesiones administrarSesiones;
     @EJB
     private IPersistenciaOpcionesKioskos persistenciaOpcionesKioskos;
-    private EntityManager em;
+    private EntityManagerFactory emf;
 
     @Override
     public void obtenerConexion(String idSesion) {
-        em = administrarSesiones.obtenerConexionSesion(idSesion);
+        emf = administrarSesiones.obtenerConexionSesion(idSesion);
     }
 
     @Override
     public OpcionesKioskos obtenerOpcionesKiosko(BigInteger secuenciaEmpresa) {
         // try {
+        EntityManager em = emf.createEntityManager();
         OpcionesKioskos opciones;
         opciones = persistenciaOpcionesKioskos.consultarOpcionesPorPadre(em, null, secuenciaEmpresa).get(0);
 
@@ -62,6 +64,7 @@ public class AdministrarOpcionesKiosko implements IAdministrarOpcionesKiosko {
                 }
             }
         }
+        em.close();
         return opciones;
         /*
          * } catch (Exception e) { System.out.println("Error

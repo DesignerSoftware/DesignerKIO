@@ -3,7 +3,7 @@ package co.com.kiosko.reportes;
 import java.io.File;
 import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.SQLException;
+//import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

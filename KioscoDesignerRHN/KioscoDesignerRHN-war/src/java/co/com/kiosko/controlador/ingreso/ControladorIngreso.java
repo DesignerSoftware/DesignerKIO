@@ -147,7 +147,7 @@ public class ControladorIngreso implements Serializable {
                                         administrarIngreso.bloquearUsuario(usuario, nit);
                                         intento = 0;
                                     }
-                                    administrarIngreso.getEm().getEntityManagerFactory().close();
+//                                    administrarIngreso.getEm().getEntityManagerFactory().close();
                                     ingresoExitoso = false;
                                 }
                             } else {
@@ -245,7 +245,7 @@ public class ControladorIngreso implements Serializable {
                     } else {
                         MensajesUI.error("El empleado no ha realizado el primer ingreso.");
                     }
-                    administrarIngreso.getEm().getEntityManagerFactory().close();
+//                    administrarIngreso.getEm().getEntityManagerFactory().close();
                 } else {
                     //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
                     MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");

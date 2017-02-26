@@ -12,6 +12,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpSession;
 
 @ManagedBean
@@ -22,14 +23,14 @@ public class ConvertidorPreguntasKiosko implements Converter {
     IAdministrarSesiones administrarSesiones;
     @EJB
     IPersistenciaPreguntasKioskos persistenciaActa;
-    private EntityManager em;
+    private EntityManagerFactory emf;
 
     @PostConstruct
     public void inicializarAdministrador() {
         try {
             FacesContext x = FacesContext.getCurrentInstance();
             HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
-            em = administrarSesiones.obtenerConexionSesion(ses.getId());
+            emf = administrarSesiones.obtenerConexionSesion(ses.getId());
         } catch (Exception e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
             System.out.println("Causa: " + e.getCause());
@@ -38,15 +39,19 @@ public class ConvertidorPreguntasKiosko implements Converter {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
+        Object dato =null;
         if (value != null && value.trim().length() > 0) {
             try {
-                return persistenciaActa.consultarPreguntaSeguridad(em, new BigDecimal(value));
+                EntityManager em = emf.createEntityManager();
+                dato = persistenciaActa.consultarPreguntaSeguridad(em, new BigDecimal(value));
+                em.close();
             } catch (NumberFormatException e) {
-                return null;
+                System.out.println("getAsObject: "+e);
             }
         } else {
-            return null;
+            dato = null;
         }
+        return dato;
     }
 
     @Override

@@ -8,16 +8,17 @@ import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaParametrizaClave;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaUtilidadesBD;
 import javax.ejb.EJB;
-//import javax.ejb.Stateful;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
+//import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
  * @author Felipe Triviño
  */
-//@Stateful
-@Stateless
+@Stateful
+//@Stateless
 public class AdministrarOlvidoClave implements IAdministrarOlvidoClave {
 
     @EJB
@@ -28,43 +29,60 @@ public class AdministrarOlvidoClave implements IAdministrarOlvidoClave {
     private IPersistenciaUtilidadesBD persistenciaUtilidadesBD;
     @EJB
     private IPersistenciaParametrizaClave persistenciaParametrizaClave;
-    private EntityManager em;
+    private EntityManagerFactory emf;
 
     @Override
     public void obtenerConexion(String idSesion) {
-        em = administrarSesiones.obtenerConexionSesion(idSesion);
+        emf = administrarSesiones.obtenerConexionSesion(idSesion);
     }
 
     @Override
     public ConexionesKioskos obtenerConexionEmpleado(String codigoEmpleado, String nitEmpresa) {
-        return persistenciaConexionesKioskos.consultarConexionEmpleado(em, codigoEmpleado, Long.parseLong(nitEmpresa));
+        EntityManager em = emf.createEntityManager();
+        ConexionesKioskos ck = persistenciaConexionesKioskos.consultarConexionEmpleado(em, codigoEmpleado, Long.parseLong(nitEmpresa));
+        em.close();
+        return ck;
     }
 
     @Override
     public boolean validarRespuestas(String respuesta1, String respuesta2, byte[] respuestaC1, byte[] respuestaC2) {
         boolean respuesta;
-        respuesta =(respuesta1.toUpperCase().equals(persistenciaUtilidadesBD.desencriptar(em, respuestaC1))
+        EntityManager em = emf.createEntityManager();
+        respuesta = (respuesta1.toUpperCase().equals(persistenciaUtilidadesBD.desencriptar(em, respuestaC1))
                 && respuesta2.toUpperCase().equals(persistenciaUtilidadesBD.desencriptar(em, respuestaC2)));
+        em.close();
         return respuesta;
     }
 
     @Override
     public byte[] encriptar(String valor) {
-        return persistenciaUtilidadesBD.encriptar(em, valor);
+        EntityManager em = emf.createEntityManager();
+        byte[] datos = persistenciaUtilidadesBD.encriptar(em, valor);
+        em.close();
+        return datos;
     }
 
     @Override
     public String desEncriptar(byte[] valor) {
-        return persistenciaUtilidadesBD.desencriptar(em, valor);
+        EntityManager em = emf.createEntityManager();
+        String resul = persistenciaUtilidadesBD.desencriptar(em, valor);
+        em.close();
+        return resul;
     }
 
     @Override
     public boolean cambiarClave(ConexionesKioskos ck) {
-        return persistenciaConexionesKioskos.registrarConexion(em, ck);
+        EntityManager em = emf.createEntityManager();
+        boolean resul = persistenciaConexionesKioskos.registrarConexion(em, ck);
+        em.close();
+        return resul;
     }
 
     @Override
     public ParametrizaClave obtenerFormatoClave(long nitEmpresa) {
-        return persistenciaParametrizaClave.obtenerFormatoClave(em, nitEmpresa);
+        EntityManager em = emf.createEntityManager();
+        ParametrizaClave pc = persistenciaParametrizaClave.obtenerFormatoClave(em, nitEmpresa);
+        em.close();
+        return pc;
     }
 }

@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -36,20 +37,25 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte {
     private IPersistenciaConfiguracionCorreo persistenciaConfiguracionCorreo;
     @EJB
     private IniciarReporteInterface reporte;
-    
-    private EntityManager em;
+
+    private EntityManagerFactory emf;
     private String idSesion;
 
     @Override
     public void obtenerConexion(String idSesion) {
+        System.out.println(this.getClass().getName()+".obtenerConexion()");
         this.idSesion = idSesion;
-        em = administrarSesiones.obtenerConexionSesion(idSesion);
+        emf = administrarSesiones.obtenerConexionSesion(idSesion);
     }
 
     @Override
     public String generarReporte(String nombreReporte, String tipoReporte, Map parametros) {
+        System.out.println(this.getClass().getName()+".generarReporte()");
         try {
+            EntityManager em = emf.createEntityManager();
             Generales general = persistenciaGenerales.consultarRutasGenerales(em);
+            em.close();
+
             String pathReporteGenerado = null;
             BigDecimal secuenciaempleado = null;
             String nombreArchivo;
@@ -84,9 +90,10 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte {
 //                pathReporteGenerado = reporte.ejecutarReporte(nombreReporte, 
 //                        rutaReporte, rutaGenerado, nombreArchivo, tipoReporte, 
 //                        parametros, em);
-EntityManager em2 = administrarSesiones.obtenerConexionSesion(idSesion);
-                pathReporteGenerado = reporte.ejecutarReporte(nombreReporte, 
-                        rutaReporte, rutaGenerado, nombreArchivo, tipoReporte, 
+//                EntityManager em2 = administrarSesiones.obtenerConexionSesion(idSesion).createEntityManager();
+                EntityManager em2 = emf.createEntityManager();
+                pathReporteGenerado = reporte.ejecutarReporte(nombreReporte,
+                        rutaReporte, rutaGenerado, nombreArchivo, tipoReporte,
                         parametros, em2);
                 em2.close();
                 return pathReporteGenerado;
@@ -100,22 +107,43 @@ EntityManager em2 = administrarSesiones.obtenerConexionSesion(idSesion);
 
     @Override
     public boolean modificarConexionKisko(ConexionesKioskos cnx) {
-        return persistenciaConexionesKioskos.registrarConexion(em, cnx);
+        System.out.println(this.getClass().getName()+".modificarConexionKisko()");
+        boolean resul = false;
+        try {
+            EntityManager em = emf.createEntityManager();
+            resul = persistenciaConexionesKioskos.registrarConexion(em, cnx);
+            em.close();
+        } catch (Exception e) {
+            System.out.println("modificarConexionKisko: " + e);
+        }
+        return resul;
     }
 
     @Override
     public boolean enviarCorreo(BigInteger secuenciaEmpresa, String destinatario, String asunto, String mensaje, String pathAdjunto) {
-        ConfiguracionCorreo cc = persistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo(em, secuenciaEmpresa);
-//        EnvioCorreo enviarCorreo = new EnvioCorreo();
-//        return enviarCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
-        return EnvioCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
+        System.out.println(this.getClass().getName()+".enviarCorreo()");
+        boolean resul = false;
+        try {
+            EntityManager em = emf.createEntityManager();
+            ConfiguracionCorreo cc = persistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo(em, secuenciaEmpresa);
+//            EnvioCorreo enviarCorreo = new EnvioCorreo();
+//            return enviarCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
+            resul = EnvioCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
+            em.close();
+        } catch (Exception e) {
+            System.out.println("enviarCorreo: " + e);
+        }
+        return resul;
     }
 
     @Override
     public boolean comprobarConfigCorreo(BigInteger secuenciaEmpresa) {
+        System.out.println(this.getClass().getName()+".comprobarConfigCorreo()");
         boolean retorno = false;
         try {
+            EntityManager em = emf.createEntityManager();
             ConfiguracionCorreo cc = persistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo(em, secuenciaEmpresa);
+            em.close();
 //            if (cc.getServidorSmtp().length() != 0) {
 //                retorno = true;
 //            } else {

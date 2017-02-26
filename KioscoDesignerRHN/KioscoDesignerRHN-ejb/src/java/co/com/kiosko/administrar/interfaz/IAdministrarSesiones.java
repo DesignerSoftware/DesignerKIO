@@ -1,7 +1,8 @@
 package co.com.kiosko.administrar.interfaz;
 
 import co.com.kiosko.clasesAyuda.SessionEntityManager;
-import javax.persistence.EntityManager;
+//import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -13,7 +14,7 @@ public interface IAdministrarSesiones {
 
     public void consultarSessionesActivas();
 
-    public EntityManager obtenerConexionSesion(String idSesion);
+    public EntityManagerFactory obtenerConexionSesion(String idSesion);
 
     public void borrarSesion(String idSesion);
 

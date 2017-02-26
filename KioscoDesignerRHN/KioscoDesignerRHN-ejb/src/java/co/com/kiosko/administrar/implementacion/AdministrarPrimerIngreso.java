@@ -18,6 +18,7 @@ import javax.ejb.EJB;
 //import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -39,45 +40,66 @@ public class AdministrarPrimerIngreso implements IAdministrarPrimerIngreso {
     private IPersistenciaUtilidadesBD persistenciaUtilidadesBD;
     @EJB
     private IPersistenciaParametrizaClave persistenciaParametrizaClave;
-    private EntityManager em;
+    private EntityManagerFactory emf;
 
     @Override
     public void obtenerConexion(String idSesion) {
-        em = administrarSesiones.obtenerConexionSesion(idSesion);
+        emf = administrarSesiones.obtenerConexionSesion(idSesion);
     }
 
     @Override
     public List<PreguntasKioskos> obtenerPreguntasSeguridad() {
-        return persistenciaPreguntasKioskos.obtenerPreguntasSeguridad(em);
+        EntityManager em = emf.createEntityManager();
+        List<PreguntasKioskos> datos =  persistenciaPreguntasKioskos.obtenerPreguntasSeguridad(em);
+        em.close();
+        return datos;
     }
 
     @Override
     public PreguntasKioskos consultarPreguntaSeguridad(BigDecimal secuencia) {
-        return persistenciaPreguntasKioskos.consultarPreguntaSeguridad(em, secuencia);
+        EntityManager em = emf.createEntityManager();
+        PreguntasKioskos pk = persistenciaPreguntasKioskos.consultarPreguntaSeguridad(em, secuencia);
+        em.close();
+        return pk;
     }
 
     @Override
     public boolean registrarConexionKiosko(ConexionesKioskos cnk) {
-        return persistenciaConexionesKioskos.registrarConexion(em, cnk);
+        EntityManager em = emf.createEntityManager();
+        boolean resul = persistenciaConexionesKioskos.registrarConexion(em, cnk);
+        em.close();
+        return resul;
     }
 
     @Override
     public Empleados consultarEmpleado(BigInteger codigoEmpleado, long nit) {
-        return persistenciaEmpleados.consultarEmpleado(em, codigoEmpleado, nit);
+        EntityManager em = emf.createEntityManager();
+        Empleados empl = persistenciaEmpleados.consultarEmpleado(em, codigoEmpleado, nit);
+        em.close();
+        return empl;
     }
 
     @Override
     public byte[] encriptar(String valor) {
-        return persistenciaUtilidadesBD.encriptar(em, valor);
+        EntityManager em = emf.createEntityManager();
+        byte[] datos = persistenciaUtilidadesBD.encriptar(em, valor);
+        em.close();
+        return datos;
     }
 
     @Override
     public String desencriptar(byte[] valor) {
-        return persistenciaUtilidadesBD.desencriptar(em, valor);
+        EntityManager em = emf.createEntityManager();
+        String dato = persistenciaUtilidadesBD.desencriptar(em, valor);
+        em.close();
+        return dato;
     }
 
     @Override
     public ParametrizaClave obtenerFormatoClave(long nitEmpresa) {
-        return persistenciaParametrizaClave.obtenerFormatoClave(em, nitEmpresa);
+        EntityManager em = emf.createEntityManager();
+        ParametrizaClave pc = persistenciaParametrizaClave.obtenerFormatoClave(em, nitEmpresa);
+        em.close();
+        return pc;
     }
 }

@@ -22,8 +22,8 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
     @Override
     public boolean registrarConexion(EntityManager eManager, ConexionesKioskos cnk) {
         boolean resp;
-        EntityManagerFactory eManagerFact = Persistence.createEntityManagerFactory("DEFAULT1");
-        eManager = eManagerFact.createEntityManager();
+//        EntityManagerFactory eManagerFact = Persistence.createEntityManagerFactory("DEFAULT1");
+//        eManager = eManagerFact.createEntityManager();
         System.out.println(this.getClass().getName()+".registrarConexion()");
         System.out.println("Se creó entityManager.");
         System.out.println("eManager"+eManager.toString());
@@ -34,7 +34,7 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
             tx.begin();
             eManager.merge(cnk);
             tx.commit();
-            eManager.close();
+//            eManager.close();
             resp = true;
         } catch (RollbackException re){
             System.out.println("PersistenciaConexionesKioskos.registrarConexion");
