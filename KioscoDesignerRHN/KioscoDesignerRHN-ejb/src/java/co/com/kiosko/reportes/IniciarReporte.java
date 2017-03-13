@@ -26,9 +26,9 @@ public class IniciarReporte implements IniciarReporteInterface, Serializable {
     private Connection inicarC(EntityManager em) {
         Connection conexion = null;
         try {
-            em.getTransaction().begin();
+//            em.getTransaction().begin();
             conexion = em.unwrap(java.sql.Connection.class);
-            em.getTransaction().commit();
+//            em.getTransaction().commit();
         } catch (Exception e) {
             System.out.println("Error: " + this.getClass().getName() + ".iniciarC()");
             System.out.println("Causa: " + e);
@@ -70,10 +70,10 @@ public class IniciarReporte implements IniciarReporteInterface, Serializable {
                 exporter.exportReport();
             }
             //cerrarConexion();
-            if (em.getTransaction().isActive()) {
-                System.out.println("Cerrando Transaccion reporte.");
-                em.getTransaction().commit();
-            }
+//            if (em.getTransaction().isActive()) {
+//                System.out.println("Cerrando Transaccion reporte.");
+//                em.getTransaction().commit();
+//            }
             return outFileName;
         } catch (JRException e) {
             System.out.println("Error: IniciarReporte.ejecutarReporte: " + e);

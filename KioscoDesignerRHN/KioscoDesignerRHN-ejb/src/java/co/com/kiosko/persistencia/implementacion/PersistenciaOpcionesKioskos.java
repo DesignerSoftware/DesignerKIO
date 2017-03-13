@@ -19,7 +19,7 @@ public class PersistenciaOpcionesKioskos implements IPersistenciaOpcionesKioskos
     @Override
     public List<OpcionesKioskos> consultarOpcionesPorPadre(EntityManager eManager, BigInteger secuenciaPadre, BigInteger secuenciaEmpresa) {
         try {
-            eManager.getTransaction().begin();
+//            eManager.getTransaction().begin();
             String sqlQuery = "SELECT ok FROM OpcionesKioskos ok ";
             Query query;
             if (secuenciaPadre == null) {
@@ -32,12 +32,12 @@ public class PersistenciaOpcionesKioskos implements IPersistenciaOpcionesKioskos
             }
             query.setParameter("secuenciaEmpresa", secuenciaEmpresa);
             List<OpcionesKioskos> lok = query.getResultList();
-            eManager.getTransaction().commit();
+//            eManager.getTransaction().commit();
             return lok;
         } catch (Exception e) {
             System.out.println("Error PersistenciaOpcionesKioskos.consultarOpcionesPorPadre: " + e);
             try {
-                eManager.getTransaction().rollback();
+//                eManager.getTransaction().rollback();
             } catch (NullPointerException npe) {
                 System.out.println("Error de nulo en la transacción.");
             }

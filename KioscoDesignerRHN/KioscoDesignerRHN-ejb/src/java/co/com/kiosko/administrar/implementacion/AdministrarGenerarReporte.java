@@ -128,8 +128,8 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte {
             ConfiguracionCorreo cc = persistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo(em, secuenciaEmpresa);
 //            EnvioCorreo enviarCorreo = new EnvioCorreo();
 //            return enviarCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
-            resul = EnvioCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
             em.close();
+            resul = EnvioCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
         } catch (Exception e) {
             System.out.println("enviarCorreo: " + e);
         }
@@ -152,6 +152,7 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte {
             retorno = cc.getServidorSmtp().length() != 0;
         } catch (NullPointerException npe) {
             retorno = false;
+            System.out.println("Null ex: "+npe);
         } catch (Exception e) {
             System.out.println("AdministrarGenerarReporte.comprobarConfigCorreo");
             System.out.println("Error validando configuracion");

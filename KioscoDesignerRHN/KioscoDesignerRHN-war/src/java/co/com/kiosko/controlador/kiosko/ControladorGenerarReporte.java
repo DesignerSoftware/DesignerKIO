@@ -320,7 +320,7 @@ public class ControladorGenerarReporte implements Serializable {
                 reporteGenerado = new DefaultStreamedContent(fis, "application/pdf");
             }
         } catch (Exception e) {
-            System.out.println("ERROR: "+ e);
+            System.out.println("ERROR: " + e);
             System.out.println("reporte nulo");
             reporteGenerado = null;
         }
@@ -330,8 +330,11 @@ public class ControladorGenerarReporte implements Serializable {
 
     public boolean isEnviocorreo() {
         System.out.println(this.getClass().getName() + "." + "isEnviocorreo" + "()");
-        boolean retorno;
-        retorno = validarConfigSMTP() && conexionEmpleado.isEnvioCorreo();
+        boolean retorno = false;
+//        retorno = validarConfigSMTP() && conexionEmpleado.isEnvioCorreo();
+        if (conexionEmpleado.isEnvioCorreo()) {
+            retorno = validarConfigSMTP();
+        }
         return retorno;
     }
 

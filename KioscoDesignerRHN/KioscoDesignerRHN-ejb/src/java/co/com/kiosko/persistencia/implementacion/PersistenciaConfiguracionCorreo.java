@@ -23,12 +23,12 @@ public class PersistenciaConfiguracionCorreo implements IPersistenciaConfiguraci
 //            if (eManager.isOpen()) {
 //            if (eManager != null) {
             if (eManager != null && eManager.isOpen()) {
-                eManager.getTransaction().begin();
+//                eManager.getTransaction().begin();
                 String sqlQuery = "SELECT cc FROM ConfiguracionCorreo cc WHERE cc.empresa.secuencia = :secuenciaEmpresa";
                 Query query = eManager.createQuery(sqlQuery);
                 query.setParameter("secuenciaEmpresa", secuenciaEmpresa);
                 cc = (ConfiguracionCorreo) query.getSingleResult();
-                eManager.getTransaction().commit();
+//                eManager.getTransaction().commit();
             } else {
                 cc = null;
                 System.out.println("entityManager nulo.");
@@ -38,14 +38,14 @@ public class PersistenciaConfiguracionCorreo implements IPersistenciaConfiguraci
             System.out.println("ERROR: "+ ise.getMessage());
         } catch (Exception e) {
             System.out.println("Error PersistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo: " + e);
-            try {
-                if (eManager.getTransaction().isActive()) {
-                    eManager.getTransaction().rollback();
-                    cc = null;
-                }
-            } catch (NullPointerException npe) {
-                System.out.println("error de nulo en la transacción.");
-            }
+//            try {
+//                if (eManager.getTransaction().isActive()) {
+//                    eManager.getTransaction().rollback();
+//                    cc = null;
+//                }
+//            } catch (NullPointerException npe) {
+//                System.out.println("error de nulo en la transacción.");
+//            }
 //            return null;
         }
         return cc;

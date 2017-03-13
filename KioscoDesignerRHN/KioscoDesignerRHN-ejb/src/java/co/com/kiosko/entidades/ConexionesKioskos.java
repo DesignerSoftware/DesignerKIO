@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,6 +15,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
@@ -30,16 +33,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({ 
     @NamedQuery(name = "ConexionesKioskos.findAll", query = "SELECT c FROM ConexionesKioskos c")})
+//@TableGenerator(name = "STABLAS")
 public class ConexionesKioskos implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Size(max = 20)
+    @Size(max = 20, message = "El seudónimo puede tener máximo 20 letras.")
     @Column(name = "SEUDONIMO")
     private String seudonimo;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @Basic(optional = false)
-    @NotNull
+//    @GeneratedValue(strategy=GenerationType.IDENTITY , generator="STABLAS")
+//    @Basic(optional = false)
+//    @NotNull
     @Column(name = "SECUENCIA")
     private BigDecimal secuencia;
     //@Lob
@@ -232,20 +237,17 @@ public class ConexionesKioskos implements Serializable {
     }
 
     public boolean isEnvioCorreo() {
-        if (enviocorreo != null && enviocorreo.equalsIgnoreCase("S")) {
-            envioCorreo = true;
-        } else {
-            envioCorreo = false;
-        }
+        envioCorreo = enviocorreo != null && enviocorreo.equalsIgnoreCase("S");
         return envioCorreo;
     }
 
     public void setEnvioCorreo(boolean envioCorreo) {
-        if (envioCorreo) {
+        /*if (envioCorreo) {
             enviocorreo = "S";
         } else {
             enviocorreo = "N";
-        }
+        }*/
+        this.enviocorreo = (envioCorreo?"S":"N");
         this.envioCorreo = envioCorreo;
     }
 
@@ -263,14 +265,11 @@ public class ConexionesKioskos implements Serializable {
             return false;
         }
         ConexionesKioskos other = (ConexionesKioskos) object;
-        if ((this.secuencia == null && other.secuencia != null) || (this.secuencia != null && !this.secuencia.equals(other.secuencia))) {
-            return false;
-        }
-        return true;
+        return !((this.secuencia == null && other.secuencia != null) || (this.secuencia != null && !this.secuencia.equals(other.secuencia)));
     }
 
     @Override
     public String toString() {
-        return "co.com.kiosko.administrar.entidades.ConexionesKioskos[ secuencia=" + secuencia + " ]";
+        return "co.com.kiosko.administrar.entidades.ConexionesKioskos secuencia: " + secuencia + " activo: "+activo+" ultimaconexion: "+ultimaconexion;
     }
 }

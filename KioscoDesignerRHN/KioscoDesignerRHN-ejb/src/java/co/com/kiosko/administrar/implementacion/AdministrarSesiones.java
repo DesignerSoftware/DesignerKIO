@@ -62,7 +62,7 @@ public class AdministrarSesiones implements IAdministrarSesiones {
             System.out.println("Causa: " + e);
             sesionActual = null;
         }
-        EntityManagerFactory emf=null;
+        EntityManagerFactory emf = null;
         if (sesionActual != null) {
             emf = sessionEMF.crearConexionUsuario(sesionActual.getUnidadPersistencia());
 //            eManager = emf.createEntityManager();

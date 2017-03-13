@@ -14,11 +14,11 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     public void setearKiosko(EntityManager eManager) {
         System.out.println(this.getClass().getName()+"."+"setearKiosko"+"()");
         try {
-            eManager.getTransaction().begin();
+//            eManager.getTransaction().begin();
             String sqlQuery = "SET ROLE ROLKIOSKO IDENTIFIED BY RLKSK ";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.executeUpdate();
-            eManager.getTransaction().commit();
+//            eManager.getTransaction().commit();
         } catch (NullPointerException npe) {
             System.out.println("PersistenciaConexionInicial.setearKiosko()");
             System.out.println("Error de nulo");
@@ -57,7 +57,7 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     public boolean validarUsuarioyEmpresa(EntityManager eManager, String usuario, String nitEmpresa) {
         boolean resultado = false;
         try {
-            eManager.getTransaction().begin();
+//            eManager.getTransaction().begin();
             String sqlQuery = "SELECT COUNT(*) FROM EMPLEADOS e, Empresas em "
                     + "WHERE e.empresa = em.secuencia "
                     + "AND e.codigoempleado = ? "
@@ -68,7 +68,7 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
             query.setParameter(2, nitEmpresa);
             BigDecimal retorno = (BigDecimal) query.getSingleResult();
             Integer instancia = retorno.intValueExact();
-            eManager.getTransaction().commit();
+//            eManager.getTransaction().commit();
             resultado = instancia > 0;
 //            return resultado;
         } catch (Exception e) {
@@ -83,7 +83,7 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     public boolean validarUsuarioRegistrado(EntityManager eManager, String usuario, String nitEmpresa) {
         boolean resultado = false;
         try {
-            eManager.getTransaction().begin();
+//            eManager.getTransaction().begin();
 //            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e "
 //                    + "WHERE ck.EMPLEADO = e.SECUENCIA "
 //                    + "AND e.codigoempleado = ?";
@@ -97,7 +97,7 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
             query.setParameter(2, nitEmpresa);
             BigDecimal retorno = (BigDecimal) query.getSingleResult();
             Integer instancia = retorno.intValueExact();
-            eManager.getTransaction().commit();
+//            eManager.getTransaction().commit();
             /*if (instancia > 0) {
              //System.out.println("El usuario está registrado.");
              return true;
@@ -119,7 +119,7 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     public boolean validarEstadoUsuario(EntityManager eManager, String usuario, String nitEmpresa) {
         boolean resultado = false;
         try {
-            eManager.getTransaction().begin();
+//            eManager.getTransaction().begin();
 //            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e "
 //                    + "WHERE ck.EMPLEADO = e.SECUENCIA "
 //                    + "AND e.codigoempleado = ? "
@@ -135,7 +135,7 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
             query.setParameter(2, nitEmpresa);
             BigDecimal retorno = (BigDecimal) query.getSingleResult();
             Integer instancia = retorno.intValueExact();
-            eManager.getTransaction().commit();
+//            eManager.getTransaction().commit();
             /*if (instancia > 0) {
              //System.out.println("El usuario esta bloqueado.");
              return false;
@@ -157,7 +157,7 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     public boolean validarIngresoUsuarioRegistrado(EntityManager eManager, String usuario, String clave, String nitEmpresa) {
         boolean resultado = false;
         try {
-            eManager.getTransaction().begin();
+//            eManager.getTransaction().begin();
 //            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, EMPLEADOS e "
 //                    + "WHERE ck.EMPLEADO = e.SECUENCIA "
 //                    + "AND e.codigoempleado = ? "
@@ -174,7 +174,7 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
             query.setParameter(3, nitEmpresa);
             BigDecimal retorno = (BigDecimal) query.getSingleResult();
             Integer instancia = retorno.intValueExact();
-            eManager.getTransaction().commit();
+//            eManager.getTransaction().commit();
             /*if (instancia > 0) {
              //System.out.println("El usuario y clave son correctos.");
              return true;

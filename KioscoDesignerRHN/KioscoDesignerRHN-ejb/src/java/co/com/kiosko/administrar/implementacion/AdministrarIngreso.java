@@ -95,7 +95,7 @@ public class AdministrarIngreso implements IAdministrarIngreso {
 //            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
             if (emf != null) {
                 EntityManager em = emf.createEntityManager();
-                persistenciaConexionInicial.setearKiosko(em);
+//                persistenciaConexionInicial.setearKiosko(em);
                 resul = persistenciaConexionInicial.validarUsuarioRegistrado(em, usuario, nitEmpresa);
                 em.close();
 //                emf.close();
@@ -155,6 +155,9 @@ public class AdministrarIngreso implements IAdministrarIngreso {
             SessionEntityManager sem = new SessionEntityManager(idSesion, unidadPersistencia);
             administrarSessiones.adicionarSesion(sem);
             emf = sessionEMF.crearConexionUsuario(sem.getUnidadPersistencia());
+            EntityManager em = emf.createEntityManager();
+            persistenciaConexionInicial.setearKiosko(em);
+            em.close();
             resul = true;
         } catch (Exception e) {
             System.out.println("Error general: " + e);
