@@ -48,8 +48,10 @@ public class AdministrarOlvidoClave implements IAdministrarOlvidoClave {
     public boolean validarRespuestas(String respuesta1, String respuesta2, byte[] respuestaC1, byte[] respuestaC2) {
         boolean respuesta;
         EntityManager em = emf.createEntityManager();
-        respuesta = (respuesta1.toUpperCase().equals(persistenciaUtilidadesBD.desencriptar(em, respuestaC1))
-                && respuesta2.toUpperCase().equals(persistenciaUtilidadesBD.desencriptar(em, respuestaC2)));
+//        System.out.println("respuesta1Nueva: "+respuesta1);
+//        System.out.println("respuesta2Nueva: "+respuesta2);
+        respuesta = (respuesta1.toUpperCase().equals(persistenciaUtilidadesBD.desencriptar(em, respuestaC1).toUpperCase())
+                && respuesta2.toUpperCase().equals(persistenciaUtilidadesBD.desencriptar(em, respuestaC2).toUpperCase()));
         em.close();
         return respuesta;
     }

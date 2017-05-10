@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.TransactionRolledbackLocalException;
 import javax.el.ELException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -137,7 +138,12 @@ public class ControladorGenerarReporte implements Serializable {
                 reporteGenerado = null;
             }
             if (reporteGenerado != null) {
-                if (userAgent.toUpperCase().contains("Mobile".toUpperCase()) || userAgent.toUpperCase().contains("Tablet".toUpperCase())) {
+                System.out.println("userAgent: "+userAgent);
+                if (userAgent.toUpperCase().contains("Mobile".toUpperCase()) 
+                        || userAgent.toUpperCase().contains("Tablet".toUpperCase())
+                        || userAgent.toUpperCase().contains("Android".toUpperCase())
+                        || userAgent.toUpperCase().contains("IOS".toUpperCase())
+                   ) {
                     //System.out.println("Acceso por mobiles.");
                     context.update("principalForm:dwlReportePDF");
                     context.execute("PF('dwlReportePDF').show();");
@@ -233,7 +239,15 @@ public class ControladorGenerarReporte implements Serializable {
 
     public boolean validarConfigSMTP() {
         System.out.println(this.getClass().getName() + "." + "validarConfigSMTP" + "()");
-        return administrarGenerarReporte.comprobarConfigCorreo(conexionEmpleado.getEmpleado().getEmpresa().getSecuencia());
+        boolean resultado=false;
+        try {
+            resultado = administrarGenerarReporte.comprobarConfigCorreo(conexionEmpleado.getEmpleado().getEmpresa().getSecuencia());
+        } catch (TransactionRolledbackLocalException trle) {
+            System.out.println(this.getClass().getName() + "." + "validarConfigSMTP" + "()");
+            System.out.println("La transacción se ha deshecho.");
+            System.out.println(trle);
+        }
+        return resultado;
     }
 
     public void reiniciarStreamedContent() {

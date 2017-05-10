@@ -27,14 +27,20 @@ public class PersistenciaUtilidadesBD implements IPersistenciaUtilidadesBD {
 
     @Override
     public String desencriptar(EntityManager eManager, byte[] valor) {
+        System.out.println(this.getClass().getName()+".desencriptar()");
+//        System.out.print("valor ");
+//        System.out.println(valor);
+        String resultado = "";
         try {
             String sqlQuery = "SELECT GENERALES_PKG.DECRYPT(?) FROM DUAL";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.setParameter(1, valor);
-            return (String) query.getSingleResult();
+            resultado = (String) query.getSingleResult();
         } catch (Exception e) {
             System.out.println("Error PersistenciaUtilidadesBD.desencriptar: " + e);
-            return null;
+            resultado = null;
         }
+        System.out.println("Resultado: "+resultado);
+        return resultado;
     }
 }
