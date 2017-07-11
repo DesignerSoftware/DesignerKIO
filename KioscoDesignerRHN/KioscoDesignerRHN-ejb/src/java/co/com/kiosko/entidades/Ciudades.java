@@ -35,7 +35,6 @@ public class Ciudades implements Serializable {
     @Size(min = 1, max = 30)
     @Column(name = "NOMBRE")
     private String nombre;
-    @Size(max = 4)
     @Column(name = "CODIGOALTERNATIVO")
     private String codigoalternativo;
 

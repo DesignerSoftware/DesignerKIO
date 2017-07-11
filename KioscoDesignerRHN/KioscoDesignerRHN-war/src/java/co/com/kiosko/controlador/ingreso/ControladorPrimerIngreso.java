@@ -58,7 +58,7 @@ public class ControladorPrimerIngreso implements Serializable {
             requerirPreguntasSeguridad();
         } catch (NumberFormatException e) {
             System.out.println("Error postconstruct. Texto no esta en formato numérico.");
-            System.out.println(this.getClass().getName() + ": "+ e);
+            System.out.println(this.getClass().getName() + ": " + e);
             System.out.println("Causa: " + e.getCause());
         } catch (ELException e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
@@ -87,9 +87,19 @@ public class ControladorPrimerIngreso implements Serializable {
     }
 
     public void finalizar() {
+        /*System.out.println(this.getClass().getName() + ".finalizar()");
+        if (clave != null) {
+            System.out.println("Clave: " + clave);
+        }
+        if (confirmacion != null) {
+            System.out.println("Confirmacion: " + confirmacion);
+        }*/
         if (clave != null && !clave.isEmpty() && confirmacion != null && !confirmacion.isEmpty()) {
+            //System.out.println("Condicional 1");
             if (clave.equals(confirmacion)) {
+                System.out.println("Condicional 2");
                 if (validarClave(clave)) {
+                    //System.out.println("Condicional 3");
                     nuevoIngreso.setEmpleado(administrarPrimerIngreso.consultarEmpleado(new BigInteger(usuario), Long.parseLong(nit)));
                     nuevoIngreso.setPwd(administrarPrimerIngreso.encriptar(clave));
                     byte[] rsp1, rsp2;
@@ -99,17 +109,22 @@ public class ControladorPrimerIngreso implements Serializable {
                     nuevoIngreso.setUltimaconexion(new Date());
                     nuevoIngreso.setEnviocorreo("N");
                     if (administrarPrimerIngreso.registrarConexionKiosko(nuevoIngreso)) {
+                        //System.out.println("Condicional 4");
                         PrimefacesContextUI.ejecutar("PF('dlgProcesoFinalizado').show()");
                     } else {
+                        //System.out.println("Condicional 5");
                         MensajesUI.error("Se ha generado un error inesperado, por favor contacte a soporte.");
                     }
-                }else{
+                } else {
+                    //System.out.println("Condicional 6");
                     MensajesUI.warn("Problema con el formato de la contraseña ya que no coincide con el formato definito.");
                 }
             } else {
+                //System.out.println("Condicional 7");
                 MensajesUI.warn("La contraseña no coincide, por favor verifique.");
             }
         } else {
+            //System.out.println("Condicional 8");
             MensajesUI.warn("Todos los campos son obligatorios.");
         }
     }
@@ -142,7 +157,7 @@ public class ControladorPrimerIngreso implements Serializable {
     public void requerirPreguntasSeguridad() {
         lstPreguntasKiosko = administrarPrimerIngreso.obtenerPreguntasSeguridad();
     }
-    
+
     //GETTER AND SETTER
     public List<PreguntasKioskos> getLstPreguntasKiosko() {
         return lstPreguntasKiosko;
@@ -198,6 +213,6 @@ public class ControladorPrimerIngreso implements Serializable {
 
     public void setPc(ParametrizaClave pc) {
         this.pc = pc;
-    }    
-    
+    }
+
 }

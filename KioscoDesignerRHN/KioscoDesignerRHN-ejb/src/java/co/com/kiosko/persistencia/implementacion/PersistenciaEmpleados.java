@@ -17,8 +17,12 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
 
     @Override
     public Empleados consultarEmpleado(EntityManager eManager, BigInteger codigoEmpleado, long nit) {
+        //System.out.println(this.getClass().getName() + ".consultarEmpleado()");
+        //System.out.println("codigoEmpleado: " + codigoEmpleado);
+        //System.out.println("nit: " + nit);
         try {
 //            eManager.getTransaction().begin();
+            //System.out.println("Primera consulta");
             String sqlQuery = "SELECT e FROM Empleados e WHERE e.codigoempleado = :codigoEmpleado";
             Query query = eManager.createQuery(sqlQuery);
             query.setParameter("codigoEmpleado", codigoEmpleado);
@@ -31,6 +35,7 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
 //            eManager.getTransaction().rollback();
             try {
 //                eManager.getTransaction().begin();
+                //System.out.println("Segunda consulta");
                 String sqlQuery = "SELECT e FROM Empleados e WHERE e.codigoempleado = :codigoEmpleado AND e.empresa.nit = :nit ";
                 Query query = eManager.createQuery(sqlQuery);
                 query.setParameter("codigoEmpleado", codigoEmpleado);

@@ -73,6 +73,9 @@ public class AdministrarPrimerIngreso implements IAdministrarPrimerIngreso {
 
     @Override
     public Empleados consultarEmpleado(BigInteger codigoEmpleado, long nit) {
+        //System.out.println(this.getClass().getName()+".consultarEmpleado");
+        //System.out.println("Codigo de empleado: "+codigoEmpleado);
+        //System.out.println("Nit de empresa: "+nit);
         EntityManager em = emf.createEntityManager();
         Empleados empl = persistenciaEmpleados.consultarEmpleado(em, codigoEmpleado, nit);
         em.close();
