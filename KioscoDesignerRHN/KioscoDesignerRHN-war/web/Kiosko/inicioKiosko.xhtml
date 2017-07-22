@@ -4,8 +4,9 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core">
-    <h:body style="font-size: 14px;">
-        <p:panelGrid id="gridSuperior" columns="3" styleClass="noBorders" style="width: 100%;">
+    <h:body style="font-size: 14px;" onload="">
+        <p:remoteCommand name="mostrarPagina" actionListener="#{controladorInicioKiosko.mostrarPagina()}"/>
+        <p:panelGrid id="gridSuperior" columns="3" styleClass="noBorders" style="width: 100%;" >
             <p:column id="supleft" width="50%">
                 <p:panelGrid id="gridSupInt1" columns="2" styleClass="noBorders">
                     <p:column> 

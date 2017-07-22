@@ -18,10 +18,15 @@
         <title>..::Designer.Kio::..</title>
     </h:head>
     <h:body style="font-size: 14px;" >
+        <script>
+            $(function(){
+                $("#fprincipal").attr("autocomplete", "off");
+            });
+        </script>
         <f:metadata>
             <f:viewParam name="grupo" value="#{controladorIngreso.grupo}" />
         </f:metadata>
-        <h:form id="fprincipal" style="position: absolute; left: 0px; top: 0px; width: 100%">
+        <h:form id="fprincipal" style="position: absolute; left: 0px; top: 0px; width: 100%;">
             <p:focus context="pnlIngreso"/>
             <center>
                 <div class="centrado">
@@ -53,20 +58,25 @@
                                     <h:outputText value="* Usuario:" style="font-weight: bold"/>
                                 </p:column>
                                 <p:column>
-                                    <p:inputText id="user" value="#{controladorIngreso.usuario}" 
+                                    <p:inputText id="usuario" value="#{controladorIngreso.usuario}" 
                                                  disabled="#{controladorIngreso.ingresoExitoso ? 'true' : 'false'}"
-                                                 style="width: 260px;" autocomplete="off"/>
+                                                 style="width: 260px;" 
+                                                 autocomplete="off"
+                                                 />
                                 </p:column>
+                                <!--p:watermark for="usuario" value="#documento"/-->
                             </p:row>
                             <p:row>
                                 <p:column>
                                     <h:outputText value="* Contrase&ntilde;a:" style="font-weight: bold"/>
                                 </p:column>
                                 <p:column>
-                                    <p:password id="pass" value="#{controladorIngreso.clave}" 
+                                    <p:password id="contrasenha" value="#{controladorIngreso.clave}" 
                                                 disabled="#{controladorIngreso.ingresoExitoso ? 'true' : 'false'}"
                                                 style="width: 260px;"
+                                                autocomplete="off"
                                                 />
+                                    <!--p:watermark for="contrasenha" value="Contra53n4"/-->
                                 </p:column>
                             </p:row>
                             <p:row>
@@ -76,7 +86,7 @@
                                 <p:column>
                                     <p:selectOneMenu id="seEmpresa" value="#{controladorIngreso.unidadPersistenciaIngreso}" 
                                                      disabled="#{controladorIngreso.obtenerCadenasKiosko().size() == 1 ?  'true' : controladorIngreso.ingresoExitoso ? 'true' : 'false'}"
-                                                     style="width: 89%">
+                                                     style="width: 89%;">
                                         <f:selectItem itemLabel="Seleccione una empresa" itemValue="#{null}"/>
                                         <f:selectItems value="#{controladorIngreso.obtenerCadenasKiosko()}" var="cadena"
                                                        itemLabel="#{cadena.descripcion}" itemValue="#{cadena.id}" />
@@ -93,14 +103,14 @@
                                 <p:column>
                                     <p:commandButton id="btnEntrar" value="#{!controladorIngreso.ingresoExitoso ? '' : 'Entrar'}" 
                                                      action="#{controladorIngreso.entrar()}"
-                                                     style="float: right" update="pnlIngreso" icon="ui-icon-carat-1-e" iconPos="right"
+                                                     style="float: right;" update="pnlIngreso" icon="ui-icon-carat-1-e" iconPos="right"
                                                      rendered="#{controladorIngreso.ingresoExitoso}"/>
                                 </p:column>
                                 <p:column>
                                     <p:commandButton id="btnIngreso" value="#{!controladorIngreso.ingresoExitoso ? 'Ingresar' : 'Cerrar Sesi&oacute;n'}" 
                                                      action="#{controladorIngreso.ingresar()}" 
                                                      update="pnlIngreso" icon="ui-icon-carat-1-e" iconPos="right"
-                                                     style="float: right"/>
+                                                     style="float: right;"/>
                                 </p:column>
                             </p:row>
                             <p:row>
@@ -122,7 +132,7 @@
                     </fieldset>
                 </div>
             </center>
-            <p:defaultCommand target="btnIngreso" />
+            <!--p:defaultCommand target="btnIngreso" /-->
         </h:form>
         <h:form>
             <p:dialog id="dlgPrimerIngreso" header="Primer ingreso" widgetVar="dlgPrimerIngreso"
@@ -170,7 +180,7 @@
             <p:dialog id="estadoSesion" header="Iniciando Sesi&oacute;n" widgetVar="estadoSesion"  resizable="false" draggable="false" modal="true" height="65" width="350" closable="false" >  
                 <p:panelGrid columns="2" styleClass="noBorders">
                     <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50"/>
-                    <h:outputText value="Iniciando sesi&oacute;n, por favor espere." style="width: 240px; text-align: justify; font-weight:bold;" />
+                    <h:outputText value="Iniciando sesi&oacute;n, por favor espere." style="width: 240px; text-align: justify; font-weight: bold;" />
                 </p:panelGrid>
             </p:dialog>
         </h:form>

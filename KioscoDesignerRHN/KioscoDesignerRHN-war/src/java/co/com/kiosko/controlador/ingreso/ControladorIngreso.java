@@ -131,6 +131,7 @@ public class ControladorIngreso implements Serializable {
 //                                    }
                                         //return "opcionesKiosko";
                                         //return "plantilla";
+                                        PrimefacesContextUI.ejecutar("PF('estadoSesion').show()");
                                         retorno = "plantilla";
                                     } else {
                                         // LA CONTRASEÑA ES INCORRECTA.
@@ -209,7 +210,7 @@ public class ControladorIngreso implements Serializable {
             System.out.println("La transacción se deshizo.");
             System.out.println(etre);
         }
-        PrimefacesContextUI.ejecutar("PF('estadoSesion').hide()");
+        //PrimefacesContextUI.ejecutar("PF('estadoSesion').hide()");
         //return "";
         return retorno;
     }

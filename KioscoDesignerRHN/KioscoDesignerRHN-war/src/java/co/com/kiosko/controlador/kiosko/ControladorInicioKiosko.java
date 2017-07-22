@@ -20,6 +20,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import co.com.kiosko.clasesAyuda.CadenasKioskos;
 import co.com.kiosko.clasesAyuda.LeerArchivoXML;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -155,6 +156,10 @@ public class ControladorInicioKiosko implements Serializable {
                 fondoEmpresa = elemento.getFondo();
             }
         }
+    }
+    public void mostrarPagina(){
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('estadoSesion').hide();");
     }
 
     //GETTER AND SETTER
