@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <p:panel header="Ver solicitudes propias" style="border: none; padding: 0px; margin: 0px; background: transparent" styleClass="noBorders">
+        <center>
+            <h:form id="frmsolicitudes">
+                <p:tabView>
+                    <p:tab title="GUARDADAS">
+                        <p:dataTable id="tbsoliciguarda" var="esg" 
+                                     value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciGuardadas}" 
+                                     selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
+                                     rowKey="#{esg.secuencia}">
+                            <f:facet name="header">
+                                SOLICITUDES GUARDADAS
+                            </f:facet>
+                            <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                            <p:column headerText="FECHA CREACION">
+                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" />
+                            </p:column>
+                            <p:column headerText="ACTIVA">
+                                <h:outputText value="#{esg.kioSoliciVaca.activa}" />
+                            </p:column>
+                            <p:column headerText="FECHA PROC">
+                                <h:outputText value="#{esg.fechaProcesamiento}" />
+                            </p:column>
+                            <p:column headerText="FECHA PROC">
+                                <h:outputText value="#{esg.estado}" />
+                            </p:column>
+                            <p:column headerText="EMPLEADO EJECUTA">
+                                <h:outputText value="#{esg.empleadoEjecuta}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton process="tbsoliciguarda" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
+                            </f:facet>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="ENVIADAS">
+                        <p:dataTable id="tbsolicienvia" var="esg" 
+                                     value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciEnviadas}" 
+                                     selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
+                                     rowKey="#{esg.secuencia}">
+                            <f:facet name="header">
+                                SOLICITUDES ENVIADAS
+                            </f:facet>
+                            <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                            <p:column headerText="FECHA CREACION">
+                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" />
+                            </p:column>
+                            <p:column headerText="ACTIVA">
+                                <h:outputText value="#{esg.kioSoliciVaca.activa}" />
+                            </p:column>
+                            <p:column headerText="FECHA PROC">
+                                <h:outputText value="#{esg.fechaProcesamiento}" />
+                            </p:column>
+                            <p:column headerText="FECHA PROC">
+                                <h:outputText value="#{esg.estado}" />
+                            </p:column>
+                            <p:column headerText="EMPLEADO EJECUTA">
+                                <h:outputText value="#{esg.empleadoEjecuta}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton process="tbsolicienvia" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
+                            </f:facet>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="APROBADAS">
+                        <p:dataTable id="tbsoliciaprobada" var="esg" 
+                                     value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciAprobadas}" 
+                                     selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
+                                     rowKey="#{esg.secuencia}">
+                            <f:facet name="header">
+                                SOLICITUDES APROBADAS
+                            </f:facet>
+                            <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                            <p:column headerText="FECHA CREACION">
+                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" />
+                            </p:column>
+                            <p:column headerText="ACTIVA">
+                                <h:outputText value="#{esg.kioSoliciVaca.activa}" />
+                            </p:column>
+                            <p:column headerText="FECHA PROC">
+                                <h:outputText value="#{esg.fechaProcesamiento}" />
+                            </p:column>
+                            <p:column headerText="FECHA PROC">
+                                <h:outputText value="#{esg.estado}" />
+                            </p:column>
+                            <p:column headerText="EMPLEADO EJECUTA">
+                                <h:outputText value="#{esg.empleadoEjecuta}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton process="tbsoliciaprobada" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
+                            </f:facet>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="RECHAZADAS">
+                        <p:dataTable id="tbsolicirechazada" var="esg" 
+                                     value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciRechazadas}" 
+                                     selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
+                                     rowKey="#{esg.secuencia}">
+                            <f:facet name="header">
+                                SOLICITUDES RECHAZADAS
+                            </f:facet>
+                            <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                            <p:column headerText="FECHA CREACION">
+                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" />
+                            </p:column>
+                            <p:column headerText="ACTIVA">
+                                <h:outputText value="#{esg.kioSoliciVaca.activa}" />
+                            </p:column>
+                            <p:column headerText="FECHA PROC">
+                                <h:outputText value="#{esg.fechaProcesamiento}" />
+                            </p:column>
+                            <p:column headerText="FECHA PROC">
+                                <h:outputText value="#{esg.estado}" />
+                            </p:column>
+                            <p:column headerText="EMPLEADO EJECUTA">
+                                <h:outputText value="#{esg.empleadoEjecuta}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton process="tbsolicirechazada" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
+                            </f:facet>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="LIQUIDADAS">
+                        <p:dataTable id="tbsoliciliqui" var="esg" 
+                                     value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciLiquidadas}" 
+                                     selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
+                                     rowKey="#{esg.secuencia}">
+                            <f:facet name="header">
+                                SOLICITUDES LIQUIDADAS
+                            </f:facet>
+                            <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                            <p:column headerText="FECHA CREACION">
+                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" />
+                            </p:column>
+                            <p:column headerText="ACTIVA">
+                                <h:outputText value="#{esg.kioSoliciVaca.activa}" />
+                            </p:column>
+                            <p:column headerText="FECHA PROC">
+                                <h:outputText value="#{esg.fechaProcesamiento}" />
+                            </p:column>
+                            <p:column headerText="FECHA PROC">
+                                <h:outputText value="#{esg.estado}" />
+                            </p:column>
+                            <p:column headerText="EMPLEADO EJECUTA">
+                                <h:outputText value="#{esg.empleadoEjecuta}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton process="tbsoliciliqui" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
+                            </f:facet>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="CANCELADAS">
+                        <p:dataTable id="tbsolicicancelada" var="esg" 
+                                     value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciCanceladas}" 
+                                     selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
+                                     rowKey="#{esg.secuencia}">
+                            <f:facet name="header">
+                                SOLICITUDES CANCELADAS
+                            </f:facet>
+                            <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                            <p:column headerText="FECHA CREACION">
+                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" />
+                            </p:column>
+                            <p:column headerText="ACTIVA">
+                                <h:outputText value="#{esg.kioSoliciVaca.activa}" />
+                            </p:column>
+                            <p:column headerText="FECHA PROC">
+                                <h:outputText value="#{esg.fechaProcesamiento}" />
+                            </p:column>
+                            <p:column headerText="FECHA PROC">
+                                <h:outputText value="#{esg.estado}" />
+                            </p:column>
+                            <p:column headerText="EMPLEADO EJECUTA">
+                                <h:outputText value="#{esg.empleadoEjecuta}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton process="tbsolicicancelada" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
+                            </f:facet>
+                        </p:dataTable>
+                    </p:tab>
+                </p:tabView>
+            </h:form>
+        </center>
+    </p:panel>
+
+
+    <p:panel style="border: none; padding: 0px; margin: 0px; background: transparent" styleClass="noBorders">
+        <center>
+            <p:commandButton value="Volver" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
+                             update=":principalForm" process="@this" icon="ui-icon-closethick"/>
+        </center>
+    </p:panel>
+    <p:dialog id="soliciDialog" widgetVar="soliciDialog" modal="true" resizable="true">
+        <p:outputPanel id="soliciDetail">
+            <p:panelGrid  columns="2" rendered="#{not empty controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" >
+
+                <h:outputText value="fecha de inicio vacaciones: " />
+                <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" />
+                <h:outputText value="fecha final de vacaciones: " />
+                <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.adelantaPagoHasta}" />
+                <h:outputText value="fecha regreso a laborar: " />
+                <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.fechaSiguienteFinVaca}" />
+                <h:outputText value="Periodo afectado: " />
+                <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.vacacion.periodoCausado}" />
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+</ui:composition>

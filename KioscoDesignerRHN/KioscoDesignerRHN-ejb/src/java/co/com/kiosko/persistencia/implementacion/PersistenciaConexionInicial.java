@@ -22,6 +22,8 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
         } catch (NullPointerException npe) {
             System.out.println("PersistenciaConexionInicial.setearKiosko()");
             System.out.println("Error de nulo");
+        } catch (Exception e){
+            System.out.println("PersistenciaConexionInicial.setearKiosko() "+e.getMessage());
         }
     }
 

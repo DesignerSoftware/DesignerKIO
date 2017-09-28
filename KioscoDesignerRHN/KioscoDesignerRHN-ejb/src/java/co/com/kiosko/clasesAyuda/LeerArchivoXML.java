@@ -41,7 +41,8 @@ public class LeerArchivoXML {
                             eElement.getElementsByTagName("cadena").item(0).getTextContent(),
                             eElement.getElementsByTagName("nit").item(0).getTextContent(),
                             eElement.getElementsByTagName("fondo").item(0).getTextContent(),
-                            eElement.getElementsByTagName("grupo").item(0).getTextContent()
+                            eElement.getElementsByTagName("grupo").item(0).getTextContent(),
+                            eElement.getElementsByTagName("emplnomina").item(0).getTextContent()
                     ));
                 }
             }

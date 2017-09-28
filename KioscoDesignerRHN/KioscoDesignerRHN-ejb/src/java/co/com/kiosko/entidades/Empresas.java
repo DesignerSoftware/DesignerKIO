@@ -39,15 +39,15 @@ public class Empresas implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "NOMBRE")
     private String nombre;
-    @Lob
-    @Column(name = "REGLAMENTO")
-    private String reglamento;
-    @Lob
-    @Column(name = "MANUALADMINISTRATIVO")
-    private String manualadministrativo;
-    @Size(max = 50)
-    @Column(name = "CODIGOALTERNATIVO")
-    private String codigoalternativo;
+//    @Lob
+//    @Column(name = "REGLAMENTO")
+//    private String reglamento;
+//    @Lob
+//    @Column(name = "MANUALADMINISTRATIVO")
+//    private String manualadministrativo;
+//    @Size(max = 50)
+//    @Column(name = "CODIGOALTERNATIVO")
+//    private String codigoalternativo;
     @Size(max = 50)
     @Column(name = "LOGO")
     private String logo;
@@ -98,29 +98,29 @@ public class Empresas implements Serializable {
         this.nombre = nombre;
     }
 
-    public String getReglamento() {
-        return reglamento;
-    }
-
-    public void setReglamento(String reglamento) {
-        this.reglamento = reglamento;
-    }
-
-    public String getManualadministrativo() {
-        return manualadministrativo;
-    }
-
-    public void setManualadministrativo(String manualadministrativo) {
-        this.manualadministrativo = manualadministrativo;
-    }
-
-    public String getCodigoalternativo() {
-        return codigoalternativo;
-    }
-
-    public void setCodigoalternativo(String codigoalternativo) {
-        this.codigoalternativo = codigoalternativo;
-    }
+//    public String getReglamento() {
+//        return reglamento;
+//    }
+//
+//    public void setReglamento(String reglamento) {
+//        this.reglamento = reglamento;
+//    }
+//
+//    public String getManualadministrativo() {
+//        return manualadministrativo;
+//    }
+//
+//    public void setManualadministrativo(String manualadministrativo) {
+//        this.manualadministrativo = manualadministrativo;
+//    }
+//
+//    public String getCodigoalternativo() {
+//        return codigoalternativo;
+//    }
+//
+//    public void setCodigoalternativo(String codigoalternativo) {
+//        this.codigoalternativo = codigoalternativo;
+//    }
 
     public String getLogo() {
         return logo;

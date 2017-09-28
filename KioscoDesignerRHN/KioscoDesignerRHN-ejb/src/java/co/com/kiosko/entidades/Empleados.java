@@ -2,7 +2,6 @@ package co.com.kiosko.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -29,7 +28,7 @@ public class Empleados implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "CODIGOEMPLEADO")
-    private BigInteger codigoempleado;
+    private BigDecimal codigoempleado;
     @Column(name = "FECHACREACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechacreacion;
@@ -53,7 +52,7 @@ public class Empleados implements Serializable {
         this.secuencia = secuencia;
     }
 
-    public Empleados(BigDecimal secuencia, BigInteger codigoempleado) {
+    public Empleados(BigDecimal secuencia, BigDecimal codigoempleado) {
         this.secuencia = secuencia;
         this.codigoempleado = codigoempleado;
     }
@@ -66,11 +65,11 @@ public class Empleados implements Serializable {
         this.secuencia = secuencia;
     }
 
-    public BigInteger getCodigoempleado() {
+    public BigDecimal getCodigoempleado() {
         return codigoempleado;
     }
 
-    public void setCodigoempleado(BigInteger codigoempleado) {
+    public void setCodigoempleado(BigDecimal codigoempleado) {
         this.codigoempleado = codigoempleado;
     }
 

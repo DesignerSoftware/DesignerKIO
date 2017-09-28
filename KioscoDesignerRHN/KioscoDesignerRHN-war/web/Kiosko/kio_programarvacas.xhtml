@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <p:panel header="Programar vacaciones" style="border: none; padding: 0px; margin: 0px; background: transparent;" styleClass="noBorders">
+        <center>
+            <p:panelGrid columns="2">
+                <p:row>
+                    <p:column>
+                        <h:form id="frmempleados">
+                            <p:dataTable id="tbempleados" var="empl" value="#{controladorKio_ProgramarVacas.empleadosACargo}" selection="#{controladorKio_ProgramarVacas.empleadoSelec}" rowKey="#{empl.secuencia}">
+                                <f:facet name="header">
+                                    EMPLEADOS A CARGO
+                                </f:facet>
+                                <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                                <p:column headerText="CODIGO">
+                                    <h:outputText value="#{empl.codigoempleado}" />
+                                </p:column>
+                                <p:column headerText="NOMBRE">
+                                    <h:outputText value="#{empl.persona.nombreCompleto}" />
+                                </p:column>
+                                <f:facet name="footer">
+                                    <p:commandButton process="tbempleados" update=":principalForm:emplDetail" icon="ui-icon-search" value="Mostrar empleado" oncomplete="PF('emplDialog').show()" />
+                                </f:facet>
+                            </p:dataTable>
+                            <p:commandButton value="Buscar empleado" action="#{controladorKio_ProgramarVacas.buscarEmpleado()}"
+                                             update=":principalForm:frmempleados" process="@this" icon="ui-icon-closethick"/>
+                            <p:commandButton value="Mostrar todos" action="#{controladorKio_ProgramarVacas.mostrarEmpleados()}"
+                                             update=":principalForm:frmempleados" process="@this" icon="ui-icon-closethick"/>
+                        </h:form>
+                    </p:column>
+                    <p:column rowspan="2">
+                        <h:form id="frmprog">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel for="finicialdis" value="Fecha inicial de disfrute: " />
+                                <p:calendar id="finicialdis" value="#{controladorKio_ProgramarVacas.solicitud.kioNovedadesSolici.fechaInicialDisfrute}" pattern="dd/MM/yyyy" mask="true" locale="es"/>
+
+                                <p:outputLabel for="dias" value="Días a disfrutar"/>
+                                <p:selectOneMenu id="dias" value="#{controladorKio_ProgramarVacas.diaSelecto}" var="d">
+                                    <f:selectItems value="#{controladorKio_ProgramarVacas.dias}" var="diaS" itemLabel="diaS" itemValue="diaS" />
+                                    <h:outputText value="#{d}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="tiposVaca" value="Tipo de vacación"/>
+                                <p:selectOneMenu id="tiposVaca" value="#{controladorKio_ProgramarVacas.tipoSelecto}" var="tv">
+                                    <f:selectItems value="#{controladorKio_ProgramarVacas.tiposVaca}" var="tipoS" itemLabel="tipoS" itemValue="tipoS" />
+                                    <h:outputText value="#{tv}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="ffindis" value="Fecha fin de disfrute: " />
+                                <p:calendar id="ffindis" value="#{controladorKio_ProgramarVacas.solicitud.kioNovedadesSolici.adelantaPagoHasta}" pattern="dd/MM/yyyy" mask="true" locale="es"/>
+
+                                <p:outputLabel for="fregrelab" value="Fecha regreso a laborar: " />
+                                <p:calendar id="fregrelab" value="#{controladorKio_ProgramarVacas.solicitud.kioNovedadesSolici.fechaSiguienteFinVaca}" pattern="dd/MM/yyyy" mask="true" locale="es"/>
+
+                                <p:outputLabel for="fpago" value="Fecha de pago: " />
+                                <p:calendar id="fpago" value="#{controladorKio_ProgramarVacas.solicitud.kioNovedadesSolici.fechaSiguienteFinVaca}" pattern="dd/MM/yyyy" mask="true" locale="es"/>
+
+                                <p:commandButton value="Programar" action="#{controladorKio_ProgramarVacas.enviarSolicitud()}" 
+                                                 update=":principalForm:frmprog" process="@this"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <h:form id="frmempleprog">
+                        <p:dataTable>
+
+                        </p:dataTable>
+                    </h:form>
+                </p:row>
+            </p:panelGrid>
+        </center>
+    </p:panel>
+
+
+    <p:panel style="border: none; padding: 0px; margin: 0px; background: transparent" styleClass="noBorders">
+        <center>
+            <p:commandButton value="Volver" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
+                             update=":principalForm" process="@this" icon="ui-icon-closethick"/>
+        </center>
+    </p:panel>
+    <p:dialog id="emplDialog" widgetVar="emplDialog" modal="true" resizable="true">
+        <p:outputPanel id="emplDetail">
+            <p:panelGrid  columns="2" rendered="#{not empty controladorKio_ProgramarVacas.empleadoSelec}" >
+
+                <h:outputText value="Codigo empleado: " />
+                <h:outputText value="#{controladorKio_ProgramarVacas.empleadoSelec.codigoempleado}" />
+
+                <h:outputText value="Nombre completo: " />
+                <h:outputText value="#{controladorKio_ProgramarVacas.empleadoSelec.persona.nombreCompleto}" />
+
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+</ui:composition>

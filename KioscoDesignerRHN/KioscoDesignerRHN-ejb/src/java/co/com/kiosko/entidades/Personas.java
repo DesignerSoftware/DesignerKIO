@@ -35,9 +35,9 @@ public class Personas implements Serializable {
     @Column(name = "FECHAVENCIMIENTOCERTIFICADO")
     @Temporal(TemporalType.DATE)
     private Date fechavencimientocertificado;
-    @Column(name = "FECHAFALLECIMIENTO")
-    @Temporal(TemporalType.DATE)
-    private Date fechafallecimiento;
+//    @Column(name = "FECHAFALLECIMIENTO")
+//    @Temporal(TemporalType.DATE)
+//    private Date fechafallecimiento;
     @Size(max = 2)
     @Column(name = "GRUPOSANGUINEO")
     private String gruposanguineo;
@@ -162,13 +162,13 @@ public class Personas implements Serializable {
         this.fechavencimientocertificado = fechavencimientocertificado;
     }
 
-    public Date getFechafallecimiento() {
-        return fechafallecimiento;
-    }
-
-    public void setFechafallecimiento(Date fechafallecimiento) {
-        this.fechafallecimiento = fechafallecimiento;
-    }
+//    public Date getFechafallecimiento() {
+//        return fechafallecimiento;
+//    }
+//
+//    public void setFechafallecimiento(Date fechafallecimiento) {
+//        this.fechafallecimiento = fechafallecimiento;
+//    }
 
     public String getGruposanguineo() {
         return gruposanguineo;

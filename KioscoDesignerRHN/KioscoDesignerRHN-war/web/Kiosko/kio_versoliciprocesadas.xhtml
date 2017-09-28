@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <p:panel header="Histórico de solicitudes de vacaciones" style="border: none; padding: 0px; margin: 0px; background: transparent" styleClass="noBorders">
+        <center>
+            <h:form id="frmempleados">
+                <p:dataTable id="tbempleados" var="empl" 
+                             value="#{controladorKio_VerSoliciProcesadas.empleadosACargo}" 
+                             selection="#{controladorKio_VerSoliciProcesadas.empleadoSelec}" 
+                             rowKey="#{empl.secuencia}" sortBy="#{empl.codigoempleado}"
+                             lazy="true"
+                             scrollable="true" scrollRows="10" scrollHeight="100"
+                             filteredValue="#{controladorKio_VerSoliciProcesadas.emplACargoFiltro}"
+                             liveScroll="true" virtualScroll="true"
+                             >
+                    <f:facet name="header">
+                        EMPLEADOS EN LA NÓMINA
+                    </f:facet>
+                    <p:column selectionMode="single" style="width:16px;text-align:center"/>
+                    <p:column headerText="CODIGO" >
+                        <h:outputText value="#{empl.codigoempleado}" />
+                    </p:column>
+                    <p:column headerText="NOMBRE" >
+                        <h:outputText value="#{empl.persona.nombreCompleto}" />
+                    </p:column>
+                    <f:facet name="footer">
+                        <p:commandButton process="tbempleados" update=":principalForm:emplDetail" icon="ui-icon-search" value="Mostrar solicitudes" oncomplete="PF('emplDialog').show()" />
+                    </f:facet>
+                </p:dataTable>                
+            </h:form>
+        </center>
+    </p:panel>
+
+
+    <p:panel style="border: none; padding: 0px; margin: 0px; background: transparent;" styleClass="noBorders">
+        <center>
+            <p:commandButton value="Volver" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
+                             update=":principalForm" process="@this" icon="ui-icon-closethick"/>
+        </center>
+    </p:panel>
+    <p:dialog id="emplDialog" widgetVar="emplDialog" modal="true" resizable="true">
+        <p:outputPanel id="emplDetail">
+            <p:panelGrid  columns="2" rendered="#{not empty controladorKio_VerSoliciProcesadas.empleadoSelec}" >
+
+                <h:outputText value="Codigo empleado: " />
+                <h:outputText value="#{controladorKio_VerSoliciProcesadas.empleadoSelec.codigoempleado}" />
+
+                <h:outputText value="Nombre completo: " />
+                <h:outputText value="#{controladorKio_VerSoliciProcesadas.empleadoSelec.persona.nombreCompleto}" />
+
+            </p:panelGrid>
+            <p:dataTable id="tbsolici" value="#{controladorKio_VerSoliciProcesadas.soliciEmpleado}"
+                             var="estSolici"
+                    emptyMessage="No hay datos">
+                    <p:column headerText="FECHA ULTIMO CAMBIO">
+                        <h:outputText value="#{estSolici.fechaProcesamiento}" />
+                    </p:column>
+                    <p:column headerText="ESTADO">
+                        <h:outputText value="#{estSolici.estado}" />
+                    </p:column>
+                    <p:column headerText="FECHA DE SOLICITUD">
+                        <h:outputText value="#{estSolici.kioSoliciVaca.fechaGeneracion}" />
+                    </p:column>
+                    <p:column headerText="JEFE">
+                        <h:outputText value="#{estSolici.kioSoliciVaca.empleadoJefe.persona.nombreCompleto}" />
+                    </p:column>
+                    <p:column headerText="FECHA INICIAL">
+                        <h:outputText value="#{estSolici.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" />
+                    </p:column>
+                    <p:column headerText="FECHA FINAL">
+                        <h:outputText value="#{estSolici.kioSoliciVaca.kioNovedadesSolici.adelantaPagoHasta}" />
+                    </p:column>
+                    <p:column headerText="DIAS">
+                        <h:outputText value="#{estSolici.kioSoliciVaca.kioNovedadesSolici.dias}" />
+                    </p:column>
+                    <p:column headerText="FECHA REGRESO A LAB">
+                        <h:outputText value="#{estSolici.kioSoliciVaca.kioNovedadesSolici.fechaSiguienteFinVaca}" />
+                    </p:column>
+                </p:dataTable>
+        </p:outputPanel>
+    </p:dialog>
+</ui:composition>

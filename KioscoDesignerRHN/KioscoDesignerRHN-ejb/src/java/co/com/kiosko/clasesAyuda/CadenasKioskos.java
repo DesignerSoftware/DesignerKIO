@@ -12,14 +12,16 @@ public class CadenasKioskos implements Comparable{
     private String nit;
     private String fondo;
     private String grupo;
+    private String emplnomina;
 
-    public CadenasKioskos(String id, String descripcion, String cadena, String nit, String fondo, String grupo) {
+    public CadenasKioskos(String id, String descripcion, String cadena, String nit, String fondo, String grupo, String emplnomina) {
         this.id = id;
         this.descripcion = descripcion;
         this.cadena = cadena;
         this.nit = nit;
         this.fondo = fondo;
         this.grupo = grupo;
+        this.emplnomina = emplnomina;
     }
 
     public String getCadena() {
@@ -70,6 +72,14 @@ public class CadenasKioskos implements Comparable{
         this.grupo = grupo;
     }
 
+    public String getEmplnomina() {
+        return emplnomina;
+    }
+
+    public void setEmplnomina(String emplnomina) {
+        this.emplnomina = emplnomina;
+    }
+    
     @Override
     public int compareTo(Object o) {
         int resultado;

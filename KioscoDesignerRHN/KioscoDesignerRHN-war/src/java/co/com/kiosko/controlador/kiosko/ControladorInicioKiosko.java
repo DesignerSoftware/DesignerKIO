@@ -6,7 +6,6 @@ import co.com.kiosko.controlador.ingreso.ControladorIngreso;
 import co.com.kiosko.utilidadesUI.MensajesUI;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
 import java.io.*;
-import java.math.BigInteger;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -20,6 +19,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import co.com.kiosko.clasesAyuda.CadenasKioskos;
 import co.com.kiosko.clasesAyuda.LeerArchivoXML;
+import java.math.BigDecimal;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -40,7 +40,7 @@ public class ControladorInicioKiosko implements Serializable {
     private StreamedContent fotoEmpleado;
     private StreamedContent logoEmpresa;
     private String pathFoto;
-    private BigInteger identificacionEmpleado;
+    private BigDecimal identificacionEmpleado;
     private String nitEmpresa;
     private String fondoEmpresa;
 
