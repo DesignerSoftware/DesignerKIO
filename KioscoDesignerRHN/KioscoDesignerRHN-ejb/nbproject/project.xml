@@ -18,6 +18,7 @@
             <included-library dirs="200">file.reference.joda-time-2.4.jar</included-library>
             <included-library dirs="200">file.reference.jasperreports-javaflow-6.3.1.jar</included-library>
             <included-library dirs="200">file.reference.Fuentes_Reportes.jar</included-library>
+            <included-library dirs="200">file.reference.ojdbc7.jar</included-library>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>

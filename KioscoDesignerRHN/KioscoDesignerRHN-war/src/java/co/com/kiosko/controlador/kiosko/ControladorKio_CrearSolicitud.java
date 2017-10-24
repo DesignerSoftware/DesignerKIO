@@ -7,11 +7,13 @@ import co.com.kiosko.controlador.ingreso.ControladorIngreso;
 //import co.com.kiosko.entidades.Empleados;
 import co.com.kiosko.entidades.*;
 import co.com.kiosko.utilidadesUI.MensajesUI;
+import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
 import java.io.Serializable;
 import java.math.BigInteger;
 //import java.text.SimpleDateFormat;
 //import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 //import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +21,9 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 //import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
+//import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +35,7 @@ import org.primefaces.event.SelectEvent;
  * @author Edwin
  */
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class ControladorKio_CrearSolicitud implements Serializable {
 
     @EJB
@@ -50,6 +54,8 @@ public class ControladorKio_CrearSolicitud implements Serializable {
     private KioSoliciVacas solicitud;
     private List<VwVacaPendientesEmpleados> listaVaca;
     private VwVacaPendientesEmpleados perVacaSelecto;
+    private String mensajeCreacion;
+    private String grupoEmpre;
 //    private Date fechaContratacion;
 
     public ControladorKio_CrearSolicitud() {
@@ -68,6 +74,7 @@ public class ControladorKio_CrearSolicitud implements Serializable {
             FacesContext x = FacesContext.getCurrentInstance();
             HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
             empleado = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getConexionEmpleado().getEmpleado();
+            grupoEmpre = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getGrupoSeleccionado();
             crearSolicitud();
             consultaIniciales(ses);
             //System.out.println("cantidad periodos: " + listaVaca.size());
@@ -100,7 +107,7 @@ public class ControladorKio_CrearSolicitud implements Serializable {
             if (solicitud.getEmpleadoJefe() != null) {
                 System.out.println("Empleado jefe: " + solicitud.getEmpleadoJefe().getPersona().getNombreCompleto());
             } else {
-                System.out.println("El Empleado jefe esta vacio " );
+                System.out.println("El Empleado jefe esta vacio ");
             }
         } catch (Exception e) {
             String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
@@ -129,6 +136,18 @@ public class ControladorKio_CrearSolicitud implements Serializable {
 //        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 //        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Date Selected", format.format(event.getObject())));
         System.out.println("Fecha seleccionada: " + event.getObject());
+        Calendar cl = Calendar.getInstance();
+        cl.setTime(administrarCrearSolicitud.fechaPago(empleado));
+        if (!validaFechaPago()) {
+            MensajesUI.error("La fecha seleccionada es inferior a la última fecha de pago.");
+            solicitud.getKioNovedadesSolici().setFechaInicialDisfrute(new Date());
+        }
+    }
+
+    private boolean validaFechaPago() {
+        Calendar cl = Calendar.getInstance();
+        cl.setTime(administrarCrearSolicitud.fechaPago(empleado));
+        return solicitud.getKioNovedadesSolici().getFechaInicialDisfrute().after(cl.getTime());
     }
 
     public void procesarDiasSelec(AjaxBehaviorEvent event) {
@@ -159,16 +178,21 @@ public class ControladorKio_CrearSolicitud implements Serializable {
     public void guardarSolicitud() {
         System.out.println(this.getClass().getName() + ".guardarSolicitud()");
         boolean res = false;
-        try {
-            administrarCrearSolicitud.guardarSolicitud(solicitud, empleado);
-            res = true;
-        } catch (Exception e) {
-            String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
-            System.out.println("Error guardarSolicitud: " + msj);
-            MensajesUI.error(msj);
-        }
-        if (res) {
-            MensajesUI.info("Solicitud guardada correctamente");
+        if (!validaFechaPago()) {
+            MensajesUI.error("La fecha seleccionada es inferior a la última fecha de pago.");
+            solicitud.getKioNovedadesSolici().setFechaInicialDisfrute(new Date());
+        } else {
+            try {
+                administrarCrearSolicitud.guardarSolicitud(solicitud, empleado);
+                res = true;
+            } catch (Exception e) {
+                String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
+                System.out.println("Error guardarSolicitud: " + msj);
+                MensajesUI.error(msj);
+            }
+            if (res) {
+                MensajesUI.info("Solicitud guardada correctamente");
+            }
         }
         //Administrar guardar solicitud junto con la novedad y el estado.
         //hay que manejar las excepciones provocadas por:
@@ -179,42 +203,74 @@ public class ControladorKio_CrearSolicitud implements Serializable {
     public void enviarSolicitud() {
         System.out.println(this.getClass().getName() + ".enviarSolicitud()");
         boolean res = false;
-        try {
-            administrarCrearSolicitud.enviarSolicitud(solicitud, empleado);
-            res = true;
-        } catch (Exception e) {
-            String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
-            System.out.println("Error guardarSolicitud: " + msj);
-            MensajesUI.error(msj);
-        }
-        if (res) {
+        if (!validaFechaPago()) {
+            mensajeCreacion = "La fecha seleccionada es inferior a la última fecha de pago.";
+            MensajesUI.error(mensajeCreacion);
+            solicitud.getKioNovedadesSolici().setFechaInicialDisfrute(new Date());
+        } else {
             try {
-                HttpServletRequest origRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-                String mensaje = "Se acaba de crear una solicitud de vacaciones en el módulo de Kiosco "
-                        + "por favor llevar el caso desde su cuenta de usuario en el Kiosco de nómina "
-                        + "y continuar con el proceso. "
-                        + "La persona que creó la solicitud es: "
-                        + empleado.getPersona().getNumerodocumento()
-                        + " " + empleado.getPersona().getNombreCompleto()
-                        + " la persona a cargo de dar aprobación es: "
-                        + solicitud.getEmpleadoJefe().getPersona().getNumerodocumento()
-                        + " " + solicitud.getEmpleadoJefe().getPersona().getNombreCompleto()
-                        + " por favor seguir el proceso en: "
-                        + origRequest.getRequestURL();
-                administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
-                        empleado.getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
-                MensajesUI.info("Solicitud enviada correctamente");
+                administrarCrearSolicitud.enviarSolicitud(solicitud, empleado);
+                res = true;
             } catch (Exception e) {
-                String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
-                System.out.println("Error guardarSolicitud: " + msj);
-                MensajesUI.error(msj);
+//                String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
+                mensajeCreacion = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
+                System.out.println("Error guardarSolicitud: " + mensajeCreacion);
+//                MensajesUI.error(msj);
+                MensajesUI.error(mensajeCreacion);
+            }
+            if (res) {
+                try {
+                    FacesContext context = FacesContext.getCurrentInstance();
+                    ExternalContext ec = context.getExternalContext();
+                    String mensaje = "Se acaba de crear una solicitud de vacaciones en el módulo de Kiosco. \n"
+                            + "Por favor llevar el caso desde su cuenta de usuario en el Kiosco de nómina "
+                            + "y continuar con el proceso. \n"
+                            + "La persona que creó la solicitud es: "
+                            + empleado.getPersona().getNumerodocumento()
+                            + " " + empleado.getPersona().getNombreCompleto() + "\n";
+                    if (solicitud.getEmpleadoJefe() != null) {
+                        mensaje = mensaje + "La persona a cargo de dar aprobación es: "
+                                + solicitud.getEmpleadoJefe().getPersona().getNumerodocumento()
+                                + " " + solicitud.getEmpleadoJefe().getPersona().getNombreCompleto()
+                                + "\n";
+                    }
+                    mensaje = mensaje + "Por favor seguir el proceso en: "
+                            + ec.getRequestScheme()+ ec.getApplicationContextPath() + ec.getRequestServerPort()
+                            + ec.getRequestContextPath() + "/" + "?grupo=" + grupoEmpre;
+                    String respuesta1 = "";
+                    String respuesta2 = "";
+                    if (empleado.getPersona().getEmail() != null && !empleado.getPersona().getEmail().isEmpty()) {
+                        administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
+                                empleado.getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
+                        respuesta1 = "Solicitud enviada correctamente al empleado";
+                    } else {
+                        respuesta1 = "El empleado no tiene correo registrado";
+                    }
+                    if (solicitud.getEmpleadoJefe() != null) {
+                        if (solicitud.getEmpleadoJefe().getPersona().getEmail() != null && !solicitud.getEmpleadoJefe().getPersona().getEmail().isEmpty()) {
+                            administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
+                                    solicitud.getEmpleadoJefe().getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
+                            respuesta2 = " Solicitud enviada correctamente al jefe inmediato";
+                        } else {
+                            respuesta2 = " El jefe inmediato no tiene correo";
+                        }
+                    } else {
+                        respuesta2 = " No hay jefe inmediato relacionado";
+                    }
+                    String respuesta = respuesta1 + respuesta2;
+                    mensajeCreacion = respuesta;
+                    MensajesUI.info(respuesta);
+                } catch (Exception e) {
+//                    String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
+                    mensajeCreacion = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
+                    System.out.println("Error guardarSolicitud: " + mensajeCreacion);
+//                    MensajesUI.error(msj);
+                    MensajesUI.error(mensajeCreacion);
+                }
             }
         }
-        //Administrar enviar la solicitud por correo para notificar al jefe. 
-        //También debe generar un registro del estado de la solicitud.
-        //Hay que manejar las excepciones que se presentan por:
-        //- no se pudo enviar el correo.
-        //- no se pudo guardar el registro del estado.
+        PrimefacesContextUI.ejecutar("PF('creandoSolici').hide()");
+        PrimefacesContextUI.ejecutar("PF('resulEnvio').show()");
     }
 
     public void limpiarSolicitud() {
@@ -318,6 +374,14 @@ public class ControladorKio_CrearSolicitud implements Serializable {
         this.topeDias = this.perVacaSelecto.getDiasPendientes().intValue();
         System.out.println("dias pendientes del periodo: " + this.perVacaSelecto.getDiasPendientes());
         solicitud.getKioNovedadesSolici().setVacacion(this.perVacaSelecto);
+    }
+
+    public String getMensajeCreacion() {
+        return mensajeCreacion;
+    }
+
+    public void setMensajeCreacion(String mensajeCreacion) {
+        this.mensajeCreacion = mensajeCreacion;
     }
 
 }

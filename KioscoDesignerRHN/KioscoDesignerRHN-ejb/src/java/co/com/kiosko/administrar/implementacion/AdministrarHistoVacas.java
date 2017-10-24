@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package co.com.kiosko.administrar.implementacion;
 
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
@@ -15,6 +10,7 @@ import co.com.kiosko.entidades.Empleados;
 import co.com.kiosko.entidades.Empresas;
 import co.com.kiosko.entidades.KioEstadosSolici;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaKioEstadosSolici;
+import java.util.ArrayList;
 //import java.math.BigDecimal;
 //import java.math.BigInteger;
 import java.util.List;
@@ -29,24 +25,25 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas {
 
     private EntityManagerFactory emf;
     private String idSesion;
-    
+
     @EJB
     private IAdministrarSesiones administrarSesiones;
     @EJB
     private IPersistenciaEmpleados persistenciaEmpleados;
     @EJB
     private IPersistenciaKioEstadosSolici persistenciaKioEstadosSolici;
-    
+
     @Override
     public void obtenerConexion(String idSesion) {
         emf = administrarSesiones.obtenerConexionSesion(idSesion);
     }
+
     @Override
     public List<Empleados> consultarEmpleadosEmpresa(long nit) throws Exception {
         EntityManager em = emf.createEntityManager();
-        try{
+        try {
             return persistenciaEmpleados.consultarEmpleadosEmpresa(em, nit);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw e;
         } finally {
             if (em != null && em.isOpen()) {
@@ -54,14 +51,15 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas {
             }
         }
     }
+
     @Override
     public List<KioEstadosSolici> consultarEstadoSoliciEmpl(Empleados empl) throws Exception {
-        System.out.println(this.getClass().getName()+".consultarEstadoSoliciEmpl()");
-        System.out.println("consultarEstadoSoliciEmpl: Empleado: "+empl.getSecuencia());
+        System.out.println(this.getClass().getName() + ".consultarEstadoSoliciEmpl()");
+        System.out.println("consultarEstadoSoliciEmpl: Empleado: " + empl.getSecuencia());
         EntityManager em = emf.createEntityManager();
-        try{
+        try {
             return persistenciaKioEstadosSolici.consultarEstadosXEmpl(em, empl.getSecuencia());
-        } catch (Exception e){
+        } catch (Exception e) {
             throw e;
         } finally {
             if (em != null && em.isOpen()) {
@@ -69,19 +67,81 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas {
             }
         }
     }
+
     @Override
     public List<KioEstadosSolici> consultarEstadoSoliciEmpre(Empresas empresa) throws Exception {
-        System.out.println(this.getClass().getName()+".consultarEstadoSoliciEmpre()");
-        System.out.println("consultarEstadoSoliciEmpre: Empresa: "+empresa.getSecuencia());
+        System.out.println(this.getClass().getName() + ".consultarEstadoSoliciEmpre()");
+        System.out.println("consultarEstadoSoliciEmpre: Empresa: " + empresa.getSecuencia());
         EntityManager em = emf.createEntityManager();
-        try{
+        try {
             return persistenciaKioEstadosSolici.consultarEstadosXEmpre(em, empresa.getSecuencia());
-        } catch (Exception e){
+        } catch (Exception e) {
             throw e;
         } finally {
             if (em != null && em.isOpen()) {
                 em.close();
             }
         }
+    }
+
+    @Override
+    public List<KioEstadosSolici> consultarEstadoSoliciEmpre(Empresas empresa, String estado) throws Exception {
+        System.out.println(this.getClass().getName() + ".consultarEstadoSoliciEmpre()-2");
+        System.out.println("consultarEstadoSoliciEmpre: Empresa: " + empresa.getSecuencia());
+        EntityManager em = emf.createEntityManager();
+        try {
+            return persistenciaKioEstadosSolici.consultarEstadosXEmpre(em, empresa.getSecuencia(), estado);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+    }
+
+    @Override
+    public List<KioEstadosSolici> consultarEstadoSoliciEmpre(Empresas empresa, String estado, Empleados emplJefe) throws Exception {
+        System.out.println(this.getClass().getName() + ".consultarEstadoSoliciEmpre()-3");
+        System.out.println("consultarEstadoSoliciEmpre: Empresa: " + empresa.getSecuencia());
+        ArrayList<String> listaEstados = new ArrayList<String>();
+        if ("PROCESADO".equalsIgnoreCase(estado)) {
+            listaEstados.add("AUTORIZADO");
+            listaEstados.add("LIQUIDADO");
+            listaEstados.add("RECHAZADO");
+        }
+        if ("SIN PROCESAR".equalsIgnoreCase(estado)) {
+            listaEstados.add("ENVIADO");
+        } else {
+            listaEstados.add(estado);
+        }
+        ArrayList listaResul = new ArrayList<KioEstadosSolici>();
+        List listaTMP;
+        for (int i = 0; i < listaEstados.size(); i++) {
+            EntityManager em = emf.createEntityManager();
+            if (emplJefe == null) {
+                try {
+                    listaTMP = persistenciaKioEstadosSolici.consultarEstadosXEmpre(em, empresa.getSecuencia(), listaEstados.get(i));
+                } catch (Exception e) {
+                    throw e;
+                } finally {
+                    if (em != null && em.isOpen()) {
+                        em.close();
+                    }
+                }
+            } else {
+                try {
+                    listaTMP = persistenciaKioEstadosSolici.consultarEstadosXEmpre(em, empresa.getSecuencia(), listaEstados.get(i), emplJefe.getSecuencia());
+                } catch (Exception e) {
+                    throw e;
+                } finally {
+                    if (em != null && em.isOpen()) {
+                        em.close();
+                    }
+                }
+            }
+            listaResul.addAll(listaTMP);
+        }
+        return listaResul;
     }
 }

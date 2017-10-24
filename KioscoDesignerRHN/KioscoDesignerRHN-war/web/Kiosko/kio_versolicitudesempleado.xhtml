@@ -21,19 +21,23 @@
                             </f:facet>
                             <p:column selectionMode="single" style="width:16px; text-align:center;"/>
                             <p:column headerText="FECHA CREACION">
-                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" />
+                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
                             </p:column>
                             <p:column headerText="ACTIVA">
-                                <h:outputText value="#{esg.kioSoliciVaca.activa}" />
+                                <h:outputText value="#{esg.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
                             </p:column>
                             <p:column headerText="FECHA PROC">
-                                <h:outputText value="#{esg.fechaProcesamiento}" />
+                                <h:outputText value="#{esg.fechaProcesamiento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
                             </p:column>
-                            <p:column headerText="FECHA PROC">
+                            <p:column headerText="ESTADO">
                                 <h:outputText value="#{esg.estado}" />
                             </p:column>
                             <p:column headerText="EMPLEADO EJECUTA">
-                                <h:outputText value="#{esg.empleadoEjecuta}" />
+                                <h:outputText value="#{esg.empleadoEjecuta.persona.nombreCompleto}" />
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton process="tbsoliciguarda" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
@@ -50,19 +54,23 @@
                             </f:facet>
                             <p:column selectionMode="single" style="width:16px; text-align:center;"/>
                             <p:column headerText="FECHA CREACION">
-                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" />
+                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
                             </p:column>
                             <p:column headerText="ACTIVA">
-                                <h:outputText value="#{esg.kioSoliciVaca.activa}" />
+                                <h:outputText value="#{esg.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
                             </p:column>
                             <p:column headerText="FECHA PROC">
-                                <h:outputText value="#{esg.fechaProcesamiento}" />
+                                <h:outputText value="#{esg.fechaProcesamiento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
                             </p:column>
-                            <p:column headerText="FECHA PROC">
+                            <p:column headerText="ESTADO">
                                 <h:outputText value="#{esg.estado}" />
                             </p:column>
                             <p:column headerText="EMPLEADO EJECUTA">
-                                <h:outputText value="#{esg.empleadoEjecuta}" />
+                                <h:outputText value="#{esg.empleadoEjecuta.persona.nombreCompleto}" />
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton process="tbsolicienvia" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
@@ -79,19 +87,23 @@
                             </f:facet>
                             <p:column selectionMode="single" style="width:16px; text-align:center;"/>
                             <p:column headerText="FECHA CREACION">
-                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" />
+                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
                             </p:column>
                             <p:column headerText="ACTIVA">
-                                <h:outputText value="#{esg.kioSoliciVaca.activa}" />
+                                <h:outputText value="#{esg.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
                             </p:column>
                             <p:column headerText="FECHA PROC">
-                                <h:outputText value="#{esg.fechaProcesamiento}" />
+                                <h:outputText value="#{esg.fechaProcesamiento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
                             </p:column>
-                            <p:column headerText="FECHA PROC">
+                            <p:column headerText="ESTADO">
                                 <h:outputText value="#{esg.estado}" />
                             </p:column>
                             <p:column headerText="EMPLEADO EJECUTA">
-                                <h:outputText value="#{esg.empleadoEjecuta}" />
+                                <h:outputText value="#{esg.empleadoEjecuta.persona.nombreCompleto}" />
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton process="tbsoliciaprobada" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
@@ -108,19 +120,23 @@
                             </f:facet>
                             <p:column selectionMode="single" style="width:16px; text-align:center;"/>
                             <p:column headerText="FECHA CREACION">
-                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" />
+                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
                             </p:column>
                             <p:column headerText="ACTIVA">
-                                <h:outputText value="#{esg.kioSoliciVaca.activa}" />
+                                <h:outputText value="#{esg.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
                             </p:column>
                             <p:column headerText="FECHA PROC">
-                                <h:outputText value="#{esg.fechaProcesamiento}" />
+                                <h:outputText value="#{esg.fechaProcesamiento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
                             </p:column>
-                            <p:column headerText="FECHA PROC">
+                            <p:column headerText="ESTADO">
                                 <h:outputText value="#{esg.estado}" />
                             </p:column>
                             <p:column headerText="EMPLEADO EJECUTA">
-                                <h:outputText value="#{esg.empleadoEjecuta}" />
+                                <h:outputText value="#{esg.empleadoEjecuta.persona.nombreCompleto}" />
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton process="tbsolicirechazada" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
@@ -137,19 +153,23 @@
                             </f:facet>
                             <p:column selectionMode="single" style="width:16px; text-align:center;"/>
                             <p:column headerText="FECHA CREACION">
-                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" />
+                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
                             </p:column>
                             <p:column headerText="ACTIVA">
-                                <h:outputText value="#{esg.kioSoliciVaca.activa}" />
+                                <h:outputText value="#{esg.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
                             </p:column>
                             <p:column headerText="FECHA PROC">
-                                <h:outputText value="#{esg.fechaProcesamiento}" />
+                                <h:outputText value="#{esg.fechaProcesamiento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
                             </p:column>
-                            <p:column headerText="FECHA PROC">
+                            <p:column headerText="ESTADO">
                                 <h:outputText value="#{esg.estado}" />
                             </p:column>
                             <p:column headerText="EMPLEADO EJECUTA">
-                                <h:outputText value="#{esg.empleadoEjecuta}" />
+                                <h:outputText value="#{esg.empleadoEjecuta.persona.nombreCompleto}" />
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton process="tbsoliciliqui" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
@@ -166,19 +186,23 @@
                             </f:facet>
                             <p:column selectionMode="single" style="width:16px; text-align:center;"/>
                             <p:column headerText="FECHA CREACION">
-                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" />
+                                <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
                             </p:column>
                             <p:column headerText="ACTIVA">
-                                <h:outputText value="#{esg.kioSoliciVaca.activa}" />
+                                <h:outputText value="#{esg.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
                             </p:column>
                             <p:column headerText="FECHA PROC">
-                                <h:outputText value="#{esg.fechaProcesamiento}" />
+                                <h:outputText value="#{esg.fechaProcesamiento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
                             </p:column>
-                            <p:column headerText="FECHA PROC">
+                            <p:column headerText="ESTADO">
                                 <h:outputText value="#{esg.estado}" />
                             </p:column>
                             <p:column headerText="EMPLEADO EJECUTA">
-                                <h:outputText value="#{esg.empleadoEjecuta}" />
+                                <h:outputText value="#{esg.empleadoEjecuta.persona.nombreCompleto}" />
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton process="tbsolicicancelada" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
@@ -191,7 +215,7 @@
     </p:panel>
 
 
-    <p:panel style="border: none; padding: 0px; margin: 0px; background: transparent" styleClass="noBorders">
+    <p:panel style="border: none; padding: 0px; margin: 0px; background: transparent;" styleClass="noBorders">
         <center>
             <p:commandButton value="Volver" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
                              update=":principalForm" process="@this" icon="ui-icon-closethick"/>
@@ -202,11 +226,17 @@
             <p:panelGrid  columns="2" rendered="#{not empty controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" >
 
                 <h:outputText value="fecha de inicio vacaciones: " />
-                <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" />
+                <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText> 
                 <h:outputText value="fecha final de vacaciones: " />
-                <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.adelantaPagoHasta}" />
+                <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.adelantaPagoHasta}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText> 
                 <h:outputText value="fecha regreso a laborar: " />
-                <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.fechaSiguienteFinVaca}" />
+                <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.fechaSiguienteFinVaca}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText> 
                 <h:outputText value="Periodo afectado: " />
                 <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.vacacion.periodoCausado}" />
             </p:panelGrid>

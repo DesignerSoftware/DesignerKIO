@@ -180,7 +180,7 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
     }
 
     private List<BigDecimal> consultarSecEmplEmpre(EntityManager em, long nit) throws Exception {
-        System.out.println(this.getClass().getName()+".consultarSecEmplEmpre()");
+        System.out.println(this.getClass().getName() + ".consultarSecEmplEmpre()");
         String sqlQuery = "select e.secuencia "
                 + "from Empleados e "
                 + "where e.empresa = (select secuencia from empresas where nit = ? ) "
@@ -202,40 +202,92 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
             throw pe;
         } catch (IllegalStateException ise) {
             throw ise;
-        } 
+        }
+    }
+
+//    @Override
+//    public List consultarEmpleadosEmpresa(EntityManager em, long nit) throws Exception {
+//        System.out.println(this.getClass().getName() + ".consultarEmpleadosEmpresa()");
+//        String sqlQuery = "select e "
+//                + "from Empleados e "
+//                + "where e.empresa.nit = :secEmpleado ";
+//        List<Empleados> empleados = new ArrayList<Empleados>();
+//        List<BigDecimal> secsEmpleados;
+//        try {
+//            secsEmpleados = consultarSecEmplEmpre(em, nit);
+//            for (int i = 0; i < secsEmpleados.size(); i++) {
+//                Query query = em.createQuery(sqlQuery);
+//                query.setParameter("secEmpleado", secsEmpleados.get(i));
+//                Object res = query.getSingleResult();
+//                if (res instanceof Empleados) {
+//                    empleados.add((Empleados) res);
+//                } else {
+//                    throw new Exception("El resultado obtenido no es un empleado sec: " + secsEmpleados.get(i));
+//                }
+//            }
+//            return empleados;
+//        } catch (PersistenceException pe) {
+//            throw pe;
+//        } catch (NullPointerException npe) {
+//            throw npe;
+//        } catch (IllegalStateException ise) {
+//            throw ise;
+//        } 
+//    }
+    
+    @Override
+    public List consultarEmpleadosEmpresa(EntityManager em, long nit) throws Exception {
+        System.out.println(this.getClass().getName() + ".consultarEmpleadosEmpresa()");
+        String sqlQuery = "select e.SECUENCIA, e.CODIGOEMPLEADO, "
+                + "e.FECHACREACION, e.CODIGOALTERNATIVO, e.USUARIOBD, e.PERSONA, "
+                + "e.EMPRESA "
+                + "from Empleados e "
+                + "where e.empresa = (select secuencia from empresas where nit = ? ) "
+                + "and exists (select vtt.secuencia "
+                + "  from vigenciastipostrabajadores vtt, tipostrabajadores tt "
+                + "  where vtt.tipotrabajador = tt.secuencia "
+                + "  and tt.tipo in ('ACTIVO', 'PENSIONADO') "
+                + "  and vtt.fechavigencia = (select max(vtti.fechavigencia) "
+                + "    from vigenciastipostrabajadores vtti "
+                + "    where vtti.empleado = vtt.empleado "
+                + "    and vtti.fechavigencia <= sysdate) "
+                + "  and vtt.empleado = e.secuencia )";
+        List<Empleados> empleados = new ArrayList<Empleados>();
+        try {
+            Query query = em.createNativeQuery(sqlQuery, Empleados.class);
+            query.setParameter(1, nit);
+            empleados = query.getResultList();
+            return empleados;
+        } catch (PersistenceException pe) {
+            throw pe;
+        } catch (IllegalStateException ise) {
+            throw ise;
+        }
     }
 
     @Override
-    public List consultarEmpleadosEmpresa(EntityManager em, long nit) throws Exception {
-        System.out.println(this.getClass().getName()+".consultarEmpleadosEmpresa()");
+    public Empleados consultaEmpleadoxSec(EntityManager em, BigDecimal secEmpleado) throws Exception {
+        System.out.println(this.getClass().getName() + ".consultaEmpleadoxSec()");
         String sqlQuery = "select e "
                 + "from Empleados e "
                 + "where e.secuencia = :secEmpleado ";
-        List<Empleados> empleados = new ArrayList<Empleados>();
-        List<BigDecimal> secsEmpleados;
+        Empleados empleado = null;
         try {
-            secsEmpleados = consultarSecEmplEmpre(em, nit);
-            for (int i = 0; i < secsEmpleados.size(); i++) {
-                Query query = em.createQuery(sqlQuery);
-                query.setParameter("secEmpleado", secsEmpleados.get(i));
-                Object res = query.getSingleResult();
-                if (res instanceof Empleados) {
-                    empleados.add( (Empleados) res);
-                } else {
-                    throw new Exception("El resultado obtenido no es un empleado sec: " + secsEmpleados.get(i) );
-                }
+            Query query = em.createQuery(sqlQuery);
+            query.setParameter("secEmpleado", secEmpleado);
+            Object res = query.getSingleResult();
+            if (res instanceof Empleados) {
+                empleado = (Empleados) res;
+            } else {
+                throw new Exception("El resultado obtenido no es un empleado sec: " + secEmpleado);
             }
-            return empleados;
+            return empleado;
         } catch (PersistenceException pe) {
             throw pe;
         } catch (NullPointerException npe) {
             throw npe;
         } catch (IllegalStateException ise) {
             throw ise;
-        } finally {
-            if (em != null && em.isOpen()) {
-                em.close();
-            }
-        }
+        } 
     }
 }

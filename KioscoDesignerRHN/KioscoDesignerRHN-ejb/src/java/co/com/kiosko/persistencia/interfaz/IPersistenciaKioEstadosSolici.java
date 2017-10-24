@@ -42,11 +42,12 @@ public interface IPersistenciaKioEstadosSolici {
      * @param solicitud
      * @param secEmplEjecuta Secuencia del empleado que ejecuta la creación de la solicitud.
      * @param estado Puede ser: GUARDADO, ENVIADO, AUTORIZADO, LIQUIDADO, RECHAZADO, CANCELADO
+     * @param motivo Razón por la cual rechaza la solicitud
      * @throws EntityExistsException Si la entidad ya existe en la base de datos.
      * @throws TransactionRolledbackLocalException Si la transacción fue abortada.
      * @throws Exception Si hay error en general.s
      */
-    public void crearEstadoSolicitud(EntityManager em, KioSoliciVacas solicitud, BigDecimal secEmplEjecuta, String estado) throws EntityExistsException, TransactionRolledbackLocalException, Exception ;
+    public void crearEstadoSolicitud(EntityManager em, KioSoliciVacas solicitud, BigDecimal secEmplEjecuta, String estado, String motivo) throws EntityExistsException, TransactionRolledbackLocalException, Exception ;
     /**
      * Método que consulta los estados determinados de las solicitudes que tiene asociadas un empleado.
      * @param em EntityManager
@@ -63,4 +64,35 @@ public interface IPersistenciaKioEstadosSolici {
      * @throws Exception 
      */
     public List<KioEstadosSolici> consultarEstadosXEmpre(EntityManager em, BigInteger secEmpresa ) throws Exception;
+    /**
+     * Método que realiza la consulta de los estados de solicitud con determinado estado para determinada empresa.
+     * @param em
+     * @param secEmpresa
+     * @param estado
+     * @return
+     * @throws Exception 
+     */
+    public List<KioEstadosSolici> consultarEstadosXEmpre(EntityManager em, BigInteger secEmpresa, String estado) throws Exception ;
+    /**
+     * Método que realiza la consulta de los estados de solicitud con determinado estado para determinada empresa 
+     * y para determinado jefe.
+     * @param em
+     * @param secEmpresa
+     * @param estado
+     * @param secJefe
+     * @return
+     * @throws Exception 
+     */
+    public List<KioEstadosSolici> consultarEstadosXEmpre(EntityManager em, BigInteger secEmpresa, String estado, BigDecimal secJefe) throws Exception;
+    /**
+     * Método para crear la novedad de vacaciones en el sistema de nómina Designer.NOM
+     * Recibe la solicitud a utilizar para crear la novedad.
+     * @param em
+     * @param solicitud
+     * @return respuesta del paquete
+     * @throws EntityExistsException
+     * @throws TransactionRolledbackLocalException
+     * @throws Exception 
+     */
+    public String registrarNovedad(EntityManager em, KioSoliciVacas solicitud) throws EntityExistsException, TransactionRolledbackLocalException, Exception;
 }

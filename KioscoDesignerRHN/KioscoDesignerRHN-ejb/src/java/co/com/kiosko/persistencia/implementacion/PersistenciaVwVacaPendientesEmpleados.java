@@ -4,7 +4,7 @@ import co.com.kiosko.persistencia.interfaz.IPersistenciaVwVacaPendientesEmpleado
 import co.com.kiosko.entidades.VwVacaPendientesEmpleados;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.DateFormat;
+//import java.text.DateFormat;
 //import java.sql.SQLDataException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -395,8 +395,8 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
     public Date consultaFechaUltimoPago(EntityManager em, BigDecimal secEmpleado) {
         System.out.println(this.getClass().getName() + "." + "consultaFechaUltimoPago" + "()");
         String consulta = "SELECT GREATEST("
-                + "CORTESPROCESOS_PKG.CAPTURARCORTEPROCESO( ? , 1), "
-                + "NVL( CORTESPROCESOS_PKG.CAPTURARCORTEPROCESO( ? , 80), CORTESPROCESOS_PKG.CAPTURARCORTEPROCESO( ? , 1)"
+                + "CORTESPROCESOS_PKG.CAPTURARCORTEPROCESO(?, 1), "
+                + "NVL( CORTESPROCESOS_PKG.CAPTURARCORTEPROCESO(?, 80), CORTESPROCESOS_PKG.CAPTURARCORTEPROCESO(?, 1)"
                 + ")) "
                 + "FROM DUAL ";
         Query query = null;

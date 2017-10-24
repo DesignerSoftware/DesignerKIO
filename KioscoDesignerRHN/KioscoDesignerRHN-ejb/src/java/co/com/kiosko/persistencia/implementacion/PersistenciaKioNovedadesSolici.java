@@ -45,6 +45,23 @@ public class PersistenciaKioNovedadesSolici implements IPersistenciaKioNovedades
             throw e;
         }
     }
+    
+    @Override
+    public void modificarNovedadSolici(EntityManager em, KioNovedadesSolici novedadSolici) throws EntityExistsException, TransactionRolledbackLocalException, Exception {
+        System.out.println(this.getClass().getName() + ".modificarNovedadSolici()");
+        System.out.println("modificarNovedadSolici-novedadSolici: "+novedadSolici);
+        em.clear();
+        try {
+            em.merge(novedadSolici);
+            em.flush();
+        } catch (TransactionRolledbackLocalException trle) {
+            System.out.println("Error modificarNovedadSolici: " + trle);
+            throw trle;
+        } catch (Exception e) {
+            System.out.println("Error modificarNovedadSolici: " + e);
+            throw e;
+        }
+    }
 
     @Override
     public KioNovedadesSolici recargarNovedadSolici(EntityManager em, KioNovedadesSolici novedadSolici) throws NoResultException, NonUniqueResultException, IllegalStateException {

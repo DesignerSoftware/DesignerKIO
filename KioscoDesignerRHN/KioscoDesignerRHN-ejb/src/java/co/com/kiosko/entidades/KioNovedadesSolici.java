@@ -63,14 +63,21 @@ public class KioNovedadesSolici implements Serializable {
     @Column(name = "FECHASISTEMA")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaSistema;
+    @Column(name = "FECHAPAGO")
+    @Temporal(TemporalType.DATE)
+    private Date fechaPago;
+    @Column(name = "PAGARPORFUERA")
+    private String pagarPorFuera;
+    @Column(name = "PROPORCIONADELANTAPAGO")
+    private BigDecimal proporcionAdelantaPago;
 
     public KioNovedadesSolici() {
         inicializa();
     }
-    
-    private void inicializa(){
+
+    private void inicializa() {
         this.secuencia = BigDecimal.ZERO;
-        this.tipo="VACACION";
+        this.tipo = "VACACION";
         this.fechaSistema = new Date();
     }
 
@@ -141,11 +148,9 @@ public class KioNovedadesSolici implements Serializable {
 //    public String getUsuario() {
 //        return usuario;
 //    }
-
 //    public void setUsuario(String usuario) {
 //        this.usuario = usuario;
 //    }
-
     public Date getFechaSiguienteFinVaca() {
         return fechaSiguienteFinVaca;
     }
@@ -157,27 +162,21 @@ public class KioNovedadesSolici implements Serializable {
 //    public String getEstado() {
 //        return estado;
 //    }
-
 //    public void setEstado(String estado) {
 //        this.estado = estado;
 //    }
-
 //    public String getAdelantaPago() {
 //        return adelantaPago;
 //    }
-
 //    public void setAdelantaPago(String adelantaPago) {
 //        this.adelantaPago = adelantaPago;
 //    }
-
 //    public BigDecimal getProporcionAdelantaPago() {
 //        return proporcionAdelantaPago;
 //    }
-
 //    public void setProporcionAdelantaPago(BigDecimal proporcionAdelantaPago) {
 //        this.proporcionAdelantaPago = proporcionAdelantaPago;
 //    }
-
     public Date getAdelantaPagoHasta() {
         return adelantaPagoHasta;
     }
@@ -186,54 +185,63 @@ public class KioNovedadesSolici implements Serializable {
         this.adelantaPagoHasta = adelantaPagoHasta;
     }
 
-//    public String getPagarPorFuera() {
-//        return pagarPorFuera;
-//    }
+    public Date getFechaPago() {
+        return fechaPago;
+    }
 
-//    public void setPagarPorFuera(String pagarPorFuera) {
-//        this.pagarPorFuera = pagarPorFuera;
-//    }
+    public void setFechaPago(Date fechaPago) {
+        this.fechaPago = fechaPago;
+    }
+
+    public String getPagarPorFuera() {
+        return pagarPorFuera;
+    }
+
+    public void setPagarPorFuera(String pagarPorFuera) throws Exception {
+        if (pagarPorFuera == null){
+            this.pagarPorFuera = "N";
+            setProporcionAdelantaPago(null);
+        } else if ("S".equalsIgnoreCase(pagarPorFuera) || "N".equalsIgnoreCase(pagarPorFuera)) {
+            this.pagarPorFuera = pagarPorFuera.toUpperCase();
+            setProporcionAdelantaPago( ("S".equalsIgnoreCase(pagarPorFuera)? new BigDecimal("0,5") : null) );
+        } else {
+            throw new Exception("Valor no válido para el campo PagarPorFuera");
+        }
+    }
+
+    public BigDecimal getProporcionAdelantaPago() {
+        return proporcionAdelantaPago;
+    }
+
+    public void setProporcionAdelantaPago(BigDecimal proporcionAdelantaPago) {
+        this.proporcionAdelantaPago = proporcionAdelantaPago;
+    }
+    
 
 //    public Date getFechaInicioNomina() {
 //        return fechaInicioNomina;
 //    }
-
 //    public void setFechaInicioNomina(Date fechaInicioNomina) {
 //        this.fechaInicioNomina = fechaInicioNomina;
 //    }
-
-//    public Date getFechaPago() {
-//        return fechaPago;
-//    }
-//
-//    public void setFechaPago(Date fechaPago) {
-//        this.fechaPago = fechaPago;
-//    }
-
 //    public String getPagado() {
 //        return pagado;
 //    }
-
 //    public void setPagado(String pagado) {
 //        this.pagado = pagado;
 //    }
-
 //    public BigDecimal getVacaDiasAplazados() {
 //        return vacaDiasAplazados;
 //    }
-
 //    public void setVacaDiasAplazados(BigDecimal vacaDiasAplazados) {
 //        this.vacaDiasAplazados = vacaDiasAplazados;
 //    }
-
 //    public BigDecimal getVacaDiasAplazadosDisfrutados() {
 //        return vacaDiasAplazadosDisfrutados;
 //    }
-
 //    public void setVacaDiasAplazadosDisfrutados(BigDecimal vacaDiasAplazadosDisfrutados) {
 //        this.vacaDiasAplazadosDisfrutados = vacaDiasAplazadosDisfrutados;
 //    }
-
 //    public String getPeriodo() {
 //        return periodo;
 //    }
@@ -241,7 +249,6 @@ public class KioNovedadesSolici implements Serializable {
 //    public Double getDiasDisponibles() {
 //        return diasDisponibles;
 //    }
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -264,7 +271,7 @@ public class KioNovedadesSolici implements Serializable {
 
     @Override
     public String toString() {
-        return "KioNovedadesSolici{" + "secuencia=" + secuencia + ", empleado=" + empleado + ", fechaInicialDisfrute=" + fechaInicialDisfrute + ", dias=" + dias + ", tipo=" + tipo + ", subtipo=" + subtipo + ", vacacion=" + vacacion + ", fechaSiguienteFinVaca=" + fechaSiguienteFinVaca + ", adelantaPagoHasta=" + adelantaPagoHasta + ", fechaSistema=" + fechaSistema + '}';
+        return "KioNovedadesSolici{" + "secuencia=" + secuencia + ", empleado=" + empleado + ", fechaInicialDisfrute=" + fechaInicialDisfrute + ", dias=" + dias + ", tipo=" + tipo + ", subtipo=" + subtipo + ", vacacion=" + vacacion + ", fechaSiguienteFinVaca=" + fechaSiguienteFinVaca + ", adelantaPagoHasta=" + adelantaPagoHasta + ", fechaPago=" + fechaPago + ", fechaSistema=" + fechaSistema + ", pagarPorFuera=" + pagarPorFuera + '}';
     }
-    
+
 }

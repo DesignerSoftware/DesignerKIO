@@ -831,6 +831,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.joda-time-2.4.jar}" todir="${build.classes.dir}"/>
         <copyfiles files="${file.reference.jasperreports-javaflow-6.3.1.jar}" todir="${build.classes.dir}"/>
         <copyfiles files="${file.reference.Fuentes_Reportes.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.ojdbc7.jar}" todir="${build.classes.dir}"/>
     </target>
     <target if="is.server.weblogic" name="-library-inclusion-in-archive-weblogic">
         <basename file="${file.reference.commons-beanutils-1.8.3.jar}" property="manifest.file.reference.commons-beanutils-1.8.3.jar"/>
@@ -846,8 +847,9 @@ exists or setup the property manually. For example like this:
         <basename file="${file.reference.joda-time-2.4.jar}" property="manifest.file.reference.joda-time-2.4.jar"/>
         <basename file="${file.reference.jasperreports-javaflow-6.3.1.jar}" property="manifest.file.reference.jasperreports-javaflow-6.3.1.jar"/>
         <basename file="${file.reference.Fuentes_Reportes.jar}" property="manifest.file.reference.Fuentes_Reportes.jar"/>
+        <basename file="${file.reference.ojdbc7.jar}" property="manifest.file.reference.ojdbc7.jar"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 jar-5 jar-6 jar-7 jar-8 jar-9 jar-10 jar-11 jar-12 jar-13 "/>
+            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 jar-5 jar-6 jar-7 jar-8 jar-9 jar-10 jar-11 jar-12 jar-13 jar-14 "/>
             <attribute name="jar-1-Extension-Name" value="${manifest.file.reference.commons-beanutils-1.8.3.jar}"/>
             <attribute name="jar-2-Extension-Name" value="${manifest.file.reference.groovy-eclipse-compiler-2.9.2-01.jar}"/>
             <attribute name="jar-3-Extension-Name" value="${manifest.file.reference.commons-collections-3.2.1.jar}"/>
@@ -861,6 +863,7 @@ exists or setup the property manually. For example like this:
             <attribute name="jar-11-Extension-Name" value="${manifest.file.reference.joda-time-2.4.jar}"/>
             <attribute name="jar-12-Extension-Name" value="${manifest.file.reference.jasperreports-javaflow-6.3.1.jar}"/>
             <attribute name="jar-13-Extension-Name" value="${manifest.file.reference.Fuentes_Reportes.jar}"/>
+            <attribute name="jar-14-Extension-Name" value="${manifest.file.reference.ojdbc7.jar}"/>
         </manifest>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
@@ -877,6 +880,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.joda-time-2.4.jar}" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.jasperreports-javaflow-6.3.1.jar}" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.Fuentes_Reportes.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.ojdbc7.jar}" todir="${dist.ear.dir}/lib"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target name="-copy-meta-inf">

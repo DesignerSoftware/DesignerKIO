@@ -20,6 +20,7 @@ import org.primefaces.model.StreamedContent;
 import co.com.kiosko.clasesAyuda.CadenasKioskos;
 import co.com.kiosko.clasesAyuda.LeerArchivoXML;
 import java.math.BigDecimal;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -53,6 +54,17 @@ public class ControladorInicioKiosko implements Serializable {
         try {
             FacesContext x = FacesContext.getCurrentInstance();
             HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
+//            HttpServletRequest origRequest = (HttpServletRequest) x;
+//            origRequest.getRequestURL();
+//            System.out.println("getContextPath: "+origRequest.getContextPath());
+//            System.out.println("getRequestURL: "+origRequest.getRequestURL());
+//            System.out.println("getAuthType: "+origRequest.getAuthType() );
+//            System.out.println("getPathInfo: "+origRequest.getPathInfo() );
+//            System.out.println("getPathTranslated: "+origRequest.getPathTranslated() );
+//            System.out.println("getRemoteAddr: "+origRequest.getRemoteAddr() );
+//            System.out.println("getRemoteUser: "+origRequest.getRemoteUser() );
+//            System.out.println("getRequestURI: "+origRequest.getRequestURI() );
+//            System.out.println("getRequestedSessionId: "+origRequest.getRequestedSessionId() );
             administrarInicioKiosko.obtenerConexion(ses.getId());
             conexionEmpleado = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getConexionEmpleado();
             ultimaConexionEmpleado = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getUltimaConexion();

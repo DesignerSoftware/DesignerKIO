@@ -33,4 +33,6 @@ public interface IPersistenciaEmpleados {
      * @throws Exception 
      */
     public List consultarEmpleadosEmpresa(EntityManager em, long nit) throws Exception ;
+
+    public Empleados consultaEmpleadoxSec(EntityManager em, BigDecimal secEmpleado) throws Exception;
 }

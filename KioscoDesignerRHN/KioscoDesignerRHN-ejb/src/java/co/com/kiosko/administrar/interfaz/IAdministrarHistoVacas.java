@@ -31,4 +31,24 @@ public interface IAdministrarHistoVacas {
      * @throws Exception 
      */
     public List<KioEstadosSolici> consultarEstadoSoliciEmpre(Empresas empresa) throws Exception;
+    /**
+     * Método para consultar las solicitudes de los empleados asociados a determinada empresa
+     * teniendo en cuenta el estado que se envía por parámetro.
+     * @param empresa
+     * @param estado
+     * @return
+     * @throws Exception 
+     */
+    public List<KioEstadosSolici> consultarEstadoSoliciEmpre(Empresas empresa, String estado) throws Exception;
+    /**
+     * Método para consultar las solicitudes de los empleados asociados a determinada empresa 
+     * teniendo en cuenta el estado que se envía por parámetro y el empleado jefe que 
+     * consulta.
+     * @param empresa
+     * @param estado
+     * @param emplJefe
+     * @return
+     * @throws Exception 
+     */
+    public List<KioEstadosSolici> consultarEstadoSoliciEmpre(Empresas empresa, String estado, Empleados emplJefe) throws Exception;
 }

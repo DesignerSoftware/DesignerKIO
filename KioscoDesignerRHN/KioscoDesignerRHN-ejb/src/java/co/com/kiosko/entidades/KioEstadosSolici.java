@@ -7,12 +7,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+//import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -41,11 +43,14 @@ public class KioEstadosSolici implements Serializable {
     @Column(name="ESTADO")
     @Size(max=10)
     private String estado;
-    @Column(name="EMPLEADOEJECUTA")
-    private BigDecimal empleadoEjecuta;
+    @JoinColumn(name = "EMPLEADOEJECUTA", referencedColumnName = "SECUENCIA")
+    @ManyToOne
+    private Empleados empleadoEjecuta;
     @Column(name="NOVEDADSISTEMA")
     private BigDecimal novedadSistema;
-
+    @Column(name="MOTIVOPROCESA")
+    private String motivoProcesa;
+    
     public KioEstadosSolici() {
         inicializa();
     }
@@ -92,11 +97,11 @@ public class KioEstadosSolici implements Serializable {
         this.estado = estado;
     }
 
-    public BigDecimal getEmpleadoEjecuta() {
+    public Empleados getEmpleadoEjecuta() {
         return empleadoEjecuta;
     }
 
-    public void setEmpleadoEjecuta(BigDecimal empleadoEjecuta) {
+    public void setEmpleadoEjecuta(Empleados empleadoEjecuta) {
         this.empleadoEjecuta = empleadoEjecuta;
     }
 
@@ -107,9 +112,17 @@ public class KioEstadosSolici implements Serializable {
     public void setNovedadSistema(BigDecimal novedadSistema) {
         this.novedadSistema = novedadSistema;
     }
+
+    public String getMotivoProcesa() {
+        return motivoProcesa;
+    }
+
+    public void setMotivoProcesa(String motivoProcesa) {
+        this.motivoProcesa = motivoProcesa;
+    }
     
     
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

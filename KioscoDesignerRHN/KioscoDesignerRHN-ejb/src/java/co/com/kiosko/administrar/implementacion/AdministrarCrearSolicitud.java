@@ -143,45 +143,52 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud {
     @Override
     public Date fechaPago(Empleados empleado) {
         Date fechaUltPago = null;
+        EntityManager em=null;
         try {
-            EntityManager em = emf.createEntityManager();
+            em = emf.createEntityManager();
             fechaUltPago = persistenciaVwVacaPendEmpl.consultaFechaUltimoPago(em, empleado.getSecuencia());
-            em.close();
             System.out.println("fechaUltimoPago: " + fechaUltPago);
         } catch (Exception exi) {
             System.out.println("AdministrarCrearSolicitud. Error consultando la fecha de último pago.");
             exi.printStackTrace();
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
-        try {
-            EntityManager em = emf.createEntityManager();
-            BigDecimal diasNoContinuos = persistenciaVwVacaPendEmpl.consultarDiasNoContinuos(em, empleado.getSecuencia(), consultarFechaContrato(empleado), fechaUltPago);
-            em.close();
-            System.out.println("diasNoContinuos: " + diasNoContinuos);
-        } catch (Exception exi) {
-            System.out.println("AdministrarCrearSolicitud. Error consultando los días no continuos.");
-            exi.printStackTrace();
-        }
-        try {
-            EntityManager em = emf.createEntityManager();
-            Date fechaMaxPago = persistenciaVwVacaPendEmpl.consultarVacaMaxPago(em, empleado.getSecuencia());
-            em.close();
-            System.out.println("fecha Pago ultima vacacion: " + fechaMaxPago);
-        } catch (Exception exi) {
-            System.out.println("AdministrarCrearSolicitud. Error consultando la fecha de la última vacación.");
-            exi.printStackTrace();
-        }
-        try {
-            EntityManager em = emf.createEntityManager();
-            Date fechaMaxRegresoVaca = persistenciaVwVacaPendEmpl.consultarVacaSigFinVaca(em, empleado.getSecuencia());
-            em.close();
-            System.out.println("fecha Regreso de la más reciente vacacion: " + fechaMaxRegresoVaca);
-        } catch (Exception exi) {
-            System.out.println("AdministrarCrearSolicitud. Error consultando la fecha de regreso de la última vacación.");
-            exi.printStackTrace();
-        }
-        return null;
+        return fechaUltPago;
     }
 
+//    private void otrasFunciones(){
+//        try {
+//            EntityManager em = emf.createEntityManager();
+//            BigDecimal diasNoContinuos = persistenciaVwVacaPendEmpl.consultarDiasNoContinuos(em, empleado.getSecuencia(), consultarFechaContrato(empleado), fechaUltPago);
+//            em.close();
+//            System.out.println("diasNoContinuos: " + diasNoContinuos);
+//        } catch (Exception exi) {
+//            System.out.println("AdministrarCrearSolicitud. Error consultando los días no continuos.");
+//            exi.printStackTrace();
+//        }
+//        try {
+//            EntityManager em = emf.createEntityManager();
+//            Date fechaMaxPago = persistenciaVwVacaPendEmpl.consultarVacaMaxPago(em, empleado.getSecuencia());
+//            em.close();
+//            System.out.println("fecha Pago ultima vacacion: " + fechaMaxPago);
+//        } catch (Exception exi) {
+//            System.out.println("AdministrarCrearSolicitud. Error consultando la fecha de la última vacación.");
+//            exi.printStackTrace();
+//        }
+//        try {
+//            EntityManager em = emf.createEntityManager();
+//            Date fechaMaxRegresoVaca = persistenciaVwVacaPendEmpl.consultarVacaSigFinVaca(em, empleado.getSecuencia());
+//            em.close();
+//            System.out.println("fecha Regreso de la más reciente vacacion: " + fechaMaxRegresoVaca);
+//        } catch (Exception exi) {
+//            System.out.println("AdministrarCrearSolicitud. Error consultando la fecha de regreso de la última vacación.");
+//            exi.printStackTrace();
+//        }
+//        return null;
+//    }
     @Override
     public void calcularFechasFin(KioSoliciVacas solicitud) throws Exception {
         Date fechaRegreso = null;
@@ -278,7 +285,7 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud {
         System.out.println("4) novedad: " + solicitud.toString());
         em = emf.createEntityManager();
         try {
-            persistenciaEstadoSolicitud.crearEstadoSolicitud(em, solicitud, emplEjecuta.getSecuencia(), "GUARDADO");
+            persistenciaEstadoSolicitud.crearEstadoSolicitud(em, solicitud, emplEjecuta.getSecuencia(), "GUARDADO", "");
             return solicitud;
         } catch (Exception e) {
 //            persistenciaNovedadSolici.removerNovedadSolici(em, solicitud.getKioNovedadesSolici());
@@ -308,7 +315,7 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud {
         System.out.println("enviarSolicitud: guardado");
         em = emf.createEntityManager();
         try {
-            persistenciaEstadoSolicitud.crearEstadoSolicitud(em, solicitud, emplEjecuta.getSecuencia(),"ENVIADO");
+            persistenciaEstadoSolicitud.crearEstadoSolicitud(em, solicitud, emplEjecuta.getSecuencia(), "ENVIADO", "");
             System.out.println("enviarSolicitud: enviando");
             return solicitud;
         } catch (Exception e) {

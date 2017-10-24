@@ -7,30 +7,65 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
     xmlns:c="http://java.sun.com/jsp/jstl/core">
-    <p:panel header="Histórico de solicitudes de vacaciones" style="border: none; padding: 0px; margin: 0px; background: transparent" styleClass="noBorders">
+    <p:remoteCommand name="pantallaDinamica" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
+                     actionListener="#{controladorKio_VerSoliciAutorizadas.limpiarListas()}"
+                     process="@this" update=":principalForm"/>
+    <p:remoteCommand name="refrescarListas" update=":principalForm:mensajecreacion"
+                     process="@this" oncomplete="pantallaDinamica()"/>
+    <p:remoteCommand name="procesarsolici" actionListener="#{controladorKio_VerSoliciAutorizadas.procesarSolicitud()}"
+                     process="@this" oncomplete="PF('creandoSolici').hide();"/>
+    <p:panel header="Ver solicitudes de vacaciones autorizadas para liquidar" 
+             style="border: none; padding: 0px; margin: 0px; background: transparent;" 
+             styleClass="noBorders">
         <center>
             <h:form id="frmempleados">
-                <p:dataTable id="tbempleados" var="empl" 
-                             value="#{controladorKio_VerSoliciAutorizadas.empleadosACargo}" 
-                             selection="#{controladorKio_VerSoliciAutorizadas.empleadoSelec}" 
-                             rowKey="#{empl.secuencia}" sortBy="#{empl.codigoempleado}"
-                             lazy="true"
-                             scrollable="true" scrollRows="10" scrollHeight="100"
-                             filteredValue="#{controladorKio_VerSoliciAutorizadas.emplACargoFiltro}"
-                             liveScroll="true" virtualScroll="true"
+                <p:dataTable id="tbempleados" widgetVar="tbempleados"
+                             var="solici" 
+                             value="#{controladorKio_VerSoliciAutorizadas.soliciEmpleado}" 
+                             lazy="true" rows="5"
+                             rowKey="#{solici.secuencia}" 
+                             rowIndexVar="#{solici.secuencia}" 
+                             sortBy="#{solici.kioSoliciVaca.empleado.codigoempleado}"
+                             selection="#{controladorKio_VerSoliciAutorizadas.solicitudSelec}" 
+                             filteredValue="#{controladorKio_VerSoliciAutorizadas.soliciFiltradas}"
+                             paginator="true"
+                             paginatorTemplate="{buscar} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} "
+                             paginatorPosition="top"
                              >
                     <f:facet name="header">
-                        EMPLEADOS EN LA NÓMINA
+                        LISTADO DE SOLICITUDES
                     </f:facet>
-                    <p:column selectionMode="single" style="width:16px;text-align:center"/>
+                    <f:facet name="{buscar}">
+                        <div>
+                            <p:commandButton value="Buscar empleado" actionListener="#{controladorKio_VerSoliciAutorizadas.buscarEmpleado()}" />
+                            <p:commandButton value="Mostrar todos" actionListener="#{controladorKio_VerSoliciAutorizadas.mostrarEmpleados()}" />
+                        </div>
+                    </f:facet>
+                    <p:column selectionMode="single" style="width:16px; text-align:center;"/>
                     <p:column headerText="CODIGO" >
-                        <h:outputText value="#{empl.codigoempleado}" />
+                        <h:outputText value="#{solici.kioSoliciVaca.empleado.codigoempleado}" />
                     </p:column>
                     <p:column headerText="NOMBRE" >
-                        <h:outputText value="#{empl.persona.nombreCompleto}" />
+                        <h:outputText value="#{solici.kioSoliciVaca.empleado.persona.nombreCompleto}" />
+                    </p:column>
+                    <p:column headerText="SOLICITUD" >
+                        <h:outputText value="#{solici.kioSoliciVaca.fechaGeneracion}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                        </h:outputText> 
+                    </p:column>
+                    <p:column headerText="ACTIVA" >
+                        <h:outputText value="#{solici.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
+                    </p:column>
+                    <p:column headerText="FECHA ULTIMA MODIFICACION" >
+                        <h:outputText value="#{solici.fechaProcesamiento}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="ESTADO SOLICITUD" >
+                        <h:outputText value="#{solici.estado}" />
                     </p:column>
                     <f:facet name="footer">
-                        <p:commandButton process="tbempleados" update=":principalForm:emplDetail" icon="ui-icon-search" value="Mostrar solicitudes" oncomplete="PF('emplDialog').show()" />
+                        <p:commandButton process="tbempleados" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitudes" oncomplete="PF('soliciDialog').show()" />
                     </f:facet>
                 </p:dataTable>                
             </h:form>
@@ -41,48 +76,141 @@
     <p:panel style="border: none; padding: 0px; margin: 0px; background: transparent;" styleClass="noBorders">
         <center>
             <p:commandButton value="Volver" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
-                             update=":principalForm" process="@this" icon="ui-icon-closethick"/>
+                             update=":principalForm" process="@this" icon="ui-icon-closethick"
+                             actionListener="#{controladorKio_VerSoliciAutorizadas.limpiarListas}"/>
         </center>
     </p:panel>
-    <p:dialog id="emplDialog" widgetVar="emplDialog" modal="true" resizable="true">
-        <p:outputPanel id="emplDetail">
-            <p:panelGrid  columns="2" rendered="#{not empty controladorKio_VerSoliciAutorizadas.empleadoSelec}" >
+    <p:dialog id="soliciDialog" widgetVar="soliciDialog" modal="true" resizable="true">
+        <p:outputPanel id="soliciDetail">
+            <h3>
+                <p:outputLabel value="#{controladorKio_VerSoliciAutorizadas.tituloProcesar}"/>
+            </h3>
+            <p:panelGrid  columns="2" rendered="#{not empty controladorKio_VerSoliciAutorizadas.solicitudSelec}" >
 
                 <h:outputText value="Codigo empleado: " />
-                <h:outputText value="#{controladorKio_VerSoliciAutorizadas.empleadoSelec.codigoempleado}" />
+                <h:outputText value="#{controladorKio_VerSoliciAutorizadas.solicitudSelec.kioSoliciVaca.empleado.codigoempleado}" />
 
                 <h:outputText value="Nombre completo: " />
-                <h:outputText value="#{controladorKio_VerSoliciAutorizadas.empleadoSelec.persona.nombreCompleto}" />
+                <h:outputText value="#{controladorKio_VerSoliciAutorizadas.solicitudSelec.kioSoliciVaca.empleado.persona.nombreCompleto}" />
 
+                <h:outputText value="Fecha inicio vacaciones: " />
+                <h:outputText value="#{controladorKio_VerSoliciAutorizadas.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText> 
+
+                <h:outputText value="Fecha fin vacaciones: " />
+                <h:outputText value="#{controladorKio_VerSoliciAutorizadas.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.adelantaPagoHasta}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText> 
+
+                <h:outputText value="Fecha regreso a laborar: " />
+                <h:outputText value="#{controladorKio_VerSoliciAutorizadas.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.fechaSiguienteFinVaca}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText> 
+
+                <h:outputText value="Dias: " />
+                <h:outputText value="#{controladorKio_VerSoliciAutorizadas.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.dias}" />
+
+                <h:outputText value="Periodo: " />
+                <h:outputText value="#{controladorKio_VerSoliciAutorizadas.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.vacacion.periodoCausado}" />
+
+                <h:outputText value="Jefe inmediato: " />
+                <h:outputText value="#{controladorKio_VerSoliciAutorizadas.solicitudSelec.kioSoliciVaca.empleadoJefe.persona.nombreCompleto}" />
+
+                <h:outputText value="Fecha pago: " />
+                <h:outputText value="#{controladorKio_VerSoliciAutorizadas.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.fechaPago}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText> 
+
+                <h:outputText value="A pagar con la nómina: " />
+                <h:outputText value="#{controladorKio_VerSoliciAutorizadas.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.pagarPorFuera}" />
             </p:panelGrid>
-            <p:dataTable id="tbsolici" value="#{controladorKio_VerSoliciAutorizadas.soliciEmpleado}"
-                             var="estSolici"
-                    emptyMessage="No hay datos">
-                    <p:column headerText="FECHA ULTIMO CAMBIO">
-                        <h:outputText value="#{estSolici.fechaProcesamiento}" />
-                    </p:column>
-                    <p:column headerText="ESTADO">
-                        <h:outputText value="#{estSolici.estado}" />
-                    </p:column>
-                    <p:column headerText="FECHA DE SOLICITUD">
-                        <h:outputText value="#{estSolici.kioSoliciVaca.fechaGeneracion}" />
-                    </p:column>
-                    <p:column headerText="JEFE">
-                        <h:outputText value="#{estSolici.kioSoliciVaca.empleadoJefe.persona.nombreCompleto}" />
-                    </p:column>
-                    <p:column headerText="FECHA INICIAL">
-                        <h:outputText value="#{estSolici.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" />
-                    </p:column>
-                    <p:column headerText="FECHA FINAL">
-                        <h:outputText value="#{estSolici.kioSoliciVaca.kioNovedadesSolici.adelantaPagoHasta}" />
-                    </p:column>
-                    <p:column headerText="DIAS">
-                        <h:outputText value="#{estSolici.kioSoliciVaca.kioNovedadesSolici.dias}" />
-                    </p:column>
-                    <p:column headerText="FECHA REGRESO A LAB">
-                        <h:outputText value="#{estSolici.kioSoliciVaca.kioNovedadesSolici.fechaSiguienteFinVaca}" />
-                    </p:column>
-                </p:dataTable>
+            <p:panelGrid columns="2" rendered="#{not empty controladorKio_VerSoliciAutorizadas.solicitudSelec}">
+                <p:outputLabel for="opcionproc" value="Seleccione una opción a aplicar: " />
+                <p:selectOneMenu id="opcionproc" value="#{controladorKio_VerSoliciAutorizadas.estadoNuevo}">
+                    <f:selectItem itemLabel="REGISTRAR" itemValue="LIQUIDADO"/>
+                    <f:selectItem itemLabel="RECHAZAR" itemValue="RECHAZADO"/>
+                    <p:ajax update="@this, txtmotivo" listener="#{controladorKio_VerSoliciAutorizadas.cambiarEstado()}"/>
+                </p:selectOneMenu>
+                <p:outputLabel for="txtmotivo" value="Motivo: " />
+                <p:inputText id="txtmotivo" value="#{controladorKio_VerSoliciAutorizadas.motivo}" disabled="#{controladorKio_VerSoliciAutorizadas.inacMotivo}"/>
+                <p:outputLabel for="opcionnomi" value="Seleccione el proceso: " />
+                <p:selectOneMenu id="opcionnomi" value="#{controladorKio_VerSoliciAutorizadas.proceso}" disabled="#{controladorKio_VerSoliciAutorizadas.activarCamposLiqui()}">
+                    <f:selectItem itemLabel="NOMINA" itemValue="N"/>
+                    <f:selectItem itemLabel="VACACIONES" itemValue="S"/>
+                    <p:ajax update="@this, dtfpago" listener="#{controladorKio_VerSoliciAutorizadas.cambiarProceso()}"/>
+                </p:selectOneMenu>
+                <p:outputLabel for="dtfpago" value="Fecha de pago: " />
+                <p:calendar id="dtfpago" value="#{controladorKio_VerSoliciAutorizadas.fpago}" 
+                            pattern="dd/MM/yyyy" mask="true" locale="es"
+                            showOn="button" disabled="#{controladorKio_VerSoliciAutorizadas.activarCamposLiqui()}"
+                            >
+                    <p:ajax event="dateSelect" listener="#{controladorKio_VerSoliciAutorizadas.onDateSelect}" update=":principalForm:dtfpago"/>
+                </p:calendar>
+                <p:commandButton value="CANCELAR" onclick="PF('soliciDialog').hide();" />
+                <p:commandButton value="PROCESAR" actionListener="#{controladorKio_VerSoliciAutorizadas.procesarSolicitud()}"
+                                 onclick="PF('creandoSolici').show();"/>
+            </p:panelGrid>
         </p:outputPanel>
+    </p:dialog>
+    <p:dialog id="recarDatos" header="Informaci&oacute;n" widgetVar="recarDatos" 
+              resizable="false" draggable="false" modal="true" 
+              height="85" width="350px" style="font-size: 12px;" closable="true">  
+        <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50" 
+                        style="position: absolute; left: 15px; top: 20px;" />
+        <h:outputText value="Recargando datos, esto puede tardar un poco..." 
+                      style="position: absolute; left: 80px; top: 20px; width: 240px; text-align: justify;" />
+    </p:dialog>
+    <p:dialog id="emplDialog" widgetVar="emplDialog" modal="true" resizable="true">
+        <p:outputPanel id="emplDetail">
+            <p:dataTable  id="tbempllist" widgetVar="tbempllist"
+                          rendered="#{not empty controladorKio_VerSoliciAutorizadas.empleadosACargo}" 
+                          value="#{controladorKio_VerSoliciAutorizadas.empleadosACargo}"
+                          var="empl" 
+                          rowKey="#{empl.secuencia}" rowIndexVar="#{empl.secuencia}" 
+                          lazy="true" rows="5"
+                          selection="#{controladorKio_VerSoliciAutorizadas.empleadoSelec}"
+                          paginator="true"
+                          paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                          paginatorPosition="top"
+                          filteredValue="#{controladorKio_VerSoliciAutorizadas.emplACargoFiltro}">
+                <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                <p:column headerText="Codigo empleado">
+                    <h:outputText value="#{empl.codigoempleado}" />
+                </p:column>
+
+                <p:column headerText="Nombre completo">
+                    <h:outputText value="#{empl.persona.nombreCompleto}" />
+                </p:column>
+            </p:dataTable>
+            <p:commandButton value="Seleccionar" 
+                             actionListener="#{controladorKio_VerSoliciAutorizadas.recargarSolici()}"
+                             onclick="PF('recarDatos').show();"
+                             update=":principalForm"
+                             />
+        </p:outputPanel>
+    </p:dialog>
+    <p:dialog id="resulEnvio" header="Información" widgetVar="resulEnvio" modal="true" resizable="true">
+        <p:panelGrid columns="1" styleClass="noBorders">
+            <p:column>
+                <center>
+                    <h:outputText id="mensajecreacion" value="#{controladorKio_VerSoliciAutorizadas.mensajeCreacion}"/>
+                </center>
+            </p:column>
+            <p:column>
+                <p:commandButton value="OK" 
+                                 onclick="PF('resulEnvio').hide(); refrescarListas();"
+                                 process="@this"/>
+            </p:column>
+        </p:panelGrid>
+    </p:dialog>
+    <p:dialog id="creandoSolici" header="Enviando solicitud" widgetVar="creandoSolici"  
+              resizable="false" draggable="true" modal="true" height="65" width="350" 
+              closable="false" >  
+        <p:panelGrid columns="2" styleClass="noBorders">
+            <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50"/>
+            <h:outputText value="Enviando solicitud al sistema, por favor espere." 
+                          style="width: 240px; text-align: justify; font-weight: bold;" />
+        </p:panelGrid>
     </p:dialog>
 </ui:composition>
