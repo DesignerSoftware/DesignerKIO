@@ -11,7 +11,7 @@
                      actionListener="#{controladorKio_CrearSolicitud.limpiarSolicitud()}"
                      process="@this" update=":principalForm"/>
     <p:remoteCommand name="refrescarListas" 
-                     process="@this" oncomplete="pantallaDinamica();"/>
+                     process="@this" oncomplete="pantallaDinamica()"/>
     <p:panel header="Crear solicitud" style="border: none; padding: 0px; margin: 0px; background: transparent;" styleClass="noBorders">
         <center>
             <h:form id="frmcreasolicitud">
@@ -54,10 +54,10 @@
                                 pattern="dd/MM/yyyy" mask="true" locale="es"
                                 showOn="none"
                                 readonly="true"/>
-                    <p:commandButton value="Guardar" action="#{controladorKio_CrearSolicitud.guardarSolicitud()}"
-                                     update=":principalForm:frmcreasolicitud" process="@this"/>
+                    <p:commandButton value="Guardar" onclick="PF('confirmGuardado').show();"
+                                     process="@this" />
                     <p:commandButton value="Enviar solicitud" onclick="PF('confirmEnvio').show();"
-                                     process="@this" style="font-size: 18px;"/>
+                                     process="@this" />
                 </p:panelGrid>
             </h:form>
         </center>
@@ -142,6 +142,24 @@
             </p:column>
         </p:panelGrid>
     </p:dialog>
+    <p:dialog id="confirmGuardado" widgetVar="confirmGuardado" modal="true" resizable="true">
+        <p:panelGrid columns="1" styleClass="noBorders">
+            <p:column>
+                <center>
+                    <h:outputText value="¿Esta seguro(a) de que desea guardar la solicitud?"/>
+                </center>
+            </p:column>
+            <p:column>
+                <p:commandButton value="No" style="float: right;"
+                                 onclick="PF('confirmGuardado').hide();"
+                                 process="@this"/>
+                <p:commandButton value="Si" style="float: right;"
+                                 actionListener="#{controladorKio_CrearSolicitud.guardarSolicitud()}"
+                                 onclick="PF('confirmGuardado').hide(); PF('creandoSolici').show();"
+                                 process="@this" update=":principalForm:resulEnvio"/>
+            </p:column>
+        </p:panelGrid>
+    </p:dialog>
     <p:dialog id="resulEnvio" header="Información" widgetVar="resulEnvio" modal="true" resizable="true">
         <p:panelGrid columns="1" styleClass="noBorders">
             <p:column>
@@ -150,7 +168,7 @@
                 </center>
             </p:column>
             <p:column>
-                <p:commandButton value="OK" style="float: none;"
+                <p:commandButton value="Aceptar" style="float: none;"
                                  onclick="PF('resulEnvio').hide(); refrescarListas();"
                                  process="@this"/>
             </p:column>

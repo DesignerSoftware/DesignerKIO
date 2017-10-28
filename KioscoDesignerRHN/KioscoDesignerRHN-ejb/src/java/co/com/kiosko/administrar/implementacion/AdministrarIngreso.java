@@ -8,6 +8,7 @@ import co.com.kiosko.conexionFuente.implementacion.SesionEntityManagerFactory;
 import co.com.kiosko.conexionFuente.interfaz.ISesionEntityManagerFactory;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionInicial;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;
+import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 //import javax.ejb.Stateless;
@@ -20,7 +21,7 @@ import javax.persistence.EntityManagerFactory;
  */
 //@Stateless
 @Stateful
-public class AdministrarIngreso implements IAdministrarIngreso {
+public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
 
     @EJB
     private IPersistenciaConexionInicial persistenciaConexionInicial;

@@ -1,7 +1,6 @@
 package co.com.kiosko.administrar.interfaz;
 
 import co.com.kiosko.clasesAyuda.SessionEntityManager;
-//import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**

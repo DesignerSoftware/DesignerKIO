@@ -87,13 +87,6 @@ public class ControladorPrimerIngreso implements Serializable {
     }
 
     public void finalizar() {
-        /*System.out.println(this.getClass().getName() + ".finalizar()");
-        if (clave != null) {
-            System.out.println("Clave: " + clave);
-        }
-        if (confirmacion != null) {
-            System.out.println("Confirmacion: " + confirmacion);
-        }*/
         if (clave != null && !clave.isEmpty() && confirmacion != null && !confirmacion.isEmpty()) {
             //System.out.println("Condicional 1");
             if (clave.equals(confirmacion)) {

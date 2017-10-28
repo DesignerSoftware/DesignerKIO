@@ -7,6 +7,13 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
     xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <p:remoteCommand name="pantallaDinamica" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
+                     actionListener="#{controladorKio_VerSolicitudesEmpleado.limpiarListas()}"
+                     process="@this" update=":principalForm"/>
+    <p:remoteCommand name="refrescarListas" update=":principalForm:resulEnvio"
+                     process="@this" oncomplete="pantallaDinamica()"/>
+    <p:remoteCommand name="procesarsolici" actionListener="#{controladorKio_VerSolicitudesEmpleado.procesarSolicitud()}"
+                     process="@this" oncomplete="PF('creandoSolici').hide();" update=":principalForm:resulEnvio"/>
     <p:panel header="Ver solicitudes propias" style="border: none; padding: 0px; margin: 0px; background: transparent" styleClass="noBorders">
         <center>
             <h:form id="frmsolicitudes">
@@ -15,22 +22,25 @@
                         <p:dataTable id="tbsoliciguarda" var="esg" 
                                      value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciGuardadas}" 
                                      selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
-                                     rowKey="#{esg.secuencia}">
+                                     rowKey="#{esg.secuencia}"
+                                     rowIndexVar="#{esg.secuencia}" >
                             <f:facet name="header">
                                 SOLICITUDES GUARDADAS
                             </f:facet>
                             <p:column selectionMode="single" style="width:16px; text-align:center;"/>
-                            <p:column headerText="FECHA CREACION">
+                            <p:column headerText="CREACION SOLICITUD">
                                 <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="FECHA INICIO">
+                                <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText> 
                             </p:column>
-                            <p:column headerText="ACTIVA">
-                                <h:outputText value="#{esg.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
-                            </p:column>
-                            <p:column headerText="FECHA PROC">
+                            <p:column headerText="FECHA PROCESADA">
                                 <h:outputText value="#{esg.fechaProcesamiento}" >
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                 </h:outputText> 
                             </p:column>
                             <p:column headerText="ESTADO">
@@ -48,22 +58,25 @@
                         <p:dataTable id="tbsolicienvia" var="esg" 
                                      value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciEnviadas}" 
                                      selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
-                                     rowKey="#{esg.secuencia}">
+                                     rowKey="#{esg.secuencia}"
+                                     rowIndexVar="#{esg.secuencia}">
                             <f:facet name="header">
                                 SOLICITUDES ENVIADAS
                             </f:facet>
                             <p:column selectionMode="single" style="width:16px; text-align:center;"/>
-                            <p:column headerText="FECHA CREACION">
+                            <p:column headerText="CREACION SOLICITUD">
                                 <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="FECHA INICIO">
+                                <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText> 
                             </p:column>
-                            <p:column headerText="ACTIVA">
-                                <h:outputText value="#{esg.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
-                            </p:column>
-                            <p:column headerText="FECHA PROC">
+                            <p:column headerText="FECHA PROCESADA">
                                 <h:outputText value="#{esg.fechaProcesamiento}" >
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                 </h:outputText> 
                             </p:column>
                             <p:column headerText="ESTADO">
@@ -81,22 +94,25 @@
                         <p:dataTable id="tbsoliciaprobada" var="esg" 
                                      value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciAprobadas}" 
                                      selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
-                                     rowKey="#{esg.secuencia}">
+                                     rowKey="#{esg.secuencia}"
+                                     rowIndexVar="#{esg.secuencia}">
                             <f:facet name="header">
                                 SOLICITUDES APROBADAS
                             </f:facet>
                             <p:column selectionMode="single" style="width:16px; text-align:center;"/>
-                            <p:column headerText="FECHA CREACION">
+                            <p:column headerText="CREACION SOLICITUD">
                                 <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="FECHA INICIO">
+                                <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText> 
                             </p:column>
-                            <p:column headerText="ACTIVA">
-                                <h:outputText value="#{esg.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
-                            </p:column>
-                            <p:column headerText="FECHA PROC">
+                            <p:column headerText="FECHA PROCESADA">
                                 <h:outputText value="#{esg.fechaProcesamiento}" >
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                 </h:outputText> 
                             </p:column>
                             <p:column headerText="ESTADO">
@@ -114,22 +130,25 @@
                         <p:dataTable id="tbsolicirechazada" var="esg" 
                                      value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciRechazadas}" 
                                      selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
-                                     rowKey="#{esg.secuencia}">
+                                     rowKey="#{esg.secuencia}"
+                                     rowIndexVar="#{esg.secuencia}">
                             <f:facet name="header">
                                 SOLICITUDES RECHAZADAS
                             </f:facet>
                             <p:column selectionMode="single" style="width:16px; text-align:center;"/>
-                            <p:column headerText="FECHA CREACION">
+                            <p:column headerText="CREACION SOLICITUD">
                                 <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="FECHA INICIO">
+                                <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText> 
                             </p:column>
-                            <p:column headerText="ACTIVA">
-                                <h:outputText value="#{esg.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
-                            </p:column>
-                            <p:column headerText="FECHA PROC">
+                            <p:column headerText="FECHA PROCESADA">
                                 <h:outputText value="#{esg.fechaProcesamiento}" >
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                 </h:outputText> 
                             </p:column>
                             <p:column headerText="ESTADO">
@@ -147,22 +166,25 @@
                         <p:dataTable id="tbsoliciliqui" var="esg" 
                                      value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciLiquidadas}" 
                                      selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
-                                     rowKey="#{esg.secuencia}">
+                                     rowKey="#{esg.secuencia}"
+                                     rowIndexVar="#{esg.secuencia}">
                             <f:facet name="header">
                                 SOLICITUDES LIQUIDADAS
                             </f:facet>
                             <p:column selectionMode="single" style="width:16px; text-align:center;"/>
-                            <p:column headerText="FECHA CREACION">
+                            <p:column headerText="CREACION SOLICITUD">
                                 <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="FECHA INICIO">
+                                <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText> 
                             </p:column>
-                            <p:column headerText="ACTIVA">
-                                <h:outputText value="#{esg.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
-                            </p:column>
-                            <p:column headerText="FECHA PROC">
+                            <p:column headerText="FECHA PROCESADA">
                                 <h:outputText value="#{esg.fechaProcesamiento}" >
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                 </h:outputText> 
                             </p:column>
                             <p:column headerText="ESTADO">
@@ -180,22 +202,25 @@
                         <p:dataTable id="tbsolicicancelada" var="esg" 
                                      value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciCanceladas}" 
                                      selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
-                                     rowKey="#{esg.secuencia}">
+                                     rowKey="#{esg.secuencia}"
+                                     rowIndexVar="#{esg.secuencia}">
                             <f:facet name="header">
                                 SOLICITUDES CANCELADAS
                             </f:facet>
                             <p:column selectionMode="single" style="width:16px; text-align:center;"/>
-                            <p:column headerText="FECHA CREACION">
+                            <p:column headerText="CREACION SOLICITUD">
                                 <h:outputText value="#{esg.kioSoliciVaca.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="FECHA INICIO">
+                                <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText> 
                             </p:column>
-                            <p:column headerText="ACTIVA">
-                                <h:outputText value="#{esg.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
-                            </p:column>
-                            <p:column headerText="FECHA PROC">
+                            <p:column headerText="FECHA PROCESADA">
                                 <h:outputText value="#{esg.fechaProcesamiento}" >
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                 </h:outputText> 
                             </p:column>
                             <p:column headerText="ESTADO">
@@ -218,28 +243,91 @@
     <p:panel style="border: none; padding: 0px; margin: 0px; background: transparent;" styleClass="noBorders">
         <center>
             <p:commandButton value="Volver" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
-                             update=":principalForm" process="@this" icon="ui-icon-closethick"/>
+                             update=":principalForm" process="@this" icon="ui-icon-closethick"
+                             actionListener="#{controladorKio_VerSolicitudesEmpleado.limpiarListas}"/>
         </center>
     </p:panel>
-    <p:dialog id="soliciDialog" widgetVar="soliciDialog" modal="true" resizable="true">
+    <p:dialog id="soliciDialog" widgetVar="soliciDialog" modal="true" resizable="true"
+              >
         <p:outputPanel id="soliciDetail">
-            <p:panelGrid  columns="2" rendered="#{not empty controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" >
-
-                <h:outputText value="fecha de inicio vacaciones: " />
+            <center>
+                <p:outputLabel value="DETALLE DE LA SOLICITUD" 
+                               rendered="#{not empty controladorKio_VerSolicitudesEmpleado.estSoliciSelec}"
+                               style="font-weight: bold;"/>
+                <p:outputLabel value="SELECCIONE UNA SOLICITUD" 
+                               rendered="#{empty controladorKio_VerSolicitudesEmpleado.estSoliciSelec}"
+                               style="font-weight: bold;"/>
+            </center>
+            <br/>
+            <p:panelGrid columns="2" rendered="#{not empty controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" >
+                <h:outputText value="Fecha de inicio vacaciones: " />
                 <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText> 
-                <h:outputText value="fecha final de vacaciones: " />
+                <h:outputText value="Fecha final de vacaciones: " />
                 <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.adelantaPagoHasta}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText> 
-                <h:outputText value="fecha regreso a laborar: " />
+                <h:outputText value="Fecha de regreso a laborar: " />
                 <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.fechaSiguienteFinVaca}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText> 
                 <h:outputText value="Periodo afectado: " />
                 <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.vacacion.periodoCausado}" />
             </p:panelGrid>
+            <br />
+            <br />
+            <center>
+                <p:outputLabel value="ACCIONES PERMITIDAS" rendered="#{controladorKio_VerSolicitudesEmpleado.mostrarPanelAcciones()}"
+                               style="font-weight: bold;"/>
+            </center>
+            <p:panelGrid columns="2" rendered="#{controladorKio_VerSolicitudesEmpleado.mostrarPanelAcciones()}" >
+                <p:outputLabel for="opcionproc" value="Seleccione una opción: " />
+                <p:selectOneMenu id="opcionproc" value="#{controladorKio_VerSolicitudesEmpleado.estadoNuevo}"
+                                 converter="convertidorOpcionLista" >
+                    <f:selectItems value="#{controladorKio_VerSolicitudesEmpleado.listaEstados}"
+                                   var="estado" itemLabel="#{estado.valorMostrar}" itemValue="#{estado}"/>
+                    <p:ajax update="@this" listener="#{controladorKio_VerSolicitudesEmpleado.cambiarEstado()}"/>
+                    <p:ajax event="change" update="@this" />
+                </p:selectOneMenu>
+                <p:outputLabel for="btnproc" value="Dé clic para aplicar el cambio" />
+                <p:commandButton id="btnproc" value="PROCESAR" actionListener="#{controladorKio_VerSolicitudesEmpleado.procesarSolicitud()}"
+                                 onclick="PF('creandoSolici').show();" process="@this"/>
+            </p:panelGrid>
+            <center>
+                <p:commandButton value="REGRESAR" onclick="PF('soliciDialog').hide();" />
+            </center>
         </p:outputPanel>
+    </p:dialog>
+    <p:dialog id="recarDatos" header="Informaci&oacute;n" widgetVar="recarDatos" 
+              resizable="false" draggable="false" modal="true" 
+              height="85" width="350px" style="font-size: 12px;" closable="true">  
+        <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50" 
+                        style="position: absolute; left: 15px; top: 20px;" />
+        <h:outputText value="Recargando datos, esto puede tardar un poco..." 
+                      style="position: absolute; left: 80px; top: 20px; width: 240px; text-align: justify;" />
+    </p:dialog>
+    <p:dialog id="resulEnvio" header="Información" widgetVar="resulEnvio" modal="true" resizable="true">
+        <p:panelGrid columns="1" styleClass="noBorders">
+            <p:column>
+                <center>
+                    <h:outputText id="mensajecreacion" value="#{controladorKio_VerSolicitudesEmpleado.mensajeCreacion}"/>
+                </center>
+            </p:column>
+            <p:column>
+                <p:commandButton value="Aceptar" 
+                                 onclick="PF('resulEnvio').hide(); refrescarListas();"
+                                 process="@this"/>
+            </p:column>
+        </p:panelGrid>
+    </p:dialog>
+    <p:dialog id="creandoSolici" header="Procesando solicitud" widgetVar="creandoSolici"  
+              resizable="false" draggable="true" modal="true" height="65" width="350" 
+              closable="false" >  
+        <p:panelGrid columns="2" styleClass="noBorders">
+            <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50"/>
+            <h:outputText value="Enviando solicitud al sistema, por favor espere." 
+                          style="width: 240px; text-align: justify; font-weight: bold;" />
+        </p:panelGrid>
     </p:dialog>
 </ui:composition>

@@ -10,6 +10,7 @@ import co.com.kiosko.entidades.Empleados;
 import co.com.kiosko.entidades.Empresas;
 import co.com.kiosko.entidades.KioEstadosSolici;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaKioEstadosSolici;
+import java.io.Serializable;
 import java.util.ArrayList;
 //import java.math.BigDecimal;
 //import java.math.BigInteger;
@@ -21,7 +22,7 @@ import javax.persistence.EntityManager;
  * @author Edwin
  */
 @Stateful
-public class AdministrarHistoVacas implements IAdministrarHistoVacas {
+public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializable {
 
     private EntityManagerFactory emf;
     private String idSesion;
@@ -106,13 +107,16 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas {
         System.out.println("consultarEstadoSoliciEmpre: Empresa: " + empresa.getSecuencia());
         ArrayList<String> listaEstados = new ArrayList<String>();
         if ("PROCESADO".equalsIgnoreCase(estado)) {
+            listaEstados.clear();
             listaEstados.add("AUTORIZADO");
             listaEstados.add("LIQUIDADO");
             listaEstados.add("RECHAZADO");
         }
         if ("SIN PROCESAR".equalsIgnoreCase(estado)) {
+            listaEstados.clear();
             listaEstados.add("ENVIADO");
         } else {
+            listaEstados.clear();
             listaEstados.add(estado);
         }
         ArrayList listaResul = new ArrayList<KioEstadosSolici>();

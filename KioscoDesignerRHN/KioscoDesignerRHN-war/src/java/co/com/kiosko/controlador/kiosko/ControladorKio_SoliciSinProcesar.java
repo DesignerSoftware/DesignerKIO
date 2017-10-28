@@ -18,14 +18,11 @@ import javax.el.ELException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-//import javax.faces.view.ViewScoped;
 import javax.servlet.http.HttpSession;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
-//import javax.inject.Named;
-//import javax.faces.view.ViewScoped;
 
 /**
  *
@@ -46,6 +43,8 @@ public class ControladorKio_SoliciSinProcesar implements Serializable {
     private String estadoNuevo;
     private String motivo;
     private boolean inacMotivo;
+    private String mensajeCreacion;
+    private String grupoEmpre;
     @EJB
     IAdministrarHistoVacas administrarHistoVacas;
     @EJB
@@ -66,6 +65,7 @@ public class ControladorKio_SoliciSinProcesar implements Serializable {
             HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
             empleado = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getConexionEmpleado().getEmpleado();
             long nit = Long.parseLong(((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit());
+            grupoEmpre = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getGrupoSeleccionado();
             consultasIniciales(ses, nit);
         } catch (ELException e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
@@ -91,11 +91,7 @@ public class ControladorKio_SoliciSinProcesar implements Serializable {
         try {
             administrarHistoVacas.obtenerConexion(ses.getId());
             administrarProcesarSolicitud.obtenerConexion(ses.getId());
-//            empleadosACargo = administrarHistoVacas.consultarEmpleadosEmpresa(nit);
-//            System.out.println("consultasIniciales: num empleados: " + empleadosACargo.size());
-//            soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa());
             soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa(), "SIN PROCESAR", null);
-//            empleadoSelec = soliciEmpleado.get(0).getKioSoliciVaca().getEmpleado();
             System.out.println("consultasIniciales: num estados solicitudes: " + soliciEmpleado.size());
         } catch (Exception e) {
             String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
@@ -105,7 +101,6 @@ public class ControladorKio_SoliciSinProcesar implements Serializable {
 
     public void limpiarListas() {
         System.out.println(this.getClass().getName() + ".limpiarListas()");
-//        this.empleadoSelec = null;
         this.empleadosACargo = null;
         this.emplACargoFiltro = null;
         this.soliciEmpleado = null;
@@ -139,7 +134,6 @@ public class ControladorKio_SoliciSinProcesar implements Serializable {
 
     public void recargarSolici() {
         System.out.println(this.getClass().getName() + ".mostrarEmpleados()");
-//        soliciFiltradas = null;
         solicitudSelec = null;
         soliciEmpleado = null;
         getSoliciEmpleado();
@@ -150,11 +144,7 @@ public class ControladorKio_SoliciSinProcesar implements Serializable {
     public void cambiarEstado() {
         System.out.println(this.getClass().getName() + ".cambiarEstado()");
         System.out.println("cambiarEstado-soliciSelec: " + this.solicitudSelec);
-        if (estadoNuevo.equals("RECHAZADO")) {
-            inacMotivo = false;
-        } else {
-            inacMotivo = true;
-        }
+        inacMotivo = !estadoNuevo.equals("RECHAZADO");
     }
 
     public void procesarSolicitud() {
@@ -175,42 +165,64 @@ public class ControladorKio_SoliciSinProcesar implements Serializable {
             MensajesUI.error(msj);
         }
         if (res) {
-            HttpServletRequest origRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-            String procesado = ("RECHAZADO".equals(estadoNuevo) ? "RECHAZAR":"APROBAR");
-            String mensaje = "Se acaba de "+procesado+" una solicitud de vacaciones en el módulo de Kiosco.\n "
-                    + "Por favor llevar el caso desde su cuenta de usuario en el Kiosco de nómina "
-                    + "y continuar con el proceso. \n"
-                    + "La persona que creó la solicitud es: "
-                    + empleado.getPersona().getNumerodocumento()
-                    + " " + empleado.getPersona().getNombreCompleto()+" \n"
-                    + " la persona que aprobó la solicitud es: "
-                    + solicitudSelec.getEmpleadoEjecuta().getPersona().getNumerodocumento()
-                    + " " + solicitudSelec.getEmpleadoEjecuta().getPersona().getNombreCompleto()
-                    + " por favor seguir el proceso en: "
-                    + origRequest.getRequestURL();
-            String respuesta1 = "";
-            String respuesta2 = "";
-            if (empleado.getPersona().getEmail() != null && !empleado.getPersona().getEmail().isEmpty()) {
-                administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
-                        empleado.getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
-                respuesta1 = "Solicitud procesada correctamente y notificada al empleado";
-            } else {
-                respuesta1 = "El empleado no tiene correo registrado";
-            }
-            if (solicitudSelec.getKioSoliciVaca().getEmpleadoJefe() != null) {
-                if (solicitudSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail() != null && !solicitudSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail().isEmpty()) {
-                    administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
-                            solicitudSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
-                    respuesta2 = "Solicitud procesada correctamente y notificada al jefe inmediato";
-                } else {
-                    respuesta2 = "El jefe inmediato no tiene correo";
+            String procesado = ("RECHAZADO".equals(estadoNuevo) ? "RECHAZAR" : "APROBAR");
+            String procesadoConj = ("RECHAZADO".equals(estadoNuevo) ? "RECHAZÓ" : "APROBÓ");
+            try {
+                FacesContext context = FacesContext.getCurrentInstance();
+                ExternalContext ec = context.getExternalContext();
+                String mensaje = "Apreciado usuario(a): \n\n"
+                        + "Nos permitimos informar que se acaba de "+procesado.toLowerCase()+" una solicitud de vacaciones "
+                        + "en el módulo de Kiosco Nómina Designer. "
+                        + "Por favor llevar el caso desde su cuenta de usuario en el portal de Kiosco "
+                        + "y continuar con el proceso. \n\n"
+                        + "La persona que "+procesadoConj+" LA SOLICITUD es: "
+                        + empleado.getPersona().getNombreCompleto() + "\n";
+                if (solicitudSelec.getKioSoliciVaca().getEmpleadoJefe() != null) {
+                    mensaje = mensaje + "La persona a cargo de HACER SEGUIMIENTO es: "
+                            + solicitudSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getNombreCompleto()
+                            + "\n";
                 }
-            } else {
-                respuesta2 = "No hay jefe inmediato relacionado";
+                mensaje = mensaje + "Por favor seguir el proceso en: "
+                        + ec.getRequestScheme() + "://" + ec.getRequestServerName() + ":" + ec.getRequestServerPort()
+                    + ec.getRequestContextPath() + "/" + "?grupo=" + grupoEmpre
+                        + "\n\n" + "Si no puede ingresar, necesitará instalar la última versión de su navegador, "
+                        + "la cual podrá descargar de forma gratuita. \n\n"
+                        + "En caso de que haya olvidado su clave, ingrese a la página de internet, y de clic en "
+                        + "¿Olvidó su clave? y siga los pasos. \n\n"
+                        + "Le recordamos que esta dirección de correo es utilizada solamente para envíos "
+                        + "automáticos de la información solicitada. Por favor no responda este correo, "
+                        + "ya que no podrá ser atendido. Si desea contactarse con nosotros, envíe un correo "
+                        + "o comuníquese telefónicamente con Talento Humano de "
+                        + empleado.getEmpresa().getNombre() + " \n\n"
+                        + "Cordial saludo. ";
+                String respuesta1 = "";
+                String respuesta2 = "";
+                if (empleado.getPersona().getEmail() != null && !empleado.getPersona().getEmail().isEmpty()) {
+                    administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
+                            empleado.getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
+                    respuesta1 = "Solicitud enviada correctamente al empleado";
+                } else {
+                    respuesta1 = "El empleado no tiene correo registrado";
+                }
+                if (solicitudSelec.getKioSoliciVaca().getEmpleadoJefe() != null) {
+                    if (solicitudSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail() != null && !solicitudSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail().isEmpty()) {
+                        administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
+                                solicitudSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
+                        respuesta2 = " Solicitud enviada correctamente al jefe inmediato";
+                    } else {
+                        respuesta2 = " El jefe inmediato no tiene correo";
+                    }
+                } else {
+                    respuesta2 = " No hay jefe inmediato relacionado";
+                }
+                String respuesta = respuesta1 + respuesta2;
+                mensajeCreacion = respuesta;
+                MensajesUI.info(respuesta);
+            } catch (Exception e) {
+                mensajeCreacion = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
+                System.out.println("Error guardarSolicitud: " + mensajeCreacion);
+                MensajesUI.error(mensajeCreacion);
             }
-            String respuesta = respuesta1 + respuesta2;
-            MensajesUI.info(respuesta);
-//            MensajesUI.info("Solicitud guardada correctamente");
             PrimefacesContextUI.ejecutar("PF('soliciDialog').hide();");
         }
     }
@@ -260,7 +272,6 @@ public class ControladorKio_SoliciSinProcesar implements Serializable {
         if (soliciEmpleado == null || soliciEmpleado.isEmpty()) {
             try {
                 if (empleadoSelec == null) {
-//                    soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa());
                     soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa(), "SIN PROCESAR", null);
                 } else {
                     soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpl(empleadoSelec);
@@ -339,6 +350,22 @@ public class ControladorKio_SoliciSinProcesar implements Serializable {
 
     public void setInacMotivo(boolean isNotMotivo) {
         this.inacMotivo = isNotMotivo;
+    }
+
+    public String getMensajeCreacion() {
+        return mensajeCreacion;
+    }
+
+    public void setMensajeCreacion(String mensajeCreacion) {
+        this.mensajeCreacion = mensajeCreacion;
+    }
+
+    public String getGrupoEmpre() {
+        return grupoEmpre;
+    }
+
+    public void setGrupoEmpre(String grupoEmpre) {
+        this.grupoEmpre = grupoEmpre;
     }
 
 }

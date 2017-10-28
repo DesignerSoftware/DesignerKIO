@@ -10,6 +10,7 @@ import co.com.kiosko.persistencia.interfaz.IPersistenciaConfiguracionCorreo;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaGenerales;
 import co.com.kiosko.correo.EnvioCorreo;
 import co.com.kiosko.reportes.IniciarReporteInterface;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -25,7 +26,7 @@ import javax.persistence.EntityManagerFactory;
  * @author Felipe Triviño
  */
 @Stateful
-public class AdministrarGenerarReporte implements IAdministrarGenerarReporte {
+public class AdministrarGenerarReporte implements IAdministrarGenerarReporte, Serializable {
 
     @EJB
     private IAdministrarSesiones administrarSesiones;

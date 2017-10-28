@@ -14,13 +14,14 @@ import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.io.Serializable;
 
 /**
  *
  * @author Edwin
  */
 @Stateful
-public class AdministrarVerSolicitudesEmpl implements IAdministrarVerSolicitudesEmpl {
+public class AdministrarVerSolicitudesEmpl implements IAdministrarVerSolicitudesEmpl, Serializable {
 
     private EntityManagerFactory emf;
     

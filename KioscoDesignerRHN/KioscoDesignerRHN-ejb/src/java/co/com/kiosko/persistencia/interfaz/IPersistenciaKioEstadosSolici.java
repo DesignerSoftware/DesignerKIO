@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package co.com.kiosko.persistencia.interfaz;
 
 import co.com.kiosko.entidades.KioEstadosSolici;
@@ -14,6 +9,8 @@ import javax.ejb.Local;
 import javax.ejb.TransactionRolledbackLocalException;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 
 /**
  *
@@ -56,6 +53,8 @@ public interface IPersistenciaKioEstadosSolici {
      * @return 
      */
     public List<KioEstadosSolici> consultarEstadosXEmplEsta(EntityManager em, BigDecimal secEmpleado, String estado);
+    
+    public KioEstadosSolici recargarEstadoSolicitud(EntityManager em, KioEstadosSolici estado) throws NoResultException, NonUniqueResultException, IllegalStateException, Exception;
     /**
      * 
      * @param em entityManager

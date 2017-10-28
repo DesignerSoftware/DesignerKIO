@@ -10,13 +10,17 @@ import co.com.kiosko.persistencia.interfaz.IPersistenciaKioEstadosSolici;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaKioNovedadesSolici;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaKioSoliciVacas;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaVwVacaPendientesEmpleados;
+import java.io.Serializable;
 import java.math.BigDecimal;
 //import java.math.BigInteger;
 import java.util.Date;
 //import java.math.BigDecimal;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionRolledbackLocalException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
@@ -26,7 +30,7 @@ import javax.persistence.NoResultException;
  * @author Edwin
  */
 @Stateful
-public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud {
+public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud, Serializable {
 
     //private EntityManager em;
     private EntityManagerFactory emf;
@@ -51,17 +55,28 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud {
     }
 
     @Override
-    public List consultarPeriodosVacacionesEmpl(Empleados empleado) {
+    public List consultarPeriodosVacacionesEmpl(Empleados empleado) throws Exception {
         EntityManager em = emf.createEntityManager();
-        List lista = persistenciaVwVacaPendEmpl.consultarPeriodosPendientesEmpleado(em, empleado.getSecuencia());
+        List lista;
+        try {
+            lista = persistenciaVwVacaPendEmpl.consultarPeriodosPendientesEmpleado(em, empleado.getSecuencia());
+        } catch (Exception ex) {
+            throw ex;
+        }
         em.close();
         return lista;
     }
 
     @Override
-    public VwVacaPendientesEmpleados consultarPeriodoMasAntiguo(Empleados empleado) {
+    public VwVacaPendientesEmpleados consultarPeriodoMasAntiguo(Empleados empleado) throws Exception{
         EntityManager em = emf.createEntityManager();
-        VwVacaPendientesEmpleados periodo = persistenciaVwVacaPendEmpl.consultarPeriodoMasAntiguo(em, empleado.getSecuencia(), consultarFechaContrato(empleado));
+        VwVacaPendientesEmpleados periodo;
+        try {
+            periodo = persistenciaVwVacaPendEmpl.consultarPeriodoMasAntiguo(em, empleado.getSecuencia(), consultarFechaContrato(empleado));
+        } catch (Exception ex) {
+//            Logger.getLogger(AdministrarCrearSolicitud.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
         em.close();
         return periodo;
     }
@@ -141,9 +156,31 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud {
     }
 
     @Override
+    public boolean existeSolicitudFecha(KioSoliciVacas solicitud) throws Exception {
+        boolean res = false;
+        BigDecimal conteo = BigDecimal.ZERO;
+        EntityManager em = null;
+        try {
+            em = emf.createEntityManager();
+            conteo = persistenciaSolicitud.verificaExistenciaSolicitud(em, solicitud.getEmpleado().getSecuencia(), solicitud.getKioNovedadesSolici().getFechaInicialDisfrute());
+            res = (conteo.compareTo(new BigDecimal("0")) == 1);
+        } catch (TransactionRolledbackLocalException trle) {
+            res = false;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (em != null && em.isOpen()) {
+//                em.joinTransaction();
+                em.close();
+            }
+        }
+        return res;
+    }
+
+    @Override
     public Date fechaPago(Empleados empleado) {
         Date fechaUltPago = null;
-        EntityManager em=null;
+        EntityManager em = null;
         try {
             em = emf.createEntityManager();
             fechaUltPago = persistenciaVwVacaPendEmpl.consultaFechaUltimoPago(em, empleado.getSecuencia());
@@ -176,15 +213,6 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud {
 //            System.out.println("fecha Pago ultima vacacion: " + fechaMaxPago);
 //        } catch (Exception exi) {
 //            System.out.println("AdministrarCrearSolicitud. Error consultando la fecha de la última vacación.");
-//            exi.printStackTrace();
-//        }
-//        try {
-//            EntityManager em = emf.createEntityManager();
-//            Date fechaMaxRegresoVaca = persistenciaVwVacaPendEmpl.consultarVacaSigFinVaca(em, empleado.getSecuencia());
-//            em.close();
-//            System.out.println("fecha Regreso de la más reciente vacacion: " + fechaMaxRegresoVaca);
-//        } catch (Exception exi) {
-//            System.out.println("AdministrarCrearSolicitud. Error consultando la fecha de regreso de la última vacación.");
 //            exi.printStackTrace();
 //        }
 //        return null;
@@ -268,14 +296,6 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud {
         } catch (Exception e) {
             System.out.println("Excepcion Creando la solicitud");
             System.out.println("mensaje: " + e.getMessage());
-//            try {
-//                if (em == null || !em.isOpen()) {
-//                    em = emf.createEntityManager();
-//                }
-//                persistenciaNovedadSolici.removerNovedadSolici(em, solicitud.getKioNovedadesSolici());
-//            } catch (Exception ex) {
-//                System.out.println("Exception removiendo la solicitud debido al error");
-//            }
             throw e;
         } finally {
             if (em != null && em.isOpen()) {

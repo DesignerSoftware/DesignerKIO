@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
+import java.io.Serializable;
 //import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -26,7 +27,7 @@ import javax.persistence.EntityManagerFactory;
  */
 //@Stateful
 @Stateless
-public class AdministrarPrimerIngreso implements IAdministrarPrimerIngreso {
+public class AdministrarPrimerIngreso implements IAdministrarPrimerIngreso, Serializable {
 
     @EJB
     private IAdministrarSesiones administrarSesiones;

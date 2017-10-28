@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package co.com.kiosko.persistencia.interfaz;
 
 import co.com.kiosko.entidades.VwVacaPendientesEmpleados;
@@ -20,12 +15,12 @@ import javax.persistence.PersistenceException;
  */
 @Local
 public interface IPersistenciaVwVacaPendientesEmpleados {
-    public List<VwVacaPendientesEmpleados> consultarPeriodosPendientesEmpleado(EntityManager em, BigDecimal secEmpleado);
-    public VwVacaPendientesEmpleados consultarPeriodoMasAntiguo(EntityManager em, BigDecimal secEmpleado, Date fechaContratos);
-    public BigDecimal consultarCodigoJornada(EntityManager em, BigDecimal secEmpleado, Date fechaDisfrute);
-    public boolean verificarFestivo(EntityManager em, Date fechaDisfrute );
-    public boolean verificarDiaLaboral(EntityManager em, Date fechaDisfrute, BigDecimal codigoJornada) ;
-    public BigDecimal consultaDiasPendientes(EntityManager em, BigDecimal secEmpleado );
+    public List<VwVacaPendientesEmpleados> consultarPeriodosPendientesEmpleado(EntityManager em, BigDecimal secEmpleado) throws Exception;
+    public VwVacaPendientesEmpleados consultarPeriodoMasAntiguo(EntityManager em, BigDecimal secEmpleado, Date fechaContrato) throws Exception;
+    public BigDecimal consultarCodigoJornada(EntityManager em, BigDecimal secEmpleado, Date fechaDisfrute) throws Exception;
+    public boolean verificarFestivo(EntityManager em, Date fechaDisfrute) throws Exception;
+    public boolean verificarDiaLaboral(EntityManager em, Date fechaDisfrute, BigDecimal codigoJornada) throws Exception;
+    public BigDecimal consultaDiasPendientes(EntityManager em, BigDecimal secEmpleado) throws Exception;
     /**
      * Método que calcula la fecha de regreso a laborar de la novedad de vacaciones
      * que se esta creando.
@@ -72,15 +67,15 @@ public interface IPersistenciaVwVacaPendientesEmpleados {
      * @param secEmpleado
      * @return 
      */
-    public Date consultaFechaUltimoPago(EntityManager em, BigDecimal secEmpleado );
-    public BigDecimal consultarDiasNoContinuos(EntityManager em, BigDecimal secEmpleado, Date fechaIngreso, Date fechaUltPago);
+    public Date consultaFechaUltimoPago(EntityManager em, BigDecimal secEmpleado) throws Exception;
+    public BigDecimal consultarDiasNoContinuos(EntityManager em, BigDecimal secEmpleado, Date fechaIngreso, Date fechaUltPago) throws Exception;
     /**
-     * Método que consulta la fecha de pago la última vacación.s
+     * Método que consulta la fecha de pago la última vacación.
      * @param em
      * @param secEmpleado
      * @return 
      */
-    public Date consultarVacaMaxPago(EntityManager em, BigDecimal secEmpleado);
+    public Date consultarVacaMaxPago(EntityManager em, BigDecimal secEmpleado) throws Exception ;
     /**
      * Método que consulta la fecha siguiente al final de las vacaciones, 
      * es decir, la fecha de regreso a laborar.
@@ -88,5 +83,5 @@ public interface IPersistenciaVwVacaPendientesEmpleados {
      * @param secEmpleado
      * @return 
      */
-    public Date consultarVacaSigFinVaca(EntityManager em, BigDecimal secEmpleado);
+    public Date consultarVacaSigFinVaca(EntityManager em, BigDecimal secEmpleado) throws Exception;
 }

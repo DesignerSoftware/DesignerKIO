@@ -56,7 +56,6 @@ public class ControladorIngreso implements Serializable {
     }
 
     public List<CadenasKioskos> obtenerCadenasKiosko() {
-        //return (new LeerArchivoXML()).leerArchivoEmpresasKiosko();
         return obtenerCadenasKioskoGrupo();
     }
 
@@ -103,7 +102,6 @@ public class ControladorIngreso implements Serializable {
         HttpSession ses = (HttpSession) contexto.getExternalContext().getSession(false);
         try {
             if (!ingresoExitoso) {
-//            CadenasKioskos cadena = null;
                 CadenasKioskos cadena;
                 cadena = validarUnidadPersistencia(unidadPersistenciaIngreso);
                 usuario = usuario.trim();
@@ -126,11 +124,7 @@ public class ControladorIngreso implements Serializable {
                                         administrarIngreso.modificarUltimaConexion(conexionEmpleado);
                                         HttpSession session = Util.getSession();
                                         session.setAttribute("idUsuario", usuario);
-//                                    if (session != null) {
                                         imprimir("Conectado a: " + session.getId());
-//                                    }
-                                        //return "opcionesKiosko";
-                                        //return "plantilla";
                                         PrimefacesContextUI.ejecutar("PF('estadoSesion').show()");
                                         retorno = "plantilla";
                                     } else {
@@ -150,7 +144,6 @@ public class ControladorIngreso implements Serializable {
                                             administrarIngreso.bloquearUsuario(usuario, nit);
                                             intento = 0;
                                         }
-//                                    administrarIngreso.getEm().getEntityManagerFactory().close();
                                         ingresoExitoso = false;
                                     }
                                 } else {
@@ -166,7 +159,6 @@ public class ControladorIngreso implements Serializable {
                                 session.setAttribute("idUsuario", usuario);
                                 PrimefacesContextUI.ejecutar("PF('dlgPrimerIngreso').show()");
                             }
-                            //          administrarIngreso.getEm().getEntityManagerFactory().close();
                         } else {
                             //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
                             MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");
@@ -187,7 +179,6 @@ public class ControladorIngreso implements Serializable {
                 System.out.println("la session con " + session.getAttribute("idUsuario") + " termino.");
                 session.setAttribute("idUsuario", "");
                 session.removeAttribute("idUsuario");
-//            session.invalidate();
                 ingresoExitoso = false;
                 conexionEmpleado = null;
                 nit = null;
@@ -200,7 +191,6 @@ public class ControladorIngreso implements Serializable {
                 } catch (NullPointerException npe) {
                     System.out.println("ExternalContext vacio");
                 }
-                //ec.redirect(ec.getRequestContextPath());
 
                 administrarIngreso.cerrarSession(ses.getId());
                 ec.redirect(ec.getRequestContextPath() + "/" + "?grupo=" + grupoSeleccionado);
@@ -210,8 +200,6 @@ public class ControladorIngreso implements Serializable {
             System.out.println("La transacción se deshizo.");
             System.out.println(etre);
         }
-        //PrimefacesContextUI.ejecutar("PF('estadoSesion').hide()");
-        //return "";
         return retorno;
     }
 
@@ -222,7 +210,6 @@ public class ControladorIngreso implements Serializable {
             numUsuario = new BigInteger(usuario);
             resultado = true;
         } catch (NumberFormatException nfe) {
-//            usuario = "-9999";
             resultado = false;
         }
         return resultado;
@@ -244,7 +231,6 @@ public class ControladorIngreso implements Serializable {
                             ingresoExitoso = true;
                             HttpSession session = Util.getSession();
                             session.setAttribute("idUsuario", usuario);
-                            //nit = cadena.getNit();
                             return "olvidoClave";
                         } else {
                             //USUARIO BLOQUEADO
@@ -253,7 +239,6 @@ public class ControladorIngreso implements Serializable {
                     } else {
                         MensajesUI.error("El empleado no ha realizado el primer ingreso.");
                     }
-//                    administrarIngreso.getEm().getEntityManagerFactory().close();
                 } else {
                     //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
                     MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");
@@ -287,15 +272,11 @@ public class ControladorIngreso implements Serializable {
     }
 
     private boolean validarGrupo() {
-        //FacesContext x = FacesContext.getCurrentInstance();
-        //HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
         boolean respuesta = false;
         if ((this.grupo == null) || (this.grupo.isEmpty())) {
-            //System.out.println("El grupo esta nulo.");
             PrimefacesContextUI.ejecutar("PF('dlgSolicitudGrupo').show();");
             respuesta = false;
         } else {
-            //System.out.println("El grupo es: " + this.grupo);
             PrimefacesContextUI.ejecutar("PF('dlgSolicitudGrupo').hide();");
             this.grupoSeleccionado = this.grupo;
             respuesta = true;
@@ -316,7 +297,6 @@ public class ControladorIngreso implements Serializable {
             imprimir("error al redireccionar");
             ex.printStackTrace();
         }
-        //return ruta;
     }
 
     //GETTER AND SETTER
@@ -338,11 +318,6 @@ public class ControladorIngreso implements Serializable {
 
     public String getUnidadPersistenciaIngreso() {
         List<CadenasKioskos> cadenas = obtenerCadenasKiosko();
-//        if (cadenas.size() == 1) {
-//            unidadPersistenciaIngreso = cadenas.get(0).getId();
-//        } else {
-//            unidadPersistenciaIngreso = null;
-//        }
         unidadPersistenciaIngreso = (cadenas.size() == 1) ? cadenas.get(0).getId() : null;
         return unidadPersistenciaIngreso;
     }

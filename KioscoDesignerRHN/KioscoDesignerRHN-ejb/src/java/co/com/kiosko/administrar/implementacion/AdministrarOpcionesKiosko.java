@@ -11,6 +11,7 @@ import co.com.kiosko.persistencia.interfaz.IPersistenciaOpcionesKioskos;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import javax.ejb.EJB;
+import java.io.Serializable;
 //import javax.ejb.Stateless;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
@@ -22,7 +23,7 @@ import javax.persistence.EntityManagerFactory;
  */
 @Stateful
 //@Stateless
-public class AdministrarOpcionesKiosko implements IAdministrarOpcionesKiosko {
+public class AdministrarOpcionesKiosko implements IAdministrarOpcionesKiosko, Serializable {
 
     @EJB
     private IAdministrarSesiones administrarSesiones;

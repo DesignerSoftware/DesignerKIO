@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-//import javax.persistence.QueryTimeoutException;
 
 /**
  *
@@ -27,32 +26,24 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
         //System.out.println("codigoEmpleado: " + codigoEmpleado);
         //System.out.println("nit: " + nit);
         try {
-//            eManager.getTransaction().begin();
-            //System.out.println("Primera consulta");
             String sqlQuery = "SELECT e FROM Empleados e WHERE e.codigoempleado = :codigoEmpleado";
             Query query = eManager.createQuery(sqlQuery);
             query.setParameter("codigoEmpleado", codigoEmpleado);
             Empleados emp = (Empleados) query.getSingleResult();
-//            eManager.getTransaction().commit();
             return emp;
         } catch (NonUniqueResultException nure) {
             System.out.println("Hay más de un empleado con el mismo código.");
             System.out.println("Error PersistenciaEmpleados.consultarEmpleado: " + nure);
-//            eManager.getTransaction().rollback();
             try {
-//                eManager.getTransaction().begin();
-                //System.out.println("Segunda consulta");
                 String sqlQuery = "SELECT e FROM Empleados e WHERE e.codigoempleado = :codigoEmpleado AND e.empresa.nit = :nit ";
                 Query query = eManager.createQuery(sqlQuery);
                 query.setParameter("codigoEmpleado", codigoEmpleado);
                 query.setParameter("nit", nit);
                 Empleados emp = (Empleados) query.getSingleResult();
-//                eManager.getTransaction().commit();
                 return emp;
             } catch (Exception e) {
                 System.out.println("Error PersistenciaEmpleados.consultarEmpleado: " + e);
                 try {
-//                    eManager.getTransaction().rollback();
                 } catch (NullPointerException npe) {
                     System.out.println("Error de nulo en la transacción.");
                 }
@@ -62,7 +53,6 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
             System.out.println("No hay empleado con el código dado.");
             System.out.println("Error PersistenciaEmpleados.consultarEmpleado: " + npe);
             try {
-//                eManager.getTransaction().rollback();
             } catch (NullPointerException npe2) {
                 System.out.println("Error 2 de nulo en la transacción");
             }
@@ -77,18 +67,11 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
         String sqlQuery = "SELECT empleadocurrent_pkg.fechatipocontrato(e.secuencia, sysdate ) FROM Empleados e WHERE e.secuencia = ? ";
         try {
             em.clear();
-            //em.getTransaction().begin();
             Query query = em.createNativeQuery(sqlQuery);
             query.setParameter(1, secEmpleado);
             fechaContrato = (Date) query.getSingleResult();
-            //em.getTransaction().commit();
             return fechaContrato;
         } catch (Exception e) {
-            /*if (em != null && em.getTransaction() != null) {
-                if (em.getTransaction().isActive()) {
-                    em.getTransaction().rollback();
-                }
-            }*/
             System.out.println("Error " + e.getMessage());
             return null;
         }
@@ -122,13 +105,11 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
         BigDecimal conteo = BigDecimal.ZERO;
         try {
             em.clear();
-            //em.getTransaction().begin();
             Query query = em.createNativeQuery(sqlQuery);
             query.setParameter(1, secEmpresa);
             query.setParameter(2, secEmpleado);
             conteo = (BigDecimal) query.getSingleResult();
             System.out.println("Conteo de jefe: " + conteo);
-            //em.getTransaction().commit();
             return conteo.compareTo(BigDecimal.ZERO) > 0;
         } catch (Exception e) {
             System.out.println("Error " + e.getMessage());
@@ -154,19 +135,16 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
                 + "                        and vci.fechavigencia <= sysdate) ";
         String consulta2 = "select e from Empleados e "
                 + "where e.secuencia = :secEmplJefe ";
-//                + "and e.empresa.secuencia = :secEmpresa ";
         BigDecimal secEmplJefe;
         Empleados jefe;
         try {
             em.clear();
             Query query = em.createNativeQuery(consulta);
-//            query.setParameter(1, secEmpresa);
             query.setParameter(1, secEmpleado);
             secEmplJefe = (BigDecimal) query.getSingleResult();
             try {
                 Query query2 = em.createQuery(consulta2);
                 query2.setParameter("secEmplJefe", secEmplJefe);
-//                query2.setParameter("secEmpresa", secEmpresa);
                 jefe = (Empleados) query2.getSingleResult();
                 return jefe;
             } catch (Exception e2) {
@@ -205,36 +183,6 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
         }
     }
 
-//    @Override
-//    public List consultarEmpleadosEmpresa(EntityManager em, long nit) throws Exception {
-//        System.out.println(this.getClass().getName() + ".consultarEmpleadosEmpresa()");
-//        String sqlQuery = "select e "
-//                + "from Empleados e "
-//                + "where e.empresa.nit = :secEmpleado ";
-//        List<Empleados> empleados = new ArrayList<Empleados>();
-//        List<BigDecimal> secsEmpleados;
-//        try {
-//            secsEmpleados = consultarSecEmplEmpre(em, nit);
-//            for (int i = 0; i < secsEmpleados.size(); i++) {
-//                Query query = em.createQuery(sqlQuery);
-//                query.setParameter("secEmpleado", secsEmpleados.get(i));
-//                Object res = query.getSingleResult();
-//                if (res instanceof Empleados) {
-//                    empleados.add((Empleados) res);
-//                } else {
-//                    throw new Exception("El resultado obtenido no es un empleado sec: " + secsEmpleados.get(i));
-//                }
-//            }
-//            return empleados;
-//        } catch (PersistenceException pe) {
-//            throw pe;
-//        } catch (NullPointerException npe) {
-//            throw npe;
-//        } catch (IllegalStateException ise) {
-//            throw ise;
-//        } 
-//    }
-    
     @Override
     public List consultarEmpleadosEmpresa(EntityManager em, long nit) throws Exception {
         System.out.println(this.getClass().getName() + ".consultarEmpleadosEmpresa()");
@@ -288,6 +236,6 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
             throw npe;
         } catch (IllegalStateException ise) {
             throw ise;
-        } 
+        }
     }
 }

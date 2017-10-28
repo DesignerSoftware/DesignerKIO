@@ -21,9 +21,13 @@ public class ExtraeCausaExcepcion {
      * @return Retorna el ultimo error capturado.
      */
     public static Throwable getLastThrowable(Exception e) {
-        Throwable t;
-        for (t = e.getCause(); t.getCause() != null; t = t.getCause());
-        return t;
+        Throwable t=null;
+        if (e != null && e.getCause() != null) {
+            for (t = e.getCause(); t.getCause() != null; t = t.getCause());
+            return t;
+        }else{
+            return e;
+        }
     }
 
     public static int obtenerCodigoSQLException(Exception e) throws Exception {

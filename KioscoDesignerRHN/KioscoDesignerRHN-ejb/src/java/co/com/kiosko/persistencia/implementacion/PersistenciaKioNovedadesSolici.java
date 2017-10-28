@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package co.com.kiosko.persistencia.implementacion;
 
 import co.com.kiosko.entidades.KioNovedadesSolici;
@@ -36,13 +31,16 @@ public class PersistenciaKioNovedadesSolici implements IPersistenciaKioNovedades
             em.flush();
         } catch (EntityExistsException eee) {
             System.out.println("Error crearNovedadSolici: " + eee);
-            throw eee;
+//            throw eee;
+            throw new Exception(eee.toString());
         } catch (TransactionRolledbackLocalException trle) {
             System.out.println("Error crearNovedadSolici: " + trle);
-            throw trle;
+//            throw trle;
+            throw new Exception(trle.toString());
         } catch (Exception e) {
             System.out.println("Error crearNovedadSolici: " + e);
-            throw e;
+//            throw e;
+            throw new Exception(e.toString());
         }
     }
     
@@ -56,10 +54,11 @@ public class PersistenciaKioNovedadesSolici implements IPersistenciaKioNovedades
             em.flush();
         } catch (TransactionRolledbackLocalException trle) {
             System.out.println("Error modificarNovedadSolici: " + trle);
-            throw trle;
+//            throw trle;
+            throw new Exception(trle.toString());
         } catch (Exception e) {
             System.out.println("Error modificarNovedadSolici: " + e);
-            throw e;
+            throw new Exception(e.toString());
         }
     }
 
@@ -85,7 +84,6 @@ public class PersistenciaKioNovedadesSolici implements IPersistenciaKioNovedades
             query.setParameter("dias", novedadSolici.getDias());
             query.setParameter("subtipo", novedadSolici.getSubtipo());
             query.setParameter("dtPagoHasta", novedadSolici.getAdelantaPagoHasta());
-//            novedadSolici = (KioNovedadesSolici) query.getSingleResult();
             lista = query.getResultList();
             Calendar cl1 = Calendar.getInstance();
             cl1.setTime(novedadSolici.getFechaSistema());
@@ -157,17 +155,18 @@ public class PersistenciaKioNovedadesSolici implements IPersistenciaKioNovedades
         }
     }
 
+    @Override
     public void removerNovedadSolici(EntityManager em, KioNovedadesSolici novedadSolici) throws IllegalArgumentException, TransactionRequiredException, Exception {
         System.out.println(this.getClass().getName() + ".removerNovedadSolici()");
         em.clear();
         try {
             em.remove(novedadSolici);
         } catch (IllegalArgumentException iae) {
-            throw iae;
+            throw new Exception(iae.toString());
         } catch (TransactionRequiredException tre) {
-            throw tre;
+            throw new Exception(tre.toString());
         } catch (Exception e) {
-            throw e;
+            throw new Exception(e.toString());
         }
     }
 }

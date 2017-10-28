@@ -7,7 +7,13 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
     xmlns:c="http://java.sun.com/jsp/jstl/core">
-    <p:remoteCommand name="procesarSolicitud" actionListener="#{controladorKio_SoliciSinProcesar.procesarSolicitud()}"/>
+    <p:remoteCommand name="pantallaDinamica" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
+                     actionListener="#{controladorKio_SoliciSinProcesar.limpiarListas()}"
+                     process="@this" update=":principalForm"/>
+    <p:remoteCommand name="refrescarListas" update=":principalForm:resulEnvio"
+                     process="@this" oncomplete="pantallaDinamica()"/>
+    <p:remoteCommand name="procesarsolici" actionListener="#{controladorKio_SoliciSinProcesar.procesarSolicitud()}"
+                     process="@this" oncomplete="PF('creandoSolici').hide();" update=":principalForm:resulEnvio"/>
     <p:panel header="Ver solicitudes de vacaciones sin procesar" 
              style="border: none; padding: 0px; margin: 0px; background: transparent;" 
              styleClass="noBorders">
@@ -47,8 +53,10 @@
                             <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
                         </h:outputText> 
                     </p:column>
-                    <p:column headerText="ACTIVA" >
-                        <h:outputText value="#{solici.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
+                    <p:column headerText="FECHA INICIO">
+                        <h:outputText value="#{solici.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText> 
                     </p:column>
                     <p:column headerText="FECHA ULTIMA MODIFICACION" >
                         <h:outputText value="#{solici.fechaProcesamiento}" >
@@ -76,7 +84,8 @@
     </p:panel>
     <p:dialog id="soliciDialog" widgetVar="soliciDialog" modal="true" resizable="true">
         <p:outputPanel id="soliciDetail">
-            <h1>DETALLE DE LA SOLICITUD</h1>
+            <p:outputLabel value="DETALLE DE LA SOLICITUD" style="font-weight: bold;"/>
+            <br/>
             <p:panelGrid  columns="2" rendered="#{not empty controladorKio_SoliciSinProcesar.solicitudSelec}" >
 
                 <h:outputText value="Codigo empleado: " />
@@ -117,6 +126,10 @@
                 <h:outputText value="A pagar con la nómina: " />
                 <h:outputText value="#{controladorKio_SoliciSinProcesar.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.pagarPorFuera}" />
             </p:panelGrid>
+            <br/>
+            <br/>
+            <p:outputLabel value="ACCIONES PERMITIDAS" style="font-weight: bold;" />
+            <br/>
             <p:panelGrid columns="2" rendered="#{not empty controladorKio_SoliciSinProcesar.solicitudSelec}">
                 <p:outputLabel for="opcionproc" value="Seleccione una opción a aplicar: " />
                 <p:selectOneMenu id="opcionproc" value="#{controladorKio_SoliciSinProcesar.estadoNuevo}">
@@ -126,9 +139,9 @@
                 </p:selectOneMenu>
                 <p:outputLabel for="txtmotivo" value="Motivo: " />
                 <p:inputText id="txtmotivo" value="#{controladorKio_SoliciSinProcesar.motivo}" disabled="#{controladorKio_SoliciSinProcesar.inacMotivo}"/>
+                <p:commandButton value="REGRESAR" onclick="PF('soliciDialog').hide();" />
                 <p:commandButton value="PROCESAR" actionListener="#{controladorKio_SoliciSinProcesar.procesarSolicitud()}"
-                                 />
-                <p:commandButton value="CANCELAR" onclick="PF('soliciDialog').hide();" />
+                                 process="@this"/>
             </p:panelGrid>
         </p:outputPanel>
     </p:dialog>
@@ -168,5 +181,28 @@
                              update=":principalForm"
                              />
         </p:outputPanel>
+    </p:dialog>
+    <p:dialog id="creandoSolici" header="Enviando solicitud" widgetVar="creandoSolici"  
+              resizable="false" draggable="true" modal="true" height="65" width="350" 
+              closable="false" >  
+        <p:panelGrid columns="2" styleClass="noBorders">
+            <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50"/>
+            <h:outputText value="Enviando solicitud al sistema, por favor espere." 
+                          style="width: 240px; text-align: justify; font-weight: bold;" />
+        </p:panelGrid>
+    </p:dialog>
+    <p:dialog id="resulEnvio" header="Información" widgetVar="resulEnvio" modal="true" resizable="true">
+        <p:panelGrid columns="1" styleClass="noBorders">
+            <p:column>
+                <center>
+                    <h:outputText id="mensajecreacion" value="#{controladorKio_VerSolicitudesEmpleado.mensajeCreacion}"/>
+                </center>
+            </p:column>
+            <p:column>
+                <p:commandButton value="Aceptar" 
+                                 onclick="PF('resulEnvio').hide(); refrescarListas();"
+                                 process="@this"/>
+            </p:column>
+        </p:panelGrid>
     </p:dialog>
 </ui:composition>

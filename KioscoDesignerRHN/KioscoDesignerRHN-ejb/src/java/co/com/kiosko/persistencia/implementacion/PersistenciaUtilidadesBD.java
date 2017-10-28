@@ -28,8 +28,6 @@ public class PersistenciaUtilidadesBD implements IPersistenciaUtilidadesBD {
     @Override
     public String desencriptar(EntityManager eManager, byte[] valor) {
         System.out.println(this.getClass().getName()+".desencriptar()");
-//        System.out.print("valor ");
-//        System.out.println(valor);
         String resultado = "";
         try {
             String sqlQuery = "SELECT GENERALES_PKG.DECRYPT(?) FROM DUAL";

@@ -6,9 +6,7 @@ import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaKioEstadosSolici;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-//import java.util.ArrayList;
 import java.util.Calendar;
-//import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -18,11 +16,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.ParameterMode;
-//import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.persistence.StoredProcedureQuery;
 import javax.persistence.TemporalType;
-//import oracle.jdbc.xa.OracleXAException;
 
 /**
  *
@@ -52,18 +48,18 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
             return listaEstaSolici;
         } catch (Exception e) {
             System.out.println("error " + e.getMessage());
-            throw e;
+//            throw e;
+            throw new Exception(e);
         }
     }
 
     @Override
     public List<KioEstadosSolici> consultarEstadosXEmplEsta(EntityManager em, BigDecimal secEmpleado, String estado) {
-        System.out.println(this.getClass().getName() + ".consultarEstadosXEmpl()");
-        System.out.println("consultarEstadosXEmpl-estado: "+estado);
+        System.out.println(this.getClass().getName() + ".consultarEstadosXEmplEsta()");
+        System.out.println("consultarEstadosXEmplEsta-estado: " + estado);
         List<KioEstadosSolici> listaEstaSolici;
         try {
             em.clear();
-            //em.getTransaction().begin();
             String consulta = "select e "
                     + "from KioEstadosSolici e "
                     + "where e.kioSoliciVaca.empleado.secuencia = :rfEmpleado "
@@ -75,7 +71,6 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
             query.setParameter("rfEmpleado", secEmpleado);
             query.setParameter("estado", estado);
             listaEstaSolici = query.getResultList();
-            //em.getTransaction().commit();
             return listaEstaSolici;
         } catch (Exception e) {
             System.out.println("error " + e.getMessage());
@@ -89,12 +84,10 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
         List<KioEstadosSolici> listaEstaSolici;
         try {
             em.clear();
-            //em.getTransaction().begin();
             String consulta = "select e from KioEstadosSolici e where e.kioSoliciVaca.secuencia = :rfSolicitud ";
             Query query = em.createQuery(consulta);
             query.setParameter("rfSolicitud", solicitud.getSecuencia());
             listaEstaSolici = query.getResultList();
-            //em.getTransaction().commit();
             return listaEstaSolici.get(0);
         } catch (Exception e) {
             System.out.println("error consultarEstadosXSolici: " + e.getMessage());
@@ -106,7 +99,7 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
     public void crearEstadoSolicitud(EntityManager em, KioSoliciVacas solicitud, BigDecimal secEmplEjecuta, String estado, String motivo) throws EntityExistsException, TransactionRolledbackLocalException, Exception {
         System.out.println(this.getClass().getName() + ".crearEstadoSolicitud()");
         KioEstadosSolici estadoSoli = new KioEstadosSolici(solicitud);
-        System.out.println("crearEstadoSolicitud-estadoSoli: "+estadoSoli.getSecuencia());
+        System.out.println("crearEstadoSolicitud-estadoSoli: " + estadoSoli.getSecuencia());
         estadoSoli.setEstado(estado);
         estadoSoli.setEmpleadoEjecuta(persistenciaEmpleados.consultaEmpleadoxSec(em, secEmplEjecuta));
         estadoSoli.setMotivoProcesa(motivo);
@@ -114,21 +107,24 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
         try {
             System.out.println("guardando el nuevo estado");
             em.persist(estadoSoli);
-//            em.merge(estadoSoli);
             em.flush();
         } catch (EntityExistsException eee) {
             System.out.println("Error crearEstadoSolicitud: " + eee);
-            throw eee;
+//            throw eee;
+            throw new Exception(eee.toString());
         } catch (TransactionRolledbackLocalException trle) {
             System.out.println("Error crearEstadoSolicitud: " + trle);
-            throw trle;
+//            throw trle;
+            throw new Exception(trle.toString());
         } catch (Exception e) {
             System.out.println("Error crearEstadoSolicitud: " + e);
-            throw e;
+//            throw e;
+            throw new Exception(e.toString());
         }
     }
 
-    public KioEstadosSolici recargarEstadoSolicitud(EntityManager em, KioEstadosSolici estado) throws NoResultException, NonUniqueResultException, IllegalStateException {
+    @Override
+    public KioEstadosSolici recargarEstadoSolicitud(EntityManager em, KioEstadosSolici estado) throws NoResultException, NonUniqueResultException, IllegalStateException, Exception {
         System.out.println(this.getClass().getName() + ".recargarEstadoSolicitud()");
         List lista = null;
         em.clear();
@@ -144,7 +140,6 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
             query.setParameter("dtProcesamiento", estado.getFechaProcesamiento(), TemporalType.TIMESTAMP);
             query.setParameter("estado", estado.getEstado());
             query.setParameter("solicitud", estado.getKioSoliciVaca().getSecuencia());
-//            solicitud = (KioSoliciVacas) query.getSingleResult();
             lista = query.getResultList();
             Calendar c1 = Calendar.getInstance();
             c1.setTime(estado.getFechaProcesamiento());
@@ -217,7 +212,8 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
 //            lista = consultarEmpleadoEjecuta(em, lista);
             return lista;
         } catch (Exception e) {
-            throw e;
+//            throw e;
+            throw new Exception(e.toString());
         }
     }
 
@@ -236,17 +232,17 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
             Query query = em.createQuery(consulta);
             query.setParameter("rfEmpresa", secEmpresa);
             listaEstaSolici = query.getResultList();
-//            listaEstaSolici = consultarEmpleadoEjecuta(em, listaEstaSolici);
             return listaEstaSolici;
-        } catch (RuntimeException re){
-            throw re;
+        } catch (RuntimeException re) {
+//            throw re;
+            throw new Exception(re.toString());
         } catch (Exception e) {
             System.out.println("consultarEstadosXEmpre:Excepcion " + e.getMessage());
-            throw e;
+//            throw e;
+            throw new Exception(e.toString());
         }
     }
-    
-    
+
     @Override
     public List<KioEstadosSolici> consultarEstadosXEmpre(EntityManager em, BigInteger secEmpresa, String estado) throws Exception {
         System.out.println(this.getClass().getName() + ".consultarEstadosXEmpre()");
@@ -264,21 +260,21 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
             query.setParameter("rfEmpresa", secEmpresa);
             query.setParameter("estado", estado);
             listaEstaSolici = query.getResultList();
-//            listaEstaSolici = consultarEmpleadoEjecuta(em, listaEstaSolici);
             return listaEstaSolici;
         } catch (Exception e) {
             System.out.println("consultarEstadosXEmpre:Excepcion " + e.getMessage());
-            throw e;
+//            throw e;
+            throw new Exception(e.toString());
         }
     }
-    
+
     @Override
-    public List<KioEstadosSolici> consultarEstadosXEmpre(EntityManager em, BigInteger secEmpresa, String estado, 
+    public List<KioEstadosSolici> consultarEstadosXEmpre(EntityManager em, BigInteger secEmpresa, String estado,
             BigDecimal secJefe) throws Exception {
         System.out.println(this.getClass().getName() + ".consultarEstadosXEmpre()-2s");
-        System.out.println("consultarEstadosXEmpre-secEmpresa: "+secEmpresa);
-        System.out.println("consultarEstadosXEmpre-estado: "+estado);
-        System.out.println("consultarEstadosXEmpre-secJefe: "+secJefe);
+        System.out.println("consultarEstadosXEmpre-secEmpresa: " + secEmpresa);
+        System.out.println("consultarEstadosXEmpre-estado: " + estado);
+        System.out.println("consultarEstadosXEmpre-secJefe: " + secJefe);
         List<KioEstadosSolici> listaEstaSolici;
         try {
             em.clear();
@@ -295,23 +291,23 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
             query.setParameter("estado", estado);
             query.setParameter("rfJefe", secJefe);
             listaEstaSolici = query.getResultList();
-//            listaEstaSolici = consultarEmpleadoEjecuta(em, listaEstaSolici);
             return listaEstaSolici;
         } catch (Exception e) {
             System.out.println("consultarEstadosXEmpre:Excepcion " + e.getMessage());
-            throw e;
+//            throw e;
+            throw new Exception(e.toString());
         }
     }
-    
+
     @Override
     public String registrarNovedad(EntityManager em, KioSoliciVacas solicitud) throws EntityExistsException, TransactionRolledbackLocalException, Exception {
         System.out.println(this.getClass().getName() + ".registrarNovedad()");
-        System.out.println("registrarNovedad-solicitud: "+solicitud);
+        System.out.println("registrarNovedad-solicitud: " + solicitud);
         em.clear();
-        String resp="";
+        String resp = "";
         boolean res = false;
         try {
-            System.out.println("solicitud: "+solicitud);
+            System.out.println("solicitud: " + solicitud);
             StoredProcedureQuery query = em.createStoredProcedureQuery("KIOVACACIONES_PKG.REGISTRARNOVEDADVACACION");
             query.registerStoredProcedureParameter(1, BigInteger.class, ParameterMode.IN);
             query.registerStoredProcedureParameter(2, String.class, ParameterMode.OUT);
@@ -323,13 +319,16 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
             return resp;
         } catch (EntityExistsException eee) {
             System.out.println("Error registrarNovedad: " + eee);
-            throw eee;
+//            throw eee;
+            throw new Exception(eee.toString());
         } catch (TransactionRolledbackLocalException trle) {
             System.out.println("Error registrarNovedad: " + trle);
-            throw trle;
+//            throw trle;
+            throw new Exception(trle.toString());
         } catch (Exception e) {
             System.out.println("Error registrarNovedad: " + e);
-            throw e;
+//            throw e;
+            throw new Exception(e.toString());
         }
     }
 }

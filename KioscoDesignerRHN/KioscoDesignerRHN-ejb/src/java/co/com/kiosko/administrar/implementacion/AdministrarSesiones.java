@@ -9,13 +9,14 @@ import java.util.List;
 import javax.ejb.Singleton;
 //import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.io.Serializable;
 
 /**
  *
  * @author Felipe Triviño
  */
 @Singleton
-public class AdministrarSesiones implements IAdministrarSesiones {
+public class AdministrarSesiones implements IAdministrarSesiones, Serializable {
 
     private List<SessionEntityManager> sessionesActivas;
     private final ISesionEntityManagerFactory sessionEMF;

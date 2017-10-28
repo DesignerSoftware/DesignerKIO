@@ -10,7 +10,7 @@
     <p:remoteCommand name="pantallaDinamica" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
                      actionListener="#{controladorKio_VerSoliciAutorizadas.limpiarListas()}"
                      process="@this" update=":principalForm"/>
-    <p:remoteCommand name="refrescarListas" update=":principalForm:mensajecreacion"
+    <p:remoteCommand name="refrescarListas" update=":principalForm:resulEnvio"
                      process="@this" oncomplete="pantallaDinamica()"/>
     <p:remoteCommand name="procesarsolici" actionListener="#{controladorKio_VerSoliciAutorizadas.procesarSolicitud()}"
                      process="@this" oncomplete="PF('creandoSolici').hide();"/>
@@ -147,7 +147,7 @@
                             >
                     <p:ajax event="dateSelect" listener="#{controladorKio_VerSoliciAutorizadas.onDateSelect}" update=":principalForm:dtfpago"/>
                 </p:calendar>
-                <p:commandButton value="CANCELAR" onclick="PF('soliciDialog').hide();" />
+                <p:commandButton value="REGRESAR" onclick="PF('soliciDialog').hide();" />
                 <p:commandButton value="PROCESAR" actionListener="#{controladorKio_VerSoliciAutorizadas.procesarSolicitud()}"
                                  onclick="PF('creandoSolici').show();"/>
             </p:panelGrid>
@@ -198,7 +198,7 @@
                 </center>
             </p:column>
             <p:column>
-                <p:commandButton value="OK" 
+                <p:commandButton value="Aceptar" 
                                  onclick="PF('resulEnvio').hide(); refrescarListas();"
                                  process="@this"/>
             </p:column>

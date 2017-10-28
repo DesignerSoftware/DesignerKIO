@@ -1,11 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package co.com.kiosko.persistencia.interfaz;
 
 import co.com.kiosko.entidades.KioSoliciVacas;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.TransactionRolledbackLocalException;
@@ -22,7 +19,7 @@ import javax.persistence.NonUniqueResultException;
 public interface IPersistenciaKioSoliciVacas {
     public void crearSolicitud(EntityManager em, KioSoliciVacas solicitud) throws EntityExistsException, TransactionRolledbackLocalException, Exception;
     public KioSoliciVacas recargarSolicitud(EntityManager em, KioSoliciVacas solicitud) throws NoResultException, NonUniqueResultException, IllegalStateException;
-    public void modificarSolicitud(EntityManager em, KioSoliciVacas solicitud);
+    public void modificarSolicitud(EntityManager em, KioSoliciVacas solicitud) throws Exception;
     /**
      * Método para consultar las solicitudes que tienen estado ENVIADO
      * @param em EntityManager
@@ -30,4 +27,5 @@ public interface IPersistenciaKioSoliciVacas {
      * @throws Exception 
      */
     public List consultaSolicitudesEnviadas(EntityManager em) throws Exception;
+    public BigDecimal verificaExistenciaSolicitud(EntityManager em, BigDecimal secEmpleado, Date fechaIniVaca) throws Exception;
 }

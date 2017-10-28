@@ -8,6 +8,7 @@ import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaParametrizaClave;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaUtilidadesBD;
 import javax.ejb.EJB;
+import java.io.Serializable;
 import javax.ejb.Stateful;
 //import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,7 +20,7 @@ import javax.persistence.EntityManagerFactory;
  */
 @Stateful
 //@Stateless
-public class AdministrarOlvidoClave implements IAdministrarOlvidoClave {
+public class AdministrarOlvidoClave implements IAdministrarOlvidoClave, Serializable {
 
     @EJB
     private IAdministrarSesiones administrarSesiones;

@@ -3,8 +3,11 @@ package co.com.kiosko.persistencia.implementacion;
 import co.com.kiosko.entidades.KioSoliciVacas;
 import javax.ejb.Stateless;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaKioSoliciVacas;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.TransactionRolledbackLocalException;
 import javax.persistence.EntityExistsException;
@@ -13,7 +16,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
-//import javax.persistence.EntityTransaction;
 
 /**
  *
@@ -27,14 +29,13 @@ public class PersistenciaKioSoliciVacas implements IPersistenciaKioSoliciVacas {
         System.out.println(this.getClass().getName() + ".crearSolicitud()");
         em.clear();
         try {
-//            em.persist(solicitud);
             em.merge(solicitud);
             em.flush();
             System.out.println("Creacion de la solicitud completada.");
             System.out.println(solicitud.toString());
         } catch (Exception e) {
             System.out.println("crearSolicitud Excepcion: " + e.getMessage());
-            throw e;
+            throw new Exception(e.toString());
         }
     }
 
@@ -42,7 +43,6 @@ public class PersistenciaKioSoliciVacas implements IPersistenciaKioSoliciVacas {
     public KioSoliciVacas recargarSolicitud(EntityManager em, KioSoliciVacas solicitud) throws NoResultException, NonUniqueResultException, IllegalStateException {
         System.out.println(this.getClass().getName() + ".recargarSolicitud()");
         System.out.println("recibido");
-//        System.out.println(solicitud.toString());
         System.out.println("secEmpleado: " + solicitud.getEmpleado().getSecuencia());
         System.out.println("dtGeneracion: " + solicitud.getFechaGeneracion());
         System.out.println("novedad: " + solicitud.getKioNovedadesSolici().getSecuencia());
@@ -60,7 +60,6 @@ public class PersistenciaKioSoliciVacas implements IPersistenciaKioSoliciVacas {
             query.setParameter("dtGeneracion", solicitud.getFechaGeneracion(), TemporalType.TIMESTAMP);
             query.setParameter("novedad", solicitud.getKioNovedadesSolici().getSecuencia());
             query.setParameter("activa", solicitud.getActiva());
-//            solicitud = (KioSoliciVacas) query.getSingleResult();
             lista = query.getResultList();
             System.out.println("Tamagno de la lista de solicitudes: " + lista.size());
             Calendar c1 = Calendar.getInstance();
@@ -142,13 +141,14 @@ public class PersistenciaKioSoliciVacas implements IPersistenciaKioSoliciVacas {
     }
 
     @Override
-    public void modificarSolicitud(EntityManager em, KioSoliciVacas solicitud) {
+    public void modificarSolicitud(EntityManager em, KioSoliciVacas solicitud) throws Exception {
         System.out.println(this.getClass().getName() + ".modificarSolicitud()");
         em.clear();
         try {
             em.merge(solicitud);
         } catch (Exception e) {
             System.out.println("modificarSolicitud Excepcion: " + e.getMessage());
+            throw new Exception(e.toString());
         }
     }
 
@@ -166,8 +166,48 @@ public class PersistenciaKioSoliciVacas implements IPersistenciaKioSoliciVacas {
             Query query = em.createQuery(consulta);
             resultado = query.getResultList();
             return resultado;
-        } catch (Exception e){
-            throw e;
+        } catch (Exception e) {
+//            throw e;
+            throw new Exception(e.toString());
         }
     }
+
+    @Override
+    public BigDecimal verificaExistenciaSolicitud(EntityManager em, BigDecimal secEmpleado, Date fechaIniVaca) throws Exception {
+        System.out.println(this.getClass().getName() + ".verificaExistenciaSolicitud()");
+        System.out.println("verificaExistenciaSolicitud-secEmpleado: " + secEmpleado);
+        System.out.println("verificaExistenciaSolicitud-fechaIniVaca: " + fechaIniVaca);
+        SimpleDateFormat formato = new SimpleDateFormat("ddMMyyyy");
+        String txtFecha = formato.format(fechaIniVaca);
+        String consulta = "SELECT "
+                + "KIOVACACIONES_PKG.VERIFICAEXISTESOLICITUD(?, to_date(?,'DDMMYYYY') ) "
+                + "FROM DUAL ";
+        System.out.println("verificaExistenciaSolicitud-consulta: " + consulta);
+        Query query = null;
+        BigDecimal conteo = null;
+        try {
+            try {
+                query = em.createNativeQuery(consulta);
+                query.setParameter(1, secEmpleado);
+                query.setParameter(2, txtFecha);
+            } catch (NullPointerException npe) {
+                throw new Exception("verificaExistenciaSolicitud: EntiyManager, query o consulta nulos.");
+            }
+            Object res = query.getSingleResult();
+            System.out.println("verificaExistenciaSolicitud-res: " + res);
+            if (res instanceof BigDecimal) {
+                conteo = (BigDecimal) res;
+                System.out.println("verificaExistenciaSolicitud-conteo: " + conteo);
+            } else {
+                throw new Exception("El conteo de la solicitud no es BigDecimal. " + res + " tipo: " + res.getClass().getName());
+            }
+        } catch (Exception e) {
+            System.out.println("verificaExistenciaSolicitud-excepcion: " + e);
+//            throw e;
+            throw new Exception("Error verificando si la solicitud ya existe " + e);
+        }
+        System.out.println("verificaExistenciaSolicitud-conteo: " + conteo);
+        return conteo;
+    }
+
 }

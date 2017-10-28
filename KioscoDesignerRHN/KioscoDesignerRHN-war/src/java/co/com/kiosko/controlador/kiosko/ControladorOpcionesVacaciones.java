@@ -2,7 +2,6 @@ package co.com.kiosko.controlador.kiosko;
 
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
-//import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 
 /**

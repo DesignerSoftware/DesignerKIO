@@ -1,7 +1,6 @@
 package co.com.kiosko.controlador.kiosko;
 
 import co.com.kiosko.administrar.interfaz.IAdministrarHistoVacas;
-//import co.com.kiosko.administrar.interfaz.IAdministrarProcesarSolicitud;
 import co.com.kiosko.administrar.interfaz.IAdministrarRegistrarSolicitud;
 import co.com.kiosko.clasesAyuda.ExtraeCausaExcepcion;
 import co.com.kiosko.controlador.ingreso.ControladorIngreso;
@@ -19,7 +18,6 @@ import javax.ejb.EJB;
 import javax.el.ELException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-//import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -96,11 +94,7 @@ public class ControladorKio_VerSoliciAutorizadas implements Serializable {
         try {
             administrarHistoVacas.obtenerConexion(ses.getId());
             administrarRegistrarSolicitud.obtenerConexion(ses.getId());
-//            empleadosACargo = administrarHistoVacas.consultarEmpleadosEmpresa(nit);
-//            System.out.println("consultasIniciales: num empleados: " + empleadosACargo.size());
-//            soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa());
             soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa(), "AUTORIZADO", null);
-//            empleadoSelec = soliciEmpleado.get(0).getKioSoliciVaca().getEmpleado();
             System.out.println("consultasIniciales: num estados solicitudes: " + soliciEmpleado.size());
         } catch (Exception e) {
             String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
@@ -110,14 +104,12 @@ public class ControladorKio_VerSoliciAutorizadas implements Serializable {
 
     public void limpiarListas() {
         System.out.println(this.getClass().getName() + ".limpiarListas()");
-//        this.empleadoSelec = null;
         this.empleadosACargo = null;
         this.emplACargoFiltro = null;
         this.soliciEmpleado = null;
         this.soliciFiltradas = null;
         this.solicitudSelec = null;
         this.motivo = null;
-//        this.estadoNuevo = null;
         this.setEstadoNuevo(null);
         this.proceso = null;
         this.fpago = null;
@@ -149,7 +141,6 @@ public class ControladorKio_VerSoliciAutorizadas implements Serializable {
 
     public void recargarSolici() {
         System.out.println(this.getClass().getName() + ".mostrarEmpleados()");
-//        soliciFiltradas = null;
         solicitudSelec = null;
         soliciEmpleado = null;
         getSoliciEmpleado();
@@ -161,11 +152,6 @@ public class ControladorKio_VerSoliciAutorizadas implements Serializable {
         System.out.println(this.getClass().getName() + ".cambiarEstado()");
         System.out.println("cambiarEstado-soliciSelec: " + this.solicitudSelec);
         System.out.println("cambiarEstado-soliciSelec: " + this.estadoNuevo);
-//        if (estadoNuevo.equals("RECHAZADO")) {
-//            inacMotivo = false;
-//        } else {
-//            inacMotivo = true;
-//        }
         inacMotivo = !estadoNuevo.equals("RECHAZADO");
     }
 
@@ -312,7 +298,6 @@ public class ControladorKio_VerSoliciAutorizadas implements Serializable {
         if (soliciEmpleado == null || soliciEmpleado.isEmpty()) {
             try {
                 if (empleadoSelec == null) {
-//                    soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa());
                     soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa(), "AUTORIZADO", null);
                 } else {
                     soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpl(empleadoSelec);
@@ -354,7 +339,6 @@ public class ControladorKio_VerSoliciAutorizadas implements Serializable {
     public void setSolicitudSelec(KioEstadosSolici solicitudSelec) {
         System.out.println(this.getClass().getName() + ".setSolicitudSelec()");
         this.solicitudSelec = solicitudSelec;
-//        fpago = administrarRegistrarSolicitud.fechaPago(solicitudSelec.getKioSoliciVaca().getEmpleado());
         fpago = administrarRegistrarSolicitud.calcularFechaPago(solicitudSelec.getKioSoliciVaca().getEmpleado(),
                 solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getFechaInicialDisfrute(),
                 solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getAdelantaPagoHasta(),

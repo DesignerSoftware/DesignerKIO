@@ -1,8 +1,6 @@
 package co.com.kiosko.utilidadesUI;
 
 import javax.annotation.PostConstruct;
-//import javax.inject.Named;
-//import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Document;

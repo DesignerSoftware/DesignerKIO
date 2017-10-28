@@ -4,8 +4,6 @@ import co.com.kiosko.persistencia.interfaz.IPersistenciaVwVacaPendientesEmpleado
 import co.com.kiosko.entidades.VwVacaPendientesEmpleados;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-//import java.text.DateFormat;
-//import java.sql.SQLDataException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,47 +21,38 @@ import javax.persistence.*;
 public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVacaPendientesEmpleados {
 
     @Override
-    public List<VwVacaPendientesEmpleados> consultarPeriodosPendientesEmpleado(EntityManager em, BigDecimal secEmpleado) {
+    public List<VwVacaPendientesEmpleados> consultarPeriodosPendientesEmpleado(EntityManager em, BigDecimal secEmpleado) throws Exception {
         System.out.println(this.getClass().getName() + "." + "consultarPeriodosPendientesEmpleado" + "()");
         List<VwVacaPendientesEmpleados> periodosPendientes = null;
         Query query = null;
         String consulta = "select vw from VwVacaPendientesEmpleados vw where vw.diasPendientes > 0 and vw.empleado.secuencia = :secEmpleado ";
         try {
-            //em.getTransaction().begin();
             query = em.createQuery(consulta);
             query.setParameter("secEmpleado", secEmpleado);
             periodosPendientes = query.getResultList();
-            //em.getTransaction().commit();
             return periodosPendientes;
         } catch (PersistenceException pe) {
             System.out.println("Error de persistencia.");
+            throw new Exception(pe.toString());
         } catch (NullPointerException npee) {
             System.out.println("Nulo general");
-//            return null;
+//            throw new Exception(npee.toString());
+            return null;
         } catch (Exception e) {
             System.out.println("Error general." + e);
-//            return null;
+            throw new Exception(e.toString());
         }
-        /*try {
-            if (em.getTransaction().isActive()) {
-                System.out.println("Cerrando transacciones.");
-                em.getTransaction().rollback();
-            }
-        } catch (NullPointerException npe) {
-            System.out.println("Error de nulo.");
-        }*/
-        return null;
     }
 
     @Override
-    public VwVacaPendientesEmpleados consultarPeriodoMasAntiguo(EntityManager em, BigDecimal secEmpleado, Date fechaContrato) {
+    public VwVacaPendientesEmpleados consultarPeriodoMasAntiguo(EntityManager em, BigDecimal secEmpleado, Date fechaContrato) throws Exception {
         System.out.println(this.getClass().getName() + "." + "consultarPeriodoMasAntiguo" + "()");
         VwVacaPendientesEmpleados periodo = null;
         Object retorno;
         Query query = null;
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
         String fechaContratoStr = formatoFecha.format(fechaContrato);
-        System.out.println("Fecha de contratacion: "+fechaContratoStr);
+        System.out.println("Fecha de contratacion: " + fechaContratoStr);
         String consulta = "select vw "
                 + "from VwVacaPendientesEmpleados vw "
                 + "where vw.diasPendientes > 0 "
@@ -78,7 +67,7 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
             query.setParameter("secEmpleado", secEmpleado);
             query.setParameter("fechaContrato", fechaContrato);
             retorno = query.getSingleResult();
-            if (retorno instanceof VwVacaPendientesEmpleados){
+            if (retorno instanceof VwVacaPendientesEmpleados) {
                 periodo = (VwVacaPendientesEmpleados) retorno;
                 System.out.println("Casteo exitoso a VwVacaPendientesEmpleados");
             } else {
@@ -88,16 +77,19 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
             return periodo;
         } catch (PersistenceException pe) {
             System.out.println("Error de persistencia.");
+            throw new Exception(pe.toString());
         } catch (NullPointerException npee) {
             System.out.println("Nulo general");
+//            throw new Exception(npee.toString());
+            return null;
         } catch (Exception e) {
             System.out.println("Error general." + e);
+            throw new Exception(e.toString());
         }
-        return null;
     }
 
     @Override
-    public BigDecimal consultarCodigoJornada(EntityManager em, BigDecimal secEmpleado, Date fechaDisfrute) {
+    public BigDecimal consultarCodigoJornada(EntityManager em, BigDecimal secEmpleado, Date fechaDisfrute) throws Exception {
         System.out.println(this.getClass().getName() + "." + "consultarCodigoJornada" + "()");
         String consulta = "select nvl(j.codigo, 1) "
                 + "from vigenciasjornadas v, jornadaslaborales j "
@@ -114,36 +106,26 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
         System.out.println("secuencia: " + secEmpleado);
         System.out.println("fecha en txt: " + strFechaDisfrute);
         try {
-            //em.getTransaction().begin();
             query = em.createNativeQuery(consulta);
             query.setParameter(1, secEmpleado);
             query.setParameter(2, strFechaDisfrute);
             codigoJornada = new BigDecimal(query.getSingleResult().toString());
-            //em.getTransaction().commit();
             return codigoJornada;
         } catch (PersistenceException pe) {
             System.out.println("Error de persistencia.");
-
+            throw new Exception(pe.toString());
         } catch (NullPointerException npee) {
             System.out.println("Nulo general");
-//            return null;
+//            throw new Exception(npee.toString());
+            return null;
         } catch (Exception e) {
             System.out.println("Error general. " + e);
-//            return null;
+            throw new Exception(e.toString());
         }
-        /*try {
-            if (em.getTransaction().isActive()) {
-                System.out.println("Cerrando transacciones.");
-                em.getTransaction().rollback();
-            }
-        } catch (NullPointerException npe) {
-            System.out.println("Error de nulo.");
-        }*/
-        return null;
     }
 
     @Override
-    public boolean verificarFestivo(EntityManager em, Date fechaDisfrute) {
+    public boolean verificarFestivo(EntityManager em, Date fechaDisfrute) throws Exception {
         System.out.println(this.getClass().getName() + "." + "verificarFestivo" + "()");
         String consulta = "select COUNT(*) "
                 + "FROM FESTIVOS F, PAISES P "
@@ -156,37 +138,27 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
         SimpleDateFormat formatoFecha = new SimpleDateFormat("ddMMyyyy");
         String strFechaDisfrute = formatoFecha.format(fechaDisfrute);
         try {
-            //em.getTransaction().begin();
             query = em.createNativeQuery(consulta);
             query.setParameter(1, "COLOMBIA");
             query.setParameter(2, strFechaDisfrute);
             conteoDiaFestivo = new BigDecimal(query.getSingleResult().toString());
-            //em.getTransaction().commit();
             esDiaFestivo = !conteoDiaFestivo.equals(BigDecimal.ZERO);
             return esDiaFestivo;
         } catch (PersistenceException pe) {
             System.out.println("Error de persistencia.");
-
+            throw new Exception(pe.toString());
         } catch (NullPointerException npee) {
             System.out.println("Nulo general");
-//            return false;
+            throw new Exception(npee.toString());
         } catch (Exception e) {
             System.out.println("Error general. " + e);
-//            return false;
+            throw new Exception(e.toString());
         }
-        /*try {
-            if (em.getTransaction().isActive()) {
-                System.out.println("Cerrando transacciones.");
-                em.getTransaction().rollback();
-            }
-        } catch (NullPointerException npe) {
-            System.out.println("Error de nulo.");
-        }*/
-        return false;
+//        return false;
     }
 
     @Override
-    public boolean verificarDiaLaboral(EntityManager em, Date fechaDisfrute, BigDecimal codigoJornada) {
+    public boolean verificarDiaLaboral(EntityManager em, Date fechaDisfrute, BigDecimal codigoJornada) throws Exception {
         System.out.println(this.getClass().getName() + "." + "verificarDiaLaboral" + "()");
         System.out.println("fechaDisfrute: " + fechaDisfrute);
         System.out.println("codigoJornada: " + codigoJornada);
@@ -206,33 +178,22 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
         strFechaDisfrute = nombreDia(diaSemana);
         System.out.println("strFechaDisfrute: " + strFechaDisfrute);
         try {
-            //em.getTransaction().begin();
             query = em.createNativeQuery(consulta);
             query.setParameter(1, codigoJornada);
             query.setParameter(2, strFechaDisfrute);
             conteoDiaLaboral = new BigDecimal(query.getSingleResult().toString());
-            //em.getTransaction().commit();
             esDiaLaboral = !conteoDiaLaboral.equals(BigDecimal.ZERO);
             return esDiaLaboral;
         } catch (PersistenceException pe) {
             System.out.println("Error de persistencia.");
-
+            throw new Exception(pe.toString());
         } catch (NullPointerException npee) {
             System.out.println("Nulo general");
-//            return false;
+            throw new Exception(npee.toString());
         } catch (Exception e) {
             System.out.println("Error general. " + e);
-//            return false;
+            throw new Exception(e.toString());
         }
-        /*try {
-            if (em.getTransaction().isActive()) {
-                System.out.println("Cerrando transacciones.");
-                em.getTransaction().rollback();
-            }
-        } catch (NullPointerException npe) {
-            System.out.println("Error de nulo.");
-        }*/
-        return false;
     }
 
     private String nombreDia(int dia) {
@@ -267,7 +228,7 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
     }
 
     @Override
-    public BigDecimal consultaDiasPendientes(EntityManager em, BigDecimal secEmpleado) {
+    public BigDecimal consultaDiasPendientes(EntityManager em, BigDecimal secEmpleado) throws Exception {
         System.out.println(this.getClass().getName() + "." + "consultaDiasPendientes" + "()");
         String consulta = "SELECT "
                 + "NVL(SUM(V.DIASPENDIENTES), 0) "
@@ -281,33 +242,24 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
         SimpleDateFormat formatoFecha = new SimpleDateFormat("ddMMyyyy");
         String strFechaDisfrute = formatoFecha.format(new Date());
         try {
-            //em.getTransaction().begin();
             query = em.createNativeQuery(consulta);
             query.setParameter(1, secEmpleado);
             query.setParameter(2, secEmpleado);
             query.setParameter(3, strFechaDisfrute);
             diasPendientes = new BigDecimal(query.getSingleResult().toString());
-            //em.getTransaction().commit();
             return diasPendientes;
         } catch (PersistenceException pe) {
             System.out.println("Error de persistencia.");
-
+            throw new Exception(pe.toString());
         } catch (NullPointerException npee) {
             System.out.println("Nulo general");
+            throw new Exception(npee.toString());
         } catch (Exception e) {
             System.out.println("Error general. " + e);
+            throw new Exception(e.toString());
         }
-        /*try {
-            if (em.getTransaction().isActive()) {
-                System.out.println("Cerrando transacciones.");
-                em.getTransaction().rollback();
-            }
-        } catch (NullPointerException npe) {
-            System.out.println("Error de nulo.");
-        }*/
-        return null;
     }
-    
+
     @Override
     public Date calculaFechaRegreso(EntityManager em, BigDecimal secEmpleado, Date fechaIniVaca, BigInteger dias) throws PersistenceException, NullPointerException, Exception {
         System.out.println(this.getClass().getName() + "." + "calculaFechaRegreso" + "()");
@@ -325,16 +277,16 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
             return fechaRegreso;
         } catch (PersistenceException pe) {
             System.out.println("Error de persistencia en calculaFechaRegreso.");
-            throw pe;
+            throw new Exception(pe.toString());
         } catch (NullPointerException npee) {
             System.out.println("Nulo general en calculaFechaRegreso");
-            throw npee;
+            throw new Exception(npee.toString());
         } catch (Exception e) {
             System.out.println("Error general en calculaFechaRegreso. " + e);
-            throw e;
+            throw new Exception(e.toString());
         }
     }
-    
+
     @Override
     public Date calculaFechaFinVaca(EntityManager em, BigDecimal secEmpleado, Date fechaIniVaca, Date fechaRegreso) throws PersistenceException, NullPointerException, Exception {
         System.out.println(this.getClass().getName() + "." + "calculaFechaFinVaca" + "()");
@@ -353,16 +305,16 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
             return fechaFinVaca;
         } catch (PersistenceException pe) {
             System.out.println("Error de persistencia en calculaFechaFinVaca.");
-            throw pe;
+            throw new Exception(pe.toString());
         } catch (NullPointerException npee) {
             System.out.println("Nulo general en calculaFechaFinVaca");
-            throw npee;
+            throw new Exception(npee.toString());
         } catch (Exception e) {
             System.out.println("Error general en calculaFechaFinVaca. " + e);
-            throw e;
+            throw new Exception(e.toString());
         }
     }
-    
+
     @Override
     public Date calculaFechaPago(EntityManager em, BigDecimal secEmpleado, Date fechaIniVaca, Date fechaRegreso, String procDifNom) throws PersistenceException, NullPointerException, Exception {
         System.out.println(this.getClass().getName() + "." + "calculaFechaPago" + "()");
@@ -381,18 +333,18 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
             return fechaPago;
         } catch (PersistenceException pe) {
             System.out.println("Error de persistencia en calculaFechaPago.");
-            throw pe;
+            throw new Exception(pe.toString());
         } catch (NullPointerException npee) {
             System.out.println("Nulo general en calculaFechaPago");
-            throw npee;
+            throw new Exception(npee.toString());
         } catch (Exception e) {
             System.out.println("Error general en calculaFechaPago. " + e);
-            throw e;
+            throw new Exception(e.toString());
         }
     }
 
     @Override
-    public Date consultaFechaUltimoPago(EntityManager em, BigDecimal secEmpleado) {
+    public Date consultaFechaUltimoPago(EntityManager em, BigDecimal secEmpleado) throws Exception {
         System.out.println(this.getClass().getName() + "." + "consultaFechaUltimoPago" + "()");
         String consulta = "SELECT GREATEST("
                 + "CORTESPROCESOS_PKG.CAPTURARCORTEPROCESO(?, 1), "
@@ -408,29 +360,21 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
             query.setParameter(2, secEmpleado);
             query.setParameter(3, secEmpleado);
             fechaUltimoPago = (Date) (query.getSingleResult());
-            //em.getTransaction().commit();
             return fechaUltimoPago;
         } catch (PersistenceException pe) {
             System.out.println("Error de persistencia.");
-
+            throw new Exception(pe.toString());
         } catch (NullPointerException npee) {
             System.out.println("Nulo general");
+            throw new Exception(npee.toString());
         } catch (Exception e) {
             System.out.println("Error general. " + e);
+            throw new Exception(e.toString());
         }
-        /*try {
-            if (em.getTransaction().isActive()) {
-                System.out.println("Cerrando transacciones.");
-                em.getTransaction().rollback();
-            }
-        } catch (NullPointerException npe) {
-            System.out.println("Error de nulo.");
-        }*/
-        return null;
     }
 
     @Override
-    public BigDecimal consultarDiasNoContinuos(EntityManager em, BigDecimal secEmpleado, Date fechaIngreso, Date fechaUltPago) {
+    public BigDecimal consultarDiasNoContinuos(EntityManager em, BigDecimal secEmpleado, Date fechaIngreso, Date fechaUltPago) throws Exception {
         System.out.println(this.getClass().getName() + "." + "consultarDiasNoContinuos" + "()");
         String consulta = "SELECT "
                 + "NOVEDADESSISTEMA_PKG.DIASDESCUENTOTIEMPOCONTINUO( ? , ? , ? ) "
@@ -438,34 +382,26 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
         Query query = null;
         BigDecimal diasNoContinuos = null;
         try {
-            //em.getTransaction().begin();
             query = em.createNativeQuery(consulta);
             query.setParameter(1, secEmpleado);
             query.setParameter(2, fechaIngreso);
             query.setParameter(3, fechaUltPago);
             diasNoContinuos = new BigDecimal(query.getSingleResult().toString());
-            //em.getTransaction().commit();
             return diasNoContinuos;
         } catch (PersistenceException pe) {
             System.out.println("Error de persistencia.");
+            throw new Exception(pe.toString());
         } catch (NullPointerException npee) {
             System.out.println("Nulo general");
+            throw new Exception(npee.toString());
         } catch (Exception e) {
             System.out.println("Error general. " + e);
+            throw new Exception(e.toString());
         }
-        /*try {
-            if (em.getTransaction().isActive()) {
-                System.out.println("Cerrando transacciones.");
-                em.getTransaction().rollback();
-            }
-        } catch (NullPointerException npe) {
-            System.out.println("Error de nulo.");
-        }*/
-        return null;
     }
 
     @Override
-    public Date consultarVacaMaxPago(EntityManager em, BigDecimal secEmpleado) {
+    public Date consultarVacaMaxPago(EntityManager em, BigDecimal secEmpleado) throws Exception {
         System.out.println(this.getClass().getName() + "." + "consultarVacaMaxPago" + "()");
         String consulta = "SELECT MAX(N.FECHAPAGO) "
                 + "FROM NOVEDADESSISTEMA N "
@@ -478,32 +414,24 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
         Query query = null;
         Date fechaMaxPago = null;
         try {
-            //em.getTransaction().begin();
             query = em.createNativeQuery(consulta);
             query.setParameter(1, secEmpleado);
             fechaMaxPago = (Date) (query.getSingleResult());
-            //em.getTransaction().commit();
             return fechaMaxPago;
         } catch (PersistenceException pe) {
             System.out.println("Error de persistencia.");
+            throw new Exception(pe.toString());
         } catch (NullPointerException npee) {
             System.out.println("Nulo general");
+            throw new Exception(npee.toString());
         } catch (Exception e) {
             System.out.println("Error general. " + e);
+            throw new Exception(e.toString());
         }
-        /*try {
-            if (em.getTransaction().isActive()) {
-                System.out.println("Cerrando transacciones.");
-                em.getTransaction().rollback();
-            }
-        } catch (NullPointerException npe) {
-            System.out.println("Error de nulo.");
-        }*/
-        return null;
     }
 
     @Override
-    public Date consultarVacaSigFinVaca(EntityManager em, BigDecimal secEmpleado) {
+    public Date consultarVacaSigFinVaca(EntityManager em, BigDecimal secEmpleado) throws Exception {
         System.out.println(this.getClass().getName() + "." + "consultarVacaSigFinVaca" + "()");
         String consulta = "SELECT MAX(N.FECHASIGUIENTEFINVACA) "
                 + "FROM NOVEDADESSISTEMA N "
@@ -516,27 +444,19 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
         Query query = null;
         Date fechaRegreUltiVaca = null;
         try {
-            //em.getTransaction().begin();
             query = em.createNativeQuery(consulta);
             query.setParameter(1, secEmpleado);
             fechaRegreUltiVaca = (Date) (query.getSingleResult());
-            //em.getTransaction().commit();
             return fechaRegreUltiVaca;
         } catch (PersistenceException pe) {
             System.out.println("Error de persistencia.");
+            throw new Exception(pe.toString());
         } catch (NullPointerException npee) {
             System.out.println("Nulo general");
+            throw new Exception(npee.toString());
         } catch (Exception e) {
             System.out.println("Error general. " + e);
+            throw new Exception(e.toString());
         }
-        /*try {
-            if (em.getTransaction().isActive()) {
-                System.out.println("Cerrando transacciones.");
-                em.getTransaction().rollback();
-            }
-        } catch (NullPointerException npe) {
-            System.out.println("Error de nulo.");
-        }*/
-        return null;
     }
 }

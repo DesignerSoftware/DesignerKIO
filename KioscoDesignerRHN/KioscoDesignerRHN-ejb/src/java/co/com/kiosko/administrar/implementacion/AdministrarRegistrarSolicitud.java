@@ -10,6 +10,7 @@ import co.com.kiosko.persistencia.interfaz.IPersistenciaKioNovedadesSolici;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaVwVacaPendientesEmpleados;
 import java.util.Date;
 import javax.ejb.EJB;
+import java.io.Serializable;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -19,7 +20,7 @@ import javax.persistence.EntityManagerFactory;
  * @author Edwin
  */
 @Stateful
-public class AdministrarRegistrarSolicitud implements IAdministrarRegistrarSolicitud {
+public class AdministrarRegistrarSolicitud implements IAdministrarRegistrarSolicitud, Serializable {
 
     
     private EntityManagerFactory emf;

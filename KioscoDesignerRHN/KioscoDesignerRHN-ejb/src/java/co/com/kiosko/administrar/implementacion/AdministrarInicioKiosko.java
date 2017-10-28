@@ -6,6 +6,7 @@ import co.com.kiosko.administrar.interfaz.IAdministrarInicioKiosko;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaGenerales;
+import java.io.Serializable;
 import java.math.BigInteger;
 import javax.ejb.EJB;
 //import javax.ejb.Stateful;
@@ -19,7 +20,7 @@ import javax.persistence.EntityManagerFactory;
  */
 //@Stateful
 @Stateless
-public class AdministrarInicioKiosko implements IAdministrarInicioKiosko {
+public class AdministrarInicioKiosko implements IAdministrarInicioKiosko, Serializable {
 
     @EJB
     private IAdministrarSesiones administrarSesiones;

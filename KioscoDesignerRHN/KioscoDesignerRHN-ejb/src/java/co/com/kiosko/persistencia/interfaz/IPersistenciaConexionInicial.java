@@ -4,7 +4,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 public interface IPersistenciaConexionInicial {
-
+    /**
+     * Método para setear el Rol Kiosko.
+     * @param eManager 
+     */
     public void setearKiosko(EntityManager eManager);
 
     public boolean validarUsuarioyEmpresa(EntityManager eManager, String usuario, String nitEmpresa);

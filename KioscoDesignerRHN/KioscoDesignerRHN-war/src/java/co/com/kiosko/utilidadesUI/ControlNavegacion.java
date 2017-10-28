@@ -1,41 +1,22 @@
 package co.com.kiosko.utilidadesUI;
 
-//import co.com.kiosko.administrar.interfaz.IAdministrarInicioKiosko;
-//import co.com.kiosko.clasesAyuda.CadenasKioskos;
-//import co.com.kiosko.clasesAyuda.LeerArchivoXML;
 import co.com.kiosko.clasesAyuda.NavegationPageURL;
-//import java.io.File;
-//import java.io.FileInputStream;
-//import java.io.FileNotFoundException;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-//import org.primefaces.model.DefaultStreamedContent;
-//import co.com.kiosko.controlador.ingreso.ControladorIngreso;
-//import java.io.IOException;
-//import javax.ejb.EJB;
-//import javax.faces.context.FacesContext;
-//import org.primefaces.model.StreamedContent;
 
 @ManagedBean
 @SessionScoped
 public class ControlNavegacion implements Serializable {
 
     private String urlMenuNavegation;
-    //private String nitEmpresa;
-    //private String pathFoto;
-    //private FileInputStream fis;
-    //private StreamedContent fondoEmpresa;
 
     @PostConstruct
     public void init() {
         System.out.println("ControlNavegacion.init");
-        //FacesContext x = FacesContext.getCurrentInstance();
         System.out.println("URL: "+NavegationPageURL.OPCIONESKIOSKO.getUrl());
         urlMenuNavegation = NavegationPageURL.OPCIONESKIOSKO.getUrl();
-        //nitEmpresa = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit();
-        //pathFoto = administrarInicioKiosko.fotoEmpleado();
     }
 
     public String getUrlNavegation() {
