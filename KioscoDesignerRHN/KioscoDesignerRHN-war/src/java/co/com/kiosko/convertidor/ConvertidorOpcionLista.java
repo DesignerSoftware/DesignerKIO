@@ -1,6 +1,6 @@
 package co.com.kiosko.convertidor;
 
-import co.com.kiosko.clasesAyuda.EstadosSolicitud;
+import co.com.kiosko.clasesAyuda.EstadoSolicitud;
 import co.com.kiosko.utilidadesUI.OpcionLista;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -22,29 +22,29 @@ public class ConvertidorOpcionLista implements Converter {
         System.out.println("getAsObject-value: " + value);
         System.out.println("getAsObject-CLComp: " + component.getClass().getName());
         System.out.println("getAsObject-comp: " + component);
-        if (EstadosSolicitud.GUARDADO.getEstado().equals(value)){
-            return new OpcionLista(EstadosSolicitud.GUARDADO.getEvento(),
-                    EstadosSolicitud.GUARDADO.getEstado());
+        if (EstadoSolicitud.GUARDADO.getEstado().equals(value)){
+            return new OpcionLista(EstadoSolicitud.GUARDADO.getEvento(),
+                    EstadoSolicitud.GUARDADO.getEstado());
         }
-        if (EstadosSolicitud.ENVIADO.getEstado().equals(value)){
-            return new OpcionLista(EstadosSolicitud.ENVIADO.getEvento(),
-                    EstadosSolicitud.ENVIADO.getEstado());
+        if (EstadoSolicitud.ENVIADO.getEstado().equals(value)){
+            return new OpcionLista(EstadoSolicitud.ENVIADO.getEvento(),
+                    EstadoSolicitud.ENVIADO.getEstado());
         }
-        if (EstadosSolicitud.AUTORIZADO.getEstado().equals(value)){
-            return new OpcionLista(EstadosSolicitud.AUTORIZADO.getEvento(),
-                    EstadosSolicitud.AUTORIZADO.getEstado());
+        if (EstadoSolicitud.AUTORIZADO.getEstado().equals(value)){
+            return new OpcionLista(EstadoSolicitud.AUTORIZADO.getEvento(),
+                    EstadoSolicitud.AUTORIZADO.getEstado());
         }
-        if (EstadosSolicitud.LIQUIDADO.getEstado().equals(value)){
-            return new OpcionLista(EstadosSolicitud.LIQUIDADO.getEvento(),
-                    EstadosSolicitud.LIQUIDADO.getEstado());
+        if (EstadoSolicitud.LIQUIDADO.getEstado().equals(value)){
+            return new OpcionLista(EstadoSolicitud.LIQUIDADO.getEvento(),
+                    EstadoSolicitud.LIQUIDADO.getEstado());
         }
-        if (EstadosSolicitud.RECHAZADO.getEstado().equals(value)){
-            return new OpcionLista(EstadosSolicitud.RECHAZADO.getEvento(),
-                    EstadosSolicitud.RECHAZADO.getEstado());
+        if (EstadoSolicitud.RECHAZADO.getEstado().equals(value)){
+            return new OpcionLista(EstadoSolicitud.RECHAZADO.getEvento(),
+                    EstadoSolicitud.RECHAZADO.getEstado());
         }
-        if (EstadosSolicitud.CANCELADO.getEstado().equals(value)){
-            return new OpcionLista(EstadosSolicitud.CANCELADO.getEvento(),
-                    EstadosSolicitud.CANCELADO.getEstado());
+        if (EstadoSolicitud.CANCELADO.getEstado().equals(value)){
+            return new OpcionLista(EstadoSolicitud.CANCELADO.getEvento(),
+                    EstadoSolicitud.CANCELADO.getEstado());
         }
         return null;
 

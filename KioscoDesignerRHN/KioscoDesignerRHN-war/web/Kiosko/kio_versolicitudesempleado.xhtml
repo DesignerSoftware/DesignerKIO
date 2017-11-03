@@ -23,7 +23,11 @@
                                      value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciGuardadas}" 
                                      selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
                                      rowKey="#{esg.secuencia}"
-                                     rowIndexVar="#{esg.secuencia}" >
+                                     rowIndexVar="#{esg.secuencia}" 
+                                     paginator="true"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} "
+                                     lazy="true" rows="5"
+                                     >
                             <f:facet name="header">
                                 SOLICITUDES GUARDADAS
                             </f:facet>
@@ -59,7 +63,11 @@
                                      value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciEnviadas}" 
                                      selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
                                      rowKey="#{esg.secuencia}"
-                                     rowIndexVar="#{esg.secuencia}">
+                                     rowIndexVar="#{esg.secuencia}"
+                                     paginator="true"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} "
+                                     lazy="true" rows="5"
+                                     >
                             <f:facet name="header">
                                 SOLICITUDES ENVIADAS
                             </f:facet>
@@ -95,7 +103,11 @@
                                      value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciAprobadas}" 
                                      selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
                                      rowKey="#{esg.secuencia}"
-                                     rowIndexVar="#{esg.secuencia}">
+                                     rowIndexVar="#{esg.secuencia}"
+                                     paginator="true"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} "
+                                     lazy="true" rows="5"
+                                     >
                             <f:facet name="header">
                                 SOLICITUDES APROBADAS
                             </f:facet>
@@ -131,7 +143,11 @@
                                      value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciRechazadas}" 
                                      selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
                                      rowKey="#{esg.secuencia}"
-                                     rowIndexVar="#{esg.secuencia}">
+                                     rowIndexVar="#{esg.secuencia}"
+                                     paginator="true"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} "
+                                     lazy="true" rows="5"
+                                     >
                             <f:facet name="header">
                                 SOLICITUDES RECHAZADAS
                             </f:facet>
@@ -157,6 +173,9 @@
                             <p:column headerText="EMPLEADO EJECUTA">
                                 <h:outputText value="#{esg.empleadoEjecuta.persona.nombreCompleto}" />
                             </p:column>
+                            <p:column headerText="MOTIVO">
+                                <h:outputText value="#{esg.motivoProcesa}" />
+                            </p:column>
                             <f:facet name="footer">
                                 <p:commandButton process="tbsolicirechazada" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
                             </f:facet>
@@ -167,7 +186,11 @@
                                      value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciLiquidadas}" 
                                      selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
                                      rowKey="#{esg.secuencia}"
-                                     rowIndexVar="#{esg.secuencia}">
+                                     rowIndexVar="#{esg.secuencia}"
+                                     paginator="true"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} "
+                                     lazy="true" rows="5"
+                                     >
                             <f:facet name="header">
                                 SOLICITUDES LIQUIDADAS
                             </f:facet>
@@ -203,7 +226,11 @@
                                      value="#{controladorKio_VerSolicitudesEmpleado.estadoSoliciCanceladas}" 
                                      selection="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec}" 
                                      rowKey="#{esg.secuencia}"
-                                     rowIndexVar="#{esg.secuencia}">
+                                     rowIndexVar="#{esg.secuencia}"
+                                     paginator="true"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} "
+                                     lazy="true" rows="5"
+                                     >
                             <f:facet name="header">
                                 SOLICITUDES CANCELADAS
                             </f:facet>

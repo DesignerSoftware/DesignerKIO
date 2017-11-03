@@ -199,9 +199,16 @@ public class ControladorKio_CrearSolicitud implements Serializable {
                     + "Cordial saludo. ";
             String respuesta1 = "";
             String respuesta2 = "";
+            Calendar fechaEnvio = Calendar.getInstance();
+            Calendar fechaDisfrute = Calendar.getInstance();
+            fechaDisfrute.setTime(solicitud.getKioNovedadesSolici().getFechaInicialDisfrute());
+            String asunto = "Solicitud de vacaciones Kiosco - Nueva solicitud"+": "
+                    +fechaEnvio.get(Calendar.YEAR)+"/"+(fechaEnvio.get(Calendar.MONTH)+1)+"/"+fechaEnvio.get(Calendar.DAY_OF_MONTH)
+                    +". Inicio de vacaciones: "
+                    +fechaDisfrute.get(Calendar.YEAR)+"/"+(fechaDisfrute.get(Calendar.MONTH)+1)+"/"+fechaDisfrute.get(Calendar.DAY_OF_MONTH);
             if (empleado.getPersona().getEmail() != null && !empleado.getPersona().getEmail().isEmpty()) {
                 administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
-                        empleado.getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
+                        empleado.getPersona().getEmail(), asunto, mensaje, "");
                 respuesta1 = "Solicitud enviada correctamente al empleado";
             } else {
                 respuesta1 = "El empleado no tiene correo registrado";
@@ -209,7 +216,7 @@ public class ControladorKio_CrearSolicitud implements Serializable {
             if (solicitud.getEmpleadoJefe() != null) {
                 if (solicitud.getEmpleadoJefe().getPersona().getEmail() != null && !solicitud.getEmpleadoJefe().getPersona().getEmail().isEmpty()) {
                     administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
-                            solicitud.getEmpleadoJefe().getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
+                            solicitud.getEmpleadoJefe().getPersona().getEmail(), asunto, mensaje, "");
                     respuesta2 = " Solicitud enviada correctamente al jefe inmediato";
                 } else {
                     respuesta2 = " El jefe inmediato no tiene correo";
@@ -389,8 +396,10 @@ public class ControladorKio_CrearSolicitud implements Serializable {
     public void setPerVacaSelecto(VwVacaPendientesEmpleados perVacaSelecto) {
         System.out.println(this.getClass().getName() + ".setPerVacaSelecto()");
         this.perVacaSelecto = perVacaSelecto;
-        this.topeDias = this.perVacaSelecto.getDiasPendientes().intValue();
+//        this.topeDias = this.perVacaSelecto.getDiasPendientes().intValue();
+        this.topeDias = this.perVacaSelecto.getDiasreales().intValue();
         System.out.println("dias pendientes del periodo: " + this.perVacaSelecto.getDiasPendientes());
+        System.out.println("dias realmente pendientes del periodo: " + this.perVacaSelecto.getDiasreales());
         solicitud.getKioNovedadesSolici().setVacacion(this.perVacaSelecto);
     }
 

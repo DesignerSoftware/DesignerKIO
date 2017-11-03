@@ -4,7 +4,7 @@ package co.com.kiosko.clasesAyuda;
  *
  * @author Edwin
  */
-public enum EstadosSolicitud {
+public enum EstadoSolicitud {
 
     GUARDADO("GUARDAR", "GUARDADO"),
     ENVIADO("ENVIAR", "ENVIADO"),
@@ -16,7 +16,7 @@ public enum EstadosSolicitud {
     private String evento;
     private String estado;
 
-    private EstadosSolicitud(String evento, String estado) {
+    private EstadoSolicitud(String evento, String estado) {
         this.evento = evento;
         this.estado = estado;
     }

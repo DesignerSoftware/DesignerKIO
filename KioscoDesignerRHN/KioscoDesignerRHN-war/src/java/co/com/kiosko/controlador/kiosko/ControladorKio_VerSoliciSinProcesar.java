@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.el.ELException;
@@ -95,6 +96,7 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
         try {
             administrarHistoVacas.obtenerConexion(ses.getId());
             administrarProcesarSolicitud.obtenerConexion(ses.getId());
+            administrarGenerarReporte.obtenerConexion(ses.getId());
             soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa(), "SIN PROCESAR", empleado);
             System.out.println("consultasIniciales: num estados solicitudes: " + soliciEmpleado.size());
         } catch (Exception e) {
@@ -110,6 +112,7 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
         this.soliciEmpleado = null;
         this.soliciFiltradas = null;
         this.solicitudSelec = null;
+        this.motivo = "";
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -197,10 +200,18 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
                     + "Cordial saludo. ";
             String respuesta1 = "";
             String respuesta2 = "";
+            Calendar fechaEnvio = Calendar.getInstance();
+            Calendar fechaDisfrute = Calendar.getInstance();
+            fechaDisfrute.setTime(solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getFechaInicialDisfrute());
+            String asunto = "Solicitud de vacaciones Kiosco - "+procesadoConj.toLowerCase()+": "
+                    +fechaEnvio.get(Calendar.YEAR)+"/"+(fechaEnvio.get(Calendar.MONTH)+1)+"/"+fechaEnvio.get(Calendar.DAY_OF_MONTH)
+                    +". Inicio de vacaciones: "
+                    +fechaDisfrute.get(Calendar.YEAR)+"/"+(fechaDisfrute.get(Calendar.MONTH)+1)+"/"+fechaDisfrute.get(Calendar.DAY_OF_MONTH);
             if (this.solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getEmpleado().getPersona().getEmail() != null
                     && !this.solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getEmpleado().getPersona().getEmail().isEmpty()) {
                 administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
-                        empleado.getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
+                        this.solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getEmpleado().getPersona().getEmail(), 
+                        asunto, mensaje, "");
                 respuesta1 = "Solicitud enviada correctamente al empleado";
             } else {
                 respuesta1 = "El empleado no tiene correo registrado";

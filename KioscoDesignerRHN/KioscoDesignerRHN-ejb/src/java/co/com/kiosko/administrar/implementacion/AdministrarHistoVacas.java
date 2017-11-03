@@ -107,12 +107,12 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializab
         System.out.println("consultarEstadoSoliciEmpre: Empresa: " + empresa.getSecuencia());
         ArrayList<String> listaEstados = new ArrayList<String>();
         if ("PROCESADO".equalsIgnoreCase(estado)) {
+            System.out.println("consultarEstadoSoliciEmpre-PROCESADO");
             listaEstados.clear();
             listaEstados.add("AUTORIZADO");
             listaEstados.add("LIQUIDADO");
             listaEstados.add("RECHAZADO");
-        }
-        if ("SIN PROCESAR".equalsIgnoreCase(estado)) {
+        }else if ("SIN PROCESAR".equalsIgnoreCase(estado)) {
             listaEstados.clear();
             listaEstados.add("ENVIADO");
         } else {
@@ -126,6 +126,7 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializab
             if (emplJefe == null) {
                 try {
                     listaTMP = persistenciaKioEstadosSolici.consultarEstadosXEmpre(em, empresa.getSecuencia(), listaEstados.get(i));
+                    System.out.println("listaTMP-1: "+listaTMP.size());
                 } catch (Exception e) {
                     throw e;
                 } finally {
@@ -134,8 +135,10 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializab
                     }
                 }
             } else {
+                System.out.println("consultarEstadoSoliciEmpre-else");
                 try {
                     listaTMP = persistenciaKioEstadosSolici.consultarEstadosXEmpre(em, empresa.getSecuencia(), listaEstados.get(i), emplJefe.getSecuencia());
+                    System.out.println("listaTMP-2: "+listaTMP.size());
                 } catch (Exception e) {
                     throw e;
                 } finally {
@@ -145,6 +148,7 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializab
                 }
             }
             listaResul.addAll(listaTMP);
+            System.out.println("listaResul-1: "+listaResul.size());
         }
         return listaResul;
     }

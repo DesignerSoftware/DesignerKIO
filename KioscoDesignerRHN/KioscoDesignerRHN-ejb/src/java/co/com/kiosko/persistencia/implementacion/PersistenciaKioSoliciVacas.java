@@ -159,7 +159,8 @@ public class PersistenciaKioSoliciVacas implements IPersistenciaKioSoliciVacas {
                 + "where s.activa = 'S' "
                 + "and (s.fechaVencimiento is null or s.fechaVencimiento >= CURRENT_DATE "
                 + "and exists (select ei from KioEstadosSolici ei where ei.estado = 'ENVIADO' "
-                + "and ei.kioSoliciVaca.secuencia = s.secuencia ) ";
+                + "and ei.kioSoliciVaca.secuencia = s.secuencia ) "
+                + "order by s.fechaGeneracion ";
         List resultado;
         try {
             em.clear();

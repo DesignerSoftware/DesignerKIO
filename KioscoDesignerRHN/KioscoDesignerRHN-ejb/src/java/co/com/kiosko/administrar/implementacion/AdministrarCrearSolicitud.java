@@ -57,9 +57,12 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud, Se
     @Override
     public List consultarPeriodosVacacionesEmpl(Empleados empleado) throws Exception {
         EntityManager em = emf.createEntityManager();
-        List lista;
+        List<VwVacaPendientesEmpleados> lista;
         try {
             lista = persistenciaVwVacaPendEmpl.consultarPeriodosPendientesEmpleado(em, empleado.getSecuencia());
+            for (int i=0; i < lista.size(); i++){
+                lista.get(i).setDiasreales(lista.get(i).getRfVacacion());
+            }
         } catch (Exception ex) {
             throw ex;
         }
@@ -73,6 +76,7 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud, Se
         VwVacaPendientesEmpleados periodo;
         try {
             periodo = persistenciaVwVacaPendEmpl.consultarPeriodoMasAntiguo(em, empleado.getSecuencia(), consultarFechaContrato(empleado));
+            periodo.setDiasreales(persistenciaVwVacaPendEmpl.consultarDiasRealPendPeriodo(em, periodo.getRfVacacion()));
         } catch (Exception ex) {
 //            Logger.getLogger(AdministrarCrearSolicitud.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;

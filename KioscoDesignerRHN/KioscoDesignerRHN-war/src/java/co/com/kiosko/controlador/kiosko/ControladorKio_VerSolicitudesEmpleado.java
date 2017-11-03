@@ -3,7 +3,7 @@ package co.com.kiosko.controlador.kiosko;
 import co.com.kiosko.administrar.interfaz.IAdministrarGenerarReporte;
 import co.com.kiosko.administrar.interfaz.IAdministrarProcesarSolicitud;
 import co.com.kiosko.administrar.interfaz.IAdministrarVerSolicitudesEmpl;
-import co.com.kiosko.clasesAyuda.EstadosSolicitud;
+import co.com.kiosko.clasesAyuda.EstadoSolicitud;
 import co.com.kiosko.clasesAyuda.ExtraeCausaExcepcion;
 import co.com.kiosko.controlador.ingreso.ControladorIngreso;
 import co.com.kiosko.entidades.*;
@@ -12,6 +12,7 @@ import co.com.kiosko.utilidadesUI.OpcionLista;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 //import java.util.HashMap;
 //import java.util.Date;
 import java.util.List;
@@ -102,7 +103,7 @@ public class ControladorKio_VerSolicitudesEmpleado implements Serializable {
         System.out.println(this.getClass().getName() + ".consultasIniciales()");
         System.out.println("consultasIniciales: nit: " + nit);
 //        setEstadoNuevo(new OpcionLista("ENVIAR","ENVIADO"));
-        setEstadoNuevo(new OpcionLista(EstadosSolicitud.ENVIADO.getEvento(), EstadosSolicitud.ENVIADO.getEstado()));
+        setEstadoNuevo(new OpcionLista(EstadoSolicitud.ENVIADO.getEvento(), EstadoSolicitud.ENVIADO.getEstado()));
         motivo = "";
         try {
 //            administrarVerSolicitudesEmpl.obtenerConexion(ses.getId());
@@ -198,9 +199,16 @@ public class ControladorKio_VerSolicitudesEmpleado implements Serializable {
                     + "Cordial saludo. ";
             String respuesta1 = "";
             String respuesta2 = "";
+            Calendar fechaEnvio = Calendar.getInstance();
+            Calendar fechaDisfrute = Calendar.getInstance();
+            fechaDisfrute.setTime(estSoliciSelec.getKioSoliciVaca().getKioNovedadesSolici().getFechaInicialDisfrute());
+            String asunto = "Solicitud de vacaciones Kiosco - "
+                    +procesoConj.toLowerCase()+": "+fechaEnvio.get(Calendar.YEAR)+"/"+(fechaEnvio.get(Calendar.MONTH)+1)+"/"+fechaEnvio.get(Calendar.DAY_OF_MONTH) 
+                    +". Inicio de vacaciones: "
+                    +fechaDisfrute.get(Calendar.YEAR)+"/"+(fechaDisfrute.get(Calendar.MONTH)+1)+"/"+fechaDisfrute.get(Calendar.DAY_OF_MONTH);
             if (empleado.getPersona().getEmail() != null && !empleado.getPersona().getEmail().isEmpty()) {
                 administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
-                        empleado.getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
+                        empleado.getPersona().getEmail(), asunto, mensaje, "");
                 respuesta1 = "Solicitud enviada correctamente al empleado";
             } else {
                 respuesta1 = "El empleado no tiene correo registrado";
@@ -208,7 +216,7 @@ public class ControladorKio_VerSolicitudesEmpleado implements Serializable {
             if (estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe() != null) {
                 if (estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail() != null && !estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail().isEmpty()) {
                     administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
-                            estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
+                            estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail(), asunto, mensaje, "");
                     respuesta2 = " Solicitud enviada correctamente al jefe inmediato";
                 } else {
                     respuesta2 = " El jefe inmediato no tiene correo";

@@ -93,7 +93,7 @@
                             <h:outputText value="#{per.periodoCausado}" />
                         </p:column>
                         <p:column headerText="DIAS">
-                            <h:outputText value="#{per.diasPendientes}" />
+                            <h:outputText value="#{per.diasreales}" />
                         </p:column>
                         <!--<f:facet name="footer">
                             <p:commandButton process="tbpervaca" update=":principalForm:periodoDetail" icon="ui-icon-search" value="Mostrar periodo" oncomplete="PF('periodoDialog').show(); " />
@@ -119,7 +119,7 @@
                 <h:outputText value="#{controladorKio_CrearSolicitud.perVacaSelecto.periodoCausado}" />
 
                 <h:outputText value="dias: " />
-                <h:outputText value="#{controladorKio_CrearSolicitud.perVacaSelecto.diasPendientes}" />
+                <h:outputText value="#{controladorKio_CrearSolicitud.perVacaSelecto.diasreales}" />
 
             </p:panelGrid>
         </p:outputPanel>

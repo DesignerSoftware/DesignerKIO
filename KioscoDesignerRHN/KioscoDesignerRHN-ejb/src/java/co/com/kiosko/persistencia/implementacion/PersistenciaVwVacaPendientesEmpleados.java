@@ -53,7 +53,7 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
         String fechaContratoStr = formatoFecha.format(fechaContrato);
         System.out.println("Fecha de contratacion: " + fechaContratoStr);
-        String consulta = "select vw "
+        /*String consulta = "select vw "
                 + "from VwVacaPendientesEmpleados vw "
                 + "where vw.diasPendientes > 0 "
                 + "and vw.empleado.secuencia = :secEmpleado "
@@ -61,11 +61,19 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
                 + "from VwVacaPendientesEmpleados vwi "
                 + "where vwi.empleado.secuencia = vw.empleado.secuencia "
                 + "and vwi.diasPendientes > 0 "
-                + "and vwi.inicialCausacion >= :fechaContrato ) ";
+                + "and vwi.inicialCausacion >= :fechaContrato ) ";*/
+        String consulta = "select vw.* "
+                + "from VwVacaPendientesEmpleados vw "
+                + "where vw.empleado =? "
+                + "and vw.inicialCausacion = ( select min( vwi.inicialCausacion ) "
+                + "from VwVacaPendientesEmpleados vwi "
+                + "where vwi.empleado = vw.empleado "
+                + "and KIOVACACIONES_PKG.DIASDISPOPER(vwi.rfVacacion) > 0 "
+                + "and vwi.inicialCausacion >=? ) ";
         try {
-            query = em.createQuery(consulta);
-            query.setParameter("secEmpleado", secEmpleado);
-            query.setParameter("fechaContrato", fechaContrato);
+            query = em.createNativeQuery(consulta,VwVacaPendientesEmpleados.class);
+            query.setParameter(1, secEmpleado);
+            query.setParameter(2, fechaContrato,TemporalType.DATE);
             retorno = query.getSingleResult();
             if (retorno instanceof VwVacaPendientesEmpleados) {
                 periodo = (VwVacaPendientesEmpleados) retorno;
@@ -230,13 +238,21 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
     @Override
     public BigDecimal consultaDiasPendientes(EntityManager em, BigDecimal secEmpleado) throws Exception {
         System.out.println(this.getClass().getName() + "." + "consultaDiasPendientes" + "()");
-        String consulta = "SELECT "
+        /*String consulta = "SELECT "
                 + "NVL(SUM(V.DIASPENDIENTES), 0) "
                 + "FROM VACACIONES V, NOVEDADES N "
                 + "WHERE N.EMPLEADO = ? "
                 + "AND N.SECUENCIA = V.NOVEDAD "
                 + "AND N.TIPO = 'VACACION PENDIENTE' "
-                + "AND V.INICIALCAUSACION >= EMPLEADOCURRENT_PKG.FECHATIPOCONTRATO( ? , TO_DATE( ? , 'DDMMYYYY') ) ";
+                + "AND V.INICIALCAUSACION >= EMPLEADOCURRENT_PKG.FECHATIPOCONTRATO( ? , TO_DATE( ? , 'DDMMYYYY') ) ";*/
+        String consulta = "select sum(KIOVACACIONES_PKG.DIASDISPOPER(vw.rfvacacion)) "
+                + "from VwVacaPendientesEmpleados vw "
+                + "where vw.empleado = ? "
+                + "and vw.inicialCausacion >= ( select min( vwi.inicialCausacion ) "
+                + "from VwVacaPendientesEmpleados vwi "
+                + "where vwi.empleado = vw.empleado "
+                + "AND KIOVACACIONES_PKG.DIASDISPOPER(vwi.rfvacacion) > 0 "
+                + "and vwi.inicialCausacion >= EMPLEADOCURRENT_PKG.FECHATIPOCONTRATO( ? , TO_DATE( ? , 'DDMMYYYY') ) ";
         Query query = null;
         BigDecimal diasPendientes = null;
         SimpleDateFormat formatoFecha = new SimpleDateFormat("ddMMyyyy");
@@ -456,6 +472,28 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
             throw new Exception(npee.toString());
         } catch (Exception e) {
             System.out.println("Error general. " + e);
+            throw new Exception(e.toString());
+        }
+    }
+    @Override
+    public BigDecimal consultarDiasRealPendPeriodo(EntityManager em, BigDecimal rfVacacion) throws Exception{
+        System.out.println(this.getClass().getName() + "." + "consultarDiasRealPendPeriodo" + "()");
+        String consulta = "select KIOVACACIONES_PKG.DIASDISPOPER(?) from dual ";
+        Query query = null;
+        BigDecimal diasPendientes = null;
+        try {
+            query = em.createNativeQuery(consulta);
+            query.setParameter(1, rfVacacion);
+            diasPendientes = new BigDecimal(query.getSingleResult().toString());
+            return diasPendientes;
+        } catch (PersistenceException pe) {
+            System.out.println("consultarDiasRealPendPeriodo-Error de persistencia.");
+            throw new Exception(pe.toString());
+        } catch (NullPointerException npee) {
+            System.out.println("consultarDiasRealPendPeriodo-Nulo general");
+            throw new Exception(npee.toString());
+        } catch (Exception e) {
+            System.out.println("consultarDiasRealPendPeriodo-Error general. " + e);
             throw new Exception(e.toString());
         }
     }

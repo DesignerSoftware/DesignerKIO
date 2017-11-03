@@ -84,4 +84,13 @@ public interface IPersistenciaVwVacaPendientesEmpleados {
      * @return 
      */
     public Date consultarVacaSigFinVaca(EntityManager em, BigDecimal secEmpleado) throws Exception;
+    /**
+     * Método para consultar los días pendientes reales del periodo, el cual se calcula teniendo en cuenta 
+     * las solicitudes que estén en estado GUARDADO, ENVIADO, AUTORIZADO y LIQUIDADO
+     * @param em
+     * @param rfVacacion secuencia de la vacacion sobre la cual se calculan los datos.
+     * @return
+     * @throws Exception 
+     */
+    public BigDecimal consultarDiasRealPendPeriodo(EntityManager em, BigDecimal rfVacacion) throws Exception;
 }

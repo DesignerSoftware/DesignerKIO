@@ -82,6 +82,8 @@ public class VwVacaPendientesEmpleados implements Serializable {
 //    private BigDecimal secuencia;
     @Transient
     private String periodoCausado;
+    @Transient
+    private BigDecimal diasreales;
 
     public BigDecimal getRfVacacion() {
         return rfVacacion;
@@ -133,8 +135,15 @@ public class VwVacaPendientesEmpleados implements Serializable {
         System.out.println(this.getClass().getName()+".setPeriodoCausado()");
         System.out.println("No disponible.");
     }
-    
 
+    public BigDecimal getDiasreales() {
+        return diasreales;
+    }
+
+    public void setDiasreales(BigDecimal diasreales) {
+        this.diasreales = diasreales;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

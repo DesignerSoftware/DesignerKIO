@@ -40,7 +40,8 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
                     + "where e.kioSoliciVaca.empleado.secuencia = :rfEmpleado "
                     + "and e.secuencia = (select max(ei.secuencia) "
                     + "from KioEstadosSolici ei "
-                    + "where ei.kioSoliciVaca.secuencia = e.kioSoliciVaca.secuencia) ";
+                    + "where ei.kioSoliciVaca.secuencia = e.kioSoliciVaca.secuencia) "
+                    + "order by e.fechaProcesamiento";
             Query query = em.createQuery(consulta);
             query.setParameter("rfEmpleado", secEmpleado);
             listaEstaSolici = query.getResultList();
@@ -66,7 +67,8 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
                     + "and e.estado = :estado "
                     + "and e.secuencia = (select max(ei.secuencia) "
                     + "from KioEstadosSolici ei "
-                    + "where ei.kioSoliciVaca.secuencia = e.kioSoliciVaca.secuencia) ";
+                    + "where ei.kioSoliciVaca.secuencia = e.kioSoliciVaca.secuencia) "
+                    + "order by e.fechaProcesamiento";
             Query query = em.createQuery(consulta);
             query.setParameter("rfEmpleado", secEmpleado);
             query.setParameter("estado", estado);
@@ -133,7 +135,8 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
                 + "where kns.empleadoEjecuta = :secEmpleado "
                 + "and kns.fechaProcesamiento between CURRENT_DATE and :dtProcesamiento "
                 + "and kns.estado = :estado "
-                + "and kns.kioSoliciVaca.secuencia = :solicitud ";
+                + "and kns.kioSoliciVaca.secuencia = :solicitud "
+                + "order by kns.fechaProcesamiento ";
         try {
             Query query = em.createQuery(consulta);
             query.setParameter("secEmpleado", estado.getEmpleadoEjecuta());
@@ -205,7 +208,8 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
                 + "FROM KioEstadosSolici e "
                 + "where e.secuencia = (select max(ei.secuencia) "
                 + "from KIOESTADOSSOLICI ei "
-                + "where ei.kiosolicivaca.secuencia = e.kiosolicivaca.secuencia ) ";
+                + "where ei.kiosolicivaca.secuencia = e.kiosolicivaca.secuencia ) "
+                + "order by e.fechaProcesamiento ";
         try {
             Query query = em.createQuery(consulta);
             lista = query.getResultList();
@@ -228,7 +232,8 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
                     + "where e.kioSoliciVaca.empleado.empresa.secuencia = :rfEmpresa "
                     + "and e.secuencia = (select max(ei.secuencia) "
                     + "from KioEstadosSolici ei "
-                    + "where ei.kioSoliciVaca.secuencia = e.kioSoliciVaca.secuencia) ";
+                    + "where e.kioSoliciVaca.secuencia = e.kioSoliciVaca.secuencia) "
+                    + "order by e.fechaProcesamiento ";
             Query query = em.createQuery(consulta);
             query.setParameter("rfEmpresa", secEmpresa);
             listaEstaSolici = query.getResultList();
@@ -255,7 +260,8 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
                     + "and e.estado = :estado "
                     + "and e.secuencia = (select max(ei.secuencia) "
                     + "from KioEstadosSolici ei "
-                    + "where ei.kioSoliciVaca.secuencia = e.kioSoliciVaca.secuencia) ";
+                    + "where ei.kioSoliciVaca.secuencia = e.kioSoliciVaca.secuencia) "
+                    + "order by e.fechaProcesamiento ";
             Query query = em.createQuery(consulta);
             query.setParameter("rfEmpresa", secEmpresa);
             query.setParameter("estado", estado);
@@ -285,7 +291,8 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
                     + "and e.kioSoliciVaca.empleadoJefe.secuencia = :rfJefe "
                     + "and e.secuencia = (select max(ei.secuencia) "
                     + "from KioEstadosSolici ei "
-                    + "where ei.kioSoliciVaca.secuencia = e.kioSoliciVaca.secuencia) ";
+                    + "where ei.kioSoliciVaca.secuencia = e.kioSoliciVaca.secuencia) "
+                    + "order by e.fechaProcesamiento ";
             Query query = em.createQuery(consulta);
             query.setParameter("rfEmpresa", secEmpresa);
             query.setParameter("estado", estado);

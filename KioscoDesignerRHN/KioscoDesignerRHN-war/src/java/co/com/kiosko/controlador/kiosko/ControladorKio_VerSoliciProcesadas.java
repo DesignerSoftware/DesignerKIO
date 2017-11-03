@@ -36,6 +36,7 @@ public class ControladorKio_VerSoliciProcesadas implements Serializable{
     private Empleados empleadoSelec;
     private KioEstadosSolici solicitudSelec;
     private String urlMenuNavegation;
+    private String grupoEmpre;
     @EJB
     IAdministrarHistoVacas administrarHistoVacas;
     
@@ -50,6 +51,7 @@ public class ControladorKio_VerSoliciProcesadas implements Serializable{
             HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
             empleado = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getConexionEmpleado().getEmpleado();
             long nit = Long.parseLong(((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit());
+            grupoEmpre = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getGrupoSeleccionado();
             consultasIniciales(ses, nit);
         } catch (ELException e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
@@ -82,7 +84,9 @@ public class ControladorKio_VerSoliciProcesadas implements Serializable{
             System.out.println("consultasIniciales: num estados solicitudes: " + soliciEmpleado.size());
         } catch (Exception e) {
             String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
+            System.out.println("consultasIniciales-msj: "+msj);
             MensajesUI.error(msj);
+            PrimefacesContextUI.actualizar("principalForm:growl");
         }
     }
 

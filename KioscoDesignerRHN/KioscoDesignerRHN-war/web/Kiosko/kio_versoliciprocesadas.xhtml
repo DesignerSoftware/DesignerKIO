@@ -44,8 +44,10 @@
                             <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
                         </h:outputText> 
                     </p:column>
-                    <p:column headerText="ACTIVA" >
-                        <h:outputText value="#{solici.kioSoliciVaca.activa == 'S' ? 'SI':'NO'}" />
+                    <p:column headerText="FECHA INICIO" >
+                        <h:outputText value="#{solici.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute }" >
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                        </h:outputText>
                     </p:column>
                     <p:column headerText="FECHA ULTIMA MODIFICACION" >
                         <h:outputText value="#{solici.fechaProcesamiento}" >
@@ -113,7 +115,9 @@
                 <h:outputText value="A pagar con la nómina: " />
                 <h:outputText value="#{controladorKio_VerSoliciProcesadas.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.pagarPorFuera}" />
             </p:panelGrid>
-
+            <center>
+                <p:commandButton value="REGRESAR" onclick="PF('soliciDialog').hide();" />
+            </center>
         </p:outputPanel>
     </p:dialog>
     <p:dialog id="recarDatos" header="Informaci&oacute;n" widgetVar="recarDatos" 

@@ -130,19 +130,24 @@
             <br/>
             <p:outputLabel value="ACCIONES PERMITIDAS" style="font-weight: bold;" />
             <br/>
-            <p:panelGrid columns="2" rendered="#{not empty controladorKio_VerSoliciSinProcesar.solicitudSelec}">
-                <p:outputLabel for="opcionproc" value="Seleccione una opción a aplicar: " />
-                <p:selectOneMenu id="opcionproc" value="#{controladorKio_VerSoliciSinProcesar.estadoNuevo}">
-                    <f:selectItem itemLabel="APROBAR" itemValue="AUTORIZADO"/>
-                    <f:selectItem itemLabel="RECHAZAR" itemValue="RECHAZADO"/>
-                    <p:ajax update="@this, txtmotivo" listener="#{controladorKio_VerSoliciSinProcesar.cambiarEstado()}"/>
-                </p:selectOneMenu>
-                <p:outputLabel for="txtmotivo" value="Motivo: " />
-                <p:inputText id="txtmotivo" value="#{controladorKio_VerSoliciSinProcesar.motivo}" disabled="#{controladorKio_VerSoliciSinProcesar.inacMotivo}"/>
+            <h:form id="frmprocesar">
+                <p:panelGrid columns="2" rendered="#{not empty controladorKio_VerSoliciSinProcesar.solicitudSelec}">
+                    <p:outputLabel for="opcionproc" value="Seleccione una opción: " />
+                    <p:selectOneMenu id="opcionproc" value="#{controladorKio_VerSoliciSinProcesar.estadoNuevo}">
+                        <f:selectItem itemLabel="APROBAR" itemValue="AUTORIZADO"/>
+                        <f:selectItem itemLabel="RECHAZAR" itemValue="RECHAZADO"/>
+                        <p:ajax update="@this, txtmotivo" listener="#{controladorKio_VerSoliciSinProcesar.cambiarEstado()}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="txtmotivo" value="Motivo: " />
+                    <p:inputText id="txtmotivo" value="#{controladorKio_VerSoliciSinProcesar.motivo}" disabled="#{controladorKio_VerSoliciSinProcesar.inacMotivo}"/>
+                    <p:outputLabel for="btnProc" value="Dé clic para aplicar el cambio" />
+                    <p:commandButton id="btnProc" value="PROCESAR" onclick="PF('confirmEnvio').show();"
+                                     process="@form" />
+                </p:panelGrid>
+            </h:form>
+            <center>
                 <p:commandButton value="REGRESAR" onclick="PF('soliciDialog').hide();" />
-                <p:commandButton value="PROCESAR" onclick="PF('confirmEnvio').show();"
-                                 process="@this" />
-            </p:panelGrid>
+            </center>
         </p:outputPanel>
     </p:dialog>
     <p:dialog id="recarDatos" header="Informaci&oacute;n" widgetVar="recarDatos" 

@@ -73,7 +73,8 @@ public class PersistenciaKioNovedadesSolici implements IPersistenciaKioNovedades
                 + "and kns.vacacion.rfVacacion = :vacacion "
                 + "and kns.dias = :dias "
                 + "and kns.subtipo = :subtipo "
-                + "and kns.adelantaPagoHasta = :dtPagoHasta ";
+                + "and kns.adelantaPagoHasta = :dtPagoHasta "
+                + "order by kns.fechaInicialDisfrute ";
         List lista = new ArrayList();
         try {
             Query query = em.createQuery(consulta);
