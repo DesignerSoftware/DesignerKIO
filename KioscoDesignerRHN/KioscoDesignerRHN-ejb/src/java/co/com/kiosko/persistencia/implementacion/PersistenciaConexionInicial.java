@@ -12,16 +12,27 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
 
     @Override
     public void setearKiosko(EntityManager eManager) {
-        System.out.println(this.getClass().getName()+"."+"setearKiosko"+"()");
+        System.out.println(this.getClass().getName() + "." + "setearKiosko" + "()");
+        setearKiosko(eManager, null);
+    }
+    
+    @Override
+    public void setearKiosko(EntityManager eManager, String esquema) {
+        System.out.println(this.getClass().getName()+"."+"setearKiosko"+"()-2");
         try {
-            String sqlQuery = "SET ROLE ROLKIOSKO IDENTIFIED BY RLKSK ";
+            String rol = "ROLKIOSKO";
+            if (esquema != null && !esquema.isEmpty()) {
+                rol = rol+esquema.toUpperCase();
+            }
+            //String sqlQuery = "SET ROLE ROLKIOSKO IDENTIFIED BY RLKSK ";
+            String sqlQuery = "SET ROLE "+ rol + " IDENTIFIED BY RLKSK ";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.executeUpdate();
         } catch (NullPointerException npe) {
-            System.out.println("PersistenciaConexionInicial.setearKiosko()");
+            System.out.println("PersistenciaConexionInicial.setearKiosko()-2");
             System.out.println("Error de nulo");
         } catch (Exception e){
-            System.out.println("PersistenciaConexionInicial.setearKiosko() "+e.getMessage());
+            System.out.println("PersistenciaConexionInicial.setearKiosko()-2 "+e.getMessage());
         }
     }
 

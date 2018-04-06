@@ -16,6 +16,14 @@ public interface IAdministrarHistoVacas {
     public void obtenerConexion(String idSesion);
 
     public List<Empleados> consultarEmpleadosEmpresa(long nit) throws Exception;
+    /**
+     * Método para consultar los empleados activos que estan relacionados con un empleado jefe.
+     * @param nit
+     * @param emplJefe
+     * @return
+     * @throws Exception 
+     */
+    public List<Empleados> consultarEmpleadosJefe(long nit, Empleados emplJefe) throws Exception;
     
     public List<KioEstadosSolici> consultarEstadoSoliciEmpl(Empleados empl) throws Exception;
     /**

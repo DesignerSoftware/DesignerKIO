@@ -5,6 +5,10 @@
         <param-value>Development</param-value>
     </context-param>
     <context-param>
+        <param-name>application.description</param-name>
+        <param-value>Designer.KIO</param-value>
+    </context-param>
+    <context-param>
         <param-name>primefaces.THEME</param-name>
         <param-value>mytheme</param-value>
     </context-param>
@@ -38,4 +42,8 @@
         <welcome-file>faces/Ingreso/ingreso.xhtml</welcome-file>
         <!-- <welcome-file>faces/Pruebas/paginaPruebas.xhtml</welcome-file> -->
     </welcome-file-list>
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/Ingreso/ingreso.xhtml</location>
+    </error-page>
 </web-app>

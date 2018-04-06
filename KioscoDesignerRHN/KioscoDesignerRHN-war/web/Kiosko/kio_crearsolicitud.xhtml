@@ -77,11 +77,11 @@
             <p:panelGrid columns="1"  styleClass="noBorders">
                 <p:row>
                     <p align="justify">
-
+                        Periodos que tienen días que aún no se han liquidados. Aunque puede que algunos estén asignados a alguna solicitud.
                     </p>
                 </p:row>
                 <p:row>
-                    <p:dataTable id="tbpervaca" var="per" 
+                    <p:dataTable id="tbpervaca" widgetVar="tbpervaca" var="per" 
                                  value="#{controladorKio_CrearSolicitud.listaVaca}" 
                                  rowKey="#{per.rfVacacion}"
                                  styleClass="tblov" >

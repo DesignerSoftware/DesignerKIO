@@ -110,7 +110,7 @@ public class ControladorIngreso implements Serializable {
                         && cadena != null) {
                     nit = cadena.getNit();
                     if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
-                        if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit()) && validarCodigoUsuario()) {
+                        if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema()) && validarCodigoUsuario()) {
                             if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
                                 if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
                                     if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave, cadena.getNit())) {
@@ -224,7 +224,7 @@ public class ControladorIngreso implements Serializable {
         if (usuario != null && clave != null && cadena != null) {
             nit = cadena.getNit();
             if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
-                if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit())) {
+                if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())) {
                     if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
                         if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
                             administrarIngreso.adicionarConexionUsuario(ses.getId());

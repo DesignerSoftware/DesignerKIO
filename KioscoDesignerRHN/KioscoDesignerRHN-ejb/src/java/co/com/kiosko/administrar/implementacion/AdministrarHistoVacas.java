@@ -52,6 +52,20 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializab
             }
         }
     }
+    
+    @Override
+    public List<Empleados> consultarEmpleadosJefe(long nit, Empleados emplJefe) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return persistenciaEmpleados.consultarEmpleadosXJefe(em, nit, emplJefe.getSecuencia());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+    }
 
     @Override
     public List<KioEstadosSolici> consultarEstadoSoliciEmpl(Empleados empl) throws Exception {

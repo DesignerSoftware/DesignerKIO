@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
+//import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.el.ELException;
@@ -156,7 +156,8 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
 
     private boolean validaFechaPago() {
         Calendar cl = Calendar.getInstance();
-        cl.setTime(administrarProcesarSolicitud.fechaUltimoPago(empleado));
+//        cl.setTime(administrarProcesarSolicitud.fechaUltimoPago(empleado));
+        cl.setTime(administrarProcesarSolicitud.fechaUltimoPago(this.solicitudSelec.getKioSoliciVaca().getEmpleado()));
         return solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getFechaInicialDisfrute().after(cl.getTime());
     }
 
@@ -319,7 +320,8 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
         System.out.println(this.getClass().getName() + ".getEmpleadosACargo()");
         if (empleadosACargo == null || empleadosACargo.isEmpty()) {
             try {
-                empleadosACargo = administrarHistoVacas.consultarEmpleadosEmpresa(empleado.getEmpresa().getNit());
+//                empleadosACargo = administrarHistoVacas.consultarEmpleadosEmpresa(empleado.getEmpresa().getNit());
+                empleadosACargo = administrarHistoVacas.consultarEmpleadosJefe(empleado.getEmpresa().getNit(), empleado);
             } catch (Exception e) {
                 System.out.println("Error getEmpleadosACargo: " + this.getClass().getName() + ": " + e);
                 System.out.println("Causa: " + e.getCause());

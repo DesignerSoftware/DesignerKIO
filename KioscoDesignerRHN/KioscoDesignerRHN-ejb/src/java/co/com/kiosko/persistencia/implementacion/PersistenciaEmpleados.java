@@ -214,6 +214,55 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
     }
 
     @Override
+    public List consultarEmpleadosXJefe(EntityManager em, long nit, BigDecimal secJefe) throws Exception {
+        System.out.println(this.getClass().getName() + ".consultarEmpleadosXJefe()");
+        String sqlQuery = "select empl.SECUENCIA, empl.CODIGOEMPLEADO, "
+                + "empl.FECHACREACION, empl.CODIGOALTERNATIVO, empl.USUARIOBD, empl.PERSONA, "
+                + "empl.EMPRESA "
+                + "from empleados empl, "
+                + "vigenciascargos vc, estructuras es, organigramas o, empresas em, "
+                + "empleados jefe "
+                + "where "
+                + "empl.secuencia = vc.empleado "
+                + "and vc.estructura = es.secuencia "
+                + "and es.organigrama = o.secuencia "
+                + "and o.empresa = em.secuencia "
+                + "and vc.empleadojefe = jefe.secuencia "
+                + "and vc.fechavigencia = (select max(vci.fechavigencia) "
+                + "from vigenciascargos vci "
+                + "where vci.empleado = vc.empleado "
+                + "and vci.fechavigencia <= sysdate) "
+                + "and exists (select vtt.secuencia "
+                + "from vigenciastipostrabajadores vtt, tipostrabajadores tt "
+                + "where vtt.tipotrabajador = tt.secuencia "
+                + "and tt.tipo in ('ACTIVO', 'PENSIONADO') "
+                + "and vtt.fechavigencia = (select max(vtti.fechavigencia) "
+                + "from vigenciastipostrabajadores vtti "
+                + "where vtti.empleado = vtt.empleado "
+                + "and vtti.fechavigencia <= sysdate) "
+                + "and vtt.empleado = empl.secuencia )"
+                + "and em.nit = ? "
+                + "and jefe.secuencia = ? ";
+        List<Empleados> empleados = new ArrayList<Empleados>();
+        try {
+            Query query = em.createNativeQuery(sqlQuery, Empleados.class);
+            query.setParameter(1, nit);
+            query.setParameter(2, secJefe);
+            empleados = query.getResultList();
+            return empleados;
+        } catch (PersistenceException pe) {
+            System.out.println("consultarEmpleadosXJefe-PersistenceException");
+            throw pe;
+        } catch (IllegalStateException ise) {
+            System.out.println("consultarEmpleadosXJefe-IllegalStateException");
+            throw ise;
+        } catch (Exception e) {
+            System.out.println("consultarEmpleadosXJefe-Exception");
+            throw e;
+        }
+    }
+
+    @Override
     public Empleados consultaEmpleadoxSec(EntityManager em, BigDecimal secEmpleado) throws Exception {
         System.out.println(this.getClass().getName() + ".consultaEmpleadoxSec()");
         String sqlQuery = "select e "

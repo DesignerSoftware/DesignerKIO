@@ -3,6 +3,7 @@ package co.com.kiosko.administrar.implementacion;
 import co.com.kiosko.administrar.interfaz.IAdministrarCrearSolicitud;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.entidades.Empleados;
+import co.com.kiosko.entidades.KioNovedadesSolici;
 import co.com.kiosko.entidades.KioSoliciVacas;
 import co.com.kiosko.entidades.VwVacaPendientesEmpleados;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;
@@ -16,8 +17,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 //import java.math.BigDecimal;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionRolledbackLocalException;
@@ -61,7 +62,8 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud, Se
         try {
             lista = persistenciaVwVacaPendEmpl.consultarPeriodosPendientesEmpleado(em, empleado.getSecuencia());
             for (int i=0; i < lista.size(); i++){
-                lista.get(i).setDiasreales(lista.get(i).getRfVacacion());
+                lista.get(i).setDiasreales(
+                        persistenciaVwVacaPendEmpl.consultarDiasRealPendPeriodo(em,lista.get(i).getRfVacacion()));
             }
         } catch (Exception ex) {
             throw ex;
@@ -76,10 +78,10 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud, Se
         VwVacaPendientesEmpleados periodo;
         try {
             periodo = persistenciaVwVacaPendEmpl.consultarPeriodoMasAntiguo(em, empleado.getSecuencia(), consultarFechaContrato(empleado));
-            periodo.setDiasreales(persistenciaVwVacaPendEmpl.consultarDiasRealPendPeriodo(em, periodo.getRfVacacion()));
+            periodo.setDiasreales(persistenciaVwVacaPendEmpl.consultarDiasRealPendPeriodo(em, periodo.getRfVacacion()) );
         } catch (Exception ex) {
 //            Logger.getLogger(AdministrarCrearSolicitud.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
+            throw new Exception(ex.getMessage());
         }
         em.close();
         return periodo;
@@ -350,5 +352,25 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud, Se
             }
         }
 //        System.out.println("enviarSolicitud: enviado");
+    }
+    @Override
+    public BigDecimal consultarTraslapamientos(KioNovedadesSolici novedad) throws Exception{
+        System.out.println(this.getClass().getName()+".consultarTraslapamientos()");
+        EntityManager em = null;
+        BigDecimal cuentTras=null;
+        try {
+            em = emf.createEntityManager();
+            cuentTras = persistenciaNovedadSolici.consultaTraslapamientos(em, novedad.getEmpleado().getSecuencia(), novedad.getFechaInicialDisfrute(),
+                    novedad.getAdelantaPagoHasta());
+            System.out.println("cuentTras: "+cuentTras);
+            return cuentTras;
+        } catch (Exception e) {
+            System.out.println("Excepcion en consultarTraslapamientos: "+e);
+            throw new Exception(e.fillInStackTrace());
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
     }
 }

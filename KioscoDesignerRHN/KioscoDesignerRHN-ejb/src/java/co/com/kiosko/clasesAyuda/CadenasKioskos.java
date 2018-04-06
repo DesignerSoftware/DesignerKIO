@@ -2,7 +2,7 @@ package co.com.kiosko.clasesAyuda;
 
 /**
  *
- * @author Felipe Triviño
+ * @author Felipe Triviño, Edwin Hastamorir
  */
 public class CadenasKioskos implements Comparable{
 
@@ -13,7 +13,19 @@ public class CadenasKioskos implements Comparable{
     private String fondo;
     private String grupo;
     private String emplnomina;
+    private String esquema;
 
+    public CadenasKioskos(String id, String descripcion, String cadena, String nit, String fondo, String grupo) {
+        this.id = id;
+        this.descripcion = descripcion;
+        this.cadena = cadena;
+        this.nit = nit;
+        this.fondo = fondo;
+        this.grupo = grupo;
+        this.emplnomina = null;
+        this.esquema = null;
+    }
+    
     public CadenasKioskos(String id, String descripcion, String cadena, String nit, String fondo, String grupo, String emplnomina) {
         this.id = id;
         this.descripcion = descripcion;
@@ -22,7 +34,19 @@ public class CadenasKioskos implements Comparable{
         this.fondo = fondo;
         this.grupo = grupo;
         this.emplnomina = emplnomina;
+        this.esquema = null;
     }
+
+    public CadenasKioskos(String id, String descripcion, String cadena, String nit, String fondo, String grupo, String emplnomina, String esquema) {
+        this.id = id;
+        this.descripcion = descripcion;
+        this.cadena = cadena;
+        this.nit = nit;
+        this.fondo = fondo;
+        this.grupo = grupo;
+        this.emplnomina = emplnomina;
+        this.esquema = esquema;
+    }    
 
     public String getCadena() {
         return cadena;
@@ -78,6 +102,14 @@ public class CadenasKioskos implements Comparable{
 
     public void setEmplnomina(String emplnomina) {
         this.emplnomina = emplnomina;
+    }
+
+    public String getEsquema() {
+        return esquema;
+    }
+
+    public void setEsquema(String esquema) {
+        this.esquema = esquema;
     }
     
     @Override

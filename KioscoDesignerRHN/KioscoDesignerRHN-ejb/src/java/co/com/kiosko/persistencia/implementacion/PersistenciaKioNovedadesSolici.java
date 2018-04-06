@@ -3,14 +3,18 @@ package co.com.kiosko.persistencia.implementacion;
 import co.com.kiosko.entidades.KioNovedadesSolici;
 import javax.ejb.Stateless;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaKioNovedadesSolici;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.TransactionRolledbackLocalException;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import javax.persistence.TransactionRequiredException;
@@ -167,6 +171,33 @@ public class PersistenciaKioNovedadesSolici implements IPersistenciaKioNovedades
         } catch (TransactionRequiredException tre) {
             throw new Exception(tre.toString());
         } catch (Exception e) {
+            throw new Exception(e.toString());
+        }
+    }
+    @Override
+    public BigDecimal consultaTraslapamientos(EntityManager em, BigDecimal secEmpleado, Date fechaIniVaca, Date fechaFinVaca) throws PersistenceException, NullPointerException, Exception {
+        System.out.println(this.getClass().getName() + "." + "consultaTraslapamientos" + "()");
+        String consulta = "SELECT "
+                + "KIOVACACIONES_PKG.VERIFICARTRASLAPAMIENTO(?, ? , ? ) "
+                + "FROM DUAL ";
+        Query query = null;
+        BigDecimal contTras = null;
+        try {
+            query = em.createNativeQuery(consulta);
+            query.setParameter(1, secEmpleado);
+            query.setParameter(2, fechaIniVaca, TemporalType.DATE);
+            query.setParameter(3, fechaFinVaca, TemporalType.DATE);
+            contTras = (BigDecimal) (query.getSingleResult());
+            System.out.println("Resultado consulta traslapamiento: "+contTras);
+            return contTras;
+        } catch (PersistenceException pe) {
+            System.out.println("Error de persistencia en consultaTraslapamientos.");
+            throw new Exception(pe.toString());
+        } catch (NullPointerException npee) {
+            System.out.println("Nulo general en consultaTraslapamientos");
+            throw new Exception(npee.toString());
+        } catch (Exception e) {
+            System.out.println("Error general en consultaTraslapamientos. " + e);
             throw new Exception(e.toString());
         }
     }

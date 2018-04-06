@@ -172,11 +172,11 @@ public class ControladorKio_VerSolicitudesEmpleado implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             ExternalContext ec = context.getExternalContext();
             String mensaje = "Apreciado usuario(a): \n\n"
-                    + "Nos permitimos informar que se acaba de "+proceso+" una solicitud de vacaciones "
+                    + "Nos permitimos informar que se acaba de " + proceso + " una solicitud de vacaciones "
                     + "en el módulo de Kiosco Nómina Designer. "
                     + "Por favor llevar el caso desde su cuenta de usuario en el portal de Kiosco "
                     + "y continuar con el proceso. \n\n"
-                    + "La persona que "+procesoConj.toUpperCase()+" LA SOLICITUD es: "
+                    + "La persona que " + procesoConj.toUpperCase() + " LA SOLICITUD es: "
                     + empleado.getPersona().getNombreCompleto() + "\n";
             if (estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe() != null) {
                 mensaje = mensaje + "La persona a cargo de HACER EL SEGUIMIENTO es: "
@@ -203,9 +203,9 @@ public class ControladorKio_VerSolicitudesEmpleado implements Serializable {
             Calendar fechaDisfrute = Calendar.getInstance();
             fechaDisfrute.setTime(estSoliciSelec.getKioSoliciVaca().getKioNovedadesSolici().getFechaInicialDisfrute());
             String asunto = "Solicitud de vacaciones Kiosco - "
-                    +procesoConj.toLowerCase()+": "+fechaEnvio.get(Calendar.YEAR)+"/"+(fechaEnvio.get(Calendar.MONTH)+1)+"/"+fechaEnvio.get(Calendar.DAY_OF_MONTH) 
-                    +". Inicio de vacaciones: "
-                    +fechaDisfrute.get(Calendar.YEAR)+"/"+(fechaDisfrute.get(Calendar.MONTH)+1)+"/"+fechaDisfrute.get(Calendar.DAY_OF_MONTH);
+                    + procesoConj.toLowerCase() + ": " + fechaEnvio.get(Calendar.YEAR) + "/" + (fechaEnvio.get(Calendar.MONTH) + 1) + "/" + fechaEnvio.get(Calendar.DAY_OF_MONTH)
+                    + ". Inicio de vacaciones: "
+                    + fechaDisfrute.get(Calendar.YEAR) + "/" + (fechaDisfrute.get(Calendar.MONTH) + 1) + "/" + fechaDisfrute.get(Calendar.DAY_OF_MONTH);
             if (empleado.getPersona().getEmail() != null && !empleado.getPersona().getEmail().isEmpty()) {
                 administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
                         empleado.getPersona().getEmail(), asunto, mensaje, "");
@@ -261,7 +261,9 @@ public class ControladorKio_VerSolicitudesEmpleado implements Serializable {
                 MensajesUI.error(msj);
             }
             if (res) {
-                construirCorreo("cancelar", "canceló");
+                if ("ENVIADO".equalsIgnoreCase(estSoliciSelec.getEstado())) {
+                    construirCorreo("cancelar", "canceló");
+                }
 //                mensajeCreacion = "Solicitud guardada correctamente";
 //                    MensajesUI.info("Solicitud guardada correctamente");
 //                MensajesUI.info(mensajeCreacion);

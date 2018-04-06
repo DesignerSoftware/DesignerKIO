@@ -67,7 +67,7 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     }
 
     @Override
-    public boolean validarUsuarioyEmpresa(String usuario, String nitEmpresa) {
+    public boolean validarUsuarioyEmpresa(String usuario, String nitEmpresa, String esquema) {
         System.out.println(this.getClass().getName() + ".validarUsuarioyEmpresa()");
 //        EntityManagerFactory emf;
         boolean resul = false;
@@ -75,7 +75,8 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
 //            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
             if (emf != null) {
                 EntityManager em = emf.createEntityManager();
-                persistenciaConexionInicial.setearKiosko(em);
+//                persistenciaConexionInicial.setearKiosko(em);
+                persistenciaConexionInicial.setearKiosko(em, esquema);
                 resul = persistenciaConexionInicial.validarUsuarioyEmpresa(em, usuario, nitEmpresa);
                 em.close();
 //                emf.close();
@@ -158,6 +159,24 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
             emf = sessionEMF.crearConexionUsuario(sem.getUnidadPersistencia());
             EntityManager em = emf.createEntityManager();
             persistenciaConexionInicial.setearKiosko(em);
+            em.close();
+            resul = true;
+        } catch (Exception e) {
+            System.out.println("Error general: " + e);
+            resul = false;
+        }
+        return resul;
+    }
+    @Override
+    public boolean adicionarConexionUsuario(String idSesion, String esquema) {
+        System.out.println(this.getClass().getName() + ".adicionarConexionUsuario()");
+        boolean resul = false;
+        try {
+            SessionEntityManager sem = new SessionEntityManager(idSesion, unidadPersistencia);
+            administrarSessiones.adicionarSesion(sem);
+            emf = sessionEMF.crearConexionUsuario(sem.getUnidadPersistencia());
+            EntityManager em = emf.createEntityManager();
+            persistenciaConexionInicial.setearKiosko(em, esquema);
             em.close();
             resul = true;
         } catch (Exception e) {

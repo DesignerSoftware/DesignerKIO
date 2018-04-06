@@ -11,13 +11,16 @@ public interface IAdministrarIngreso {
 
     public boolean conexionIngreso(String unidadPersistencia);
 
-    public boolean validarUsuarioyEmpresa(String usuario, String nitEmpresa);
+    //public boolean validarUsuarioyEmpresa(String usuario, String nitEmpresa);
+    public boolean validarUsuarioyEmpresa(String usuario, String nitEmpresa, String esquema);
 
     public boolean validarUsuarioRegistrado(String usuario, String nitEmpresa);
 
     public boolean validarIngresoUsuarioRegistrado(String usuario, String clave, String nitEmpresa);
 
     public boolean adicionarConexionUsuario(String idSesion);
+    
+    public boolean adicionarConexionUsuario(String idSesion, String esquema);
 
     public void cerrarSession(String idSesion);
 

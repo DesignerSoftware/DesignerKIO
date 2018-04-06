@@ -8,6 +8,7 @@ import co.com.kiosko.entidades.*;
 import co.com.kiosko.utilidadesUI.MensajesUI;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -134,6 +135,9 @@ public class ControladorKio_CrearSolicitud implements Serializable {
             MensajesUI.error("La fecha seleccionada es inferior a la última fecha de pago.");
             solicitud.getKioNovedadesSolici().setFechaInicialDisfrute(new Date());
         }
+        asignarFechas();
+        PrimefacesContextUI.actualizar("principalForm:frmcreasolicitud:ffindis");
+        PrimefacesContextUI.actualizar("principalForm:frmcreasolicitud:fregrelab");
     }
 
     private boolean validaFechaPago() {
@@ -142,19 +146,25 @@ public class ControladorKio_CrearSolicitud implements Serializable {
         return solicitud.getKioNovedadesSolici().getFechaInicialDisfrute().after(cl.getTime());
     }
 
-    public void procesarDiasSelec(AjaxBehaviorEvent event) {
+    private void asignarFechas() {
         System.out.println(this.getClass().getName() + ".procesarDiasSelec()");
         System.out.println("dia seleccionado: " + diaSelecto);
         System.out.println("fecha inicial disfrute: " + solicitud.getKioNovedadesSolici().getFechaInicialDisfrute());
-        solicitud.getKioNovedadesSolici().setDias(new BigInteger(diaSelecto.toString()));
-        try {
-            administrarCrearSolicitud.calcularFechasFin(solicitud);
-        } catch (Exception e) {
-            String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
-            System.out.println("Error seleccionando fechas fin: " + msj);
-            MensajesUI.error(msj);
+        if (diaSelecto > 0) {
+            solicitud.getKioNovedadesSolici().setDias(new BigInteger(diaSelecto.toString()));
+            try {
+                administrarCrearSolicitud.calcularFechasFin(solicitud);
+            } catch (Exception e) {
+                String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
+                System.out.println("Error seleccionando fechas fin: " + msj);
+                MensajesUI.error(msj);
+            }
         }
+    }
 
+    public void procesarDiasSelec(AjaxBehaviorEvent event) {
+        System.out.println(this.getClass().getName() + ".procesarDiasSelec()");
+        asignarFechas();
     }
 
     private boolean validaFechaInicial() {
@@ -164,6 +174,17 @@ public class ControladorKio_CrearSolicitud implements Serializable {
         } catch (Exception ex) {
             System.out.println("validaFechaInicial-excepcion: " + ex.getMessage());
             res = true;
+        }
+        return res;
+    }
+    private boolean validaTraslapamientos(){
+        boolean res=false;
+        try{
+            res = !BigDecimal.ZERO.equals(administrarCrearSolicitud.consultarTraslapamientos(solicitud.getKioNovedadesSolici()));
+            //si es igual a cero, no hay traslapamientos.
+            //falso si es cero, verdadero si es diferente de cero.
+        } catch (Exception e){
+            System.out.println("validaTraslapamientos-excepcion: " + e.getMessage());
         }
         return res;
     }
@@ -202,10 +223,10 @@ public class ControladorKio_CrearSolicitud implements Serializable {
             Calendar fechaEnvio = Calendar.getInstance();
             Calendar fechaDisfrute = Calendar.getInstance();
             fechaDisfrute.setTime(solicitud.getKioNovedadesSolici().getFechaInicialDisfrute());
-            String asunto = "Solicitud de vacaciones Kiosco - Nueva solicitud"+": "
-                    +fechaEnvio.get(Calendar.YEAR)+"/"+(fechaEnvio.get(Calendar.MONTH)+1)+"/"+fechaEnvio.get(Calendar.DAY_OF_MONTH)
-                    +". Inicio de vacaciones: "
-                    +fechaDisfrute.get(Calendar.YEAR)+"/"+(fechaDisfrute.get(Calendar.MONTH)+1)+"/"+fechaDisfrute.get(Calendar.DAY_OF_MONTH);
+            String asunto = "Solicitud de vacaciones Kiosco - Nueva solicitud" + ": "
+                    + fechaEnvio.get(Calendar.YEAR) + "/" + (fechaEnvio.get(Calendar.MONTH) + 1) + "/" + fechaEnvio.get(Calendar.DAY_OF_MONTH)
+                    + ". Inicio de vacaciones: "
+                    + fechaDisfrute.get(Calendar.YEAR) + "/" + (fechaDisfrute.get(Calendar.MONTH) + 1) + "/" + fechaDisfrute.get(Calendar.DAY_OF_MONTH);
             if (empleado.getPersona().getEmail() != null && !empleado.getPersona().getEmail().isEmpty()) {
                 administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
                         empleado.getPersona().getEmail(), asunto, mensaje, "");
@@ -238,12 +259,14 @@ public class ControladorKio_CrearSolicitud implements Serializable {
         System.out.println(this.getClass().getName() + ".guardarSolicitud()");
         boolean res = false;
         boolean valFPago = !validaFechaPago();
+        boolean valTraslap = validaTraslapamientos();
         boolean valFInicial = validaFechaInicial();
         System.out.println("guardarSolicitud-valFPago: " + valFPago);
         System.out.println("guardarSolicitud-valFInicial: " + valFInicial);
-        if (valFPago || valFInicial) {
+        if (valFPago || valFInicial || valTraslap) {
             mensajeCreacion = (valFPago ? "La fecha seleccionada es inferior a la última fecha de pago." : "");
             mensajeCreacion = (valFInicial ? mensajeCreacion + "Ya existe una solicitud con la fecha inicial de disfrute." : mensajeCreacion);
+            mensajeCreacion = (valTraslap ? mensajeCreacion + "Las fechas utilizadas se cruzan con otras solicitudes." : mensajeCreacion);
             MensajesUI.error(mensajeCreacion);
             solicitud.getKioNovedadesSolici().setFechaInicialDisfrute(new Date());
         } else {
@@ -268,12 +291,14 @@ public class ControladorKio_CrearSolicitud implements Serializable {
         System.out.println(this.getClass().getName() + ".enviarSolicitud()");
         boolean res = false;
         boolean valFPago = !validaFechaPago();
+        boolean valTraslap = validaTraslapamientos();
         boolean valFInicial = validaFechaInicial();
         System.out.println("enviarSolicitud-valFPago: " + valFPago);
         System.out.println("enviarSolicitud-valFInicial: " + valFInicial);
-        if (valFPago || valFInicial) {
+        if (valFPago || valFInicial || valTraslap) {
             mensajeCreacion = (valFPago ? "La fecha seleccionada es inferior a la última fecha de pago." : "");
             mensajeCreacion = (valFInicial ? mensajeCreacion + "Ya existe una solicitud con la fecha inicial de disfrute." : mensajeCreacion);
+            mensajeCreacion = (valTraslap ? mensajeCreacion + "Las fechas utilizadas se cruzan con las fechas de otras solicitudes." : mensajeCreacion);
             MensajesUI.error(mensajeCreacion);
             solicitud.getKioNovedadesSolici().setFechaInicialDisfrute(new Date());
         } else {
@@ -299,6 +324,7 @@ public class ControladorKio_CrearSolicitud implements Serializable {
         this.topeDias = 0;
         perVacaSelecto = null;
         this.mensajeCreacion = "";
+        this.listaVaca = null;
     }
 
     /////Accesores

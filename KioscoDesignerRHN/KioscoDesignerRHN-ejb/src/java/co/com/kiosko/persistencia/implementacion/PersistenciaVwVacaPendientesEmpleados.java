@@ -484,7 +484,13 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
         try {
             query = em.createNativeQuery(consulta);
             query.setParameter(1, rfVacacion);
-            diasPendientes = new BigDecimal(query.getSingleResult().toString());
+//            diasPendientes = new BigDecimal(query.getSingleResult().toString());
+            Object res = query.getSingleResult();
+            if (res instanceof BigDecimal){
+                System.out.println("Los DIASDISPOPER es BigDecimal");
+                diasPendientes = (BigDecimal) res;
+                System.out.println("Los DIASDISPOPER es: "+diasPendientes);
+            }
             return diasPendientes;
         } catch (PersistenceException pe) {
             System.out.println("consultarDiasRealPendPeriodo-Error de persistencia.");

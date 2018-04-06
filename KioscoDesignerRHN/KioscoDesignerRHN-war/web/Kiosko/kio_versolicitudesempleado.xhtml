@@ -42,6 +42,10 @@
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText> 
                             </p:column>
+                            <p:column headerText="DIAS SOLICITADOS">
+                                <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.dias}" >
+                                </h:outputText> 
+                            </p:column>
                             <p:column headerText="FECHA PROCESADA">
                                 <h:outputText value="#{esg.fechaProcesamiento}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
@@ -50,8 +54,8 @@
                             <p:column headerText="ESTADO">
                                 <h:outputText value="#{esg.estado}" />
                             </p:column>
-                            <p:column headerText="EMPLEADO EJECUTA">
-                                <h:outputText value="#{esg.empleadoEjecuta.persona.nombreCompleto}" />
+                            <p:column headerText="EMPLEADO JEFE">
+                                <h:outputText value="#{esg.kioSoliciVaca.empleadoJefe.persona.nombreCompleto}" />
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton process="tbsoliciguarda" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
@@ -82,6 +86,10 @@
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText> 
                             </p:column>
+                            <p:column headerText="DIAS SOLICITADOS">
+                                <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.dias}" >
+                                </h:outputText> 
+                            </p:column>
                             <p:column headerText="FECHA PROCESADA">
                                 <h:outputText value="#{esg.fechaProcesamiento}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
@@ -90,8 +98,8 @@
                             <p:column headerText="ESTADO">
                                 <h:outputText value="#{esg.estado}" />
                             </p:column>
-                            <p:column headerText="EMPLEADO EJECUTA">
-                                <h:outputText value="#{esg.empleadoEjecuta.persona.nombreCompleto}" />
+                            <p:column headerText="EMPLEADO JEFE">
+                                <h:outputText value="#{esg.kioSoliciVaca.empleadoJefe.persona.nombreCompleto}" />
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton process="tbsolicienvia" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " />
@@ -120,6 +128,10 @@
                             <p:column headerText="FECHA INICIO">
                                 <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="DIAS SOLICITADOS">
+                                <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.dias}" >
                                 </h:outputText> 
                             </p:column>
                             <p:column headerText="FECHA PROCESADA">
@@ -160,6 +172,10 @@
                             <p:column headerText="FECHA INICIO">
                                 <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="DIAS SOLICITADOS">
+                                <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.dias}" >
                                 </h:outputText> 
                             </p:column>
                             <p:column headerText="FECHA PROCESADA">
@@ -205,6 +221,10 @@
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText> 
                             </p:column>
+                            <p:column headerText="DIAS SOLICITADOS">
+                                <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.dias}" >
+                                </h:outputText> 
+                            </p:column>
                             <p:column headerText="FECHA PROCESADA">
                                 <h:outputText value="#{esg.fechaProcesamiento}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
@@ -243,6 +263,10 @@
                             <p:column headerText="FECHA INICIO">
                                 <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.fechaInicialDisfrute}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="DIAS SOLICITADOS">
+                                <h:outputText value="#{esg.kioSoliciVaca.kioNovedadesSolici.dias}" >
                                 </h:outputText> 
                             </p:column>
                             <p:column headerText="FECHA PROCESADA">
@@ -295,6 +319,8 @@
                 <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.adelantaPagoHasta}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText> 
+                <h:outputText value="Días solicitados: " />
+                <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.dias}" />
                 <h:outputText value="Fecha de regreso a laborar: " />
                 <h:outputText value="#{controladorKio_VerSolicitudesEmpleado.estSoliciSelec.kioSoliciVaca.kioNovedadesSolici.fechaSiguienteFinVaca}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
