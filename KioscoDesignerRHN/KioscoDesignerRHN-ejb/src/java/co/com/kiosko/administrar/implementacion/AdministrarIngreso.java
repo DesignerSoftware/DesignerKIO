@@ -89,6 +89,24 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     }
 
     @Override
+    public boolean validarAutorizador(String usuario, String esquema) {
+        System.out.println(this.getClass().getName() + ".validarAutorizador()");
+        boolean resul = false;
+        try {
+            if (emf != null) {
+                EntityManager em = emf.createEntityManager();
+                persistenciaConexionInicial.setearKiosko(em, esquema);
+                resul = persistenciaConexionInicial.validarAutorizador(em, usuario);
+                em.close();
+            }
+        } catch (Exception e) {
+            System.out.println("Excepcion validarAutorizador: " + e);
+            resul = false;
+        }
+        return resul;
+    }
+
+    @Override
     public boolean validarUsuarioRegistrado(String usuario, String nitEmpresa) {
         System.out.println(this.getClass().getName() + ".validarUsuarioRegistrado()");
 //        EntityManagerFactory emf;
@@ -103,8 +121,18 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
 //                emf.close();
             }
         } catch (Exception e) {
-            System.out.println("Error general: " + e);
+            System.out.println("validarUsuarioRegistrado-1: " + e);
             resul = false;
+        }
+        if (!resul) {
+            try {
+                EntityManager em = emf.createEntityManager();
+                resul = persistenciaConexionInicial.validarUsuarioRegistrado(em, usuario);
+                em.close();
+            } catch (Exception e) {
+                System.out.println("validarUsuarioRegistrado-2 " + e);
+                resul = false;
+            }
         }
         return resul;
     }
@@ -123,8 +151,20 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
 //                emf.close();
             }
         } catch (Exception e) {
-            System.out.println("Error general: " + e);
+            System.out.println("validarEstadoUsuario-1: " + e);
             resul = false;
+        }
+        if (!resul) {
+            try {
+                if (emf != null) {
+                    EntityManager em = emf.createEntityManager();
+                    resul = persistenciaConexionInicial.validarEstadoUsuario(em, usuario);
+                    em.close();
+                }
+            } catch (Exception e) {
+                System.out.println("validarEstadoUsuario-2: " + e);
+                resul = false;
+            }
         }
         return resul;
     }
@@ -143,8 +183,20 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
 //                emf.close();
             }
         } catch (Exception e) {
-            System.out.println("Error general: " + e);
+            System.out.println("validarIngresoUsuarioRegistrado-1: " + e);
             resul = false;
+        }
+        if (!resul) {
+            try {
+                if (emf != null) {
+                    EntityManager em = emf.createEntityManager();
+                    resul = persistenciaConexionInicial.validarIngresoUsuarioRegistrado(em, usuario, clave);
+                    em.close();
+                }
+            } catch (Exception e) {
+                System.out.println("validarIngresoUsuarioRegistrado-2: " + e);
+                resul = false;
+            }
         }
         return resul;
     }
@@ -167,6 +219,7 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
         }
         return resul;
     }
+
     @Override
     public boolean adicionarConexionUsuario(String idSesion, String esquema) {
         System.out.println(this.getClass().getName() + ".adicionarConexionUsuario()");
@@ -221,8 +274,22 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
 //                    emf.close();
                 }
             } catch (Exception e) {
-                System.out.println("Excepcion al consultar el empleado.");
+                System.out.println("obtenerConexionEmpelado: Excepcion al consultar el empleado.");
                 System.out.println(e);
+            }
+            if (resul == null) {
+                try {
+//                emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
+                    if (emf != null) {
+                        EntityManager em = emf.createEntityManager();
+                        resul = persistenciaConexionesKioskos.consultarConexionEmpleado(em, codigoEmpleado);
+                        em.close();
+//                    emf.close();
+                    }
+                } catch (Exception e) {
+                    System.out.println("obtenerConexionEmpelado: Excepcion al consultar la persona.");
+                    System.out.println(e);
+                }
             }
         }
         return resul;

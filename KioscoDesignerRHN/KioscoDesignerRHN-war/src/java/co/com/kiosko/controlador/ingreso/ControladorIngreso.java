@@ -110,7 +110,10 @@ public class ControladorIngreso implements Serializable {
                         && cadena != null) {
                     nit = cadena.getNit();
                     if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
-                        if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema()) && validarCodigoUsuario()) {
+                        if ((administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema()) 
+                                || administrarIngreso.validarAutorizador(usuario, cadena.getEsquema()) ) 
+                                && validarCodigoUsuario()
+                                ) {
                             if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
                                 if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
                                     if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave, cadena.getNit())) {

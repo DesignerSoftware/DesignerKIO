@@ -4,21 +4,28 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 public interface IPersistenciaConexionInicial {
+
     /**
-     * Método para setear el rol de la base de datos con el que se van a hacer las consultas.
-     * @param eManager 
+     * Método para setear el rol de la base de datos con el que se van a hacer
+     * las consultas.
+     *
+     * @param eManager
      */
     @Deprecated
     public void setearKiosko(EntityManager eManager);
+
     /**
-     * Método que setea el kiosko usando el esquema que se proporcione para complementar 
-     * el nombre del rol con que se harán las consultas.
+     * Método que setea el kiosko usando el esquema que se proporcione para
+     * complementar el nombre del rol con que se harán las consultas.
+     *
      * @param eManager
-     * @param esquema 
+     * @param esquema
      */
     public void setearKiosko(EntityManager eManager, String esquema);
 
     public boolean validarUsuarioyEmpresa(EntityManager eManager, String usuario, String nitEmpresa);
+
+    public boolean validarAutorizador(EntityManager eManager, String usuario);
 
     public boolean validarUsuarioRegistrado(EntityManager eManager, String usuario, String nitEmpresa);
 
@@ -28,4 +35,9 @@ public interface IPersistenciaConexionInicial {
 
     public boolean validarEstadoUsuario(EntityManager eManager, String usuario, String nitEmpresa);
 
+    public boolean validarUsuarioRegistrado(EntityManager eManager, String usuario);
+
+    public boolean validarEstadoUsuario(EntityManager eManager, String usuario);
+
+    public boolean validarIngresoUsuarioRegistrado(EntityManager eManager, String usuario, String clave);
 }

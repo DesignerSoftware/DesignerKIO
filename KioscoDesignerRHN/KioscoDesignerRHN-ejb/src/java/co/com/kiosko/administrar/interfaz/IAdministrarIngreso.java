@@ -13,6 +13,8 @@ public interface IAdministrarIngreso {
 
     //public boolean validarUsuarioyEmpresa(String usuario, String nitEmpresa);
     public boolean validarUsuarioyEmpresa(String usuario, String nitEmpresa, String esquema);
+    
+    public boolean validarAutorizador(String usuario, String esquema);
 
     public boolean validarUsuarioRegistrado(String usuario, String nitEmpresa);
 

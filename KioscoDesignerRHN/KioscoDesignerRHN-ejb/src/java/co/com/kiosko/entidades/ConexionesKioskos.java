@@ -3,11 +3,11 @@ package co.com.kiosko.entidades;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.Basic;
+//import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+//import javax.persistence.GeneratedValue;
+//import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,12 +15,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.TableGenerator;
+//import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 //import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+//import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "CONEXIONESKIOSKOS")
 @XmlRootElement
-@NamedQueries({ 
+@NamedQueries({
     @NamedQuery(name = "ConexionesKioskos.findAll", query = "SELECT c FROM ConexionesKioskos c")})
 //@TableGenerator(name = "STABLAS")
 public class ConexionesKioskos implements Serializable {
@@ -86,6 +86,9 @@ public class ConexionesKioskos implements Serializable {
     @JoinColumn(name = "EMPLEADO", referencedColumnName = "SECUENCIA")
     @OneToOne(optional = false)
     private Empleados empleado;
+    @JoinColumn(name = "PERSONA", referencedColumnName = "SECUENCIA")
+    @OneToOne(optional = false)
+    private Personas persona;
     @Transient
     private String respuesta1UI;
     @Transient
@@ -220,6 +223,14 @@ public class ConexionesKioskos implements Serializable {
         this.empleado = empleado;
     }
 
+    public Personas getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Personas persona) {
+        this.persona = persona;
+    }
+
     public String getRespuesta1UI() {
         return respuesta1UI;
     }
@@ -247,7 +258,7 @@ public class ConexionesKioskos implements Serializable {
         } else {
             enviocorreo = "N";
         }*/
-        this.enviocorreo = (envioCorreo?"S":"N");
+        this.enviocorreo = (envioCorreo ? "S" : "N");
         this.envioCorreo = envioCorreo;
     }
 
@@ -270,6 +281,6 @@ public class ConexionesKioskos implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.kiosko.administrar.entidades.ConexionesKioskos secuencia: " + secuencia + " activo: "+activo+" ultimaconexion: "+ultimaconexion;
+        return "co.com.kiosko.administrar.entidades.ConexionesKioskos secuencia: " + secuencia + " activo: " + activo + " ultimaconexion: " + ultimaconexion;
     }
 }

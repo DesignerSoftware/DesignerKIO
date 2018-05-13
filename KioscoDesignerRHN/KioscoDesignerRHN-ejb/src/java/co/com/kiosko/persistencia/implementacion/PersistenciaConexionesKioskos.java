@@ -61,4 +61,23 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
             return null;
         }
     }
+    @Override
+    public ConexionesKioskos consultarConexionEmpleado(EntityManager eManager, String numerodocumento) {
+        System.out.println(this.getClass().getName()+".consultarConexionEmpleado()");
+        System.out.println("eManager: " + eManager);
+        System.out.println("codigoEmpleado: " + numerodocumento);
+        try {
+            String sqlQuery = "SELECT ck FROM ConexionesKioskos ck WHERE ck.persona.numerodocumento = :numeroDocumento";
+            Query query = eManager.createQuery(sqlQuery);
+            query.setParameter("numeroDocumento", new BigInteger(numerodocumento));
+            return (ConexionesKioskos) query.getSingleResult();
+        } catch (Exception e) {
+            System.out.println("Error PersistenciaConexionesKioskos.consultarConexionEmpleado: " + e);
+            try {
+            } catch (NullPointerException npe) {
+                System.out.println("La transacción es nula.");
+            }
+            return null;
+        }
+    }
 }
