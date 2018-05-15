@@ -20,6 +20,7 @@ public interface IAdministrarIngreso {
 
     public boolean validarIngresoUsuarioRegistrado(String usuario, String clave, String nitEmpresa);
 
+    @Deprecated
     public boolean adicionarConexionUsuario(String idSesion);
     
     public boolean adicionarConexionUsuario(String idSesion, String esquema);

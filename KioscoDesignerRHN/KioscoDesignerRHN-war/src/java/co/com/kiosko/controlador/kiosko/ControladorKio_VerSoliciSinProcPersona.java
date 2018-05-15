@@ -1,19 +1,22 @@
 package co.com.kiosko.controlador.kiosko;
 
+//import javax.inject.Named;
+//import javax.enterprise.context.SessionScoped;
 import co.com.kiosko.administrar.interfaz.IAdministrarGenerarReporte;
 import co.com.kiosko.administrar.interfaz.IAdministrarHistoVacas;
 import co.com.kiosko.administrar.interfaz.IAdministrarProcesarSolicitud;
 import co.com.kiosko.clasesAyuda.ExtraeCausaExcepcion;
 import co.com.kiosko.controlador.ingreso.ControladorIngreso;
 import co.com.kiosko.entidades.Empleados;
+import co.com.kiosko.entidades.Empresas;
 import co.com.kiosko.entidades.KioEstadosSolici;
+import co.com.kiosko.entidades.Personas;
 import co.com.kiosko.utilidadesUI.MensajesUI;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-//import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.el.ELException;
@@ -28,13 +31,13 @@ import org.primefaces.event.UnselectEvent;
 
 /**
  *
- * @author Edwin
+ * @author PC_Angelo
  */
 @ManagedBean
 @ViewScoped
-public class ControladorKio_VerSoliciSinProcesar implements Serializable {
+public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
 
-    private Empleados empleado;
+//    private Empleados empleado;
     private List<Empleados> empleadosACargo;
     private List<Empleados> emplACargoFiltro;
     private List<KioEstadosSolici> soliciEmpleado;
@@ -54,8 +57,11 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
     IAdministrarProcesarSolicitud administrarProcesarSolicitud;
     @EJB
     IAdministrarGenerarReporte administrarGenerarReporte;
+    private Personas personaCon;
+    private long nit;
+    private Empresas empresa;
 
-    public ControladorKio_VerSoliciSinProcesar() {
+    public ControladorKio_VerSoliciSinProcPersona() {
         empleadosACargo = new ArrayList<Empleados>();
         inacMotivo = true;
     }
@@ -66,7 +72,8 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
         try {
             FacesContext x = FacesContext.getCurrentInstance();
             HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
-            empleado = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getConexionEmpleado().getEmpleado();
+//            empleado = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getConexionEmpleado().getEmpleado();
+            personaCon = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getConexionEmpleado().getPersona();
             long nit = Long.parseLong(((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit());
             grupoEmpre = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getGrupoSeleccionado();
             consultasIniciales(ses, nit);
@@ -97,8 +104,10 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
             administrarHistoVacas.obtenerConexion(ses.getId());
             administrarProcesarSolicitud.obtenerConexion(ses.getId());
             administrarGenerarReporte.obtenerConexion(ses.getId());
-            soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa(), "SIN PROCESAR", empleado);
+//            soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa(), "SIN PROCESAR", empleado);
+            soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(nit, "SIN PROCESAR", personaCon);
             System.out.println("consultasIniciales: num estados solicitudes: " + soliciEmpleado.size());
+            empresa = administrarHistoVacas.consultarInfoEmpresa(nit);
         } catch (Exception e) {
             String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
             MensajesUI.error(msj);
@@ -173,6 +182,12 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
     }
 
     private void construirCorreo() {
+        FacesContext x = FacesContext.getCurrentInstance();
+        nit = Long.parseLong(((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit());
+        grupoEmpre = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getGrupoSeleccionado();
+//        System.out.println("nit-1: "+nit);
+        empresa = administrarHistoVacas.consultarInfoEmpresa(nit);
+//        System.out.println("solicitudSelec: "+solicitudSelec);
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             ExternalContext ec = context.getExternalContext();
@@ -180,12 +195,13 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
             String procesadoConj = ("RECHAZADO".equals(estadoNuevo) ? "RECHAZÓ" : "APROBÓ");
             String mensaje = "Apreciado usuario(a): \n\n"
                     + "Nos permitimos informar que se acaba de " + procesado + " una solicitud de vacaciones "
-                    + "creada para "+solicitudSelec.getKioSoliciVaca().getEmpleado().getPersona().getNombreCompleto()+" "
+                    + "creada para " + solicitudSelec.getKioSoliciVaca().getEmpleado().getPersona().getNombreCompleto() + " "
                     + "en el módulo de Kiosco Nómina Designer. "
                     + "Por favor llevar el caso desde su cuenta de usuario en el portal de Kiosco "
                     + "y continuar con el proceso. \n\n"
                     + "La persona que " + procesadoConj + " LA SOLICITUD fue: "
-                    + empleado.getPersona().getNombreCompleto() + "\n";
+                    + personaCon.getNombreCompleto() + "\n";
+//            System.out.println("mensaje-1: "+mensaje);
             mensaje = mensaje + "Por favor seguir el proceso en: "
                     + ec.getRequestScheme() + "://" + ec.getRequestServerName() + ":" + ec.getRequestServerPort()
                     + "/" + ec.getRequestContextPath() + "/" + "?grupo=" + grupoEmpre
@@ -197,30 +213,46 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
                     + "automáticos de la información solicitada. Por favor no responda este correo, "
                     + "ya que no podrá ser atendido. Si desea contactarse con nosotros, envíe un correo "
                     + "o comuníquese telefónicamente con Talento Humano de "
-                    + empleado.getEmpresa().getNombre() + ". \n\n"
+                    + empresa.getNombre() + ". \n\n"
                     + "Cordial saludo. ";
+            System.out.println("mensaje-2: " + mensaje);
             String respuesta1 = "";
             String respuesta2 = "";
             Calendar fechaEnvio = Calendar.getInstance();
             Calendar fechaDisfrute = Calendar.getInstance();
             fechaDisfrute.setTime(solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getFechaInicialDisfrute());
-            String asunto = "Solicitud de vacaciones Kiosco - "+procesadoConj.toLowerCase()+": "
-                    +fechaEnvio.get(Calendar.YEAR)+"/"+(fechaEnvio.get(Calendar.MONTH)+1)+"/"+fechaEnvio.get(Calendar.DAY_OF_MONTH)
-                    +". Inicio de vacaciones: "
-                    +fechaDisfrute.get(Calendar.YEAR)+"/"+(fechaDisfrute.get(Calendar.MONTH)+1)+"/"+fechaDisfrute.get(Calendar.DAY_OF_MONTH);
+            String asunto = "Solicitud de vacaciones Kiosco - " + procesadoConj.toLowerCase() + ": "
+                    + fechaEnvio.get(Calendar.YEAR) + "/" + (fechaEnvio.get(Calendar.MONTH) + 1) + "/" + fechaEnvio.get(Calendar.DAY_OF_MONTH)
+                    + ". Inicio de vacaciones: "
+                    + fechaDisfrute.get(Calendar.YEAR) + "/" + (fechaDisfrute.get(Calendar.MONTH) + 1) + "/" + fechaDisfrute.get(Calendar.DAY_OF_MONTH);
+            System.out.println("asunto-1: "+asunto);
             if (this.solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getEmpleado().getPersona().getEmail() != null
                     && !this.solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getEmpleado().getPersona().getEmail().isEmpty()) {
-                administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
-                        this.solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getEmpleado().getPersona().getEmail(), 
+                System.out.println("envio-1");
+                administrarGenerarReporte.enviarCorreo(empresa.getSecuencia(),
+                        this.solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getEmpleado().getPersona().getEmail(),
                         asunto, mensaje, "");
                 respuesta1 = "Solicitud enviada correctamente al empleado";
             } else {
                 respuesta1 = "El empleado no tiene correo registrado";
             }
-            if (this.solicitudSelec.getKioSoliciVaca().getEmpleadoJefe() != null) {
+            if (solicitudSelec.getKioSoliciVaca().getAutorizador() != null) {
+                System.out.println("envio-2");
+                if (solicitudSelec.getKioSoliciVaca().getAutorizador().getEmail() != null
+                        && !solicitudSelec.getKioSoliciVaca().getAutorizador().getEmail().isEmpty()) {
+                    System.out.println("envio-2.1");
+                    administrarGenerarReporte.enviarCorreo(empresa.getSecuencia(),
+                            solicitudSelec.getKioSoliciVaca().getAutorizador().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
+                    respuesta2 = " Solicitud enviada correctamente al autorizador";
+                } else {
+                    respuesta2 = " El autorizador no tiene correo";
+                }
+            } else if (this.solicitudSelec.getKioSoliciVaca().getEmpleadoJefe() != null) {
+                System.out.println("envio-3");
                 if (this.solicitudSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail() != null
                         && !this.solicitudSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail().isEmpty()) {
-                    administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
+                    System.out.println("envio-3.1");
+                    administrarGenerarReporte.enviarCorreo(empresa.getSecuencia(),
                             this.solicitudSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
                     respuesta2 = " Solicitud enviada correctamente al jefe inmediato";
                 } else {
@@ -233,6 +265,7 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
             mensajeCreacion = respuesta;
             MensajesUI.info(respuesta);
         } catch (Exception e) {
+            System.out.println("construirCorreo: " + e);
             mensajeCreacion = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
             System.out.println("Error guardarSolicitud: " + mensajeCreacion);
             MensajesUI.error(mensajeCreacion);
@@ -282,7 +315,7 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
         }
         if (continuar) {
             try {
-                administrarProcesarSolicitud.cambiarEstadoSolicitud(solicitudSelec.getKioSoliciVaca(), empleado, estadoNuevo, motivo, null);
+                administrarProcesarSolicitud.cambiarEstadoSolicitud(solicitudSelec.getKioSoliciVaca(), null, estadoNuevo, motivo, personaCon);
                 res = true;
             } catch (Exception ex) {
                 String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(ex);
@@ -306,22 +339,22 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
         }
     }
 
-    public Empleados getEmpleado() {
-        System.out.println(this.getClass().getName() + ".getEmpleado()");
-        return empleado;
-    }
-
-    public void setEmpleado(Empleados empleado) {
-        System.out.println(this.getClass().getName() + ".setEmpleado()");
-        this.empleado = empleado;
-    }
-
+//    public Empleados getEmpleado() {
+//        System.out.println(this.getClass().getName() + ".getEmpleado()");
+//        return empleado;
+//    }
+//
+//    public void setEmpleado(Empleados empleado) {
+//        System.out.println(this.getClass().getName() + ".setEmpleado()");
+//        this.empleado = empleado;
+//    }
     public List<Empleados> getEmpleadosACargo() {
         System.out.println(this.getClass().getName() + ".getEmpleadosACargo()");
         if (empleadosACargo == null || empleadosACargo.isEmpty()) {
             try {
 //                empleadosACargo = administrarHistoVacas.consultarEmpleadosEmpresa(empleado.getEmpresa().getNit());
-                empleadosACargo = administrarHistoVacas.consultarEmpleadosJefe(empleado.getEmpresa().getNit(), empleado);
+//                empleadosACargo = administrarHistoVacas.consultarEmpleadosJefe(empleado.getEmpresa().getNit(), empleado);
+                empleadosACargo = administrarHistoVacas.consultarEmpleadosAutorizador(nit, personaCon);
             } catch (Exception e) {
                 System.out.println("Error getEmpleadosACargo: " + this.getClass().getName() + ": " + e);
                 System.out.println("Causa: " + e.getCause());
@@ -352,7 +385,8 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
         if (soliciEmpleado == null || soliciEmpleado.isEmpty()) {
             try {
                 if (empleadoSelec == null) {
-                    soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa(), "SIN PROCESAR", empleado);
+//                    soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa(), "SIN PROCESAR", empleado);
+                    soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(nit, motivo, personaCon);
                 } else {
                     soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpl(empleadoSelec);
                 }

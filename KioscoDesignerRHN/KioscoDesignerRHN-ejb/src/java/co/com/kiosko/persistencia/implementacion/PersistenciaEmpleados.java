@@ -1,6 +1,8 @@
 package co.com.kiosko.persistencia.implementacion;
 
 import co.com.kiosko.entidades.Empleados;
+import co.com.kiosko.entidades.Empresas;
+import co.com.kiosko.entidades.Personas;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -200,7 +202,7 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
                 + "    where vtti.empleado = vtt.empleado "
                 + "    and vtti.fechavigencia <= sysdate) "
                 + "  and vtt.empleado = e.secuencia )";
-        List<Empleados> empleados = new ArrayList<Empleados>();
+        List<Empleados> empleados = new ArrayList();
         try {
             Query query = em.createNativeQuery(sqlQuery, Empleados.class);
             query.setParameter(1, nit);
@@ -285,6 +287,231 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
             throw npe;
         } catch (IllegalStateException ise) {
             throw ise;
+        }
+    }
+
+    @Override
+    public Personas consultarPersona(EntityManager eManager, BigInteger numeroDocumento) {
+        try {
+            String sqlQuery = "SELECT per FROM Personas per WHERE per.numeroDocumento = :numeroDocumento";
+            Query query = eManager.createQuery(sqlQuery);
+            query.setParameter("numeroDocumento", numeroDocumento);
+            Personas per = (Personas) query.getSingleResult();
+            return per;
+        } catch (NonUniqueResultException nure) {
+            System.out.println("Hay más de una persona con el mismo numero de documento.");
+            System.out.println("Error PersistenciaEmpleados.consultarPersona: " + nure);
+            try {
+                String sqlQuery = "SELECT per FROM Personas per WHERE per.numeroDocumento = :numeroDocumento ";
+                Query query = eManager.createQuery(sqlQuery);
+                query.setParameter("numeroDocumento", numeroDocumento);
+                List personas = query.getResultList();
+                return (Personas) personas.get(0);
+            } catch (Exception e) {
+                System.out.println("Error PersistenciaEmpleados.consultarPersona: " + e);
+                try {
+                } catch (NullPointerException npe) {
+                    System.out.println("consultarPersona: Error de nulo en la transacción.");
+                }
+                return null;
+            }
+        } catch (NullPointerException npe) {
+            System.out.println("consultarPersona: No hay persona con el código dado.");
+            System.out.println("Error PersistenciaEmpleados.consultarPersona: " + npe);
+            try {
+            } catch (NullPointerException npe2) {
+                System.out.println("consultarPersona: Error 2 de nulo en la transacción");
+            }
+            return null;
+        }
+    }
+
+    @Override
+    public Empleados consultarEmpleadoXPersoEmpre(EntityManager em, BigInteger numeroDocumento, long nit) {
+        String consulta = "select empl.* "
+                + "from personas per, empleados empl, empresas em, vigenciascargos vc, estructuras es, organigramas o "
+                + "where per.secuencia = empl.persona "
+                + "and em.secuencia = empl.empresa "
+                + "and vc.empleado = empl.secuencia "
+                + "and es.secuencia = vc.estructura "
+                + "and o.secuencia = es.organigrama "
+                + "and em.secuencia = o.empresa "
+                + "and per.numerodocumento = ? "
+                + "and em.nit = ? "
+                + "and vc.fechavigencia = (select max(vci.fechavigencia) "
+                + "                        from vigenciascargos vci "
+                + "                        where vci.empleado = vc.empleado "
+                + "                        and vci.fechavigencia <= sysdate) ";
+        Empleados empleado = null;
+        try {
+            Query query = em.createNativeQuery(consulta, Empleados.class);
+            query.setParameter(1, numeroDocumento);
+            query.setParameter(2, nit);
+            empleado = (Empleados) query.getSingleResult();
+        } catch (PersistenceException pe) {
+            throw pe;
+        } catch (IllegalStateException ise) {
+            throw ise;
+        }
+        return empleado;
+    }
+
+    public boolean esAutorizador(EntityManager em, BigDecimal rfPersona) {
+        String sqlQuery = "select count(*) "
+                + "from kioautorizadores ka "
+                + "where ka.persona = ? ";
+        BigDecimal conteo = BigDecimal.ZERO;
+        try {
+            em.clear();
+            Query query = em.createNativeQuery(sqlQuery);
+            query.setParameter(1, rfPersona);
+            conteo = (BigDecimal) query.getSingleResult();
+            System.out.println("Conteo de autorizador: " + conteo);
+            return conteo.compareTo(BigDecimal.ZERO) > 0;
+        } catch (Exception e) {
+            System.out.println("esAutorizador:Error " + e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public BigInteger consultarEmpresaXNit(EntityManager em, long nit) {
+        String sqlQuery = "select secuencia "
+                + "from empresas e "
+                + "where e.nit = ? ";
+        BigInteger secuencia = BigInteger.ZERO;
+        try {
+            em.clear();
+            Query query = em.createNativeQuery(sqlQuery);
+            query.setParameter(1, nit);
+            Object resul = query.getSingleResult();
+            if (resul instanceof BigInteger) {
+                secuencia = (BigInteger) resul;
+            } else if (resul instanceof BigDecimal) {
+                secuencia = ((BigDecimal) resul).toBigInteger();
+            }
+            System.out.println("secuencia empresa: " + secuencia);
+            return secuencia;
+        } catch (Exception e) {
+            System.out.println("consultarEmpresaXNit:Error " + e.getMessage());
+            return secuencia;
+        }
+    }
+
+    @Override
+    public Empresas consultarEmpresa(EntityManager em, long nit) {
+        String sqlQuery = "select e.* "
+                + "from empresas e "
+                + "where e.nit = ? ";
+        Empresas empresa = null;
+        try {
+            em.clear();
+            Query query = em.createNativeQuery(sqlQuery, Empresas.class);
+            query.setParameter(1, nit);
+            Object resul = query.getSingleResult();
+            if (resul instanceof Empresas) {
+                empresa = (Empresas) resul;
+            } else {
+                empresa = null;
+            }
+        } catch (Exception e) {
+            System.out.println("consultarEmpresa:excepcion: " + e);
+        }
+        return empresa;
+    }
+
+    @Override
+    public List consultarEmpleadosXAutorizador(EntityManager em, long nit, BigInteger secPersona) throws Exception {
+        System.out.println(this.getClass().getName() + ".consultarEmpleadosXAutorizador()");
+        String sqlQuery = "select empl.* "
+                + "from empleados empl, "
+                + "vigenciascargos vc, estructuras es, organigramas o, empresas em, "
+                + "kioautorizadores ka, KIOAUTORIZASOLICIVACAS KASV "
+                + "where "
+                + "empl.secuencia = vc.empleado "
+                + "and vc.estructura = es.secuencia "
+                + "and es.organigrama = o.secuencia "
+                + "and o.empresa = em.secuencia "
+                + "and kasv.empleado = empl.secuencia "
+                + "and kasv.kioautorizador = ka.secuencia "
+                + "and vc.fechavigencia = (select max(vci.fechavigencia) "
+                + "from vigenciascargos vci "
+                + "where vci.empleado = vc.empleado "
+                + "and vci.fechavigencia <= sysdate) "
+                + "and exists (select vtt.secuencia "
+                + "from vigenciastipostrabajadores vtt, tipostrabajadores tt "
+                + "where vtt.tipotrabajador = tt.secuencia "
+                + "and tt.tipo in ('ACTIVO', 'PENSIONADO') "
+                + "and vtt.fechavigencia = (select max(vtti.fechavigencia) "
+                + "from vigenciastipostrabajadores vtti "
+                + "where vtti.empleado = vtt.empleado "
+                + "and vtti.fechavigencia <= sysdate) "
+                + "and vtt.empleado = empl.secuencia ) "
+                + "and em.nit = ? "
+                + "and ka.persona = ? ";
+        List<Empleados> empleados = new ArrayList();
+        try {
+            Query query = em.createNativeQuery(sqlQuery, Empleados.class);
+            query.setParameter(1, nit);
+            query.setParameter(2, secPersona);
+            empleados = query.getResultList();
+            return empleados;
+        } catch (PersistenceException pe) {
+            System.out.println("consultarEmpleadosXAutorizador-PersistenceException");
+            throw pe;
+        } catch (IllegalStateException ise) {
+            System.out.println("consultarEmpleadosXAutorizador-IllegalStateException");
+            throw ise;
+        } catch (Exception e) {
+            System.out.println("consultarEmpleadosXAutorizador-Exception");
+            throw e;
+        }
+    }
+
+    @Override
+    public Personas consultaPersonaxSec(EntityManager em, BigInteger secPersona) throws Exception {
+        System.out.println(this.getClass().getName() + ".consultaPersonaxSec()");
+        String sqlQuery = "select e "
+                + "from Personas e "
+                + "where e.secuencia = :secPersona ";
+        Personas persona = null;
+        try {
+            Query query = em.createQuery(sqlQuery);
+            query.setParameter("secPersona", secPersona);
+            Object res = query.getSingleResult();
+            if (res instanceof Personas) {
+                persona = (Personas) res;
+            } else {
+                throw new Exception("El resultado obtenido no es una persona sec: " + secPersona);
+            }
+            return persona;
+        } catch (PersistenceException pe) {
+            throw pe;
+        } catch (NullPointerException npe) {
+            throw npe;
+        } catch (IllegalStateException ise) {
+            throw ise;
+        }
+    }
+
+    @Override
+    public Personas consutarAutorizador(EntityManager em, BigDecimal secEmpleado, BigInteger secEmpresa) throws Exception {
+        String consulta = "select per.* "
+                + "from empleados empl, kioautorizadores ka, kioautorizasolicivacas kasv, personas per "
+                + "where empl.secuencia = kasv.empleado "
+                + "and kasv.kioautorizador = ka.secuencia "
+                + "and per.secuencia = ka.persona "
+                + "and empl.secuencia = ? ";
+        try {
+            em.clear();
+            Query query = em.createNativeQuery(consulta, Personas.class);
+            query.setParameter(1, secEmpleado);
+            Personas persona = (Personas) query.getSingleResult();
+            return persona;
+        } catch (Exception e) {
+            System.out.println("Error consutarAutorizador: " + e);
+//            throw e;
+            throw new Exception(e);
         }
     }
 }

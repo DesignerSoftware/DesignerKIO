@@ -3,6 +3,7 @@ package co.com.kiosko.administrar.interfaz;
 import co.com.kiosko.entidades.ConexionesKioskos;
 import co.com.kiosko.entidades.Empleados;
 import co.com.kiosko.entidades.ParametrizaClave;
+import co.com.kiosko.entidades.Personas;
 import co.com.kiosko.entidades.PreguntasKioskos;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -28,5 +29,7 @@ public interface IAdministrarPrimerIngreso {
     public String desencriptar(byte[] valor);
 
     public ParametrizaClave obtenerFormatoClave(long nitEmpresa);
+    
+    public Personas consultarPersona(BigInteger numeroDocumento);
     
 }

@@ -85,7 +85,7 @@ public class ControladorIngreso implements Serializable {
         return listaRetorno;
     }
 
-    private CadenasKioskos validarUnidadPersistencia(String unidadP) {
+    public CadenasKioskos validarUnidadPersistencia(String unidadP) {
         CadenasKioskos resultado = null;
         for (CadenasKioskos elemento : (new LeerArchivoXML()).leerArchivoEmpresasKiosko()) {
             if (elemento.getId().equals(unidadP)) {
@@ -110,15 +110,14 @@ public class ControladorIngreso implements Serializable {
                         && cadena != null) {
                     nit = cadena.getNit();
                     if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
-                        if ((administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema()) 
-                                || administrarIngreso.validarAutorizador(usuario, cadena.getEsquema()) ) 
-                                && validarCodigoUsuario()
-                                ) {
+                        if ((administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())
+                                || administrarIngreso.validarAutorizador(usuario, cadena.getEsquema()))
+                                && validarCodigoUsuario()) {
                             if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
                                 if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
                                     if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave, cadena.getNit())) {
                                         //nit = cadena.getNit();
-                                        administrarIngreso.adicionarConexionUsuario(ses.getId());
+                                        administrarIngreso.adicionarConexionUsuario(ses.getId(), cadena.getEsquema());
                                         ingresoExitoso = true;
                                         intento = 0;
                                         //return "inicio";
@@ -155,7 +154,8 @@ public class ControladorIngreso implements Serializable {
                                     ingresoExitoso = false;
                                 }
                             } else {
-                                administrarIngreso.adicionarConexionUsuario(ses.getId());
+//                                administrarIngreso.adicionarConexionUsuario(ses.getId());
+                                administrarIngreso.adicionarConexionUsuario(ses.getId(), cadena.getEsquema());
                                 nit = cadena.getNit();
                                 ingresoExitoso = true;
                                 HttpSession session = Util.getSession();
@@ -199,7 +199,7 @@ public class ControladorIngreso implements Serializable {
                 ec.redirect(ec.getRequestContextPath() + "/" + "?grupo=" + grupoSeleccionado);
             }
         } catch (EJBTransactionRolledbackException etre) {
-            System.out.println(this.getClass().getName()+".ingresar() exception");
+            System.out.println(this.getClass().getName() + ".ingresar() exception");
             System.out.println("La transacción se deshizo.");
             System.out.println(etre);
         }
@@ -320,8 +320,10 @@ public class ControladorIngreso implements Serializable {
     }
 
     public String getUnidadPersistenciaIngreso() {
-        List<CadenasKioskos> cadenas = obtenerCadenasKiosko();
-        unidadPersistenciaIngreso = (cadenas.size() == 1) ? cadenas.get(0).getId() : null;
+        if (unidadPersistenciaIngreso == null) {
+            List<CadenasKioskos> cadenas = obtenerCadenasKiosko();
+            unidadPersistenciaIngreso = (cadenas.size() == 1) ? cadenas.get(0).getId() : null;
+        }
         return unidadPersistenciaIngreso;
     }
 

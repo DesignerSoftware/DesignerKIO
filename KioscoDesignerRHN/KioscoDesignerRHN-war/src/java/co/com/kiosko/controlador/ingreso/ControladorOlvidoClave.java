@@ -44,7 +44,8 @@ public class ControladorOlvidoClave implements Serializable {
             usuario = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getUsuario();
             nit = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit();
             pc = administrarOlvidoClave.obtenerFormatoClave(Long.parseLong(nit));
-            conexion = administrarOlvidoClave.obtenerConexionEmpleado(usuario, nit);
+            //conexion = administrarOlvidoClave.obtenerConexionEmpleado(usuario, nit);
+            conexion = administrarOlvidoClave.obtenerConexionEmpleado(usuario);
         } catch (Exception e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
             System.out.println("Causa: " + e.getCause());

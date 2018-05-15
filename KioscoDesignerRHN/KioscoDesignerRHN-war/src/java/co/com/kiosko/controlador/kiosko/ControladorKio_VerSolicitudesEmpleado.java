@@ -247,11 +247,11 @@ public class ControladorKio_VerSolicitudesEmpleado implements Serializable {
         if ("CANCELADO".equals(estadoNuevo.getValor())) {
             try {
                 try {
-                    administrarProcesarSolicitud.cambiarEstadoSolicitud(this.estSoliciSelec.getKioSoliciVaca(), empleado, estadoNuevo.getValor(), motivo);
+                    administrarProcesarSolicitud.cambiarEstadoSolicitud(this.estSoliciSelec.getKioSoliciVaca(), empleado, estadoNuevo.getValor(), motivo, null);
                 } catch (NoSuchObjectLocalException nsole) {
                     System.out.println("procesarSolicitud-nsole-1: " + nsole.getMessage());
                     inicializarEJB();
-                    administrarProcesarSolicitud.cambiarEstadoSolicitud(this.estSoliciSelec.getKioSoliciVaca(), empleado, estadoNuevo.getValor(), motivo);
+                    administrarProcesarSolicitud.cambiarEstadoSolicitud(this.estSoliciSelec.getKioSoliciVaca(), empleado, estadoNuevo.getValor(), motivo, null);
                 }
                 res = true;
             } catch (Exception ex) {
@@ -272,11 +272,11 @@ public class ControladorKio_VerSolicitudesEmpleado implements Serializable {
         } else if ("ENVIADO".equals(estadoNuevo.getValor())) {
             try {
                 try {
-                    administrarProcesarSolicitud.cambiarEstadoSolicitud(estSoliciSelec.getKioSoliciVaca(), empleado, estadoNuevo.getValor(), motivo);
+                    administrarProcesarSolicitud.cambiarEstadoSolicitud(estSoliciSelec.getKioSoliciVaca(), empleado, estadoNuevo.getValor(), motivo, null);
                 } catch (NoSuchObjectLocalException nsole) {
                     System.out.println("procesarSolicitud-nsole-2: " + nsole.getMessage());
                     inicializarEJB();
-                    administrarProcesarSolicitud.cambiarEstadoSolicitud(estSoliciSelec.getKioSoliciVaca(), empleado, estadoNuevo.getValor(), motivo);
+                    administrarProcesarSolicitud.cambiarEstadoSolicitud(estSoliciSelec.getKioSoliciVaca(), empleado, estadoNuevo.getValor(), motivo, null);
                 }
                 res = true;
             } catch (Exception ex) {

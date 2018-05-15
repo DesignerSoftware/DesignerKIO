@@ -4,6 +4,7 @@ import co.com.kiosko.entidades.ConexionesKioskos;
 import co.com.kiosko.entidades.ParametrizaClave;
 import co.com.kiosko.entidades.PreguntasKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarPrimerIngreso;
+import co.com.kiosko.entidades.Empleados;
 import co.com.kiosko.utilidadesUI.MensajesUI;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
 import java.io.Serializable;
@@ -93,7 +94,15 @@ public class ControladorPrimerIngreso implements Serializable {
                 System.out.println("Condicional 2");
                 if (validarClave(clave)) {
                     //System.out.println("Condicional 3");
-                    nuevoIngreso.setEmpleado(administrarPrimerIngreso.consultarEmpleado(new BigInteger(usuario), Long.parseLong(nit)));
+                    //nuevoIngreso.setEmpleado(administrarPrimerIngreso.consultarEmpleado(new BigInteger(usuario), Long.parseLong(nit)));
+                    Empleados empl = administrarPrimerIngreso.consultarEmpleado(new BigInteger(usuario), Long.parseLong(nit));
+                    if (empl != null) {
+                        System.out.println("Condicional 3a");
+                        nuevoIngreso.setEmpleado(empl);
+                    } else {
+                        System.out.println("Condicional 3b");
+                        nuevoIngreso.setPersona(administrarPrimerIngreso.consultarPersona(new BigInteger(usuario)) );
+                    }
                     nuevoIngreso.setPwd(administrarPrimerIngreso.encriptar(clave));
                     byte[] rsp1, rsp2;
                     nuevoIngreso.setRespuesta1(administrarPrimerIngreso.encriptar(nuevoIngreso.getRespuesta1UI().toUpperCase()));

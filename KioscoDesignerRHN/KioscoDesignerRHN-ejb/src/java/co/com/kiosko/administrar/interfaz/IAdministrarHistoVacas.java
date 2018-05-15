@@ -3,6 +3,7 @@ package co.com.kiosko.administrar.interfaz;
 import co.com.kiosko.entidades.Empleados;
 import co.com.kiosko.entidades.Empresas;
 import co.com.kiosko.entidades.KioEstadosSolici;
+import co.com.kiosko.entidades.Personas;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -54,4 +55,15 @@ public interface IAdministrarHistoVacas {
      * @throws Exception 
      */
     public List<KioEstadosSolici> consultarEstadoSoliciEmpre(Empresas empresa, String estado, Empleados emplJefe) throws Exception;
+    /**
+     * Método para consultar las solicitudes de los empleados asociados a determinada empresa 
+     * teniendo en cuenta el estado que se envía por parámetro y el autorizador que 
+     * consulta.
+     * @param estado de las solicitudes
+     * @return
+     * @throws Exception 
+     */
+    public List<KioEstadosSolici> consultarEstadoSoliciEmpre(long nit, String estado, Personas autorizador) throws Exception;
+    public Empresas consultarInfoEmpresa(long nit);
+    public List<Empleados> consultarEmpleadosAutorizador(long nit, Personas per) throws Exception;
 }

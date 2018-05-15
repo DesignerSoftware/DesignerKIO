@@ -3,6 +3,7 @@ package co.com.kiosko.administrar.interfaz;
 import co.com.kiosko.entidades.Empleados;
 import co.com.kiosko.entidades.KioNovedadesSolici;
 import co.com.kiosko.entidades.KioSoliciVacas;
+import co.com.kiosko.entidades.Personas;
 import co.com.kiosko.entidades.VwVacaPendientesEmpleados;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -116,4 +117,5 @@ public interface IAdministrarCrearSolicitud {
      */
     public boolean existeSolicitudFecha(KioSoliciVacas solicitud) throws Exception;
     public BigDecimal consultarTraslapamientos(KioNovedadesSolici novedad) throws Exception;
+    public Personas consultarAutorizador(Empleados empleado) throws Exception;
 }

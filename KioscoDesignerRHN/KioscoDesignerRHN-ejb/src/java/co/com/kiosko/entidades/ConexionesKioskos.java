@@ -221,6 +221,7 @@ public class ConexionesKioskos implements Serializable {
 
     public void setEmpleado(Empleados empleado) {
         this.empleado = empleado;
+        setPersona(this.empleado.getPersona());
     }
 
     public Personas getPersona() {

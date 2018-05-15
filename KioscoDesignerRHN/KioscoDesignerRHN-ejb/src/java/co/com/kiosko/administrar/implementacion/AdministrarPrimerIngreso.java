@@ -6,6 +6,7 @@ import co.com.kiosko.entidades.ParametrizaClave;
 import co.com.kiosko.entidades.PreguntasKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarPrimerIngreso;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
+import co.com.kiosko.entidades.Personas;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaParametrizaClave;
@@ -105,5 +106,12 @@ public class AdministrarPrimerIngreso implements IAdministrarPrimerIngreso, Seri
         ParametrizaClave pc = persistenciaParametrizaClave.obtenerFormatoClave(em, nitEmpresa);
         em.close();
         return pc;
+    }
+    
+    public Personas consultarPersona(BigInteger numeroDocumento){
+        EntityManager em = emf.createEntityManager();
+        Personas per = persistenciaEmpleados.consultarPersona(em, numeroDocumento);
+        em.close();
+        return per;
     }
 }

@@ -4,7 +4,8 @@ import co.com.kiosko.entidades.OpcionesKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarOpcionesKiosko;
 import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.clasesAyuda.CadenasKioskos;
-import co.com.kiosko.clasesAyuda.LeerArchivoXML;
+//import co.com.kiosko.clasesAyuda.LeerArchivoXML;
+import co.com.kiosko.entidades.ConexionesKioskos;
 import co.com.kiosko.entidades.Empleados;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaOpcionesKioskos;
@@ -36,6 +37,23 @@ public class AdministrarOpcionesKiosko implements IAdministrarOpcionesKiosko, Se
     @Override
     public void obtenerConexion(String idSesion) {
         emf = administrarSesiones.obtenerConexionSesion(idSesion);
+    }
+
+    @Override
+    public BigInteger obtenerSecEmpresa(long nit) {
+        BigInteger secEmpresa = BigInteger.ZERO;
+        try {
+            EntityManager em = emf.createEntityManager();
+            secEmpresa = persistenciaEmpleados.consultarEmpresaXNit(em, nit);
+            em.close();
+        } catch (Exception e) {
+            System.out.println("obtenerOpcionesKiosko:excepcion: "+e);
+        }
+        //if (!secEmpresa.equals(BigInteger.ZERO)){
+            return secEmpresa;
+        //}else{
+        //    return null;
+        //}
     }
 
     @Override
@@ -91,7 +109,7 @@ public class AdministrarOpcionesKiosko implements IAdministrarOpcionesKiosko, Se
                     }
                 }
             }
-        } catch (Exception exce){
+        } catch (Exception exce) {
             System.out.println("obtenerOpcionesKiosko:consultaOpciones:excep: " + exce);
         } finally {
             if (em != null && em.isOpen()) {
@@ -107,56 +125,78 @@ public class AdministrarOpcionesKiosko implements IAdministrarOpcionesKiosko, Se
     }
 
     @Override
-    public String determinarRol(Empleados empleado, String unidadPersistenciaIngreso) {
+    public String determinarRol(ConexionesKioskos conexionK, CadenasKioskos cadenaK) {
         EntityManager em = emf.createEntityManager();
-        String rol = "EMPLEADO";
-        boolean esJefe = false;
+        String rol;
+        if (conexionK.getPersona().getSecuencia() != null) {
+            rol = "PERSONA";
+        } else {
+            rol = "";
+        }
+//        String rol = "EMPLEADO";
+        //consulta si es autorizador
+        boolean esAutorizador = false;
         try {
-            esJefe = persistenciaEmpleados.esJefe(em, empleado.getSecuencia(), empleado.getEmpresa().getSecuencia());
+            esAutorizador = persistenciaEmpleados.esAutorizador(em, new BigDecimal(conexionK.getPersona().getSecuencia()));
         } catch (Exception e) {
-            System.out.println("determinarRol: esJefe: excep: " + e);
-        } finally {
-            if (em != null && em.isOpen()) {
-                em.close();
-            }
+            System.out.println("determinarRol: esAutorizador: excep: " + e);
         }
-        if (esJefe) {
-            rol = rol + ";JEFE";
+        if (esAutorizador) {
+            rol = rol + ";AUTORIZADOR";
         }
-        String codNomina = "";
+        //consulta si es empleado
+        Empleados empleado = null;
         try {
-            codNomina = validarUnidadPersistencia(unidadPersistenciaIngreso).getEmplnomina();
-        } catch (NumberFormatException nfe) {
-            System.out.println("El codigo de empleado de nomina no tiene formato numerico");
-        } catch (Exception ex) {
-            System.out.println("determinarRol: esNomina: excep: " + ex);
+            empleado = persistenciaEmpleados.consultarEmpleadoXPersoEmpre(em, conexionK.getPersona().getNumerodocumento(), Long.parseLong(cadenaK.getNit()));
+        } catch (Exception e) {
+            System.out.println("determinarRol: esEmpleado: excep: " + e);
         }
-        try {
-            if ((codNomina != null) && (!codNomina.isEmpty())) {
-                System.out.println("codigo registrado como empleado de nomina: " + codNomina);
-                if (empleado.getCodigoempleado().equals(new BigDecimal(codNomina))) {
-                    rol = rol + ";NOMINA";
+        if (empleado != null) {
+            rol = rol + ";EMPLEADO";
+        }
+
+        if (empleado != null) {
+            //consulta si es jefe
+            boolean esJefe = false;
+            try {
+                esJefe = persistenciaEmpleados.esJefe(em, empleado.getSecuencia(), empleado.getEmpresa().getSecuencia());
+            } catch (Exception e) {
+                System.out.println("determinarRol: esJefe: excep: " + e);
+            } finally {
+                if (em != null && em.isOpen()) {
+                    em.close();
                 }
-            } else {
-                System.out.println("NO hay empleado de nomina registrado: " + codNomina);
             }
-        } catch (NullPointerException npe) {
-            System.out.println("determinarRol: esNomina: excep: " + npe);
-            System.out.println("determinarRol: esNomina: codNomina: " + codNomina);
-        } catch (NumberFormatException nfe) {
-            System.out.println("determinarRol: esNomina: excep: " + nfe);
+            if (esJefe) {
+                rol = rol + ";JEFE";
+            }
+            //consulta si es responsable de la nomina
+            String codNomina = "";
+            try {
+                codNomina = cadenaK.getEmplnomina();
+            } catch (NumberFormatException nfe) {
+                System.out.println("El codigo de empleado de nomina no tiene formato numerico");
+            } catch (Exception ex) {
+                System.out.println("determinarRol: esNomina: excep: " + ex);
+            }
+            try {
+                if ((codNomina != null) && (!codNomina.isEmpty())) {
+                    System.out.println("codigo registrado como empleado de nomina: " + codNomina);
+                    if (empleado.getCodigoempleado().equals(new BigDecimal(codNomina))) {
+                        rol = rol + ";NOMINA";
+                    }
+                } else {
+                    System.out.println("NO hay empleado de nomina registrado: " + codNomina);
+                }
+            } catch (NullPointerException npe) {
+                System.out.println("determinarRol: esNomina: excep: " + npe);
+                System.out.println("determinarRol: esNomina: codNomina: " + codNomina);
+            } catch (NumberFormatException nfe) {
+                System.out.println("determinarRol: esNomina: excep: " + nfe);
+            }
         }
+        //
         return rol;
     }
 
-    private CadenasKioskos validarUnidadPersistencia(String unidadP) {
-        CadenasKioskos resultado = null;
-        for (CadenasKioskos elemento : (new LeerArchivoXML()).leerArchivoEmpresasKiosko()) {
-            if (elemento.getId().equals(unidadP)) {
-                resultado = elemento;
-                break;
-            }
-        }
-        return resultado;
-    }
 }

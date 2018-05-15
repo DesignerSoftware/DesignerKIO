@@ -9,8 +9,11 @@ import co.com.kiosko.administrar.interfaz.IAdministrarHistoVacas;
 import co.com.kiosko.entidades.Empleados;
 import co.com.kiosko.entidades.Empresas;
 import co.com.kiosko.entidades.KioEstadosSolici;
+import co.com.kiosko.entidades.Personas;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaKioEstadosSolici;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 //import java.math.BigDecimal;
 //import java.math.BigInteger;
@@ -52,7 +55,7 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializab
             }
         }
     }
-    
+
     @Override
     public List<Empleados> consultarEmpleadosJefe(long nit, Empleados emplJefe) throws Exception {
         EntityManager em = emf.createEntityManager();
@@ -126,21 +129,21 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializab
             listaEstados.add("AUTORIZADO");
             listaEstados.add("LIQUIDADO");
             listaEstados.add("RECHAZADO");
-        }else if ("SIN PROCESAR".equalsIgnoreCase(estado)) {
+        } else if ("SIN PROCESAR".equalsIgnoreCase(estado)) {
             listaEstados.clear();
             listaEstados.add("ENVIADO");
         } else {
             listaEstados.clear();
             listaEstados.add(estado);
         }
-        ArrayList listaResul = new ArrayList<KioEstadosSolici>();
+        ArrayList listaResul = new ArrayList();
         List listaTMP;
         for (int i = 0; i < listaEstados.size(); i++) {
             EntityManager em = emf.createEntityManager();
             if (emplJefe == null) {
                 try {
                     listaTMP = persistenciaKioEstadosSolici.consultarEstadosXEmpre(em, empresa.getSecuencia(), listaEstados.get(i));
-                    System.out.println("listaTMP-1: "+listaTMP.size());
+                    System.out.println("listaTMP-1: " + listaTMP.size());
                 } catch (Exception e) {
                     throw e;
                 } finally {
@@ -152,7 +155,7 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializab
                 System.out.println("consultarEstadoSoliciEmpre-else");
                 try {
                     listaTMP = persistenciaKioEstadosSolici.consultarEstadosXEmpre(em, empresa.getSecuencia(), listaEstados.get(i), emplJefe.getSecuencia());
-                    System.out.println("listaTMP-2: "+listaTMP.size());
+                    System.out.println("listaTMP-2: " + listaTMP.size());
                 } catch (Exception e) {
                     throw e;
                 } finally {
@@ -162,8 +165,97 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializab
                 }
             }
             listaResul.addAll(listaTMP);
-            System.out.println("listaResul-1: "+listaResul.size());
+            System.out.println("listaResul-1: " + listaResul.size());
         }
         return listaResul;
+    }
+
+    @Override
+    public List<KioEstadosSolici> consultarEstadoSoliciEmpre(long nit, String estado, Personas autorizador) throws Exception {
+        System.out.println(this.getClass().getName() + ".consultarEstadoSoliciEmpre()-4");
+        ArrayList<String> listaEstados = new ArrayList<String>();
+        BigInteger secEmpresa = BigInteger.ZERO;
+        try {
+            EntityManager em = emf.createEntityManager();
+            secEmpresa = persistenciaEmpleados.consultarEmpresaXNit(em, nit);
+            em.close();
+        } catch (Exception e){
+            System.out.println("consultarEstadoSoliciEmpre:exce: "+e);
+        }
+        if ("PROCESADO".equalsIgnoreCase(estado)) {
+            System.out.println("consultarEstadoSoliciEmpre-PROCESADO");
+            listaEstados.clear();
+            listaEstados.add("AUTORIZADO");
+            listaEstados.add("LIQUIDADO");
+            listaEstados.add("RECHAZADO");
+        } else if ("SIN PROCESAR".equalsIgnoreCase(estado)) {
+            listaEstados.clear();
+            listaEstados.add("ENVIADO");
+        } else {
+            listaEstados.clear();
+            listaEstados.add(estado);
+        }
+        ArrayList listaResul = new ArrayList();
+        List listaTMP;
+        for (int i = 0; i < listaEstados.size(); i++) {
+            EntityManager em = emf.createEntityManager();
+            if (autorizador == null) {
+                try {
+                    listaTMP = persistenciaKioEstadosSolici.consultarEstadosXEmpre(em, secEmpresa, listaEstados.get(i));
+                    System.out.println("listaTMP-1: " + listaTMP.size());
+                } catch (Exception e) {
+                    throw e;
+                } finally {
+                    if (em != null && em.isOpen()) {
+                        em.close();
+                    }
+                }
+            } else {
+                System.out.println("consultarEstadoSoliciEmpre-else");
+                try {
+                    listaTMP = persistenciaKioEstadosSolici.consultarEstadosXEmpre(em, secEmpresa, listaEstados.get(i), autorizador.getSecuencia());
+                    System.out.println("listaTMP-2: " + listaTMP.size());
+                } catch (Exception e) {
+                    throw e;
+                } finally {
+                    if (em != null && em.isOpen()) {
+                        em.close();
+                    }
+                }
+            }
+            listaResul.addAll(listaTMP);
+            System.out.println("listaResul-1: " + listaResul.size());
+        }
+        return listaResul;
+    }
+    @Override
+    public Empresas consultarInfoEmpresa(long nit){
+        Empresas empresa = null;
+        EntityManager em = null;
+        try{
+            
+        }catch (Exception e){
+            em = emf.createEntityManager();
+            empresa = persistenciaEmpleados.consultarEmpresa(em, nit);
+        }finally{
+            if (em != null && em.isOpen()){
+                em.close();
+            }
+        }
+        return empresa;
+    }
+    
+    @Override
+    public List<Empleados> consultarEmpleadosAutorizador(long nit, Personas per) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return persistenciaEmpleados.consultarEmpleadosXAutorizador(em, nit, per.getSecuencia());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
     }
 }

@@ -96,17 +96,29 @@ public class ControladorKio_CrearSolicitud implements Serializable {
         } catch (Exception ex) {
             MensajesUI.error(ex.getMessage());
         }
+        Personas autorizador = null;
         try {
-            solicitud.setEmpleadoJefe(administrarCrearSolicitud.consultarEmpleadoJefe(empleado));
-            if (solicitud.getEmpleadoJefe() != null) {
-                System.out.println("Empleado jefe: " + solicitud.getEmpleadoJefe().getPersona().getNombreCompleto());
-            } else {
-                System.out.println("El Empleado jefe esta vacio ");
-            }
+            autorizador = administrarCrearSolicitud.consultarAutorizador(empleado);
         } catch (Exception e) {
             String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
-            System.out.println("Error consultado jefe: " + msj);
-            MensajesUI.error(msj);
+            System.out.println("Error consultado autorizador: " + msj);
+//            MensajesUI.error(msj);
+        }
+        if (autorizador == null) {
+            try {
+                solicitud.setEmpleadoJefe(administrarCrearSolicitud.consultarEmpleadoJefe(empleado));
+                if (solicitud.getEmpleadoJefe() != null) {
+                    System.out.println("Empleado jefe: " + solicitud.getEmpleadoJefe().getPersona().getNombreCompleto());
+                } else {
+                    System.out.println("El Empleado jefe esta vacio ");
+                }
+            } catch (Exception e) {
+                String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
+                System.out.println("Error consultado jefe: " + msj);
+                MensajesUI.error(msj);
+            }
+        } else {
+            solicitud.setAutorizador(autorizador);
         }
     }
 
@@ -177,13 +189,14 @@ public class ControladorKio_CrearSolicitud implements Serializable {
         }
         return res;
     }
-    private boolean validaTraslapamientos(){
-        boolean res=false;
-        try{
+
+    private boolean validaTraslapamientos() {
+        boolean res = false;
+        try {
             res = !BigDecimal.ZERO.equals(administrarCrearSolicitud.consultarTraslapamientos(solicitud.getKioNovedadesSolici()));
             //si es igual a cero, no hay traslapamientos.
             //falso si es cero, verdadero si es diferente de cero.
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("validaTraslapamientos-excepcion: " + e.getMessage());
         }
         return res;
@@ -200,10 +213,16 @@ public class ControladorKio_CrearSolicitud implements Serializable {
                     + "y continuar con el proceso. \n\n"
                     + "La persona que CREÓ LA SOLICITUD es: "
                     + empleado.getPersona().getNombreCompleto() + "\n";
-            if (solicitud.getEmpleadoJefe() != null) {
+            if (solicitud.getAutorizador() != null) {
                 mensaje = mensaje + "La persona a cargo de DAR APROBACIÓN es: "
-                        + solicitud.getEmpleadoJefe().getPersona().getNombreCompleto()
-                        + "\n";
+                            + solicitud.getAutorizador().getNombreCompleto()
+                            + "\n";
+            } else {
+                if (solicitud.getEmpleadoJefe() != null) {
+                    mensaje = mensaje + "La persona a cargo de DAR APROBACIÓN es: "
+                            + solicitud.getEmpleadoJefe().getPersona().getNombreCompleto()
+                            + "\n";
+                }
             }
             mensaje = mensaje + "Por favor seguir el proceso en: "
                     + ec.getRequestScheme() + "://" + ec.getRequestServerName() + ":" + ec.getRequestServerPort()
@@ -234,7 +253,13 @@ public class ControladorKio_CrearSolicitud implements Serializable {
             } else {
                 respuesta1 = "El empleado no tiene correo registrado";
             }
-            if (solicitud.getEmpleadoJefe() != null) {
+            if (solicitud.getAutorizador() != null){
+                if (solicitud.getAutorizador().getEmail() != null && !solicitud.getAutorizador().getEmail().isEmpty()){
+                    administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
+                            solicitud.getAutorizador().getEmail(), asunto, mensaje, "");
+                    respuesta2 = " Solicitud enviada correctamente al autorizador";
+                }
+            }else if (solicitud.getEmpleadoJefe() != null) {
                 if (solicitud.getEmpleadoJefe().getPersona().getEmail() != null && !solicitud.getEmpleadoJefe().getPersona().getEmail().isEmpty()) {
                     administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
                             solicitud.getEmpleadoJefe().getPersona().getEmail(), asunto, mensaje, "");

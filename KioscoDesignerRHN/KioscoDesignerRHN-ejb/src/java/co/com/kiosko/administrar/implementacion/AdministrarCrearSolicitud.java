@@ -5,6 +5,7 @@ import co.com.kiosko.administrar.interfaz.IAdministrarSesiones;
 import co.com.kiosko.entidades.Empleados;
 import co.com.kiosko.entidades.KioNovedadesSolici;
 import co.com.kiosko.entidades.KioSoliciVacas;
+import co.com.kiosko.entidades.Personas;
 import co.com.kiosko.entidades.VwVacaPendientesEmpleados;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaKioEstadosSolici;
@@ -373,4 +374,18 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud, Se
             }
         }
     }
+    @Override
+    public Personas consultarAutorizador(Empleados empleado) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return persistenciaEmpleados.consutarAutorizador(em, empleado.getSecuencia(), empleado.getEmpresa().getSecuencia());
+        } catch (Exception e) {
+            //throw e;
+            return null;
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+    } 
 }

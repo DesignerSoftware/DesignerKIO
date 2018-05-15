@@ -49,6 +49,9 @@ public class KioEstadosSolici implements Serializable {
     private BigDecimal novedadSistema;
     @Column(name="MOTIVOPROCESA")
     private String motivoProcesa;
+    @JoinColumn(name = "PERSONAEJECUTA", referencedColumnName = "SECUENCIA")
+    @ManyToOne
+    private Personas personaEjecuta;
     
     public KioEstadosSolici() {
         inicializa();
@@ -118,6 +121,14 @@ public class KioEstadosSolici implements Serializable {
 
     public void setMotivoProcesa(String motivoProcesa) {
         this.motivoProcesa = motivoProcesa;
+    }
+
+    public Personas getPersonaEjecuta() {
+        return personaEjecuta;
+    }
+
+    public void setPersonaEjecuta(Personas personaEjecuta) {
+        this.personaEjecuta = personaEjecuta;
     }
     
     

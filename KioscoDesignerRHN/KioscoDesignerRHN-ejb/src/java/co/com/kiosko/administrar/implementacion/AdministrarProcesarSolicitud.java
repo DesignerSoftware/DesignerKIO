@@ -11,9 +11,11 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import co.com.kiosko.administrar.interfaz.IAdministrarProcesarSolicitud;
+import co.com.kiosko.entidades.Personas;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaKioSoliciVacas;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaVwVacaPendientesEmpleados;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.ejb.TransactionRolledbackLocalException;
 
@@ -44,13 +46,21 @@ public class AdministrarProcesarSolicitud implements IAdministrarProcesarSolicit
     }
 
     @Override
-    public void cambiarEstadoSolicitud(KioSoliciVacas solicitud, Empleados emplEjecuta, String estado, String motivo) throws Exception {
+    public void cambiarEstadoSolicitud(KioSoliciVacas solicitud, Empleados emplEjecuta, String estado, String motivo, Personas perEjecuta) throws Exception {
         System.out.println(this.getClass().getName() + ".cambiarEstadoSolicitud()");
         EntityManager em = null;
         System.out.println("cambiarEstadoSolicitud: guardado");
+        BigInteger secPersona = null;
+        if (perEjecuta != null){
+            secPersona = perEjecuta.getSecuencia();
+        }
+        BigDecimal secEmpleado = null;
+        if (emplEjecuta != null){
+            secEmpleado = emplEjecuta.getSecuencia();
+        }
         try {
             em = emf.createEntityManager();
-            persistenciaEstadoSolicitud.crearEstadoSolicitud(em, solicitud, emplEjecuta.getSecuencia(), estado, motivo);
+            persistenciaEstadoSolicitud.crearEstadoSolicitud(em, solicitud, secEmpleado, estado, motivo, secPersona);
             System.out.println("cambiarEstadoSolicitud: enviando");
         } catch (Exception e) {
             throw e;

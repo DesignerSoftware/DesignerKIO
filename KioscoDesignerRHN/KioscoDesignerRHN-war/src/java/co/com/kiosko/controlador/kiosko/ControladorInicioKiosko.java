@@ -20,7 +20,7 @@ import org.primefaces.model.StreamedContent;
 import co.com.kiosko.clasesAyuda.CadenasKioskos;
 import co.com.kiosko.clasesAyuda.LeerArchivoXML;
 import java.math.BigDecimal;
-import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletRequest;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -80,7 +80,11 @@ public class ControladorInicioKiosko implements Serializable {
 
     public void obtenerFotoEmpleado() {
         String formatoFotoEmpleado="image/jpg";
-        String rutaFoto = pathFoto + conexionEmpleado.getEmpleado().getCodigoempleado() + ".jpg";
+        BigDecimal codFoto = conexionEmpleado.getEmpleado().getCodigoempleado();
+        if (codFoto == null ){
+            codFoto = new BigDecimal(conexionEmpleado.getPersona().getNumerodocumento());
+        }
+        String rutaFoto = pathFoto + codFoto + ".jpg";
         if (rutaFoto != null) {
             try {
                 fis = new FileInputStream(new File(rutaFoto));
@@ -104,8 +108,8 @@ public class ControladorInicioKiosko implements Serializable {
         Long tamanho = event.getFile().getSize();
         if (extension.equals("jpg") || extension.equals("JPG")) {
             if (tamanho <= 153600) {
-                //identificacionEmpleado = conexionEmpleado.getEmpleado().getPersona().getNumerodocumento();
-                identificacionEmpleado = conexionEmpleado.getEmpleado().getCodigoempleado();
+                identificacionEmpleado = new BigDecimal( conexionEmpleado.getPersona().getNumerodocumento() );
+//                identificacionEmpleado = conexionEmpleado.getEmpleado().getCodigoempleado();
                 transformarArchivo(tamanho, event.getFile().getInputstream());
                 obtenerFotoEmpleado();
                 PrimefacesContextUI.ejecutar("PF('subirFoto').hide()");

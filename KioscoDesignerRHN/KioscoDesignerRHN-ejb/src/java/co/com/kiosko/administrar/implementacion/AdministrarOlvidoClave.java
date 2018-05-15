@@ -44,6 +44,14 @@ public class AdministrarOlvidoClave implements IAdministrarOlvidoClave, Serializ
         em.close();
         return ck;
     }
+    
+    @Override
+    public ConexionesKioskos obtenerConexionEmpleado(String numeroDocumento) {
+        EntityManager em = emf.createEntityManager();
+        ConexionesKioskos ck = persistenciaConexionesKioskos.consultarConexionEmpleado(em, numeroDocumento);
+        em.close();
+        return ck;
+    }
 
     @Override
     public boolean validarRespuestas(String respuesta1, String respuesta2, byte[] respuestaC1, byte[] respuestaC2) {

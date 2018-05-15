@@ -1,6 +1,8 @@
 package co.com.kiosko.persistencia.interfaz;
 
 import co.com.kiosko.entidades.Empleados;
+import co.com.kiosko.entidades.Empresas;
+import co.com.kiosko.entidades.Personas;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
@@ -52,4 +54,12 @@ public interface IPersistenciaEmpleados {
     public List consultarEmpleadosXJefe(EntityManager em, long nit, BigDecimal secJefe) throws Exception;
 
     public Empleados consultaEmpleadoxSec(EntityManager em, BigDecimal secEmpleado) throws Exception;
+    public Personas consultarPersona(EntityManager eManager, BigInteger numeroDocumento);
+    public Empleados consultarEmpleadoXPersoEmpre(EntityManager em, BigInteger numeroDocumento, long nit);
+    public boolean esAutorizador(EntityManager em, BigDecimal rfPersona );
+    public BigInteger consultarEmpresaXNit(EntityManager em, long nit);
+    public Empresas consultarEmpresa(EntityManager em, long nit);
+    public List consultarEmpleadosXAutorizador(EntityManager em, long nit, BigInteger secPersona) throws Exception;
+    public Personas consultaPersonaxSec(EntityManager em, BigInteger secPersona) throws Exception;
+    public Personas consutarAutorizador(EntityManager em, BigDecimal secEmpleado, BigInteger secEmpresa) throws Exception;
 }

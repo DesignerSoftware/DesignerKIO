@@ -173,7 +173,8 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     public boolean validarIngresoUsuarioRegistrado(EntityManager eManager, String usuario, String clave, String nitEmpresa) {
         boolean resultado = false;
         try {
-            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, Personas per, EMPLEADOS e, EMPRESAS em "
+            String sqlQuery = "SELECT COUNT(*) "
+                    + "FROM CONEXIONESKIOSKOS ck, Personas per, EMPLEADOS e, EMPRESAS em "
                     + "WHERE ck.PERSONA = per.SECUENCIA "
                     + "AND per.secuencia = e.persona "
                     + "AND e.empresa = em.secuencia "
@@ -201,7 +202,6 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
             String sqlQuery = "SELECT COUNT(*) "
                     + "FROM CONEXIONESKIOSKOS ck, Personas per "
                     + "WHERE ck.PERSONA = per.SECUENCIA "
-                    + "AND per.secuencia = e.persona "
                     + "AND per.numerodocumento = ? "
                     + "AND ck.PWD = GENERALES_PKG.ENCRYPT(?) "
                     ;

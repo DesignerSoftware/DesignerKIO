@@ -55,6 +55,10 @@ public class KioSoliciVacas implements Serializable {
     @JoinColumn(name = "EMPLEADOJEFE", referencedColumnName = "SECUENCIA")
     @ManyToOne
     private Empleados empleadoJefe;
+    @JoinColumn(name = "AUTORIZADOR", referencedColumnName = "SECUENCIA")
+    @ManyToOne
+    private Personas autorizador;
+    
     @Size(max = 1)
     @Column(name = "ACTIVA")
     private String activa;
@@ -126,6 +130,14 @@ public class KioSoliciVacas implements Serializable {
         this.empleadoJefe = empleadoJefe;
     }
 
+    public Personas getAutorizador() {
+        return autorizador;
+    }
+
+    public void setAutorizador(Personas autorizador) {
+        this.autorizador = autorizador;
+    }
+    
     public String getActiva() {
         return activa;
     }

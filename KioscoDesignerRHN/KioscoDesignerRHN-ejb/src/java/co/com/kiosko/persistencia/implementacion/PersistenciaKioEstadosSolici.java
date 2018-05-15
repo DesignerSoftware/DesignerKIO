@@ -99,11 +99,26 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
 
     @Override
     public void crearEstadoSolicitud(EntityManager em, KioSoliciVacas solicitud, BigDecimal secEmplEjecuta, String estado, String motivo) throws EntityExistsException, TransactionRolledbackLocalException, Exception {
+        try {
+            crearEstadoSolicitud(em, solicitud, secEmplEjecuta, estado, motivo, null);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @Override
+    public void crearEstadoSolicitud(EntityManager em, KioSoliciVacas solicitud,
+            BigDecimal secEmplEjecuta, String estado,
+            String motivo, BigInteger secPersona) throws EntityExistsException, TransactionRolledbackLocalException, Exception {
         System.out.println(this.getClass().getName() + ".crearEstadoSolicitud()");
         KioEstadosSolici estadoSoli = new KioEstadosSolici(solicitud);
         System.out.println("crearEstadoSolicitud-estadoSoli: " + estadoSoli.getSecuencia());
         estadoSoli.setEstado(estado);
-        estadoSoli.setEmpleadoEjecuta(persistenciaEmpleados.consultaEmpleadoxSec(em, secEmplEjecuta));
+        if (secPersona != null && secPersona.compareTo(BigInteger.ZERO) > 0) {
+            estadoSoli.setPersonaEjecuta(persistenciaEmpleados.consultaPersonaxSec(em,secPersona));
+        } else {
+            estadoSoli.setEmpleadoEjecuta(persistenciaEmpleados.consultaEmpleadoxSec(em, secEmplEjecuta));
+        }
         estadoSoli.setMotivoProcesa(motivo);
         em.clear();
         try {
@@ -301,6 +316,36 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
             return listaEstaSolici;
         } catch (Exception e) {
             System.out.println("consultarEstadosXEmpre:Excepcion " + e.getMessage());
+//            throw e;
+            throw new Exception(e.toString());
+        }
+    }
+
+    @Override
+    public List<KioEstadosSolici> consultarEstadosXEmpre(EntityManager em, BigInteger secEmpresa, String estado,
+            BigInteger secPersona) throws Exception {
+        System.out.println(this.getClass().getName() + ".consultarEstadosXEmpre()-3");
+        List<KioEstadosSolici> listaEstaSolici;
+        try {
+            em.clear();
+            String consulta = "select e "
+                    + "from KioEstadosSolici e, Empresas em "
+                    + "where em.secuencia = :rfEmpresa "
+                    + "and e.kioSoliciVaca.empleado.empresa.secuencia = em.secuencia "
+                    + "and e.estado = :estado "
+                    + "and e.kioSoliciVaca.autorizador.secuencia = :rfautorizador "
+                    + "and e.secuencia = (select max(ei.secuencia) "
+                    + "from KioEstadosSolici ei "
+                    + "where ei.kioSoliciVaca.secuencia = e.kioSoliciVaca.secuencia) "
+                    + "order by e.fechaProcesamiento ";
+            Query query = em.createQuery(consulta);
+            query.setParameter("rfEmpresa", secEmpresa);
+            query.setParameter("estado", estado);
+            query.setParameter("rfautorizador", secPersona);
+            listaEstaSolici = query.getResultList();
+            return listaEstaSolici;
+        } catch (Exception e) {
+            System.out.println("consultarEstadosXEmpre-3:Excepcion " + e.getMessage());
 //            throw e;
             throw new Exception(e.toString());
         }
