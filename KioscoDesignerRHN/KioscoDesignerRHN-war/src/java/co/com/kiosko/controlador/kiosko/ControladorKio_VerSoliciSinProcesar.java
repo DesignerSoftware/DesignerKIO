@@ -19,6 +19,7 @@ import javax.ejb.EJB;
 import javax.el.ELException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -31,7 +32,8 @@ import org.primefaces.event.UnselectEvent;
  * @author Edwin
  */
 @ManagedBean
-@ViewScoped
+//@ViewScoped
+@SessionScoped
 public class ControladorKio_VerSoliciSinProcesar implements Serializable {
 
     private Empleados empleado;
@@ -112,7 +114,11 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
         this.soliciEmpleado = null;
         this.soliciFiltradas = null;
         this.solicitudSelec = null;
+        this.empleadoSelec = null;
+        this.estadoNuevo = "";
         this.motivo = "";
+        mensajeCreacion="";
+        grupoEmpre="";
     }
 
     public void onRowSelect(SelectEvent event) {

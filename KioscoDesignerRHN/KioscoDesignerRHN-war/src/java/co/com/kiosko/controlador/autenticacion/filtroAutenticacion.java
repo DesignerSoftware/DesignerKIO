@@ -33,44 +33,44 @@ public class filtroAutenticacion implements Filter, Serializable {
 
             HttpServletRequest req = (HttpServletRequest) request;
             HttpServletResponse res = (HttpServletResponse) response;
-            try{
-            System.out.println("getAuthType() " + req.getAuthType());
-            System.out.println("getCharacterEncoding() " + req.getCharacterEncoding());
-            System.out.println("getContentLengthLong() " + req.getContentLengthLong());
-            System.out.println("getContentType() " + req.getContentType());
-            System.out.println("getContextPath() " + req.getContextPath());
-            for (Cookie c : req.getCookies()) {
-                System.out.println("getComment() " + c.getComment());
-                System.out.println("getDomain() " + c.getDomain());
-                System.out.println("getMaxAge() " + c.getMaxAge());
-                System.out.println("getName() " + c.getName());
-                System.out.println("getPath() " + c.getPath());
-                System.out.println("getSecure() " + c.getSecure());
-                System.out.println("getValue() " + c.getValue());
-                System.out.println("getVersion() " + c.getVersion());
-            }
-            System.out.println("getLocalAddr() " + req.getLocalAddr());
-            System.out.println("getLocalName() " + req.getLocalName());
-            System.out.println("getLocalPort() " + req.getLocalPort());
-            System.out.println("getMethod() " + req.getMethod());
-            System.out.println("getPathInfo() " + req.getPathInfo());
-            System.out.println("getPathTranslated() " + req.getPathTranslated());
-            System.out.println("getProtocol() " + req.getProtocol());
-            System.out.println("getQueryString() " + req.getQueryString());
-            System.out.println("getRemoteAddr() " + req.getRemoteAddr());
-            System.out.println("getRemoteHost() " + req.getRemoteHost());
-            System.out.println("getRemotePort() " + req.getRemotePort());
-            System.out.println("getRemoteUser() " + req.getRemoteUser());
-            System.out.println("getRequestURI() " + req.getRequestURI());
-            System.out.println("getRequestURL() " + req.getRequestURL());
-            System.out.println("getRequestedSessionId() " + req.getRequestedSessionId());
-            System.out.println("getScheme() " + req.getScheme());
-            System.out.println("getServerName() " + req.getServerName());
-            System.out.println("getServerPort() " + req.getServerPort());
-            System.out.println("getServletPath() " + req.getServletPath());
-            } catch(Exception e){
-                System.out.println("excepcion en filtro: "+e.getMessage());
-            }
+//            try{
+//            System.out.println("getAuthType() " + req.getAuthType());
+//            System.out.println("getCharacterEncoding() " + req.getCharacterEncoding());
+//            System.out.println("getContentLengthLong() " + req.getContentLengthLong());
+//            System.out.println("getContentType() " + req.getContentType());
+//            System.out.println("getContextPath() " + req.getContextPath());
+//            for (Cookie c : req.getCookies()) {
+//                System.out.println("getComment() " + c.getComment());
+//                System.out.println("getDomain() " + c.getDomain());
+//                System.out.println("getMaxAge() " + c.getMaxAge());
+//                System.out.println("getName() " + c.getName());
+//                System.out.println("getPath() " + c.getPath());
+//                System.out.println("getSecure() " + c.getSecure());
+//                System.out.println("getValue() " + c.getValue());
+//                System.out.println("getVersion() " + c.getVersion());
+//            }
+//            System.out.println("getLocalAddr() " + req.getLocalAddr());
+//            System.out.println("getLocalName() " + req.getLocalName());
+//            System.out.println("getLocalPort() " + req.getLocalPort());
+//            System.out.println("getMethod() " + req.getMethod());
+//            System.out.println("getPathInfo() " + req.getPathInfo());
+//            System.out.println("getPathTranslated() " + req.getPathTranslated());
+//            System.out.println("getProtocol() " + req.getProtocol());
+//            System.out.println("getQueryString() " + req.getQueryString());
+//            System.out.println("getRemoteAddr() " + req.getRemoteAddr());
+//            System.out.println("getRemoteHost() " + req.getRemoteHost());
+//            System.out.println("getRemotePort() " + req.getRemotePort());
+//            System.out.println("getRemoteUser() " + req.getRemoteUser());
+//            System.out.println("getRequestURI() " + req.getRequestURI());
+//            System.out.println("getRequestURL() " + req.getRequestURL());
+//            System.out.println("getRequestedSessionId() " + req.getRequestedSessionId());
+//            System.out.println("getScheme() " + req.getScheme());
+//            System.out.println("getServerName() " + req.getServerName());
+//            System.out.println("getServerPort() " + req.getServerPort());
+//            System.out.println("getServletPath() " + req.getServletPath());
+//            } catch(Exception e){
+//                System.out.println("excepcion en filtro: "+e.getMessage());
+//            }
             HttpSession ses = req.getSession(false);
             String reqURI = req.getRequestURI();
 

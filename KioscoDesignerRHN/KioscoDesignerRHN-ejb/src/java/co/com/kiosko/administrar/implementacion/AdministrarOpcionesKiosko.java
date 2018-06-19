@@ -147,7 +147,7 @@ public class AdministrarOpcionesKiosko implements IAdministrarOpcionesKiosko, Se
         //consulta si es empleado
         Empleados empleado = null;
         try {
-            empleado = persistenciaEmpleados.consultarEmpleadoXPersoEmpre(em, conexionK.getPersona().getNumerodocumento(), Long.parseLong(cadenaK.getNit()));
+            empleado = persistenciaEmpleados.consultarEmpleadoXPersoEmpre(em, conexionK.getPersona().getNumerodocumento().toBigInteger(), Long.parseLong(cadenaK.getNit()));
         } catch (Exception e) {
             System.out.println("determinarRol: esEmpleado: excep: " + e);
         }

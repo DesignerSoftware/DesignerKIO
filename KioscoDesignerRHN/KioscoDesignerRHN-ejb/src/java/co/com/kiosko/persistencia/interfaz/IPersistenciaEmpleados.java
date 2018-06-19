@@ -55,7 +55,7 @@ public interface IPersistenciaEmpleados {
 
     public Empleados consultaEmpleadoxSec(EntityManager em, BigDecimal secEmpleado) throws Exception;
     public Personas consultarPersona(EntityManager eManager, BigInteger numeroDocumento);
-    public Empleados consultarEmpleadoXPersoEmpre(EntityManager em, BigInteger numeroDocumento, long nit);
+    public Empleados consultarEmpleadoXPersoEmpre(EntityManager em, BigInteger numeroDocumento, long nit) throws Exception;
     public boolean esAutorizador(EntityManager em, BigDecimal rfPersona );
     public BigInteger consultarEmpresaXNit(EntityManager em, long nit);
     public Empresas consultarEmpresa(EntityManager em, long nit);

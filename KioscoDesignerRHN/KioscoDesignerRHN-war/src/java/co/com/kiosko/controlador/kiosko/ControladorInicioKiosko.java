@@ -82,7 +82,7 @@ public class ControladorInicioKiosko implements Serializable {
         String formatoFotoEmpleado="image/jpg";
         BigDecimal codFoto = conexionEmpleado.getEmpleado().getCodigoempleado();
         if (codFoto == null ){
-            codFoto = new BigDecimal(conexionEmpleado.getPersona().getNumerodocumento());
+            codFoto = conexionEmpleado.getPersona().getNumerodocumento();
         }
         String rutaFoto = pathFoto + codFoto + ".jpg";
         if (rutaFoto != null) {
@@ -108,7 +108,7 @@ public class ControladorInicioKiosko implements Serializable {
         Long tamanho = event.getFile().getSize();
         if (extension.equals("jpg") || extension.equals("JPG")) {
             if (tamanho <= 153600) {
-                identificacionEmpleado = new BigDecimal( conexionEmpleado.getPersona().getNumerodocumento() );
+                identificacionEmpleado = conexionEmpleado.getPersona().getNumerodocumento();
 //                identificacionEmpleado = conexionEmpleado.getEmpleado().getCodigoempleado();
                 transformarArchivo(tamanho, event.getFile().getInputstream());
                 obtenerFotoEmpleado();

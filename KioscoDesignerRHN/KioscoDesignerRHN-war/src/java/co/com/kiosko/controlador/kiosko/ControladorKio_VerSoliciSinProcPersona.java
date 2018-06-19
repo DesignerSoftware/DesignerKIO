@@ -22,7 +22,9 @@ import javax.ejb.EJB;
 import javax.el.ELException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
+//import javax.faces.bean.ViewScoped;
+//import javax.faces.bean.*;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -34,7 +36,8 @@ import org.primefaces.event.UnselectEvent;
  * @author PC_Angelo
  */
 @ManagedBean
-@ViewScoped
+//@ViewScoped
+@SessionScoped
 public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
 
 //    private Empleados empleado;
@@ -118,10 +121,17 @@ public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
         System.out.println(this.getClass().getName() + ".limpiarListas()");
         this.empleadosACargo = null;
         this.emplACargoFiltro = null;
-        this.soliciEmpleado = null;
         this.soliciFiltradas = null;
+        this.soliciEmpleado = null;
+        this.empleadoSelec = null;
         this.solicitudSelec = null;
+        this.estadoNuevo = "";
         this.motivo = "";
+        mensajeCreacion="";
+        grupoEmpre="";
+        personaCon=null;
+        empresa=null;
+        nit=0;
     }
 
     public void onRowSelect(SelectEvent event) {

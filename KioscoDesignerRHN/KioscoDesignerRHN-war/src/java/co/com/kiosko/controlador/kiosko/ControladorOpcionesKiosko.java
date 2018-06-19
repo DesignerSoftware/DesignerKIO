@@ -99,7 +99,7 @@ public class ControladorOpcionesKiosko implements Serializable {
         if (!roles.contains("NOMINA")) {
             //recorrer la lista de opciones en profundidad con el fin de encontrar las opciones propias de la nomina
             //y quitarlas.
-            System.out.println("es rol nomina.");
+            System.out.println("no es rol nomina.");
             if (codigos == null) {
                 codigos = new String[3];
                 codigos[0] = "0136";
@@ -119,7 +119,7 @@ public class ControladorOpcionesKiosko implements Serializable {
         if (!roles.contains("JEFE")) {
             //recorrer la lista de opciones en profundidad con el fin de encontrar las opciones propias del jefe
             //y quitarlas.
-            System.out.println("es rol jefe.");
+            System.out.println("no es rol jefe.");
             if (codigos == null) {
                 codigos = new String[2];
                 codigos[0] = "0133";
@@ -137,8 +137,8 @@ public class ControladorOpcionesKiosko implements Serializable {
             }
         }
         if (!roles.contains("EMPLEADO")) {
-            System.out.println("es rol empleado.");
-            System.out.println("es rol autorizador.");
+            System.out.println("no es rol empleado.");
+//            System.out.println("es rol autorizador.");
             if (codigos == null) {
                 codigos = new String[7];
                 codigos[0] = "0121";
@@ -146,25 +146,27 @@ public class ControladorOpcionesKiosko implements Serializable {
                 codigos[2] = "0123";
                 codigos[3] = "0124";
                 codigos[4] = "0125";
-                codigos[5] = "0131";
-                codigos[6] = "0132";
+                codigos[5] = "0126";
+                codigos[6] = "0131";
+                codigos[7] = "0132";
             } else {
-                String[] tmp = new String[codigos.length + 7];
+                String[] tmp = new String[codigos.length + 8];
                 for (int j = 0; j < codigos.length; j++) {
                     tmp[j] = codigos[j];
                 }
-                tmp[tmp.length - 7] = "0121";
-                tmp[tmp.length - 6] = "0122";
-                tmp[tmp.length - 5] = "0123";
-                tmp[tmp.length - 4] = "0124";
-                tmp[tmp.length - 3] = "0125";
+                tmp[tmp.length - 8] = "0121";
+                tmp[tmp.length - 7] = "0122";
+                tmp[tmp.length - 6] = "0123";
+                tmp[tmp.length - 5] = "0124";
+                tmp[tmp.length - 4] = "0125";
+                tmp[tmp.length - 3] = "0126";
                 tmp[tmp.length - 2] = "0131";
                 tmp[tmp.length - 1] = "0132";
                 codigos = tmp;
             }
         }
         if (!roles.contains("AUTORIZADOR")) {
-            System.out.println("es rol autorizador.");
+            System.out.println("no es rol autorizador.");
             if (codigos == null) {
                 codigos = new String[2];
                 codigos[0] = "0139";
@@ -205,18 +207,18 @@ public class ControladorOpcionesKiosko implements Serializable {
     }
 
     private boolean retirarOpcion(OpcionesKioskos opcion, String codigo) {
-        System.out.println("compara: " + codigo);
+        //System.out.println("compara: " + codigo);
         if (opcion.getCodigo().equalsIgnoreCase(codigo)) {
             return true;
         }
         if (opcion.getOpcionesHijas() != null && !opcion.getOpcionesHijas().isEmpty()) {
             for (int i = 0; i < opcion.getOpcionesHijas().size(); i++) {
-                System.out.println("opcion: " + opcion.getOpcionesHijas().get(i));
+//                System.out.println("opcion: " + opcion.getOpcionesHijas().get(i));
                 if (retirarOpcion(opcion.getOpcionesHijas().get(i), codigo)) {
-                    System.out.println("tamagno antes de remover: " + opcion.getOpcionesHijas().size());
-                    System.out.println("se va a remover: " + opcion.getOpcionesHijas().get(i).getCodigo());
+//                    System.out.println("tamagno antes de remover: " + opcion.getOpcionesHijas().size());
+//                    System.out.println("se va a remover: " + opcion.getOpcionesHijas().get(i).getCodigo());
                     opcion.getOpcionesHijas().remove(i);
-                    System.out.println("tamagno despues de remover: " + opcion.getOpcionesHijas().size());
+//                    System.out.println("tamagno despues de remover: " + opcion.getOpcionesHijas().size());
                 }
             }
         }

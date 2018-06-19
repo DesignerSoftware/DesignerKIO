@@ -84,10 +84,10 @@ public class ConexionesKioskos implements Serializable {
     @ManyToOne
     private PreguntasKioskos pregunta1;
     @JoinColumn(name = "EMPLEADO", referencedColumnName = "SECUENCIA")
-    @OneToOne(optional = false)
+    @OneToOne(optional = true)
     private Empleados empleado;
     @JoinColumn(name = "PERSONA", referencedColumnName = "SECUENCIA")
-    @OneToOne(optional = false)
+    @OneToOne(optional = true)
     private Personas persona;
     @Transient
     private String respuesta1UI;

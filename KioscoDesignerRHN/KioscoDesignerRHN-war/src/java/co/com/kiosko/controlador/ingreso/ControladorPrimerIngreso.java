@@ -95,14 +95,20 @@ public class ControladorPrimerIngreso implements Serializable {
                 if (validarClave(clave)) {
                     //System.out.println("Condicional 3");
                     //nuevoIngreso.setEmpleado(administrarPrimerIngreso.consultarEmpleado(new BigInteger(usuario), Long.parseLong(nit)));
-                    Empleados empl = administrarPrimerIngreso.consultarEmpleado(new BigInteger(usuario), Long.parseLong(nit));
+                    Empleados empl = null;
+                    try {
+                        empl = administrarPrimerIngreso.consultarEmpleado(new BigInteger(usuario), Long.parseLong(nit));
+                    } catch (Exception ex1) {
+                        empl = null;
+                    }
                     if (empl != null) {
                         System.out.println("Condicional 3a");
                         nuevoIngreso.setEmpleado(empl);
                     } else {
                         System.out.println("Condicional 3b");
-                        nuevoIngreso.setPersona(administrarPrimerIngreso.consultarPersona(new BigInteger(usuario)) );
+                        nuevoIngreso.setPersona(administrarPrimerIngreso.consultarPersona(new BigInteger(usuario)));
                     }
+
                     nuevoIngreso.setPwd(administrarPrimerIngreso.encriptar(clave));
                     byte[] rsp1, rsp2;
                     nuevoIngreso.setRespuesta1(administrarPrimerIngreso.encriptar(nuevoIngreso.getRespuesta1UI().toUpperCase()));

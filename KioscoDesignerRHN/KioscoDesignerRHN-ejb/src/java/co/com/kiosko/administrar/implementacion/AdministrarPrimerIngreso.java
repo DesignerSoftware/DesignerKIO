@@ -52,7 +52,7 @@ public class AdministrarPrimerIngreso implements IAdministrarPrimerIngreso, Seri
     @Override
     public List<PreguntasKioskos> obtenerPreguntasSeguridad() {
         EntityManager em = emf.createEntityManager();
-        List<PreguntasKioskos> datos =  persistenciaPreguntasKioskos.obtenerPreguntasSeguridad(em);
+        List<PreguntasKioskos> datos = persistenciaPreguntasKioskos.obtenerPreguntasSeguridad(em);
         em.close();
         return datos;
     }
@@ -107,11 +107,28 @@ public class AdministrarPrimerIngreso implements IAdministrarPrimerIngreso, Seri
         em.close();
         return pc;
     }
-    
-    public Personas consultarPersona(BigInteger numeroDocumento){
-        EntityManager em = emf.createEntityManager();
-        Personas per = persistenciaEmpleados.consultarPersona(em, numeroDocumento);
-        em.close();
+
+    @Override
+    public Personas consultarPersona(BigInteger numeroDocumento) {
+        EntityManager em;
+        Personas per = null;
+        try {
+            em = emf.createEntityManager();
+            per = persistenciaEmpleados.consultarPersona(em, numeroDocumento);
+            em.close();
+        } catch (Exception ex) {
+            System.out.println("consultarPersona;excepcion: " + ex);
+        }
+        boolean resul = false;
+        if (per != null) {
+            try {
+                em = emf.createEntityManager();
+                resul = persistenciaEmpleados.esAutorizador(em, new BigDecimal(per.getSecuencia()));
+                em.close();
+            } catch (Exception ex2) {
+                System.out.println("consultarPersona;excepcionAutorizador: " + ex2);
+            }
+        }
         return per;
     }
 }

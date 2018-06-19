@@ -110,61 +110,67 @@ public class ControladorIngreso implements Serializable {
                         && cadena != null) {
                     nit = cadena.getNit();
                     if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
-                        if ((administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())
-                                || administrarIngreso.validarAutorizador(usuario, cadena.getEsquema()))
-                                && validarCodigoUsuario()) {
-                            if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
-                                if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
-                                    if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave, cadena.getNit())) {
-                                        //nit = cadena.getNit();
-                                        administrarIngreso.adicionarConexionUsuario(ses.getId(), cadena.getEsquema());
-                                        ingresoExitoso = true;
-                                        intento = 0;
-                                        //return "inicio";
-                                        conexionEmpleado = administrarIngreso.obtenerConexionEmpelado(usuario, nit);
-                                        ultimaConexion = conexionEmpleado.getUltimaconexion();
-                                        administrarIngreso.modificarUltimaConexion(conexionEmpleado);
-                                        HttpSession session = Util.getSession();
-                                        session.setAttribute("idUsuario", usuario);
-                                        imprimir("Conectado a: " + session.getId());
-                                        PrimefacesContextUI.ejecutar("PF('estadoSesion').show()");
-                                        retorno = "plantilla";
-                                    } else {
-                                        // LA CONTRASEÑA ES INCORRECTA.
-                                        if (bckUsuario == null || bckUsuario.equals(usuario)) {
-                                            intento++;
-                                        } else {
-                                            intento = 1;
-                                        }
-                                        bckUsuario = usuario;
-                                        MensajesUI.error(intento < 3 ? "La contraseña es inválida. Intento #" + intento
-                                                : "La contraseña es inválida. Intento #" + intento + " Cuenta bloqueada.");
-
-                                        if (intento == 2) {
-                                            PrimefacesContextUI.ejecutar("PF('dlgAlertaIntentos').show()");
-                                        } else if (intento >= 3) {
-                                            administrarIngreso.bloquearUsuario(usuario, nit);
+                        try {
+                            if ((administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())
+                                    || administrarIngreso.validarAutorizador(usuario, cadena.getEsquema()))
+                                    && validarCodigoUsuario()) {
+                                if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
+                                    if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
+                                        if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave, cadena.getNit())) {
+                                            //nit = cadena.getNit();
+                                            administrarIngreso.adicionarConexionUsuario(ses.getId(), cadena.getEsquema());
+                                            ingresoExitoso = true;
                                             intento = 0;
+                                            //return "inicio";
+                                            conexionEmpleado = administrarIngreso.obtenerConexionEmpelado(usuario, nit);
+                                            ultimaConexion = conexionEmpleado.getUltimaconexion();
+                                            administrarIngreso.modificarUltimaConexion(conexionEmpleado);
+                                            HttpSession session = Util.getSession();
+                                            session.setAttribute("idUsuario", usuario);
+                                            imprimir("Conectado a: " + session.getId());
+                                            PrimefacesContextUI.ejecutar("PF('estadoSesion').show()");
+                                            retorno = "plantilla";
+                                        } else {
+                                            // LA CONTRASEÑA ES INCORRECTA.
+                                            if (bckUsuario == null || bckUsuario.equals(usuario)) {
+                                                intento++;
+                                            } else {
+                                                intento = 1;
+                                            }
+                                            bckUsuario = usuario;
+                                            MensajesUI.error(intento < 3 ? "La contraseña es inválida. Intento #" + intento
+                                                    : "La contraseña es inválida. Intento #" + intento + " Cuenta bloqueada.");
+
+                                            if (intento == 2) {
+                                                PrimefacesContextUI.ejecutar("PF('dlgAlertaIntentos').show()");
+                                            } else if (intento >= 3) {
+                                                administrarIngreso.bloquearUsuario(usuario, nit);
+                                                intento = 0;
+                                            }
+                                            ingresoExitoso = false;
                                         }
+                                    } else {
+                                        //USUARIO BLOQUEADO
+                                        MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de soporte.");
                                         ingresoExitoso = false;
                                     }
                                 } else {
-                                    //USUARIO BLOQUEADO
-                                    MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de soporte.");
-                                    ingresoExitoso = false;
+//                                administrarIngreso.adicionarConexionUsuario(ses.getId());
+                                    administrarIngreso.adicionarConexionUsuario(ses.getId(), cadena.getEsquema());
+                                    nit = cadena.getNit();
+                                    ingresoExitoso = true;
+                                    HttpSession session = Util.getSession();
+                                    session.setAttribute("idUsuario", usuario);
+                                    PrimefacesContextUI.ejecutar("PF('dlgPrimerIngreso').show()");
                                 }
                             } else {
-//                                administrarIngreso.adicionarConexionUsuario(ses.getId());
-                                administrarIngreso.adicionarConexionUsuario(ses.getId(), cadena.getEsquema());
-                                nit = cadena.getNit();
-                                ingresoExitoso = true;
-                                HttpSession session = Util.getSession();
-                                session.setAttribute("idUsuario", usuario);
-                                PrimefacesContextUI.ejecutar("PF('dlgPrimerIngreso').show()");
+                                //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
+                                MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");
+                                ingresoExitoso = false;
                             }
-                        } else {
-                            //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
-                            MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");
+                        } catch (Exception ex1) {
+                            String mensajeExcep = ex1.getMessage();
+                            MensajesUI.error("ERROR: " + mensajeExcep);
                             ingresoExitoso = false;
                         }
                     } else {
@@ -227,24 +233,32 @@ public class ControladorIngreso implements Serializable {
         if (usuario != null && clave != null && cadena != null) {
             nit = cadena.getNit();
             if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
-                if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())) {
-                    if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
-                        if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
-                            administrarIngreso.adicionarConexionUsuario(ses.getId());
-                            ingresoExitoso = true;
-                            HttpSession session = Util.getSession();
-                            session.setAttribute("idUsuario", usuario);
-                            return "olvidoClave";
+                try {
+                    if ((administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())
+                            || administrarIngreso.validarAutorizador(usuario, cadena.getEsquema()))
+                            && validarCodigoUsuario()) {
+                        if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
+                            if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
+//                            administrarIngreso.adicionarConexionUsuario(ses.getId());
+                                ingresoExitoso = true;
+                                HttpSession session = Util.getSession();
+                                session.setAttribute("idUsuario", usuario);
+                                return "olvidoClave";
+                            } else {
+                                //USUARIO BLOQUEADO
+                                MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de soporte.");
+                            }
                         } else {
-                            //USUARIO BLOQUEADO
-                            MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de soporte.");
+                            MensajesUI.error("El empleado no ha realizado el primer ingreso.");
                         }
                     } else {
-                        MensajesUI.error("El empleado no ha realizado el primer ingreso.");
+                        //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
+                        MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");
                     }
-                } else {
-                    //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
-                    MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");
+                } catch (Exception ex1) {
+                    String mensajeExcep = ex1.getMessage();
+                    MensajesUI.error("ERROR: " + mensajeExcep);
+
                 }
             } else {
                 //UNIDAD DE PERSISTENCIA INVALIDA - REVISAR ARCHIVO DE CONFIGURACION

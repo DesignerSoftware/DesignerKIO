@@ -1,6 +1,7 @@
 package co.com.kiosko.entidades;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.*;
@@ -49,7 +50,7 @@ public class Personas implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "NUMERODOCUMENTO")
-    private BigInteger numerodocumento;
+    private BigDecimal numerodocumento;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 20)
@@ -123,7 +124,7 @@ public class Personas implements Serializable {
         this.secuencia = secuencia;
     }
 
-    public Personas(BigInteger secuencia, String nombre, BigInteger numerodocumento, String primerapellido) {
+    public Personas(BigInteger secuencia, String nombre, BigDecimal numerodocumento, String primerapellido) {
         this.secuencia = secuencia;
         this.nombre = nombre;
         this.numerodocumento = numerodocumento;
@@ -189,11 +190,11 @@ public class Personas implements Serializable {
         this.nombre = nombre;
     }
 
-    public BigInteger getNumerodocumento() {
+    public BigDecimal getNumerodocumento() {
         return numerodocumento;
     }
 
-    public void setNumerodocumento(BigInteger numerodocumento) {
+    public void setNumerodocumento(BigDecimal numerodocumento) {
         this.numerodocumento = numerodocumento;
     }
 

@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
@@ -35,7 +36,7 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
             return emp;
         } catch (NonUniqueResultException nure) {
             System.out.println("Hay más de un empleado con el mismo código.");
-            System.out.println("Error PersistenciaEmpleados.consultarEmpleado: " + nure);
+            System.out.println("Error PersistenciaEmpleados.consultarEmpleado-1: " + nure);
             try {
                 String sqlQuery = "SELECT e FROM Empleados e WHERE e.codigoempleado = :codigoEmpleado AND e.empresa.nit = :nit ";
                 Query query = eManager.createQuery(sqlQuery);
@@ -44,20 +45,16 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
                 Empleados emp = (Empleados) query.getSingleResult();
                 return emp;
             } catch (Exception e) {
-                System.out.println("Error PersistenciaEmpleados.consultarEmpleado: " + e);
-                try {
-                } catch (NullPointerException npe) {
-                    System.out.println("Error de nulo en la transacción.");
-                }
+                System.out.println("Error PersistenciaEmpleados.consultarEmpleado-1.1: " + e);
                 return null;
             }
         } catch (NullPointerException npe) {
             System.out.println("No hay empleado con el código dado.");
-            System.out.println("Error PersistenciaEmpleados.consultarEmpleado: " + npe);
-            try {
-            } catch (NullPointerException npe2) {
-                System.out.println("Error 2 de nulo en la transacción");
-            }
+            System.out.println("Error PersistenciaEmpleados.consultarEmpleado-2: " + npe);
+            return null;
+        } catch (NoResultException nre){
+            System.out.println("No hay empleado con el código dado.");
+            System.out.println("Error PersistenciaEmpleados.consultarEmpleado-3: " + nre);
             return null;
         }
     }
@@ -293,7 +290,7 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
     @Override
     public Personas consultarPersona(EntityManager eManager, BigInteger numeroDocumento) {
         try {
-            String sqlQuery = "SELECT per FROM Personas per WHERE per.numeroDocumento = :numeroDocumento";
+            String sqlQuery = "SELECT per FROM Personas per WHERE per.numerodocumento = :numeroDocumento";
             Query query = eManager.createQuery(sqlQuery);
             query.setParameter("numeroDocumento", numeroDocumento);
             Personas per = (Personas) query.getSingleResult();
@@ -302,7 +299,7 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
             System.out.println("Hay más de una persona con el mismo numero de documento.");
             System.out.println("Error PersistenciaEmpleados.consultarPersona: " + nure);
             try {
-                String sqlQuery = "SELECT per FROM Personas per WHERE per.numeroDocumento = :numeroDocumento ";
+                String sqlQuery = "SELECT per FROM Personas per WHERE per.numerodocumento = :numeroDocumento ";
                 Query query = eManager.createQuery(sqlQuery);
                 query.setParameter("numeroDocumento", numeroDocumento);
                 List personas = query.getResultList();
@@ -327,7 +324,7 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
     }
 
     @Override
-    public Empleados consultarEmpleadoXPersoEmpre(EntityManager em, BigInteger numeroDocumento, long nit) {
+    public Empleados consultarEmpleadoXPersoEmpre(EntityManager em, BigInteger numeroDocumento, long nit) throws Exception{
         String consulta = "select empl.* "
                 + "from personas per, empleados empl, empresas em, vigenciascargos vc, estructuras es, organigramas o "
                 + "where per.secuencia = empl.persona "
@@ -349,9 +346,9 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
             query.setParameter(2, nit);
             empleado = (Empleados) query.getSingleResult();
         } catch (PersistenceException pe) {
-            throw pe;
+            throw new Exception(pe);
         } catch (IllegalStateException ise) {
-            throw ise;
+            throw new Exception(ise);
         }
         return empleado;
     }
@@ -447,13 +444,11 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
                 + "where vtti.empleado = vtt.empleado "
                 + "and vtti.fechavigencia <= sysdate) "
                 + "and vtt.empleado = empl.secuencia ) "
-                + "and em.nit = ? "
                 + "and ka.persona = ? ";
         List<Empleados> empleados = new ArrayList();
         try {
             Query query = em.createNativeQuery(sqlQuery, Empleados.class);
-            query.setParameter(1, nit);
-            query.setParameter(2, secPersona);
+            query.setParameter(1, secPersona);
             empleados = query.getResultList();
             return empleados;
         } catch (PersistenceException pe) {
