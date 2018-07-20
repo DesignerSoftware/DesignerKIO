@@ -33,10 +33,10 @@ import org.primefaces.event.UnselectEvent;
 
 /**
  *
- * @author PC_Angelo
+ * @author Edwin
  */
-@ManagedBean
 //@ViewScoped
+@ManagedBean
 @SessionScoped
 public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
 
@@ -79,6 +79,9 @@ public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
             personaCon = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getConexionEmpleado().getPersona();
             long nit = Long.parseLong(((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit());
             grupoEmpre = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getGrupoSeleccionado();
+            System.out.println("personaCon: "+personaCon);
+            System.out.println("nit: "+nit);
+            System.out.println("grupoEmpre: "+grupoEmpre);
             consultasIniciales(ses, nit);
         } catch (ELException e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
@@ -192,12 +195,14 @@ public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
     }
 
     private void construirCorreo() {
+        System.out.println(this.getClass().getName()+".construirCorreo");
         FacesContext x = FacesContext.getCurrentInstance();
         nit = Long.parseLong(((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit());
         grupoEmpre = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getGrupoSeleccionado();
-//        System.out.println("nit-1: "+nit);
+        System.out.println("nit-1: "+nit);
         empresa = administrarHistoVacas.consultarInfoEmpresa(nit);
-//        System.out.println("solicitudSelec: "+solicitudSelec);
+        System.out.println("empresa: "+empresa);
+        System.out.println("solicitudSelec: "+solicitudSelec);
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             ExternalContext ec = context.getExternalContext();
@@ -222,8 +227,8 @@ public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
                     + "Le recordamos que esta dirección de correo es utilizada solamente para envíos "
                     + "automáticos de la información solicitada. Por favor no responda este correo, "
                     + "ya que no podrá ser atendido. Si desea contactarse con nosotros, envíe un correo "
-                    + "o comuníquese telefónicamente con Talento Humano de "
-                    + empresa.getNombre() + ". \n\n"
+                    + "o comuníquese telefónicamente con "
+                    + personaCon.getEmail() + ". \n\n"
                     + "Cordial saludo. ";
             System.out.println("mensaje-2: " + mensaje);
             String respuesta1 = "";
@@ -246,6 +251,7 @@ public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
             } else {
                 respuesta1 = "El empleado no tiene correo registrado";
             }
+            
             if (solicitudSelec.getKioSoliciVaca().getAutorizador() != null) {
                 System.out.println("envio-2");
                 if (solicitudSelec.getKioSoliciVaca().getAutorizador().getEmail() != null

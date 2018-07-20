@@ -94,8 +94,7 @@ public interface IPersistenciaKioEstadosSolici {
      * @throws Exception 
      */
     public String registrarNovedad(EntityManager em, KioSoliciVacas solicitud) throws EntityExistsException, TransactionRolledbackLocalException, Exception;
-    public List<KioEstadosSolici> consultarEstadosXEmpre(EntityManager em, BigInteger secEmpresa, String estado,
-            BigInteger secPersona) throws Exception;
+    public List<KioEstadosSolici> consultarEstadosXEmpre(EntityManager em, String estado, BigInteger secPersona) throws Exception;
     public void crearEstadoSolicitud(EntityManager em, KioSoliciVacas solicitud,
             BigDecimal secEmplEjecuta, String estado,
             String motivo, BigInteger secPersona) throws EntityExistsException, TransactionRolledbackLocalException, Exception;

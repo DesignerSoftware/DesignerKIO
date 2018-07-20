@@ -322,7 +322,7 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
     }
 
     @Override
-    public List<KioEstadosSolici> consultarEstadosXEmpre(EntityManager em, BigInteger secEmpresa, String estado,
+    public List<KioEstadosSolici> consultarEstadosXEmpre(EntityManager em, String estado,
             BigInteger secPersona) throws Exception {
         System.out.println(this.getClass().getName() + ".consultarEstadosXEmpre()-3");
         List<KioEstadosSolici> listaEstaSolici;
@@ -330,8 +330,7 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
             em.clear();
             String consulta = "select e "
                     + "from KioEstadosSolici e, Empresas em "
-                    + "where em.secuencia = :rfEmpresa "
-                    + "and e.kioSoliciVaca.empleado.empresa.secuencia = em.secuencia "
+                    + "where e.kioSoliciVaca.empleado.empresa.secuencia = em.secuencia "
                     + "and e.estado = :estado "
                     + "and e.kioSoliciVaca.autorizador.secuencia = :rfautorizador "
                     + "and e.secuencia = (select max(ei.secuencia) "
@@ -339,7 +338,7 @@ public class PersistenciaKioEstadosSolici implements IPersistenciaKioEstadosSoli
                     + "where ei.kioSoliciVaca.secuencia = e.kioSoliciVaca.secuencia) "
                     + "order by e.fechaProcesamiento ";
             Query query = em.createQuery(consulta);
-            query.setParameter("rfEmpresa", secEmpresa);
+//            query.setParameter("rfEmpresa", secEmpresa);
             query.setParameter("estado", estado);
             query.setParameter("rfautorizador", secPersona);
             listaEstaSolici = query.getResultList();
