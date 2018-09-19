@@ -44,7 +44,7 @@ public class AdministrarOlvidoClave implements IAdministrarOlvidoClave, Serializ
         em.close();
         return ck;
     }
-    
+
     @Override
     public ConexionesKioskos obtenerConexionEmpleado(String numeroDocumento) {
         EntityManager em = emf.createEntityManager();
@@ -91,9 +91,16 @@ public class AdministrarOlvidoClave implements IAdministrarOlvidoClave, Serializ
 
     @Override
     public ParametrizaClave obtenerFormatoClave(long nitEmpresa) {
-        EntityManager em = emf.createEntityManager();
-        ParametrizaClave pc = persistenciaParametrizaClave.obtenerFormatoClave(em, nitEmpresa);
-        em.close();
+        System.out.println(this.getClass().getName()+".obtenerFormatoClave");
+        System.out.println("nitEmpresa: " + nitEmpresa);
+        ParametrizaClave pc = null;
+        try {
+            EntityManager em = emf.createEntityManager();
+            pc = persistenciaParametrizaClave.obtenerFormatoClave(em, nitEmpresa);
+            em.close();
+        } catch (Exception ex) {
+            System.out.println("exception: " + ex.toString());
+        }
         return pc;
     }
 }

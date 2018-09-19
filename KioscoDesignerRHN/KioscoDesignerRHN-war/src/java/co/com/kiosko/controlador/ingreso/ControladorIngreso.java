@@ -111,13 +111,27 @@ public class ControladorIngreso implements Serializable {
                     nit = cadena.getNit();
                     if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
                         try {
-                            if ((administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())
+                            if (validarCodigoUsuario() &&
+                                    (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())
                                     || administrarIngreso.validarAutorizador(usuario, cadena.getEsquema()))
-                                    && validarCodigoUsuario()) {
+                                    ) {
                                 if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
                                     if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
                                         if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave, cadena.getNit())) {
                                             //nit = cadena.getNit();
+                                            System.out.println("El usuario que ingresa es: "+usuario);
+                                            System.out.println("Intervalo inactividad: " + ses.getMaxInactiveInterval());
+//                                            if (ses.getMaxInactiveInterval() >= 200) {
+//                                                System.out.println("metodo autenticacion: " + contexto.getExternalContext().getAuthType());
+//                                                ses.invalidate();
+//                                                ses = (HttpSession) contexto.getExternalContext().getSession(true);
+//                                                
+//                                            }
+                                            if (ses.isNew()){
+                                                System.out.println("La sesion es nueva.");
+                                            }else{
+                                                System.out.println("La sesion NO es nueva.");
+                                            }
                                             administrarIngreso.adicionarConexionUsuario(ses.getId(), cadena.getEsquema());
                                             ingresoExitoso = true;
                                             intento = 0;
@@ -138,6 +152,7 @@ public class ControladorIngreso implements Serializable {
                                                 intento = 1;
                                             }
                                             bckUsuario = usuario;
+                                            PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                                             MensajesUI.error(intento < 3 ? "La contraseña es inválida. Intento #" + intento
                                                     : "La contraseña es inválida. Intento #" + intento + " Cuenta bloqueada.");
 
@@ -151,6 +166,7 @@ public class ControladorIngreso implements Serializable {
                                         }
                                     } else {
                                         //USUARIO BLOQUEADO
+                                        PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                                         MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de soporte.");
                                         ingresoExitoso = false;
                                     }
@@ -165,20 +181,24 @@ public class ControladorIngreso implements Serializable {
                                 }
                             } else {
                                 //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
+                                PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                                 MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");
                                 ingresoExitoso = false;
                             }
                         } catch (Exception ex1) {
                             String mensajeExcep = ex1.getMessage();
+                            PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                             MensajesUI.error("ERROR: " + mensajeExcep);
                             ingresoExitoso = false;
                         }
                     } else {
                         //UNIDAD DE PERSISTENCIA INVALIDA - REVISAR ARCHIVO DE CONFIGURACION
+                        PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                         MensajesUI.fatal("Unidad de persistencia inválida, por favor contactar al área de soporte.");
                         ingresoExitoso = false;
                     }
                 } else {
+                    PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                     MensajesUI.error("Todos los campos son de obligatorio ingreso.");
                     ingresoExitoso = false;
                 }
@@ -200,7 +220,7 @@ public class ControladorIngreso implements Serializable {
                 } catch (NullPointerException npe) {
                     System.out.println("ExternalContext vacio");
                 }
-
+                PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                 administrarIngreso.cerrarSession(ses.getId());
                 ec.redirect(ec.getRequestContextPath() + "/" + "?grupo=" + grupoSeleccionado);
             }
@@ -246,25 +266,31 @@ public class ControladorIngreso implements Serializable {
                                 return "olvidoClave";
                             } else {
                                 //USUARIO BLOQUEADO
+                                PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                                 MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de soporte.");
                             }
                         } else {
+                            PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                             MensajesUI.error("El empleado no ha realizado el primer ingreso.");
                         }
                     } else {
                         //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
+                        PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                         MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");
                     }
                 } catch (Exception ex1) {
                     String mensajeExcep = ex1.getMessage();
+                    PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                     MensajesUI.error("ERROR: " + mensajeExcep);
 
                 }
             } else {
                 //UNIDAD DE PERSISTENCIA INVALIDA - REVISAR ARCHIVO DE CONFIGURACION
+                PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                 MensajesUI.fatal("Unidad de persistencia inválida, por favor contactar al área de soporte.");
             }
         } else {
+            PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
             MensajesUI.error("Para recuperar su clave, es necesario ingresar el numero de empleado y empresa.");
         }
         return "";

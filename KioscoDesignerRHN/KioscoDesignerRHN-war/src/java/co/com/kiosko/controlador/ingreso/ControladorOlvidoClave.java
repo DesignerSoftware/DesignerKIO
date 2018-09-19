@@ -1,8 +1,10 @@
 package co.com.kiosko.controlador.ingreso;
 
+import co.com.kiosko.administrar.interfaz.IAdministrarIngreso;
 import co.com.kiosko.entidades.ConexionesKioskos;
 import co.com.kiosko.entidades.ParametrizaClave;
 import co.com.kiosko.administrar.interfaz.IAdministrarOlvidoClave;
+import co.com.kiosko.clasesAyuda.CadenasKioskos;
 import co.com.kiosko.utilidadesUI.MensajesUI;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
 import java.io.Serializable;
@@ -25,6 +27,8 @@ public class ControladorOlvidoClave implements Serializable {
 
     @EJB
     private IAdministrarOlvidoClave administrarOlvidoClave;
+    @EJB
+    private IAdministrarIngreso administrarIngreso;
     private ConexionesKioskos conexion;
     private String claveActual, clave, confirmacion, respuesta1, respuesta2;
     //VALORES INGRESO
@@ -40,9 +44,13 @@ public class ControladorOlvidoClave implements Serializable {
         try {
             FacesContext x = FacesContext.getCurrentInstance();
             HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
-            administrarOlvidoClave.obtenerConexion(ses.getId());
             usuario = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getUsuario();
             nit = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit();
+            String unidadPersistencia = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getUnidadPersistenciaIngreso();
+            CadenasKioskos cadena = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).validarUnidadPersistencia(unidadPersistencia);
+            administrarIngreso.conexionIngreso(cadena.getCadena());
+            administrarIngreso.adicionarConexionUsuario(ses.getId(), cadena.getEsquema());
+            administrarOlvidoClave.obtenerConexion(ses.getId());
             pc = administrarOlvidoClave.obtenerFormatoClave(Long.parseLong(nit));
             //conexion = administrarOlvidoClave.obtenerConexionEmpleado(usuario, nit);
             conexion = administrarOlvidoClave.obtenerConexionEmpleado(usuario);

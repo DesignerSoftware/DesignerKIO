@@ -51,6 +51,7 @@ public class AdministrarSesiones implements IAdministrarSesiones, Serializable {
         
         try {
             if (!sessionesActivas.isEmpty()) {
+                System.out.println("sesiones activas no vacias");
                 for (int i = 0; i < sessionesActivas.size(); i++) {
                     if (sessionesActivas.get(i).getIdSession().equals(idSesion)) {
                         sesionActual = sessionesActivas.get(i);
@@ -63,6 +64,7 @@ public class AdministrarSesiones implements IAdministrarSesiones, Serializable {
             System.out.println("Causa: " + e);
             sesionActual = null;
         }
+        System.out.println("sesion activa: "+sesionActual);
         EntityManagerFactory emf = null;
         if (sesionActual != null) {
             emf = sessionEMF.crearConexionUsuario(sesionActual.getUnidadPersistencia());

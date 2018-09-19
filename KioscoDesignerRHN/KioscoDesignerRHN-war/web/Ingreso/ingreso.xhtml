@@ -48,7 +48,7 @@
                             <h:outputText value="Inicie sesi&oacute;n para consultar sus datos de personal" style="font-family: Arial; font-size: 16px; color:#000;"/>
                             <br/>
                             <br/>
-                            <h:outputText value="En el campo Usuario, por favor coloque el c&oacute;digo con que esta registrado en la empresa. " style="font-family: Arial; font-size: 10px; color:#000;"/>
+                            <h:outputText value="En el campo Usuario, por favor coloque el n&uacute;mero de identificaci&oacute;n del empleado. " style="font-family: Arial; font-size: 10px; color:#000;"/>
                             <h:outputText value="Si es la primera vez que ingresa, por favor coloque cualquier letra en el campo contrase&ntilde;a para proceder a configurar su cuenta." style="font-family: Arial; font-size: 10px; color:#000;"/>
                         </center>
                         <br/>
@@ -104,13 +104,16 @@
                                     <p:commandButton id="btnEntrar" value="#{!controladorIngreso.ingresoExitoso ? '' : 'Entrar'}" 
                                                      action="#{controladorIngreso.entrar()}"
                                                      style="float: right;" update="pnlIngreso" icon="ui-icon-carat-1-e" iconPos="right"
+                                                     onclick="PF('estadoSesion').show();"
                                                      rendered="#{controladorIngreso.ingresoExitoso}"/>
                                 </p:column>
                                 <p:column>
                                     <p:commandButton id="btnIngreso" value="#{!controladorIngreso.ingresoExitoso ? 'Ingresar' : 'Cerrar Sesi&oacute;n'}" 
                                                      action="#{controladorIngreso.ingresar()}" 
                                                      update="pnlIngreso" icon="ui-icon-carat-1-e" iconPos="right"
-                                                     style="float: right;"/>
+                                                     onclick="PF('estadoSesion').show();"
+                                                     style="float: right;"
+                                                     />
                                 </p:column>
                             </p:row>
                             <p:row>
