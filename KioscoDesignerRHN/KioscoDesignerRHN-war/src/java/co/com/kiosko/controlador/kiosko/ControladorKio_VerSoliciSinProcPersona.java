@@ -77,7 +77,8 @@ public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
             HttpSession ses = (HttpSession) x.getExternalContext().getSession(false);
 //            empleado = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getConexionEmpleado().getEmpleado();
             personaCon = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getConexionEmpleado().getPersona();
-            long nit = Long.parseLong(((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit());
+//            long nit = Long.parseLong(((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit());
+            this.nit = Long.parseLong(((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit());
             grupoEmpre = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getGrupoSeleccionado();
             System.out.println("personaCon: "+personaCon);
             System.out.println("nit: "+nit);
@@ -131,10 +132,10 @@ public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
         this.estadoNuevo = "";
         this.motivo = "";
         mensajeCreacion="";
-        grupoEmpre="";
-        personaCon=null;
-        empresa=null;
-        nit=0;
+        //grupoEmpre="";
+        //personaCon=null;
+        //empresa=null;
+        //nit=0;
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -197,10 +198,10 @@ public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
     private void construirCorreo() {
         System.out.println(this.getClass().getName()+".construirCorreo");
         FacesContext x = FacesContext.getCurrentInstance();
-        nit = Long.parseLong(((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit());
+        this.nit = Long.parseLong(((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit());
         grupoEmpre = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getGrupoSeleccionado();
-        System.out.println("nit-1: "+nit);
-        empresa = administrarHistoVacas.consultarInfoEmpresa(nit);
+        System.out.println("nit-1: "+this.nit);
+        empresa = administrarHistoVacas.consultarInfoEmpresa(this.nit);
         System.out.println("empresa: "+empresa);
         System.out.println("solicitudSelec: "+solicitudSelec);
         try {
@@ -370,7 +371,7 @@ public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
             try {
 //                empleadosACargo = administrarHistoVacas.consultarEmpleadosEmpresa(empleado.getEmpresa().getNit());
 //                empleadosACargo = administrarHistoVacas.consultarEmpleadosJefe(empleado.getEmpresa().getNit(), empleado);
-                empleadosACargo = administrarHistoVacas.consultarEmpleadosAutorizador(nit, personaCon);
+                empleadosACargo = administrarHistoVacas.consultarEmpleadosAutorizador(this.nit, personaCon);
             } catch (Exception e) {
                 System.out.println("Error getEmpleadosACargo: " + this.getClass().getName() + ": " + e);
                 System.out.println("Causa: " + e.getCause());
@@ -402,8 +403,10 @@ public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
             try {
                 if (empleadoSelec == null) {
 //                    soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa(), "SIN PROCESAR", empleado);
-                    soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(nit, motivo, personaCon);
+//                    soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(nit, motivo, personaCon);
+                    soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(nit, "SIN PROCESAR", personaCon);
                 } else {
+                    System.out.println("soliciEmpleado: "+soliciEmpleado);
                     soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpl(empleadoSelec);
                 }
             } catch (Exception e) {

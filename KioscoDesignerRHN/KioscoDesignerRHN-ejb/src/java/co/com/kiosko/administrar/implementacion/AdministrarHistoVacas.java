@@ -247,8 +247,9 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializab
     
     @Override
     public List<Empleados> consultarEmpleadosAutorizador(long nit, Personas per) throws Exception {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = null;
         try {
+            em = emf.createEntityManager();
             return persistenciaEmpleados.consultarEmpleadosXAutorizador(em, nit, per.getSecuencia());
         } catch (Exception e) {
             throw e;
