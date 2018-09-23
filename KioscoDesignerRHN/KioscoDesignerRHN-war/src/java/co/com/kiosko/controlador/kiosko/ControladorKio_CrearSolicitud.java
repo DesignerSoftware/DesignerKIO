@@ -258,6 +258,8 @@ public class ControladorKio_CrearSolicitud implements Serializable {
                     administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
                             solicitud.getAutorizador().getEmail(), asunto, mensaje, "");
                     respuesta2 = " Solicitud enviada correctamente al autorizador";
+                } else {
+                    respuesta2 = " La persona que autoriza la solicitud no tiene correo";
                 }
             }else if (solicitud.getEmpleadoJefe() != null) {
                 if (solicitud.getEmpleadoJefe().getPersona().getEmail() != null && !solicitud.getEmpleadoJefe().getPersona().getEmail().isEmpty()) {

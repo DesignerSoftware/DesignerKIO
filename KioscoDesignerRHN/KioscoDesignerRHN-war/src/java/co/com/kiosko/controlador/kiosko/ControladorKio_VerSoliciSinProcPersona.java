@@ -343,6 +343,7 @@ public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
         // Si la respuesta es positiva
         if (res) {
             construirCorreo();
+            motivo="";
         }
 
         PrimefacesContextUI.ejecutar("PF('creandoSolici').hide()");
@@ -478,6 +479,7 @@ public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
     }
 
     public boolean isInacMotivo() {
+        inacMotivo = !estadoNuevo.equals("RECHAZADO");
         return inacMotivo;
     }
 

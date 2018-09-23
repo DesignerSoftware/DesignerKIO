@@ -6,6 +6,7 @@
 package co.com.kiosko.clasesAyuda;
 
 import java.sql.SQLException;
+import java.util.Calendar;
 
 /**
  *
@@ -46,6 +47,24 @@ public class ExtraeCausaExcepcion {
         String mensaje;
         Throwable t = getLastThrowable(e);
         mensaje = t.getMessage();
+        Calendar fecha = Calendar.getInstance();
+        System.out.println("mensaje error: "+
+                fecha.get(Calendar.YEAR)+"/"+
+                (fecha.get(Calendar.MONTH)+1)+"/"+
+                fecha.get(Calendar.DAY_OF_MONTH)+" "+
+                fecha.get(Calendar.HOUR_OF_DAY)+":"+
+                fecha.get(Calendar.MINUTE)+":"+
+                fecha.get(Calendar.SECOND)+" "+
+                mensaje
+        );
+        mensaje = "Hubo un error, por favor solicitar la revision al momento: "+
+                fecha.get(Calendar.YEAR)+"/"+
+                (fecha.get(Calendar.MONTH)+1)+"/"+
+                fecha.get(Calendar.DAY_OF_MONTH)+" "+
+                fecha.get(Calendar.HOUR_OF_DAY)+":"+
+                fecha.get(Calendar.MINUTE)+":"+
+                fecha.get(Calendar.SECOND)+" "
+                ;
         return mensaje;
     }
 }

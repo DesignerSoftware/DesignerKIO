@@ -178,10 +178,16 @@ public class ControladorKio_VerSolicitudesEmpleado implements Serializable {
                     + "y continuar con el proceso. \n\n"
                     + "La persona que " + procesoConj.toUpperCase() + " LA SOLICITUD es: "
                     + empleado.getPersona().getNombreCompleto() + "\n";
-            if (estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe() != null) {
+            if (estSoliciSelec.getKioSoliciVaca().getAutorizador() != null) {
                 mensaje = mensaje + "La persona a cargo de HACER EL SEGUIMIENTO es: "
-                        + estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getNombreCompleto()
+                        + estSoliciSelec.getKioSoliciVaca().getAutorizador().getNombreCompleto()
                         + "\n";
+            } else {
+                if (estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe() != null) {
+                    mensaje = mensaje + "La persona a cargo de HACER EL SEGUIMIENTO es: "
+                            + estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getNombreCompleto()
+                            + "\n";
+                }
             }
             mensaje = mensaje + "Por favor seguir el proceso en: "
                     + ec.getRequestScheme() + "://" + ec.getRequestServerName() + ":" + ec.getRequestServerPort()
@@ -213,7 +219,15 @@ public class ControladorKio_VerSolicitudesEmpleado implements Serializable {
             } else {
                 respuesta1 = "El empleado no tiene correo registrado";
             }
-            if (estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe() != null) {
+            if ( estSoliciSelec.getKioSoliciVaca().getAutorizador() != null ) {
+                if (estSoliciSelec.getKioSoliciVaca().getAutorizador().getEmail() != null && !estSoliciSelec.getKioSoliciVaca().getAutorizador().getEmail().isEmpty()){
+                    administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
+                            estSoliciSelec.getKioSoliciVaca().getAutorizador().getEmail(), asunto, mensaje, "");
+                    respuesta2 = " Solicitud enviada correctamente al autorizador";
+                } else {
+                    respuesta2 = " La persona que autoriza la solicitud no tiene correo";
+                }
+            }else if (estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe() != null) {
                 if (estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail() != null && !estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail().isEmpty()) {
                     administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
                             estSoliciSelec.getKioSoliciVaca().getEmpleadoJefe().getPersona().getEmail(), asunto, mensaje, "");
