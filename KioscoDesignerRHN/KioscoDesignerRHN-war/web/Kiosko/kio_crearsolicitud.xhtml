@@ -54,10 +54,11 @@
                                 pattern="dd/MM/yyyy" mask="true" locale="es"
                                 showOn="none"
                                 readonly="true"/>
-                    <p:commandButton value="Guardar" onclick="PF('confirmGuardado').show();"
+                    <!--<p:commandButton value="Guardar" onclick="PF('confirmGuardado').show();"
+                                     process="@this" /> -->
+                    <p:commandButton id="btnenviar" value="Enviar solicitud" onclick="PF('confirmEnvio').show();"
                                      process="@this" />
-                    <p:commandButton value="Enviar solicitud" onclick="PF('confirmEnvio').show();"
-                                     process="@this" />
+
                 </p:panelGrid>
             </h:form>
         </center>

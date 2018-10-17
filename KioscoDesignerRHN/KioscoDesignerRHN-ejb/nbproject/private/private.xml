@@ -4,11 +4,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/persistencia/implementacion/PersistenciaParametrizaClave.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/administrar/implementacion/AdministrarOlvidoClave.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/administrar/implementacion/AdministrarIngreso.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/administrar/interfaz/IAdministrarIngreso.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/administrar/implementacion/AdministrarSesiones.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/entidades/KioSoliciVacas.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/administrar/implementacion/AdministrarCrearSolicitud.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/entidades/KioNovedadesSolici.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/persistencia/implementacion/PersistenciaKioNovedadesSolici.java</file>
         </group>
     </open-files>
 </project-private>

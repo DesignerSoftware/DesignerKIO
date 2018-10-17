@@ -66,10 +66,10 @@ public class KioNovedadesSolici implements Serializable {
     @Column(name = "FECHAPAGO")
     @Temporal(TemporalType.DATE)
     private Date fechaPago;
-    @Column(name = "PAGARPORFUERA")
-    private String pagarPorFuera;
-    @Column(name = "PROPORCIONADELANTAPAGO")
-    private BigDecimal proporcionAdelantaPago;
+//    @Column(name = "PAGARPORFUERA")
+//    private String pagarPorFuera;
+//    @Column(name = "PROPORCIONADELANTAPAGO")
+//    private BigDecimal proporcionAdelantaPago;
 
     public KioNovedadesSolici() {
         inicializa();
@@ -193,29 +193,30 @@ public class KioNovedadesSolici implements Serializable {
         this.fechaPago = fechaPago;
     }
 
-    public String getPagarPorFuera() {
-        return pagarPorFuera;
-    }
+//    public String getPagarPorFuera() {
+//        return pagarPorFuera;
+//    }
 
-    public void setPagarPorFuera(String pagarPorFuera) throws Exception {
-        if (pagarPorFuera == null){
-            this.pagarPorFuera = "N";
-            setProporcionAdelantaPago(null);
-        } else if ("S".equalsIgnoreCase(pagarPorFuera) || "N".equalsIgnoreCase(pagarPorFuera)) {
-            this.pagarPorFuera = pagarPorFuera.toUpperCase();
-            setProporcionAdelantaPago( ("S".equalsIgnoreCase(pagarPorFuera)? new BigDecimal("0,5") : null) );
-        } else {
-            throw new Exception("Valor no válido para el campo PagarPorFuera");
-        }
-    }
+//    public void setPagarPorFuera(String pagarPorFuera) throws Exception {
+//        if (pagarPorFuera == null){
+//            this.pagarPorFuera = "N";
+////            this.pagarPorFuera = "S";
+////            setProporcionAdelantaPago(null);
+//        } else if ("S".equalsIgnoreCase(pagarPorFuera) || "N".equalsIgnoreCase(pagarPorFuera)) {
+//            this.pagarPorFuera = pagarPorFuera.toUpperCase();
+////            setProporcionAdelantaPago( ("S".equalsIgnoreCase(pagarPorFuera)? new BigDecimal("0,5") : null) );
+//        } else {
+//            throw new Exception("Valor no válido para el campo PagarPorFuera");
+//        }
+//    }
 
-    public BigDecimal getProporcionAdelantaPago() {
-        return proporcionAdelantaPago;
-    }
-
-    public void setProporcionAdelantaPago(BigDecimal proporcionAdelantaPago) {
-        this.proporcionAdelantaPago = proporcionAdelantaPago;
-    }
+//    public BigDecimal getProporcionAdelantaPago() {
+//        return proporcionAdelantaPago;
+//    }
+//
+//    public void setProporcionAdelantaPago(BigDecimal proporcionAdelantaPago) {
+//        this.proporcionAdelantaPago = proporcionAdelantaPago;
+//    }
     
 
 //    public Date getFechaInicioNomina() {
@@ -271,7 +272,7 @@ public class KioNovedadesSolici implements Serializable {
 
     @Override
     public String toString() {
-        return "KioNovedadesSolici{" + "secuencia=" + secuencia + ", empleado=" + empleado + ", fechaInicialDisfrute=" + fechaInicialDisfrute + ", dias=" + dias + ", tipo=" + tipo + ", subtipo=" + subtipo + ", vacacion=" + vacacion + ", fechaSiguienteFinVaca=" + fechaSiguienteFinVaca + ", adelantaPagoHasta=" + adelantaPagoHasta + ", fechaPago=" + fechaPago + ", fechaSistema=" + fechaSistema + ", pagarPorFuera=" + pagarPorFuera + '}';
+        return "KioNovedadesSolici{" + "secuencia=" + secuencia + ", empleado=" + empleado + ", fechaInicialDisfrute=" + fechaInicialDisfrute + ", dias=" + dias + ", tipo=" + tipo + ", subtipo=" + subtipo + ", vacacion=" + vacacion + ", fechaSiguienteFinVaca=" + fechaSiguienteFinVaca + ", adelantaPagoHasta=" + adelantaPagoHasta + ", fechaPago=" + fechaPago + ", fechaSistema=" + fechaSistema + '}';
     }
 
 }

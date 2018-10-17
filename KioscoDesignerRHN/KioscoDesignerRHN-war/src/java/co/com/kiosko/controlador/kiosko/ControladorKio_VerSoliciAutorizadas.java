@@ -195,7 +195,7 @@ public class ControladorKio_VerSoliciAutorizadas implements Serializable {
         boolean res2 = false;
         solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().setFechaPago(fpago);
         try {
-            solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().setPagarPorFuera(proceso);
+//            solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().setPagarPorFuera(proceso);
             contin = true;
         } catch (Exception e) {
             System.out.println("Error asignando el proceso a la novedad: " + e);
