@@ -30,6 +30,8 @@ public class ControladorOpcionesKiosko implements Serializable {
 
     @EJB
     private IAdministrarOpcionesKiosko administrarOpcionesKiosko;
+//    @EJB
+    private LeerArchivoXML leerArchivoXML;
     private OpcionesKioskos opcionesPrincipales, opcionActual, opcionReporte;
     private List<OpcionesKioskos> navegacionOpciones;
     //ACTUALIZAR COMPONENTES
@@ -47,6 +49,7 @@ public class ControladorOpcionesKiosko implements Serializable {
         navegacionOpciones = new ArrayList<OpcionesKioskos>();
         actualizar = new ArrayList<String>();
         actualizar.add("principalForm:pnlOpciones");
+        leerArchivoXML = new LeerArchivoXML();
     }
 
     @PostConstruct
@@ -274,7 +277,7 @@ public class ControladorOpcionesKiosko implements Serializable {
     }
     public CadenasKioskos validarUnidadPersistencia(String unidadP) {
         CadenasKioskos resultado = null;
-        for (CadenasKioskos elemento : (new LeerArchivoXML()).leerArchivoEmpresasKiosko()) {
+        for (CadenasKioskos elemento : leerArchivoXML.leerArchivoEmpresasKiosko()) {
             if (elemento.getId().equals(unidadP)) {
                 resultado = elemento;
                 break;

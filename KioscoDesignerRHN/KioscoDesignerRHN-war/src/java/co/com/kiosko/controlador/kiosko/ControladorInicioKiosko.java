@@ -33,6 +33,8 @@ public class ControladorInicioKiosko implements Serializable {
 
     @EJB
     private IAdministrarInicioKiosko administrarInicioKiosko;
+//    @EJB
+    private LeerArchivoXML leerArchivoXML;
     private String usuario;
     private ConexionesKioskos conexionEmpleado;
     private Date ultimaConexionEmpleado;
@@ -46,6 +48,7 @@ public class ControladorInicioKiosko implements Serializable {
     private String fondoEmpresa;
 
     public ControladorInicioKiosko() {
+        leerArchivoXML = new LeerArchivoXML();
     }
 
     @PostConstruct
@@ -167,7 +170,8 @@ public class ControladorInicioKiosko implements Serializable {
     public void obtenerFondoEmpresa(){
         //String rutaFondo = null;
         //consultaNitEmpresa();
-        for (CadenasKioskos elemento : (new LeerArchivoXML()).leerArchivoEmpresasKiosko()) {
+//        for (CadenasKioskos elemento : LeerArchivoXML.getInstance().leerArchivoEmpresasKiosko()) {
+        for (CadenasKioskos elemento : leerArchivoXML.leerArchivoEmpresasKiosko()) {
             if ( elemento.getNit().equals( nitEmpresa ) ){
                 fondoEmpresa = elemento.getFondo();
             }

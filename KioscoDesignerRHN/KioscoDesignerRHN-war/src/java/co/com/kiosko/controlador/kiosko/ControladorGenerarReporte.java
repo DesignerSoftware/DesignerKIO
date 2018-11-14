@@ -3,6 +3,7 @@ package co.com.kiosko.controlador.kiosko;
 import co.com.kiosko.entidades.ConexionesKioskos;
 import co.com.kiosko.entidades.OpcionesKioskos;
 import co.com.kiosko.administrar.interfaz.IAdministrarGenerarReporte;
+import co.com.kiosko.clasesAyuda.LeerArchivoXML;
 import co.com.kiosko.controlador.ingreso.ControladorIngreso;
 import co.com.kiosko.utilidadesUI.MensajesUI;
 import co.com.kiosko.utilidadesUI.PrimefacesContextUI;
@@ -11,7 +12,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,7 +43,6 @@ public class ControladorGenerarReporte implements Serializable {
 
     @EJB
     private IAdministrarGenerarReporte administrarGenerarReporte;
-
     private OpcionesKioskos reporte;
     private ConexionesKioskos conexionEmpleado;
     private String email, areaDe;
@@ -51,6 +53,7 @@ public class ControladorGenerarReporte implements Serializable {
     private boolean enviocorreo;
     private ExternalContext externalContext;
     private String userAgent;
+    private LeerArchivoXML leerArchivoXML;
 
     public ControladorGenerarReporte() {
     }
@@ -68,6 +71,8 @@ public class ControladorGenerarReporte implements Serializable {
             conexionEmpleado = controladorIngreso.getConexionEmpleado();
             reporte = ((ControladorOpcionesKiosko) x.getApplication().evaluateExpressionGet(x, "#{controladorOpcionesKiosko}", ControladorOpcionesKiosko.class)).getOpcionReporte();
             email = conexionEmpleado.getEmpleado().getPersona().getEmail();
+            leerArchivoXML = new LeerArchivoXML();
+            leerArchivoXML.leerArchivoConfigModulos();
             //System.out.println("contexto: " + userAgent);
         } catch (ELException e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e.getMessage());
@@ -84,6 +89,8 @@ public class ControladorGenerarReporte implements Serializable {
             parametros.put("secuenciaempleado", conexionEmpleado.getEmpleado().getSecuencia());
             pathReporteGenerado = administrarGenerarReporte.generarReporte(reporte.getNombrearchivo(), "PDF", parametros);
             if (pathReporteGenerado != null) {
+                /* generar reporte de auditoria */
+//                generarAuditoria(pathReporteGenerado);
                 PrimefacesContextUI.ejecutar("validarDescargaReporte();");
             } else {
                 PrimefacesContextUI.ejecutar("PF('generandoReporte').hide();");
@@ -95,6 +102,39 @@ public class ControladorGenerarReporte implements Serializable {
         }
     }
 
+    private void generarAuditoria(String rutaReporteGen) {
+        Calendar dtGen = Calendar.getInstance();
+        System.out.println(dtGen.get(Calendar.YEAR) + "/" + (dtGen.get(Calendar.MONTH) + 1) + "/" + dtGen.get(Calendar.DAY_OF_MONTH) + " " + dtGen.get(Calendar.HOUR_OF_DAY) + ":" + dtGen.get(Calendar.MINUTE));
+        System.out.println(conexionEmpleado.getEmpleado().getCodigoempleado() + " " + conexionEmpleado.getEmpleado().getEmpresa().getNit());
+        System.out.println(reporte.getCodigo() + " " + reporte.getDescripcion());
+        System.out.println(rutaReporteGen);
+        System.out.println("destinatarios");
+        List<String> cuentasAud = leerArchivoXML.getCuentasAudOp("reportes", conexionEmpleado.getEmpleado().getEmpresa().getNit(), reporte.getCodigo());
+        System.out.println("cuentas: " + cuentasAud);
+        System.out.println("Enviando mensaje de auditoria");
+        
+        for (String cuentaAud : cuentasAud) {
+            if (administrarGenerarReporte.enviarCorreo(conexionEmpleado.getEmpleado().getEmpresa().getSecuencia(), cuentaAud,
+                    "Reporte Kiosko - " + reporte.getDescripcion(), 
+                    "Mensaje enviado automáticamente, por favor no responda a este correo.",
+                    pathReporteGenerado)) {
+                MensajesUI.info("El reporte de auditoria ha sido enviado exitosamente.");
+                PrimefacesContextUI.actualizar("principalForm:growl");
+            } else {
+                MensajesUI.error("No fue posible enviar el correo de auditoria, por favor comuníquese con soporte.");
+                PrimefacesContextUI.actualizar("principalForm:growl");
+            }
+        }
+//        estaAuditado(reporte.getCodigo(), conexionEmpleado.getEmpleado().getEmpresa().getNit());
+    }
+
+//    private boolean estaAuditado(String codigo, long nit){
+//        boolean resultado = false;
+//        String modulo = "reportes";
+//        System.out.println(modulo+" "+codigo+" "+nit);
+//        
+//        return resultado;
+//    }
     public void validar() {
         System.out.println(this.getClass().getName() + "." + "validar" + "()");
         if (validarCampos()) {
@@ -138,12 +178,11 @@ public class ControladorGenerarReporte implements Serializable {
                 reporteGenerado = null;
             }
             if (reporteGenerado != null) {
-                System.out.println("userAgent: "+userAgent);
-                if (userAgent.toUpperCase().contains("Mobile".toUpperCase()) 
+                System.out.println("userAgent: " + userAgent);
+                if (userAgent.toUpperCase().contains("Mobile".toUpperCase())
                         || userAgent.toUpperCase().contains("Tablet".toUpperCase())
                         || userAgent.toUpperCase().contains("Android".toUpperCase())
-                        || userAgent.toUpperCase().contains("IOS".toUpperCase())
-                   ) {
+                        || userAgent.toUpperCase().contains("IOS".toUpperCase())) {
                     //System.out.println("Acceso por mobiles.");
                     context.update("principalForm:dwlReportePDF");
                     context.execute("PF('dwlReportePDF').show();");
@@ -161,6 +200,7 @@ public class ControladorGenerarReporte implements Serializable {
             context.update("principalForm:errorGenerandoReporte");
             context.execute("PF('errorGenerandoReporte').show();");
         }
+        generarAuditoria(pathReporteGenerado);
     }
 
     public boolean validarCampos() {
@@ -239,7 +279,7 @@ public class ControladorGenerarReporte implements Serializable {
 
     public boolean validarConfigSMTP() {
         System.out.println(this.getClass().getName() + "." + "validarConfigSMTP" + "()");
-        boolean resultado=false;
+        boolean resultado = false;
         try {
             resultado = administrarGenerarReporte.comprobarConfigCorreo(conexionEmpleado.getEmpleado().getEmpresa().getSecuencia());
         } catch (TransactionRolledbackLocalException trle) {

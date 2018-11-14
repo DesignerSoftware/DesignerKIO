@@ -81,4 +81,13 @@
         <emplnomina></emplnomina>
         <esquema>HAVAS</esquema>
     </cadenaKiosko>
+    <cadenaKiosko id="9">
+        <descripcion>LM INSTRUMENTS</descripcion>
+        <cadena>DEFAULT3</cadena>
+        <nit>800077635</nit>
+        <fondo>fondoMenu.png</fondo>
+        <grupo>GrupoEmpresarial3</grupo>
+        <emplnomina></emplnomina>
+        <esquema></esquema>
+    </cadenaKiosko>
 </conexiones>

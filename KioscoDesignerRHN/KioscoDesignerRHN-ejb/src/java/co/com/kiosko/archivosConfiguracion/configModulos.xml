@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configModulos>
+    <moduloConfig nombre="solicitudVacaciones">
+        <empresaModulo nit="800020751">
+            <auditoriaModulo codigo="0131">
+                <emailsMod>
+                    <cuenta>edwinh@nomina.com.co</cuenta>
+                    <cuenta>edwinhasta@hotmail.com</cuenta>
+                </emailsMod>
+            </auditoriaModulo>
+        </empresaModulo>
+        <empresaModulo nit="800077635">
+            <auditoriaModulo codigo="0131">
+                <emailsMod>
+                    <cuenta>acarvajal@nomina.com.co</cuenta>
+                    <cuenta>otrcuenta@hotmail.com</cuenta>
+                </emailsMod>
+            </auditoriaModulo>
+        </empresaModulo>
+    </moduloConfig>
+    <moduloConfig nombre="reportes">
+        <empresaModulo nit="800020751">
+            <auditoriaModulo codigo="0126">
+                <emailsMod>
+                    <cuenta>tmanrique@nomina.com.co</cuenta>
+                    <cuenta>edwinhasta@hotmail.com</cuenta>
+                </emailsMod>
+            </auditoriaModulo>
+        </empresaModulo>
+    </moduloConfig>
+</configModulos>

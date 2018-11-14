@@ -34,6 +34,8 @@ public class ControladorIngreso implements Serializable {
 
     @EJB
     private IAdministrarIngreso administrarIngreso;
+//    @EJB
+    private LeerArchivoXML leerArchivoXML;
     private String usuario, clave, unidadPersistenciaIngreso, bckUsuario;
     private Date ultimaConexion;
     private boolean ingresoExitoso;
@@ -48,6 +50,7 @@ public class ControladorIngreso implements Serializable {
     public ControladorIngreso() {
         intento = 0;
         logo = "logonominadesignertrans.png";
+        leerArchivoXML = new LeerArchivoXML();
     }
 
     @PostConstruct
@@ -68,15 +71,15 @@ public class ControladorIngreso implements Serializable {
             }
         }
         if (resultadoValidacion) {
-            listaResultado = (new LeerArchivoXML()).leerArchivoEmpresasKioskoGrupo(this.grupo);
+            listaResultado = leerArchivoXML.leerArchivoEmpresasKioskoGrupo(this.grupo);
         } else {
-            listaResultado = (new LeerArchivoXML()).leerArchivoEmpresasKioskoGrupo("0");
+            listaResultado = leerArchivoXML.leerArchivoEmpresasKioskoGrupo("0");
         }
         return listaResultado;
     }
 
     public List<SelectItem> obtenerGruposCadenasKiosko() {
-        List<String> listaOriginal = (new LeerArchivoXML()).obtenerGruposEmpresasKiosko();
+        List<String> listaOriginal = leerArchivoXML.obtenerGruposEmpresasKiosko();
         Collections.sort(listaOriginal);
         List<SelectItem> listaRetorno = new ArrayList<SelectItem>();
         for (int i = 0; i < listaOriginal.size(); i++) {
@@ -87,7 +90,7 @@ public class ControladorIngreso implements Serializable {
 
     public CadenasKioskos validarUnidadPersistencia(String unidadP) {
         CadenasKioskos resultado = null;
-        for (CadenasKioskos elemento : (new LeerArchivoXML()).leerArchivoEmpresasKiosko()) {
+        for (CadenasKioskos elemento : leerArchivoXML.leerArchivoEmpresasKiosko()) {
             if (elemento.getId().equals(unidadP)) {
                 resultado = elemento;
                 break;
@@ -111,15 +114,14 @@ public class ControladorIngreso implements Serializable {
                     nit = cadena.getNit();
                     if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
                         try {
-                            if (validarCodigoUsuario() &&
-                                    (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())
-                                    || administrarIngreso.validarAutorizador(usuario, cadena.getEsquema()))
-                                    ) {
+                            if (validarCodigoUsuario()
+                                    && (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())
+                                    || administrarIngreso.validarAutorizador(usuario, cadena.getEsquema()))) {
                                 if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
                                     if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
                                         if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave, cadena.getNit())) {
                                             //nit = cadena.getNit();
-                                            System.out.println("El usuario que ingresa es: "+usuario);
+                                            System.out.println("El usuario que ingresa es: " + usuario);
                                             System.out.println("Intervalo inactividad: " + ses.getMaxInactiveInterval());
 //                                            if (ses.getMaxInactiveInterval() >= 200) {
 //                                                System.out.println("metodo autenticacion: " + contexto.getExternalContext().getAuthType());
@@ -127,9 +129,9 @@ public class ControladorIngreso implements Serializable {
 //                                                ses = (HttpSession) contexto.getExternalContext().getSession(true);
 //                                                
 //                                            }
-                                            if (ses.isNew()){
+                                            if (ses.isNew()) {
                                                 System.out.println("La sesion es nueva.");
-                                            }else{
+                                            } else {
                                                 System.out.println("La sesion NO es nueva.");
                                             }
                                             administrarIngreso.adicionarConexionUsuario(ses.getId(), cadena.getEsquema());
