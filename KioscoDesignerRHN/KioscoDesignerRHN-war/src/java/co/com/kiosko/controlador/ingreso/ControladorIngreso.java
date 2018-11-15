@@ -188,7 +188,8 @@ public class ControladorIngreso implements Serializable {
                                 ingresoExitoso = false;
                             }
                         } catch (Exception ex1) {
-                            String mensajeExcep = ex1.getMessage();
+                            System.out.println(ex1.getMessage());
+                            String mensajeExcep = "Fallo en la conexion: "+ex1.getMessage().substring(0, 40);
                             PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                             MensajesUI.error("ERROR: " + mensajeExcep);
                             ingresoExitoso = false;

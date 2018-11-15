@@ -112,17 +112,18 @@ public class ControladorGenerarReporte implements Serializable {
         List<String> cuentasAud = leerArchivoXML.getCuentasAudOp("reportes", conexionEmpleado.getEmpleado().getEmpresa().getNit(), reporte.getCodigo());
         System.out.println("cuentas: " + cuentasAud);
         System.out.println("Enviando mensaje de auditoria");
-        
-        for (String cuentaAud : cuentasAud) {
-            if (administrarGenerarReporte.enviarCorreo(conexionEmpleado.getEmpleado().getEmpresa().getSecuencia(), cuentaAud,
-                    "Reporte Kiosko - " + reporte.getDescripcion(), 
-                    "Mensaje enviado automáticamente, por favor no responda a este correo.",
-                    pathReporteGenerado)) {
-                MensajesUI.info("El reporte de auditoria ha sido enviado exitosamente.");
-                PrimefacesContextUI.actualizar("principalForm:growl");
-            } else {
-                MensajesUI.error("No fue posible enviar el correo de auditoria, por favor comuníquese con soporte.");
-                PrimefacesContextUI.actualizar("principalForm:growl");
+        if (cuentasAud != null && !cuentasAud.isEmpty()) {
+            for (String cuentaAud : cuentasAud) {
+                if (administrarGenerarReporte.enviarCorreo(conexionEmpleado.getEmpleado().getEmpresa().getSecuencia(), cuentaAud,
+                        "Reporte Kiosko - " + reporte.getDescripcion(),
+                        "Mensaje enviado automáticamente, por favor no responda a este correo.",
+                        pathReporteGenerado)) {
+                    MensajesUI.info("El reporte de auditoria ha sido enviado exitosamente.");
+                    PrimefacesContextUI.actualizar("principalForm:growl");
+                } else {
+                    MensajesUI.error("No fue posible enviar el correo de auditoria, por favor comuníquese con soporte.");
+                    PrimefacesContextUI.actualizar("principalForm:growl");
+                }
             }
         }
 //        estaAuditado(reporte.getCodigo(), conexionEmpleado.getEmpleado().getEmpresa().getNit());
