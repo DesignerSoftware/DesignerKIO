@@ -4,12 +4,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/clasesAyuda/personalizaModulos/ModuloConfig.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/archivosConfiguracion/configModulos.xml</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/clasesAyuda/personalizaModulos/EmailMod.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/clasesAyuda/personalizaModulos/EmpresaModulo.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/clasesAyuda/LeerArchivoXML.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/clasesAyuda/personalizaModulos/AuditoriaModulo.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/KioskoDesigner/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/persistencia/implementacion/PersistenciaConexionInicial.java</file>
         </group>
     </open-files>
 </project-private>

@@ -3,6 +3,7 @@ package co.com.kiosko.controlador.kiosko;
 import co.com.kiosko.administrar.interfaz.IAdministrarCrearSolicitud;
 import co.com.kiosko.administrar.interfaz.IAdministrarGenerarReporte;
 import co.com.kiosko.clasesAyuda.ExtraeCausaExcepcion;
+import co.com.kiosko.clasesAyuda.LeerArchivoXML;
 import co.com.kiosko.controlador.ingreso.ControladorIngreso;
 import co.com.kiosko.entidades.*;
 import co.com.kiosko.utilidadesUI.MensajesUI;
@@ -51,6 +52,7 @@ public class ControladorKio_CrearSolicitud implements Serializable {
     private VwVacaPendientesEmpleados perVacaSelecto;
     private String mensajeCreacion;
     private String grupoEmpre;
+    private LeerArchivoXML leerArchivoXML;
 
     public ControladorKio_CrearSolicitud() {
         System.out.println(this.getClass().getName());
@@ -74,6 +76,8 @@ public class ControladorKio_CrearSolicitud implements Serializable {
             System.out.println("fecha periodo vaca: " + perVacaSelecto.getInicialCausacion());
             HttpServletRequest origRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
             System.out.println("URL: " + origRequest.getRequestURL());
+            leerArchivoXML = new LeerArchivoXML();
+            leerArchivoXML.leerArchivoConfigModulos();
         } catch (Exception e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
             System.out.println("Causa: " + e.getMessage());
@@ -111,6 +115,7 @@ public class ControladorKio_CrearSolicitud implements Serializable {
                     System.out.println("Empleado jefe: " + solicitud.getEmpleadoJefe().getPersona().getNombreCompleto());
                 } else {
                     System.out.println("El Empleado jefe esta vacio ");
+                    throw new Exception("El empleado jefe no esta registrado por lo que no se puede crear la solicitud.");
                 }
             } catch (Exception e) {
                 String msj = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
@@ -215,8 +220,8 @@ public class ControladorKio_CrearSolicitud implements Serializable {
                     + empleado.getPersona().getNombreCompleto() + "\n";
             if (solicitud.getAutorizador() != null) {
                 mensaje = mensaje + "La persona a cargo de DAR APROBACIÓN es: "
-                            + solicitud.getAutorizador().getNombreCompleto()
-                            + "\n";
+                        + solicitud.getAutorizador().getNombreCompleto()
+                        + "\n";
             } else {
                 if (solicitud.getEmpleadoJefe() != null) {
                     mensaje = mensaje + "La persona a cargo de DAR APROBACIÓN es: "
@@ -253,15 +258,15 @@ public class ControladorKio_CrearSolicitud implements Serializable {
             } else {
                 respuesta1 = "El empleado no tiene correo registrado";
             }
-            if (solicitud.getAutorizador() != null){
-                if (solicitud.getAutorizador().getEmail() != null && !solicitud.getAutorizador().getEmail().isEmpty()){
+            if (solicitud.getAutorizador() != null) {
+                if (solicitud.getAutorizador().getEmail() != null && !solicitud.getAutorizador().getEmail().isEmpty()) {
                     administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
                             solicitud.getAutorizador().getEmail(), asunto, mensaje, "");
                     respuesta2 = " Solicitud enviada correctamente al autorizador";
                 } else {
                     respuesta2 = " La persona que autoriza la solicitud no tiene correo";
                 }
-            }else if (solicitud.getEmpleadoJefe() != null) {
+            } else if (solicitud.getEmpleadoJefe() != null) {
                 if (solicitud.getEmpleadoJefe().getPersona().getEmail() != null && !solicitud.getEmpleadoJefe().getPersona().getEmail().isEmpty()) {
                     administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
                             solicitud.getEmpleadoJefe().getPersona().getEmail(), asunto, mensaje, "");
@@ -280,6 +285,48 @@ public class ControladorKio_CrearSolicitud implements Serializable {
             System.out.println("Error guardarSolicitud: " + mensajeCreacion);
             MensajesUI.error(mensajeCreacion);
         }
+        try {
+            generarAuditoria();
+        } catch (Exception ex) {
+            System.out.println("construirCorreo ERROR generando auditoria: ");
+            ex.printStackTrace();
+        }
+    }
+
+    private void generarAuditoria() {
+        System.out.println(this.getClass().getName() + ".generarAuditoria()");
+        Calendar dtGen = Calendar.getInstance();
+        List<String> cuentasAud = leerArchivoXML.getCuentasAudOp("solicitudVacaciones", empleado.getEmpresa().getNit(), "0131");
+        System.out.println("cuentas: " + cuentasAud);
+        System.out.println("Enviando mensaje de auditoria en la creacion de la solicitud de vacaciones");
+        if (cuentasAud != null && !cuentasAud.isEmpty()) {
+            for (String cuentaAud : cuentasAud) {
+                String mensaje = "Apreciado usuario(a):\n\n"
+                        + "Nos permitimos informar que "+empleado.getPersona().getNombreCompleto()+" generó la SOLICITUD DE VACACIONES el "
+                        + dtGen.get(Calendar.DAY_OF_MONTH) + "/" + (dtGen.get(Calendar.MONTH) + 1) + "/" + dtGen.get(Calendar.YEAR) 
+                        + " a las " + dtGen.get(Calendar.HOUR_OF_DAY) + ":" + dtGen.get(Calendar.MINUTE)+" en el módulo de Kiosco Nómina Designer.\n\n"
+                        + "Recuerde:\n"
+                        + "Esta dirección de correo es utilizada solamente para envíos automáticos de la información solicitada. "+"\n\n"
+                        + "Cordial saludo."+"\n\n--\n"
+                        + "Por favor no responda este correo, ya que no podrá ser atendido. "
+                        + "Si desea contactarse con nosotros, envíe un correo o comuníquese telefónicamente con Talento Humano de "+empleado.getEmpresa().getNombre()+"\n\n"
+                        ;
+                String asunto = "Auditoria: Nueva Solicitud de vacaciones Kiosco ";
+                if (administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(), cuentaAud,
+                        asunto,
+                        mensaje,
+                        "")) {
+                    System.out.println("El reporte de auditoria de la solicitud de Kiosko ha sido enviado exitosamente.");
+                    //MensajesUI.info("El reporte de auditoria de la solicitud de Kiosko ha sido enviado exitosamente.");
+                    //PrimefacesContextUI.actualizar("principalForm:growl");
+                } else {
+                    System.out.println("No fue posible enviar el correo de auditoria, por favor comuníquese con soporte.");
+                    //MensajesUI.error("No fue posible enviar el correo de auditoria, por favor comuníquese con soporte.");
+                    //PrimefacesContextUI.actualizar("principalForm:growl");
+                }
+            }
+        }
+//        estaAuditado(reporte.getCodigo(), conexionEmpleado.getEmpleado().getEmpresa().getNit());
     }
 
     public void guardarSolicitud() {

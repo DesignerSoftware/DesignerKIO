@@ -114,9 +114,22 @@ public class ControladorGenerarReporte implements Serializable {
         System.out.println("Enviando mensaje de auditoria");
         if (cuentasAud != null && !cuentasAud.isEmpty()) {
             for (String cuentaAud : cuentasAud) {
+                String mensaje = "Apreciado usuario(a): \n\n"
+                    + "Nos permitimos informar que el "
+                    + dtGen.get(Calendar.DAY_OF_MONTH) + "/" + (dtGen.get(Calendar.MONTH) + 1) + "/" + dtGen.get(Calendar.YEAR) + " a las " + dtGen.get(Calendar.HOUR_OF_DAY) + ":" + dtGen.get(Calendar.MINUTE)    
+                    + " se generó el "+reporte.getDescripcion()
+                    + " en el módulo de Kiosco Nómina Designer. "
+                    + "La persona que GENERÓ el reporte es: "
+                    + conexionEmpleado.getEmpleado().getPersona().getNombreCompleto() + ". \n\n";
+                mensaje = mensaje + "Le recordamos que esta dirección de correo es utilizada solamente para envíos "
+                    + "automáticos de la información solicitada. Por favor no responda este correo, "
+                    + "ya que no podrá ser atendido. Si desea contactarse con nosotros, envíe un correo "
+                    + "o comuníquese telefónicamente con Talento Humano de "
+                    + conexionEmpleado.getEmpleado().getEmpresa().getNombre() + " \n\n"
+                    + "Cordial saludo. ";
                 if (administrarGenerarReporte.enviarCorreo(conexionEmpleado.getEmpleado().getEmpresa().getSecuencia(), cuentaAud,
-                        "Reporte Kiosko - " + reporte.getDescripcion(),
-                        "Mensaje enviado automáticamente, por favor no responda a este correo.",
+                        "Auditoria: Reporte Kiosko - " + reporte.getDescripcion(),
+                        mensaje,
                         pathReporteGenerado)) {
                     MensajesUI.info("El reporte de auditoria ha sido enviado exitosamente.");
                     PrimefacesContextUI.actualizar("principalForm:growl");
@@ -245,8 +258,17 @@ public class ControladorGenerarReporte implements Serializable {
     public void validarEnviaCorreo() {
         System.out.println(this.getClass().getName() + "." + "validarEnviaCorreo" + "()");
         if (conexionEmpleado.isEnvioCorreo()) {
+            String mensaje = "Apreciado usuario(a): \n\n"
+                    + "Nos permitimos informar que se acaba de generar el "+reporte.getDescripcion()
+                    + "en el módulo de Kiosco Nómina Designer. \n\n";
+                mensaje = mensaje + "Le recordamos que esta dirección de correo es utilizada solamente para envíos "
+                    + "automáticos de la información solicitada. Por favor no responda este correo, "
+                    + "ya que no podrá ser atendido. Si desea contactarse con nosotros, envíe un correo "
+                    + "o comuníquese telefónicamente con Talento Humano de "
+                    + conexionEmpleado.getEmpleado().getEmpresa().getNombre() + " \n\n"
+                    + "Cordial saludo. ";
             if (administrarGenerarReporte.enviarCorreo(conexionEmpleado.getEmpleado().getEmpresa().getSecuencia(), email,
-                    "Reporte Kiosko - " + reporte.getDescripcion(), "Mensaje enviado automáticamente, por favor no responda a este correo.",
+                    "Reporte Kiosko - " + reporte.getDescripcion(), mensaje,
                     pathReporteGenerado)) {
                 MensajesUI.info("El reporte ha sido enviado exitosamente.");
                 PrimefacesContextUI.actualizar("principalForm:growl");

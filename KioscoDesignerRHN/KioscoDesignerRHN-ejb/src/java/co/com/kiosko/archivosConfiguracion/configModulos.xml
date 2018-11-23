@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configModulos>
-    <moduloConfig nombre="solicitudVacaciones">
-        <empresaModulo nit="800020751">
-            <auditoriaModulo codigo="0131">
+    <moduloConfig nombre="solicitudVacaciones"> <!--Modulo del kiosko-->
+        <empresaModulo nit="800020751"> <!--Empresa-->
+            <auditoriaModulo codigo="0131"> <!--OpcionKiosko-->
                 <emailsMod>
                     <cuenta>edwinh@nomina.com.co</cuenta>
                     <cuenta>edwinhasta@hotmail.com</cuenta>
@@ -17,6 +17,14 @@
                 </emailsMod>
             </auditoriaModulo>
         </empresaModulo>
+        <empresaModulo nit="830035904">
+            <auditoriaModulo codigo="0131">
+                <emailsMod>
+                    <cuenta>edwinhasta@hotmail.com</cuenta>
+                    <cuenta>disey2086@yahoo.es</cuenta>
+                </emailsMod>
+            </auditoriaModulo>
+        </empresaModulo>
     </moduloConfig>
     <moduloConfig nombre="reportes">
         <empresaModulo nit="800020751">
@@ -24,6 +32,19 @@
                 <emailsMod>
                     <cuenta>tmanrique@nomina.com.co</cuenta>
                     <cuenta>edwinhasta@hotmail.com</cuenta>
+                </emailsMod>
+            </auditoriaModulo>
+        </empresaModulo>
+        <empresaModulo nit="830045567">
+            <auditoriaModulo codigo="0126">
+                <emailsMod>
+                    <cuenta>edwinhasta@hotmail.com</cuenta>
+                    <cuenta>disey2086@yahoo.es</cuenta>
+                </emailsMod>
+            </auditoriaModulo>
+            <auditoriaModulo codigo="0128">
+                <emailsMod>
+                    <cuenta>edwinh@nomina.com.co</cuenta>
                 </emailsMod>
             </auditoriaModulo>
         </empresaModulo>

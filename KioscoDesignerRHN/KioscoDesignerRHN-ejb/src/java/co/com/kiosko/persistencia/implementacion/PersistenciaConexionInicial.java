@@ -49,7 +49,8 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
                     + "WHERE e.empresa = em.secuencia "
                     + "AND e.codigoempleado = ? "
                     + "AND em.nit = ? "
-                    + "AND EMPLEADOCURRENT_PKG.TipoTrabajadorCorte(e.secuencia, SYSDATE)='ACTIVO' ";
+                    + "AND (EMPLEADOCURRENT_PKG.TipoTrabajadorCorte(e.secuencia, SYSDATE) = 'ACTIVO' "
+                    + "OR EMPLEADOCURRENT_PKG.TipoTrabajadorCorte(e.secuencia, SYSDATE) = 'PENSIONADO')";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.setParameter(1, usuario);
             query.setParameter(2, nitEmpresa);

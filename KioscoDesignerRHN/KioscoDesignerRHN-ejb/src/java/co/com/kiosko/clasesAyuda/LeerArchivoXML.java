@@ -200,7 +200,7 @@ public class LeerArchivoXML {
                                 auditoria.setCodigo(eAudMod.getAttribute("codigo"));
                                 empresa.adicionarAuditorias(auditoria);
                                 for (int l = 0; l < ndsEmailMod.getLength(); l++) {
-                                    Element eEmailMod = (Element) ndsAudMod.item(l);
+                                    Element eEmailMod = (Element) ndsEmailMod.item(l);
                                     NodeList ndsCuentas = eEmailMod.getElementsByTagName("cuenta");
                                     EmailMod emailMod = new EmailMod();
                                     auditoria.adicionarCorreoModulo(emailMod);
@@ -245,8 +245,11 @@ public class LeerArchivoXML {
                 for (EmpresaModulo empresaModulo : moduloConfig.getEmpresas()) {
                     if (empresaModulo.getNit().equalsIgnoreCase( String.valueOf(empresa) )){
                         for(AuditoriaModulo auditoriaModulo : empresaModulo.getAuditorias()){
+                            System.out.println("auditoriaModulo: "+auditoriaModulo.getCodigo());
                             if (auditoriaModulo.getCodigo().equalsIgnoreCase(opcion)){
+                                System.out.println(auditoriaModulo.getCodigo()+": "+auditoriaModulo.getEmailMods().size());
                                 for(EmailMod emailMod : auditoriaModulo.getEmailMods() ){
+                                    System.out.println("cuentas: "+emailMod.getCuentas());
                                     return emailMod.getCuentas();
                                 }
                             }
