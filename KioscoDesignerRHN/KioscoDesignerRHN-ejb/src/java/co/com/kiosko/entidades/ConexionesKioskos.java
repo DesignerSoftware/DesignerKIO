@@ -33,18 +33,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ConexionesKioskos.findAll", query = "SELECT c FROM ConexionesKioskos c")})
-//@TableGenerator(name = "STABLAS")
 public class ConexionesKioskos implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Size(max = 20, message = "El seudónimo puede tener máximo 20 letras.")
     @Column(name = "SEUDONIMO")
     private String seudonimo;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "STABLAS")
+//    @Column(name = "SECUENCIA", updatable = false, nullable = false)
     @Id
-//    @GeneratedValue(strategy=GenerationType.IDENTITY , generator="STABLAS")
-//    @Basic(optional = false)
-//    @NotNull
     @Column(name = "SECUENCIA")
     private BigDecimal secuencia;
     //@Lob

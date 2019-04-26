@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='ISO-8859-1' ?>
+<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition
     xmlns="http://www.w3.org/1999/xhtml"
@@ -66,6 +66,9 @@
                     <p:column headerText="ESTADO SOLICITUD" >
                         <h:outputText value="#{solici.estado}" />
                     </p:column>
+                    <p:column headerText="MOTIVO" >
+                        <h:outputText value="#{solici.motivoProcesa}" />
+                    </p:column>
                     <f:facet name="footer">
                         <p:commandButton process="tbempleados" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitudes" oncomplete="PF('soliciDialog').show()" />
                     </f:facet>
@@ -123,8 +126,6 @@
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText> 
 
-                <h:outputText value="A pagar con la nómina: " />
-                <h:outputText value="#{controladorKio_VerSoliciSinProcesar.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.pagarPorFuera}" />
             </p:panelGrid>
             <br/>
             <br/>
@@ -139,7 +140,7 @@
                         <p:ajax update="@this, txtmotivo" listener="#{controladorKio_VerSoliciSinProcesar.cambiarEstado()}"/>
                     </p:selectOneMenu>
                     <p:outputLabel for="txtmotivo" value="Motivo: " />
-                    <p:inputText id="txtmotivo" value="#{controladorKio_VerSoliciSinProcesar.motivo}" disabled="#{controladorKio_VerSoliciSinProcesar.inacMotivo}"/>
+                    <p:inputText id="txtmotivo" value="#{controladorKio_VerSoliciSinProcesar.motivo}" />
                     <p:outputLabel for="btnProc" value="Dé clic para aplicar el cambio" />
                     <p:commandButton id="btnProc" value="PROCESAR" onclick="PF('confirmEnvio').show();"
                                      process="@form" />

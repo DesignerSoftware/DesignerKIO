@@ -4,6 +4,7 @@ import co.com.kiosko.administrar.interfaz.IAdministrarGenerarReporte;
 import co.com.kiosko.administrar.interfaz.IAdministrarHistoVacas;
 import co.com.kiosko.administrar.interfaz.IAdministrarProcesarSolicitud;
 import co.com.kiosko.clasesAyuda.ExtraeCausaExcepcion;
+import co.com.kiosko.clasesAyuda.LeerArchivoXML;
 import co.com.kiosko.controlador.ingreso.ControladorIngreso;
 import co.com.kiosko.entidades.Empleados;
 import co.com.kiosko.entidades.KioEstadosSolici;
@@ -20,7 +21,7 @@ import javax.el.ELException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
+//import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -50,6 +51,7 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
     private String mensajeCreacion;
     private String grupoEmpre;
     private boolean salirPagina;
+    private LeerArchivoXML leerArchivoXML;
     @EJB
     IAdministrarHistoVacas administrarHistoVacas;
     @EJB
@@ -72,6 +74,8 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
             long nit = Long.parseLong(((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit());
             grupoEmpre = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getGrupoSeleccionado();
             consultasIniciales(ses, nit);
+            leerArchivoXML = new LeerArchivoXML();
+            leerArchivoXML.leerArchivoConfigModulos();
         } catch (ELException e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
             System.out.println("Causa: " + e.getCause());
@@ -117,8 +121,8 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
         this.empleadoSelec = null;
         this.estadoNuevo = "";
         this.motivo = "";
-        mensajeCreacion="";
-        grupoEmpre="";
+        mensajeCreacion = "";
+        grupoEmpre = "";
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -182,11 +186,11 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             ExternalContext ec = context.getExternalContext();
-            String procesado = ("RECHAZADO".equals(estadoNuevo) ? "RECHAZAR" : "APROBAR");
-            String procesadoConj = ("RECHAZADO".equals(estadoNuevo) ? "RECHAZÓ" : "APROBÓ");
+            String procesado = ("RECHAZADO".equals(estadoNuevo) ? "RECHAZAR" : "PRE-APROBAR");
+            String procesadoConj = ("RECHAZADO".equals(estadoNuevo) ? "RECHAZÓ" : "PRE-APROBÓ");
             String mensaje = "Apreciado usuario(a): \n\n"
                     + "Nos permitimos informar que se acaba de " + procesado + " una solicitud de vacaciones "
-                    + "creada para "+solicitudSelec.getKioSoliciVaca().getEmpleado().getPersona().getNombreCompleto()+" "
+                    + "creada para " + solicitudSelec.getKioSoliciVaca().getEmpleado().getPersona().getNombreCompleto() + " "
                     + "en el módulo de Kiosco Nómina Designer. "
                     + "Por favor llevar el caso desde su cuenta de usuario en el portal de Kiosco "
                     + "y continuar con el proceso. \n\n"
@@ -210,14 +214,14 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
             Calendar fechaEnvio = Calendar.getInstance();
             Calendar fechaDisfrute = Calendar.getInstance();
             fechaDisfrute.setTime(solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getFechaInicialDisfrute());
-            String asunto = "Solicitud de vacaciones Kiosco - "+procesadoConj.toLowerCase()+": "
-                    +fechaEnvio.get(Calendar.YEAR)+"/"+(fechaEnvio.get(Calendar.MONTH)+1)+"/"+fechaEnvio.get(Calendar.DAY_OF_MONTH)
-                    +". Inicio de vacaciones: "
-                    +fechaDisfrute.get(Calendar.YEAR)+"/"+(fechaDisfrute.get(Calendar.MONTH)+1)+"/"+fechaDisfrute.get(Calendar.DAY_OF_MONTH);
+            String asunto = "Solicitud de vacaciones Kiosco - " + procesadoConj.toLowerCase() + ": "
+                    + fechaEnvio.get(Calendar.YEAR) + "/" + (fechaEnvio.get(Calendar.MONTH) + 1) + "/" + fechaEnvio.get(Calendar.DAY_OF_MONTH)
+                    + ". Inicio de vacaciones: "
+                    + fechaDisfrute.get(Calendar.YEAR) + "/" + (fechaDisfrute.get(Calendar.MONTH) + 1) + "/" + fechaDisfrute.get(Calendar.DAY_OF_MONTH);
             if (this.solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getEmpleado().getPersona().getEmail() != null
                     && !this.solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getEmpleado().getPersona().getEmail().isEmpty()) {
                 administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
-                        this.solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getEmpleado().getPersona().getEmail(), 
+                        this.solicitudSelec.getKioSoliciVaca().getKioNovedadesSolici().getEmpleado().getPersona().getEmail(),
                         asunto, mensaje, "");
                 respuesta1 = "Solicitud enviada correctamente al empleado";
             } else {
@@ -242,6 +246,49 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
             mensajeCreacion = ExtraeCausaExcepcion.obtenerMensajeSQLException(e);
             System.out.println("Error guardarSolicitud: " + mensajeCreacion);
             MensajesUI.error(mensajeCreacion);
+        }
+        try {
+            generarAuditoria();
+        } catch (Exception ex) {
+            System.out.println("ControladorKio_VerSoliciSinProcesar");
+            System.out.println("construirCorreo ERROR generando auditoria: ");
+            ex.printStackTrace();
+        }
+    }
+
+    private void generarAuditoria() {
+        Calendar dtGen = Calendar.getInstance();
+        System.out.println(dtGen.get(Calendar.YEAR) + "/" + (dtGen.get(Calendar.MONTH) + 1) + "/" + dtGen.get(Calendar.DAY_OF_MONTH) + " " + dtGen.get(Calendar.HOUR_OF_DAY) + ":" + dtGen.get(Calendar.MINUTE));
+        List<String> cuentasAud = leerArchivoXML.getCuentasAudOp("solicitudVacaciones", solicitudSelec.getKioSoliciVaca().getEmpleado().getEmpresa().getNit(), "0133");
+        System.out.println("cuentas0133: " + cuentasAud);
+        System.out.println("Enviando mensaje de auditoria");
+        if (cuentasAud != null && !cuentasAud.isEmpty()) {
+            for (String cuentaAud : cuentasAud) {
+                String procesadoConj = ("RECHAZADO".equals(estadoNuevo) ? "RECHAZÓ" : "PRE-APROBÓ");
+                String mensaje = "Apreciado usuario(a): \n\n"
+                        + "Nos permitimos informar que el "
+                        + dtGen.get(Calendar.DAY_OF_MONTH) + "/" + (dtGen.get(Calendar.MONTH) + 1) + "/" + dtGen.get(Calendar.YEAR) + " a las " + dtGen.get(Calendar.HOUR_OF_DAY) + ":" + dtGen.get(Calendar.MINUTE)
+                        + " se " + procesadoConj + " la solicitud de vacaciones de " + solicitudSelec.getKioSoliciVaca().getEmpleado().getPersona().getNombreCompleto()
+                        + " en el módulo de Kiosco Nómina Designer. "
+                        + "La persona que PROCESÓ la solicitud es: "
+                        + empleado.getPersona().getNombreCompleto() + ". \n\n";
+                mensaje = mensaje + "Le recordamos que esta dirección de correo es utilizada solamente para envíos "
+                        + "automáticos de la información solicitada. Por favor no responda este correo, "
+                        + "ya que no podrá ser atendido. Si desea contactarse con nosotros, envíe un correo "
+                        + "o comuníquese telefónicamente con Talento Humano de "
+                        + solicitudSelec.getKioSoliciVaca().getEmpleado().getEmpresa().getNombre() + " \n\n"
+                        + "Cordial saludo. ";
+                if (administrarGenerarReporte.enviarCorreo(solicitudSelec.getKioSoliciVaca().getEmpleado().getEmpresa().getSecuencia(), cuentaAud,
+                        "Auditoria: Pre-aprobación - solicitud de vacaciones",
+                        mensaje,
+                        "")) {
+                    MensajesUI.info("El reporte de auditoria ha sido enviado exitosamente.");
+                    PrimefacesContextUI.actualizar("principalForm:growl");
+                } else {
+                    MensajesUI.error("No fue posible enviar el correo de auditoria, por favor comuníquese con soporte.");
+                    PrimefacesContextUI.actualizar("principalForm:growl");
+                }
+            }
         }
     }
 

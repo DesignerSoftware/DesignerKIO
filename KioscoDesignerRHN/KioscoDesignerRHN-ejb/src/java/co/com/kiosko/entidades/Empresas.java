@@ -48,7 +48,7 @@ public class Empresas implements Serializable {
 //    @Size(max = 50)
 //    @Column(name = "CODIGOALTERNATIVO")
 //    private String codigoalternativo;
-    @Size(max = 50)
+//    @Size(max = 50)
     @Column(name = "LOGO")
     private String logo;
 

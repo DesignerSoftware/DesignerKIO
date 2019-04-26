@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='ISO-8859-1' ?> 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
@@ -46,7 +46,9 @@
 
     <h:body>
         <h:form id="principalForm" enctype="multipart/form-data">
-            <p:growl id="growl" widgetVar="growl" showDetail="true" autoUpdate="true"/>
+            <p:growl id="growl" widgetVar="growl" showDetail="true" >
+                <p:autoUpdate/>
+            </p:growl>
             <div id="top" class="top">
                 <ui:insert name="top">
                     <ui:include src="/Kiosko/inicioKiosko.xhtml" />
@@ -54,7 +56,9 @@
             </div>
             <div id="messagesout" class="top">
                 <p:messages id="messagessgeneral" showDetail="true"
-                            autoUpdate="true" closable="true"/>
+                    closable="true">
+                    <p:autoUpdate />
+                </p:messages>
 
             </div>
             <div class="center_content">

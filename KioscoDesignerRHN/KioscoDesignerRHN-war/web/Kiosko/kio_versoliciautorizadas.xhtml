@@ -121,9 +121,7 @@
                 <h:outputText value="#{controladorKio_VerSoliciAutorizadas.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.fechaPago}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText> 
-
-                <h:outputText value="A pagar con la nómina: " />
-                <h:outputText value="#{controladorKio_VerSoliciAutorizadas.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.pagarPorFuera}" />
+                
             </p:panelGrid>
             <p:panelGrid columns="2" rendered="#{not empty controladorKio_VerSoliciAutorizadas.solicitudSelec}">
                 <p:outputLabel for="opcionproc" value="Seleccione una opción a aplicar: " />

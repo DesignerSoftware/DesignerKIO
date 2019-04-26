@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='ISO-8859-1' ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition
     xmlns="http://www.w3.org/1999/xhtml"
@@ -21,28 +21,30 @@
                     <p:panelGrid columns="1" styleClass="noBorders" >
                         <p:panelGrid id="pnlFechas" columns="4" styleClass="noBorders">
                             <p:outputLabel for="desde" value="Fecha Desde: " />
-                            <p:calendar id="desde" value="#{controladorGenerarReporte.conexionEmpleado.fechadesde}"
-                                        pattern="dd/MM/yyyy" mask="true" locale="es"/>
+                            <p:calendar id="desde" widgetVar="desde" value="#{controladorGenerarReporte.conexionEmpleado.fechadesde}"
+                                        pattern="dd/MM/yyyy" mask="true" locale="es"
+                                        showOn="button" style="width: 90px;" />
                             <p:outputLabel for="hasta" value="Fecha Hasta: " />
-                            <p:calendar id="hasta" value="#{controladorGenerarReporte.conexionEmpleado.fechahasta}"
-                                        pattern="dd/MM/yyyy" mask="true" locale="es"/>
+                            <p:calendar id="hasta" widgetVar="hasta" value="#{controladorGenerarReporte.conexionEmpleado.fechahasta}"
+                                        pattern="dd/MM/yyyy" mask="true" locale="es"
+                                        showOn="button" style="width: 90px;"/>
                         </p:panelGrid>
                         <p:panelGrid id="pnlEnvioCorreo" columns="2" styleClass="noBorders">
-                            <p:outputLabel for="enviarCorreo" value="¿Desea enviar el reporte por correo?: " />
-                            <p:selectBooleanCheckbox id="enviarCorreo" value="#{controladorGenerarReporte.enviocorreo}" >
+                            <p:outputLabel for="enviarCorreo" value="Â¿Desea enviar el reporte por correo?: " />
+                            <p:selectBooleanCheckbox id="enviarCorreo" widgetVar="enviarCorreo" value="#{controladorGenerarReporte.enviocorreo}" >
                                 <p:ajax update=":principalForm:pnlEnvioCorreo" />
                             </p:selectBooleanCheckbox>
                             <p:column>
                                 <p:outputLabel for="correoDestino" value="E-mail: " style="display: #{controladorGenerarReporte.conexionEmpleado.envioCorreo ? '' : 'none'}"/>
-                                <p:inputText id="correoDestino" value="#{controladorGenerarReporte.email}" style="display: #{controladorGenerarReporte.conexionEmpleado.envioCorreo ? '' : 'none'}"/>
+                                <p:inputText id="correoDestino" widgetVar="correoDestino" value="#{controladorGenerarReporte.email}" style="width: 260px; display: #{controladorGenerarReporte.conexionEmpleado.envioCorreo ? '' : 'none'}"/>
                             </p:column>
                         </p:panelGrid>
                         
                         <p:panelGrid id="pnlInfoAdicional" columns="2" styleClass="noBorders" rendered="#{controladorGenerarReporte.reporte.destino}">
                             <p:outputLabel for="dirigida" value="Constancia dirigida a: " />
-                            <p:inputText id="dirigida" value="#{controladorGenerarReporte.conexionEmpleado.dirigidoa}"/>
+                            <p:inputText id="dirigida" widgetVar="dirigida" value="#{controladorGenerarReporte.conexionEmpleado.dirigidoa}"/>
                             <!--
-                            <p:outputLabel for="area" value="Constancia al área de:" />
+                            <p:outputLabel for="area" value="Constancia al Ã¡rea de:" />
                             <p:inputText id="area" value="#{controladorGenerarReporte.areaDe}"/> 
                             -->
                         </p:panelGrid>
@@ -70,11 +72,11 @@
     </p:panel>
 
 
-    <p:dialog id="generandoReporte" header="Informaci&oacute;n" widgetVar="generandoReporte"  resizable="false" draggable="false" modal="true" height="85" width="350px" style="font-size: 12px;" closable="true">  
+    <p:dialog id="generandoReporte" widgetVar="generandoReporte" header="Informaci&oacute;n" resizable="false" draggable="false" modal="true" height="85" width="350px" style="font-size: 12px;" closable="true">  
         <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50" style="position: absolute; left: 15px; top: 20px;"  />
         <h:outputText value="Generando reporte, esto puede tardar un poco..." style="position: absolute; left: 80px; top: 20px; width: 240px; text-align: justify" />
     </p:dialog>
-    <p:dialog id="errorGenerandoReporte" header="Error generando el reporte" widgetVar="errorGenerandoReporte"  resizable="false" draggable="false" modal="true" height="90" width="350px" style="font-size: 12px">  
+    <p:dialog id="errorGenerandoReporte" widgetVar="errorGenerandoReporte" header="Error generando el reporte" resizable="false" draggable="false" modal="true" height="90" width="350px" style="font-size: 12px">  
         <p:inputTextarea value="#{controladorGenerarReporte.pathReporteGenerado}" style="position: absolute; left: 10px; top: 20px; width: 300px; height: 70px; overflow: auto;" readonly="true" />
     </p:dialog>
 
@@ -89,9 +91,9 @@
     </p:dialog>
     <p:remoteCommand name="reiniciarStreamedContent" actionListener="#{controladorGenerarReporte.reiniciarStreamedContent()}"/>
 
-    <p:dialog id="dlgVerificarFechas" header="Verificar fechas" widgetVar="dlgVerificarFechas"
+    <p:dialog id="dlgVerificarFechas" widgetVar="dlgVerificarFechas" header="Verificar fechas" 
               resizable="false" draggable="false" modal="true"  closable="false" width="500">
-        <p:panelGrid columns="2"  styleClass="noBorders">
+        <p:panelGrid columns="2" styleClass="noBorders">
             <h:graphicImage value="resources/imagenes/alerta.jpg" width="90" height="70"  />
             <p align="justify">
                 Para generar el <strong>Certificado de Ingresos y Retenciones</strong> se 

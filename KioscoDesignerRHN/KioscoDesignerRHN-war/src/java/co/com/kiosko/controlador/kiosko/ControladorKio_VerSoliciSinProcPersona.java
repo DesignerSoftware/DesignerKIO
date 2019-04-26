@@ -207,8 +207,8 @@ public class ControladorKio_VerSoliciSinProcPersona implements Serializable {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             ExternalContext ec = context.getExternalContext();
-            String procesado = ("RECHAZADO".equals(estadoNuevo) ? "RECHAZAR" : "APROBAR");
-            String procesadoConj = ("RECHAZADO".equals(estadoNuevo) ? "RECHAZÓ" : "APROBÓ");
+            String procesado = ("RECHAZADO".equals(estadoNuevo) ? "RECHAZAR" : "PRE-APROBAR");
+            String procesadoConj = ("RECHAZADO".equals(estadoNuevo) ? "RECHAZÓ" : "PRE-APROBÓ");
             String mensaje = "Apreciado usuario(a): \n\n"
                     + "Nos permitimos informar que se acaba de " + procesado + " una solicitud de vacaciones "
                     + "creada para " + solicitudSelec.getKioSoliciVaca().getEmpleado().getPersona().getNombreCompleto() + " "

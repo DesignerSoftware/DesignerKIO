@@ -66,6 +66,9 @@
                     <p:column headerText="ESTADO SOLICITUD" >
                         <h:outputText value="#{solici.estado}" />
                     </p:column>
+                    <p:column headerText="MOTIVO" >
+                        <h:outputText value="#{solici.motivoProcesa}" />
+                    </p:column>
                     <f:facet name="footer">
                         <p:commandButton process="tbempleados" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitudes" oncomplete="PF('soliciDialog').show()" />
                     </f:facet>
@@ -123,8 +126,6 @@
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText> 
 
-                <h:outputText value="A pagar con la nómina: " />
-                <h:outputText value="#{controladorKio_VerSoliciSinProcPersona.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.pagarPorFuera}" />
             </p:panelGrid>
             <br/>
             <br/>
@@ -139,7 +140,7 @@
                         <p:ajax update="@this, txtmotivo" listener="#{controladorKio_VerSoliciSinProcPersona.cambiarEstado()}"/>
                     </p:selectOneMenu>
                     <p:outputLabel for="txtmotivo" value="Motivo: " />
-                    <p:inputText id="txtmotivo" value="#{controladorKio_VerSoliciSinProcPersona.motivo}" disabled="#{controladorKio_VerSoliciSinProcPersona.inacMotivo}"/>
+                    <p:inputText id="txtmotivo" value="#{controladorKio_VerSoliciSinProcPersona.motivo}" />
                     <p:outputLabel for="btnProc" value="Dé clic para aplicar el cambio" />
                     <p:commandButton id="btnProc" value="PROCESAR" onclick="PF('confirmEnvio').show();"
                                      process="@form" />

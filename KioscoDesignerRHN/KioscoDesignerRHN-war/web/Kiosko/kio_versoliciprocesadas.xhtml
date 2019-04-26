@@ -57,6 +57,9 @@
                     <p:column headerText="ESTADO SOLICITUD" >
                         <h:outputText value="#{solici.estado}" />
                     </p:column>
+                    <p:column headerText="MOTIVO" >
+                        <h:outputText value="#{solici.motivoProcesa}" />
+                    </p:column>
                     <f:facet name="footer">
                         <p:commandButton process="tbempleados" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitudes" oncomplete="PF('soliciDialog').show()" />
                     </f:facet>
@@ -112,8 +115,6 @@
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText> 
 
-                <h:outputText value="A pagar con la nómina: " />
-                <h:outputText value="#{controladorKio_VerSoliciProcesadas.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.pagarPorFuera}" />
             </p:panelGrid>
             <center>
                 <p:commandButton value="REGRESAR" onclick="PF('soliciDialog').hide();" />

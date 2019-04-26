@@ -18,8 +18,8 @@ import javax.persistence.EntityManagerFactory;
  *
  * @author Felipe Triviño
  */
-@Stateful
 //@Stateless
+@Stateful
 public class AdministrarOlvidoClave implements IAdministrarOlvidoClave, Serializable {
 
     @EJB

@@ -35,9 +35,11 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
         } catch (NullPointerException npe) {
             System.out.println("PersistenciaConexionInicial.setearKiosko()-2");
             System.out.println("Error de nulo");
-            throw new Exception(npe);
+//            throw new Exception(npe);
+            throw npe;
         } catch (Exception e) {
             System.out.println("PersistenciaConexionInicial.setearKiosko()-2 " + e.getMessage());
+            throw e;
         }
     }
 
@@ -60,7 +62,8 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
         } catch (Exception e) {
             System.out.println("Error PersistenciaConexionInicial.validarUsuarioyEmpresa: " + e);
             resultado = false;
-            throw new Exception(e);
+//            throw new Exception(e);
+            throw e;
         }
         return resultado;
     }
