@@ -172,7 +172,7 @@ public class ControladorIngreso implements Serializable {
                                         } else {
                                             //USUARIO BLOQUEADO
                                             PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
-                                            MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de soporte.");
+                                            MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de recursos humanos de su empresa.");
                                             ingresoExitoso = false;
                                         }
                                     } else {
@@ -200,7 +200,7 @@ public class ControladorIngreso implements Serializable {
                         } else {
                             //UNIDAD DE PERSISTENCIA INVALIDA - REVISAR ARCHIVO DE CONFIGURACION
                             PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
-                            MensajesUI.fatal("Unidad de persistencia inválida, por favor contactar al área de soporte.");
+                            MensajesUI.fatal("Unidad de persistencia inválida, por favor contactar al área de recursos humanos de su empresa.");
                             ingresoExitoso = false;
                         }
                     } catch(Exception ex1){
@@ -279,7 +279,7 @@ public class ControladorIngreso implements Serializable {
                             } else {
                                 //USUARIO BLOQUEADO
                                 PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
-                                MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de soporte.");
+                                MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de recursos humanos de su empresa.");
                             }
                         } else {
                             PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
@@ -299,7 +299,7 @@ public class ControladorIngreso implements Serializable {
             } else {
                 //UNIDAD DE PERSISTENCIA INVALIDA - REVISAR ARCHIVO DE CONFIGURACION
                 PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
-                MensajesUI.fatal("Unidad de persistencia inválida, por favor contactar al área de soporte.");
+                MensajesUI.fatal("Unidad de persistencia inválida, por favor contactar al área de recursos humanos de su empresa.");
             }
         } else {
             PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
