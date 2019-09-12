@@ -3,6 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Soporte/Documents/NetBeansProjects/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-war/src/java/co/com/kiosko/controlador/ingreso/ControladorIngreso.java</file>
+            <file>file:/C:/Users/Soporte/Documents/NetBeansProjects/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-war/web/Ingreso/olvidoClave.xhtml</file>
+            <file>file:/C:/Users/Soporte/Documents/NetBeansProjects/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-war/src/java/co/com/kiosko/controlador/ingreso/ControladorOlvidoClave.java</file>
+            <file>file:/C:/Users/Soporte/Documents/NetBeansProjects/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-war/web/Ingreso/ingreso.xhtml</file>
+        </group>
     </open-files>
 </project-private>

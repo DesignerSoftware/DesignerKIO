@@ -3,6 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Soporte/Documents/NetBeansProjects/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/persistencia/implementacion/PersistenciaConexionesKioskos.java</file>
+            <file>file:/C:/Users/Soporte/Documents/NetBeansProjects/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/administrar/implementacion/AdministrarInicioKiosko.java</file>
+            <file>file:/C:/Users/Soporte/Documents/NetBeansProjects/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/administrar/implementacion/AdministrarOlvidoClave.java</file>
+            <file>file:/C:/Users/Soporte/Documents/NetBeansProjects/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/persistencia/implementacion/PersistenciaPreguntasKioskos.java</file>
+            <file>file:/C:/Users/Soporte/Documents/NetBeansProjects/DesignerKIO/KioscoDesignerRHN/KioscoDesignerRHN-ejb/src/java/co/com/kiosko/administrar/implementacion/AdministrarIngreso.java</file>
+        </group>
     </open-files>
 </project-private>

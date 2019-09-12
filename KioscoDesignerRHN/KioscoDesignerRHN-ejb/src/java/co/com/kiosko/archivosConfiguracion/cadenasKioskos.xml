@@ -90,4 +90,22 @@
         <emplnomina></emplnomina>
         <esquema></esquema>
     </cadenaKiosko>
+    <cadenaKiosko id="10">
+        <descripcion>SERVICIOS ONLINE SAS</descripcion>
+        <cadena>DEFAULT4</cadena>
+        <nit>900330500</nit>
+        <fondo>fondoMenu.png</fondo>
+        <grupo>GrupoEmpresarial4</grupo>
+        <emplnomina></emplnomina>
+        <esquema></esquema>
+    </cadenaKiosko> 
+    <cadenaKiosko id="11">
+        <descripcion>DESPEGAR COLOMBIA SAS</descripcion>
+        <cadena>DEFAULT4</cadena>
+        <nit>900610518</nit>
+        <fondo>fondoMenu.png</fondo>
+        <grupo>GrupoEmpresarial4</grupo>
+        <emplnomina></emplnomina>
+        <esquema></esquema>
+    </cadenaKiosko>         
 </conexiones>

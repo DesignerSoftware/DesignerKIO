@@ -199,7 +199,7 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializab
         List listaTMP;
         for (int i = 0; i < listaEstados.size(); i++) {
             EntityManager em = emf.createEntityManager();
-            if (autorizador == null) {
+            /*if (autorizador == null) {
                 try {
                     listaTMP = persistenciaKioEstadosSolici.consultarEstadosXEmpre(em, secEmpresa, listaEstados.get(i));
                     System.out.println("listaTMP-1: " + listaTMP.size());
@@ -210,7 +210,8 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializab
                         em.close();
                     }
                 }
-            } else {
+            } else {*/
+            if (autorizador != null) {
                 System.out.println("consultarEstadoSoliciEmpre-else");
                 try {
                     listaTMP = persistenciaKioEstadosSolici.consultarEstadosXEmpre(em, listaEstados.get(i), autorizador.getSecuencia());
@@ -222,6 +223,8 @@ public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializab
                         em.close();
                     }
                 }
+            }else{
+                listaTMP = new ArrayList();
             }
             listaResul.addAll(listaTMP);
             System.out.println("listaResul-1: " + listaResul.size());

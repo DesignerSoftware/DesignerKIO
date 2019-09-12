@@ -208,7 +208,8 @@ public class ControladorIngreso implements Serializable {
                         System.out.println("MSJ_RAW: "+ex1);
 //                        String msjex = ExtraeCausaExcepcion.getLastThrowable(ex1).getMessage();
 //                        System.out.println("MSJ_EX: "+msjex);
-                        MensajesUI.fatal("Hubo un error de conexion");
+                        //MensajesUI.fatal("Hubo un error de conexion, por favor ingresa nuevamente.");    
+                        MensajesUI.fatal("Hubo un error de conexion, por favor ingresa nuevamente!."); //20190827 Tm
                     }
                 } else {
                     PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
@@ -266,7 +267,7 @@ public class ControladorIngreso implements Serializable {
             nit = cadena.getNit();
             if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
                 try {
-                    if ((administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())
+                    if ((administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema()) 
                             || administrarIngreso.validarAutorizador(usuario, cadena.getEsquema()))
                             && validarCodigoUsuario()) {
                         if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {

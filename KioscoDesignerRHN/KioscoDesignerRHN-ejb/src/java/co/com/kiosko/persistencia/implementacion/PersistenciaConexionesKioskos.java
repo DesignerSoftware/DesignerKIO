@@ -46,6 +46,8 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
         System.out.println("eManager: " + eManager);
         System.out.println("codigoEmpleado: " + codigoEmpleado);
         System.out.println("nitEmpresa: " + nitEmpresa);
+        System.out.println("Codigoempleado:: "+codigoEmpleado); //agregado por Tm 20190828
+            System.out.println("nitEmpresa:: "+nitEmpresa); // agregado por Tm 20190828
         try {
             String sqlQuery = "SELECT ck FROM ConexionesKioskos ck WHERE ck.empleado.codigoempleado = :codigoEmpleado and ck.empleado.empresa.nit = :nitEmpresa";
             Query query = eManager.createQuery(sqlQuery);
@@ -53,7 +55,7 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
             query.setParameter("nitEmpresa", nitEmpresa);
             return (ConexionesKioskos) query.getSingleResult();
         } catch (Exception e) {
-            System.out.println("Error PersistenciaConexionesKioskos.consultarConexionEmpleado: " + e);
+            System.out.println("Error PersistenciaConexionesKioskos.consultarConexionEmpleado(eManager, codigoempleado, nitEmpresa): " + e);
             try {
             } catch (NullPointerException npe) {
                 System.out.println("La transacción es nula.");
@@ -67,12 +69,12 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
         System.out.println("eManager: " + eManager);
         System.out.println("codigoEmpleado: " + numerodocumento);
         try {
-            String sqlQuery = "SELECT ck FROM ConexionesKioskos ck WHERE ck.persona.numerodocumento = :numeroDocumento";
+            String sqlQuery = "SELECT ck FROM ConexionesKioskos ck WHERE ck.persona.numerodocumento = :numeroDocumento)";
             Query query = eManager.createQuery(sqlQuery);
             query.setParameter("numeroDocumento", new BigInteger(numerodocumento));
             return (ConexionesKioskos) query.getSingleResult();
         } catch (Exception e) {
-            System.out.println("Error PersistenciaConexionesKioskos.consultarConexionEmpleado: " + e);
+            System.out.println("Error PersistenciaConexionesKioskos.consultarConexionEmpleado(eManager, numerodocumento): " + e);
             try {
             } catch (NullPointerException npe) {
                 System.out.println("La transacción es nula.");

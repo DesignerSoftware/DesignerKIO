@@ -134,7 +134,8 @@ public class ControladorKio_VerSoliciProcPersona implements Serializable {
         System.out.println(this.getClass().getName() + ".getEmpleadosACargo()");
         if (empleadosACargo == null || empleadosACargo.isEmpty()) {
             try {
-                empleadosACargo = administrarHistoVacas.consultarEmpleadosEmpresa(nit);
+                //empleadosACargo = administrarHistoVacas.consultarEmpleadosEmpresa(nit); 
+                empleadosACargo=administrarHistoVacas.consultarEmpleadosAutorizador(nit, personaCon); //se añadió un filtro por autorizador
             } catch (Exception e) {
                 System.out.println("Error getEmpleadosACargo: " + this.getClass().getName() + ": " + e);
                 System.out.println("Causa: " + e.getCause());

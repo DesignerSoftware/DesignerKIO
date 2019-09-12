@@ -148,7 +148,8 @@ public class ControladorKio_VerSoliciProcesadas implements Serializable{
         System.out.println(this.getClass().getName() + ".getEmpleadosACargo()");
         if (empleadosACargo == null || empleadosACargo.isEmpty()) {
             try {
-                empleadosACargo = administrarHistoVacas.consultarEmpleadosEmpresa(empleado.getEmpresa().getNit());
+                //empleadosACargo = administrarHistoVacas.consultarEmpleadosEmpresa(empleado.getEmpresa().getNit());
+                empleadosACargo = administrarHistoVacas.consultarEmpleadosJefe(empleado.getEmpresa().getNit(), empleado);//////verificar
             } catch (Exception e) {
                 System.out.println("Error getEmpleadosACargo: " + this.getClass().getName() + ": " + e);
                 System.out.println("Causa: " + e.getCause());
