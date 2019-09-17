@@ -33,7 +33,7 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     private String unidadPersistencia;
 //    private final ISesionEntityManagerFactory sessionEMF;
 
-    private EntityManagerFactory emf;
+    private transient EntityManagerFactory emf;
 
 //    public AdministrarIngreso() {
 //        sessionEMF = new SesionEntityManagerFactory();

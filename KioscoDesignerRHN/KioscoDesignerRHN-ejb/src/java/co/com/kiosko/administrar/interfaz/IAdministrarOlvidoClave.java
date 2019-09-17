@@ -12,6 +12,8 @@ public interface IAdministrarOlvidoClave {
     public void obtenerConexion(String idSesion);
 
     public ConexionesKioskos obtenerConexionEmpleado(String codigoEmpleado, String nitEmpresa);
+    
+    public ConexionesKioskos obtenerConexionPersona(String numeroDocumento, long nitEmpresa);
 
     public boolean validarRespuestas(String respuesta1, String respuesta2, byte[] respuestaC1, byte[] respuestaC2);
 

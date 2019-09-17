@@ -42,7 +42,7 @@ public class AdministrarPrimerIngreso implements IAdministrarPrimerIngreso, Seri
     private IPersistenciaUtilidadesBD persistenciaUtilidadesBD;
     @EJB
     private IPersistenciaParametrizaClave persistenciaParametrizaClave;
-    private EntityManagerFactory emf;
+    private transient EntityManagerFactory emf;
 
     @Override
     public void obtenerConexion(String idSesion) {

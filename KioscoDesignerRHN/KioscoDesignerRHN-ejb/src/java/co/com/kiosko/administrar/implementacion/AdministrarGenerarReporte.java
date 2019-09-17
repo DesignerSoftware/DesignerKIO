@@ -39,7 +39,7 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte, Se
     @EJB
     private IniciarReporteInterface reporte;
 
-    private EntityManagerFactory emf;
+    private transient EntityManagerFactory emf;
     private String idSesion;
 
     @Override

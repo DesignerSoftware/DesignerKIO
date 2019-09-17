@@ -30,7 +30,7 @@ public class AdministrarOlvidoClave implements IAdministrarOlvidoClave, Serializ
     private IPersistenciaUtilidadesBD persistenciaUtilidadesBD;
     @EJB
     private IPersistenciaParametrizaClave persistenciaParametrizaClave;
-    private EntityManagerFactory emf;
+    private transient EntityManagerFactory emf;
 
     @Override
     public void obtenerConexion(String idSesion) {
@@ -49,6 +49,14 @@ public class AdministrarOlvidoClave implements IAdministrarOlvidoClave, Serializ
     public ConexionesKioskos obtenerConexionEmpleado(String numeroDocumento) {
         EntityManager em = emf.createEntityManager();
         ConexionesKioskos ck = persistenciaConexionesKioskos.consultarConexionEmpleado(em, numeroDocumento);
+        em.close();
+        return ck;
+    }
+    
+    @Override
+    public ConexionesKioskos obtenerConexionPersona(String numeroDocumento, long nitEmpresa) {
+        EntityManager em = emf.createEntityManager();
+        ConexionesKioskos ck = persistenciaConexionesKioskos.consultarConexionPersona(em, numeroDocumento, nitEmpresa);
         em.close();
         return ck;
     }

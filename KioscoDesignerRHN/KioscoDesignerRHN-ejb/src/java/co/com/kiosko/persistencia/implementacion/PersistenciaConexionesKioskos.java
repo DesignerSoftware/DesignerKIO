@@ -2,6 +2,7 @@ package co.com.kiosko.persistencia.implementacion;
 
 import co.com.kiosko.entidades.ConexionesKioskos;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionesKioskos;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.Map;
@@ -63,18 +64,41 @@ public class PersistenciaConexionesKioskos implements IPersistenciaConexionesKio
             return null;
         }
     }
+    
     @Override
     public ConexionesKioskos consultarConexionEmpleado(EntityManager eManager, String numerodocumento) {
         System.out.println(this.getClass().getName()+".consultarConexionEmpleado()");
         System.out.println("eManager: " + eManager);
         System.out.println("codigoEmpleado: " + numerodocumento);
         try {
-            String sqlQuery = "SELECT ck FROM ConexionesKioskos ck WHERE ck.persona.numerodocumento = :numeroDocumento)";
+            String sqlQuery = "SELECT ck FROM ConexionesKioskos ck WHERE ck.persona.numerodocumento = :numeroDocumento ";
             Query query = eManager.createQuery(sqlQuery);
             query.setParameter("numeroDocumento", new BigInteger(numerodocumento));
             return (ConexionesKioskos) query.getSingleResult();
         } catch (Exception e) {
             System.out.println("Error PersistenciaConexionesKioskos.consultarConexionEmpleado(eManager, numerodocumento): " + e);
+            try {
+            } catch (NullPointerException npe) {
+                System.out.println("La transacción es nula.");
+            }
+            return null;
+        }
+    }
+    
+     @Override
+    public ConexionesKioskos consultarConexionPersona(EntityManager eManager, String numeroDocumento, long nitEmpresa) {
+        System.out.println(this.getClass().getName()+".consultarConexionPersona()");
+        System.out.println("eManager: " + eManager);
+        System.out.println("codigoEmpleado: " + numeroDocumento);
+        System.out.println("nitEmpresa: " + nitEmpresa);
+        try {
+            String sqlQuery = "SELECT ck FROM ConexionesKioskos ck WHERE ck.persona.numerodocumento = :numeroDocumento and ck.nitEmpresa = :nitEmpresa";
+            Query query = eManager.createQuery(sqlQuery);
+            query.setParameter("numeroDocumento", new BigInteger(numeroDocumento));
+            query.setParameter("nitEmpresa", nitEmpresa);
+            return (ConexionesKioskos) query.getSingleResult();
+        } catch (Exception e) {
+            System.out.println("Error PersistenciaConexionesKioskos.consultarConexionPersona(eManager, numeroDocumento, nitEmpresa): " + e);
             try {
             } catch (NullPointerException npe) {
                 System.out.println("La transacción es nula.");

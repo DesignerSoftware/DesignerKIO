@@ -26,7 +26,7 @@ import javax.ejb.TransactionRolledbackLocalException;
 @Stateful
 public class AdministrarProcesarSolicitud implements IAdministrarProcesarSolicitud, Serializable {
 
-    private EntityManagerFactory emf;
+    private transient EntityManagerFactory emf;
     private String idSesion;
 
     @EJB

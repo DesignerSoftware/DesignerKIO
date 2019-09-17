@@ -44,6 +44,6 @@
     </welcome-file-list>
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/Ingreso/ingreso.xhtml</location>
+        <location>/Ingreso/errorPage.xhtml</location>
     </error-page>
 </web-app>

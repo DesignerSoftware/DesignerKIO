@@ -23,7 +23,7 @@ import javax.persistence.EntityManagerFactory;
 public class AdministrarRegistrarSolicitud implements IAdministrarRegistrarSolicitud, Serializable {
 
     
-    private EntityManagerFactory emf;
+    private transient EntityManagerFactory emf;
     private String idSesion;
 
     @EJB

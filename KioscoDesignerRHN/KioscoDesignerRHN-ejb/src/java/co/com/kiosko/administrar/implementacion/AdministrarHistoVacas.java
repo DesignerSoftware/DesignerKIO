@@ -12,7 +12,7 @@ import co.com.kiosko.entidades.KioEstadosSolici;
 import co.com.kiosko.entidades.Personas;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaKioEstadosSolici;
 import java.io.Serializable;
-import java.math.BigDecimal;
+//import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 //import java.math.BigDecimal;
@@ -27,7 +27,7 @@ import javax.persistence.EntityManager;
 @Stateful
 public class AdministrarHistoVacas implements IAdministrarHistoVacas, Serializable {
 
-    private EntityManagerFactory emf;
+    private transient EntityManagerFactory emf;
     private String idSesion;
 
     @EJB

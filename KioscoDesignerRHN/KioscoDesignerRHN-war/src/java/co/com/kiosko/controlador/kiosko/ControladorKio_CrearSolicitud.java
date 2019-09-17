@@ -152,6 +152,14 @@ public class ControladorKio_CrearSolicitud implements Serializable {
             MensajesUI.error("La fecha seleccionada es inferior a la última fecha de pago.");
             solicitud.getKioNovedadesSolici().setFechaInicialDisfrute(new Date());
         }
+        if (validaFestivo()){
+            MensajesUI.error("La fecha seleccionada es un día festivo.");
+//            solicitud.getKioNovedadesSolici().setFechaInicialDisfrute(new Date());
+        }
+        if (!validaDiaLaboral() ){
+            MensajesUI.error("La fecha seleccionada no es un día laboral.");
+//            solicitud.getKioNovedadesSolici().setFechaInicialDisfrute(new Date());
+        }
         asignarFechas();
         PrimefacesContextUI.actualizar("principalForm:frmcreasolicitud:ffindis");
         PrimefacesContextUI.actualizar("principalForm:frmcreasolicitud:fregrelab");
@@ -161,6 +169,18 @@ public class ControladorKio_CrearSolicitud implements Serializable {
         Calendar cl = Calendar.getInstance();
         cl.setTime(administrarCrearSolicitud.fechaPago(empleado));
         return solicitud.getKioNovedadesSolici().getFechaInicialDisfrute().after(cl.getTime());
+    }
+    
+    private boolean validaFestivo() {
+        BigDecimal codigoJornada = administrarCrearSolicitud.consultarCodigoJornada(empleado, solicitud.getKioNovedadesSolici().getFechaInicialDisfrute());
+        return administrarCrearSolicitud.verificarDiaFestivo(solicitud.getKioNovedadesSolici().getFechaInicialDisfrute(), codigoJornada);
+        //retorna true si es dia festivo.
+    }
+    
+    private boolean validaDiaLaboral() {
+        BigDecimal codigoJornada = administrarCrearSolicitud.consultarCodigoJornada(empleado, solicitud.getKioNovedadesSolici().getFechaInicialDisfrute());
+        return administrarCrearSolicitud.verificarDiaLaboral(solicitud.getKioNovedadesSolici().getFechaInicialDisfrute(), codigoJornada);
+        //retorna true si es dia laboral.
     }
 
     private void asignarFechas() {

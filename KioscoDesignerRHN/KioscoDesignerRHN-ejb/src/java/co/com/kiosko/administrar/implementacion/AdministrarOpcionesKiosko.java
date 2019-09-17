@@ -32,7 +32,7 @@ public class AdministrarOpcionesKiosko implements IAdministrarOpcionesKiosko, Se
     private IPersistenciaOpcionesKioskos persistenciaOpcionesKioskos;
     @EJB
     private IPersistenciaEmpleados persistenciaEmpleados;
-    private EntityManagerFactory emf;
+    private transient EntityManagerFactory emf;
 
     @Override
     public void obtenerConexion(String idSesion) {

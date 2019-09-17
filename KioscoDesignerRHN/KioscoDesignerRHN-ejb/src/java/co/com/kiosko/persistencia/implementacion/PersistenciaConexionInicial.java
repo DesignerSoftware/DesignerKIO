@@ -95,8 +95,8 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
         try {
             String sqlQuery = "SELECT COUNT(*) "
                     + "FROM CONEXIONESKIOSKOS ck, PERSONAS per, EMPLEADOS e, EMPRESAS em "
-                    //                    + "WHERE ck.EMPLEADO = e.SECUENCIA "
-                    + "WHERE ck.PERSONA = per.SECUENCIA "
+                    + "WHERE ck.EMPLEADO = e.SECUENCIA "
+//                    + "WHERE ck.PERSONA = per.SECUENCIA "
                     + "AND e.persona = per.secuencia "
                     + "AND e.empresa = em.secuencia "
                     + "AND e.codigoempleado = ? "
@@ -119,9 +119,14 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     public boolean validarUsuarioRegistrado(EntityManager eManager, String usuario) throws Exception {
         boolean resultado = false;
         try {
-            String sqlQuery = "SELECT COUNT(*) "
+            /*String sqlQuery = "SELECT COUNT(*) "
                     + "FROM CONEXIONESKIOSKOS ck, PERSONAS per "
                     + "WHERE ck.PERSONA = per.SECUENCIA "
+                    + "AND per.NUMERODOCUMENTO = ? ";*/
+            String sqlQuery = "SELECT COUNT(*) "
+                    + "FROM CONEXIONESKIOSKOS ck, PERSONAS per, KIOAUTORIZADORES ka "
+                    + "WHERE ck.PERSONA = per.SECUENCIA "
+                    + "AND ka.PERSONA = per.SECUENCIA "
                     + "AND per.NUMERODOCUMENTO = ? ";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.setParameter(1, usuario);
@@ -140,8 +145,10 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     public boolean validarEstadoUsuario(EntityManager eManager, String usuario, String nitEmpresa) throws Exception {
         boolean resultado = false;
         try {
-            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, PERSONAS per, EMPLEADOS e, EMPRESAS em "
-                    + "WHERE ck.PERSONA = per.SECUENCIA "
+            String sqlQuery = "SELECT COUNT(*) "
+                    + "FROM CONEXIONESKIOSKOS ck, PERSONAS per, EMPLEADOS e, EMPRESAS em "
+//                    + "WHERE ck.PERSONA = per.SECUENCIA "
+                    + "WHERE ck.EMPLEADO = e.SECUENCIA "
                     + "AND per.secuencia = e.persona "
                     + "AND e.empresa = em.secuencia "
                     + "AND ck.activo = 'N' "
@@ -165,8 +172,15 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     public boolean validarEstadoUsuario(EntityManager eManager, String usuario) throws Exception {
         boolean resultado = false;
         try {
-            String sqlQuery = "SELECT COUNT(*) FROM CONEXIONESKIOSKOS ck, PERSONAS per "
+            /*String sqlQuery = "SELECT COUNT(*) "
+                    + "FROM CONEXIONESKIOSKOS ck, PERSONAS per "
                     + "WHERE ck.PERSONA = per.SECUENCIA "
+                    + "AND ck.activo = 'N' "
+                    + "AND per.numerodocumento = ? ";*/
+            String sqlQuery = "SELECT COUNT(*) "
+                    + "FROM CONEXIONESKIOSKOS ck, PERSONAS per, KIOAUTORIZADORES ka "
+                    + "WHERE ck.PERSONA = per.SECUENCIA "
+                    + "AND per.SECUENCIA = ka.PERSONA "
                     + "AND ck.activo = 'N' "
                     + "AND per.numerodocumento = ? ";
             Query query = eManager.createNativeQuery(sqlQuery);

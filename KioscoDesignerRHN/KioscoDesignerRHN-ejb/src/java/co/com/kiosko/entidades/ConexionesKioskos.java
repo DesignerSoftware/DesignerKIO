@@ -75,6 +75,8 @@ public class ConexionesKioskos implements Serializable {
     @Size(max = 200)
     @Column(name = "DIRIGIDOA")
     private String dirigidoa;
+    @Column(name = "NITEMPRESA")
+    private long nitEmpresa;
     @JoinColumn(name = "PREGUNTA2", referencedColumnName = "SECUENCIA")
     @ManyToOne
     private PreguntasKioskos pregunta2;
@@ -197,6 +199,14 @@ public class ConexionesKioskos implements Serializable {
         this.dirigidoa = dirigidoa;
     }
 
+    public long getNitEmpresa() {
+        return nitEmpresa;
+    }
+
+    public void setNitEmpresa(long nitEmpresa) {
+        this.nitEmpresa = nitEmpresa;
+    }
+
     public PreguntasKioskos getPregunta2() {
         return pregunta2;
     }
@@ -280,6 +290,6 @@ public class ConexionesKioskos implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.kiosko.administrar.entidades.ConexionesKioskos secuencia: " + secuencia + " activo: " + activo + " ultimaconexion: " + ultimaconexion;
+        return "co.com.kiosko.administrar.entidades.ConexionesKioskos secuencia: " + secuencia + " nit: " + nitEmpresa + " activo: " + activo + " ultimaconexion: " + ultimaconexion;
     }
 }

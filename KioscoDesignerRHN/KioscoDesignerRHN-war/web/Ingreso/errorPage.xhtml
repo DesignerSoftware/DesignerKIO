@@ -4,10 +4,11 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui">
-
     <h:head>
+        <title>..::Designer.Kio::..</title>
         <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="refresh" content="0;url=#{request.contextPath}/ingreso.xhtml" />
         <link href="././resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
         <link href="././resources/css/estilosPersonalizados.css" rel="stylesheet" type="text/css" />
         <link href="././resources/imagenes/favicon.ico" rel="shortcut icon"/>
@@ -15,7 +16,6 @@
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="././resources/imagenes/quiosco_icono_72x72.png" />
         <link rel="apple-touch-icon-precomposed" sizes="180x180" href="././resources/imagenes/quiosco_icono_180x180.png" />
         <script src="./resources/js/scriptPersonalizado.js"/>
-        <title>..::Designer.Kio::..</title>
     </h:head>
     <h:body>
         <h:form id="principalForm" enctype="multipart/form-data">
@@ -26,6 +26,8 @@
                     <h:outputText value="En este momento se presentó un error no controlado." style="font-style: italic"/>
                     <br/>
                     <h:outputText value="Por favor recargue la página, desconéctese y vuelva a intentarlo." />
+                    <br/>
+                    <p><a href="#{request.contextPath}/ingreso.xhtml">Clic aquí si no es redirigido a la página de ingreso.</a>.</p>
                     <br/>
                     <h:outputText value="Si el error persiste, por favor comuníquese con el área de Talento Humano 
                                   de su empresa." style="font-weight: bold;" />

@@ -28,7 +28,7 @@ public class AdministrarInicioKiosko implements IAdministrarInicioKiosko, Serial
     private IPersistenciaEmpleados persistenciaEmpleados;
     @EJB
     private IPersistenciaGenerales persistenciaGenerales;
-    private EntityManagerFactory emf;
+    private transient EntityManagerFactory emf;
 
     @Override
     public void obtenerConexion(String idSesion) {

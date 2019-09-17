@@ -35,7 +35,7 @@ import javax.persistence.NoResultException;
 public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud, Serializable {
 
     //private EntityManager em;
-    private EntityManagerFactory emf;
+    private transient EntityManagerFactory emf;
     private String idSesion;
 
     @EJB

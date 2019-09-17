@@ -108,7 +108,7 @@ public class ControladorPrimerIngreso implements Serializable {
                         System.out.println("Condicional 3b");
                         nuevoIngreso.setPersona(administrarPrimerIngreso.consultarPersona(new BigInteger(usuario)));
                     }
-
+                    nuevoIngreso.setNitEmpresa(Long.parseLong(nit));
                     nuevoIngreso.setPwd(administrarPrimerIngreso.encriptar(clave));
                     byte[] rsp1, rsp2;
                     nuevoIngreso.setRespuesta1(administrarPrimerIngreso.encriptar(nuevoIngreso.getRespuesta1UI().toUpperCase()));

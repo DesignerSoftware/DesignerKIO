@@ -23,7 +23,7 @@ import java.io.Serializable;
 @Stateful
 public class AdministrarVerSolicitudesEmpl implements IAdministrarVerSolicitudesEmpl, Serializable {
 
-    private EntityManagerFactory emf;
+    private transient EntityManagerFactory emf;
     
     @EJB
     private IAdministrarSesiones administrarSesiones;

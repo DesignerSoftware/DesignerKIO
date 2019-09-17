@@ -14,4 +14,6 @@ public interface IPersistenciaConexionesKioskos {
     public ConexionesKioskos consultarConexionEmpleado(EntityManager eManager, java.lang.String codigoEmpleado, long nitEmpresa);
 
     public ConexionesKioskos consultarConexionEmpleado(EntityManager eManager, String numerodocumento);
+    
+    public ConexionesKioskos consultarConexionPersona(EntityManager eManager, String numeroDocumento, long nitEmpresa) ;
 }

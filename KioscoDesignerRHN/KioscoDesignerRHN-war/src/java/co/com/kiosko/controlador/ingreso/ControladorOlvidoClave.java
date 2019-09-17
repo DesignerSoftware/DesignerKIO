@@ -53,7 +53,8 @@ public class ControladorOlvidoClave implements Serializable {
             administrarOlvidoClave.obtenerConexion(ses.getId());
             pc = administrarOlvidoClave.obtenerFormatoClave(Long.parseLong(nit));
             //conexion = administrarOlvidoClave.obtenerConexionEmpleado(usuario, nit);
-            conexion = administrarOlvidoClave.obtenerConexionEmpleado(usuario);
+//            conexion = administrarOlvidoClave.obtenerConexionEmpleado(usuario);
+            conexion = administrarOlvidoClave.obtenerConexionPersona(usuario, Long.parseLong(nit));
         } catch (Exception e) {
             System.out.println("Error postconstruct " + this.getClass().getName() + ": " + e);
             System.out.println("Causa: " + e.getCause());
