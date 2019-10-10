@@ -20,7 +20,6 @@
                              rowIndexVar="#{solici.secuencia}" 
                              sortBy="#{solici.kioSoliciVaca.empleado.codigoempleado}"
                              selection="#{controladorKio_HistoVacas.solicitudSelec}" 
-                             filteredValue="#{controladorKio_HistoVacas.soliciFiltradas}"
                              paginator="true"
                              paginatorTemplate="{buscar} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} {exportar} "
                              paginatorPosition="top"
@@ -28,24 +27,6 @@
                     <f:facet name="header">
                         LISTADO DE SOLICITUDES
                     </f:facet>
-                    <f:facet name="{buscar}">
-                        <div style="float: left;">
-                            <p:commandButton value="Buscar empleado" actionListener="#{controladorKio_HistoVacas.buscarEmpleado()}" />
-                            <p:commandButton value="Mostrar todos" actionListener="#{controladorKio_HistoVacas.mostrarEmpleados()}" />
-                        </div>
-                    </f:facet>
-                    <f:facet name="{exportar}">
-                        <!--<div style="float: right;">-->
-                            <p:commandLink actionListener="#{controladorArchivoReporte.validar()}" >
-                                <f:param name="nombreArchivo" value="kiolistasolicitudes" />
-                                <f:param name="tipo" value="XLS" />
-                                <p:graphicImage name="/imagenes/xls.png" width="24"/>
-                            </p:commandLink>
-                        <!--</div>-->
-                    </f:facet>
-<!--                    <f:facet name="{reordena}">
-                        <div style="float: left;">A</div>
-                    </f:facet>-->
                     <p:column selectionMode="single" style="width:16px; text-align:center;"/>
                     <p:column headerText="CODIGO" >
                         <h:outputText value="#{solici.kioSoliciVaca.empleado.codigoempleado}" />
@@ -118,11 +99,8 @@
 
                 <h:outputText value="Jefe inmediato: " />
                 <h:outputText value="#{controladorKio_HistoVacas.solicitudSelec.kioSoliciVaca.empleadoJefe.persona.nombreCompleto}" />
-
-                <h:outputText value="Fecha pago: " />
-                <h:outputText value="#{controladorKio_HistoVacas.solicitudSelec.kioSoliciVaca.kioNovedadesSolici.fechaPago}" >
-                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                </h:outputText> 
+                <h:outputText value="Autorizador: " />
+                <h:outputText value="#{controladorKio_HistoVacas.solicitudSelec.kioSoliciVaca.autorizador.persona.nombreCompleto}" />
 
             </p:panelGrid>
 
@@ -161,7 +139,7 @@
                           paginator="true"
                           paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                           paginatorPosition="top"
-                          filteredValue="#{controladorKio_HistoVacas.emplACargoFiltro}">
+                          >
                 <p:column selectionMode="single" style="width:16px; text-align:center;"/>
                 <p:column headerText="Codigo empleado">
                     <h:outputText value="#{empl.codigoempleado}" />

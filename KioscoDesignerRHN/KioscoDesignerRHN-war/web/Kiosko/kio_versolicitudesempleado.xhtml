@@ -54,7 +54,7 @@
                             <p:column headerText="ESTADO">
                                 <h:outputText value="#{esg.estado}" />
                             </p:column>
-                            <p:column headerText="EMPLEADO JEFE">
+                            <p:column rendered="#{esg.kioSoliciVaca.empleadoJefe != null}" headerText="EMPLEADO JEFE">
                                 <h:outputText value="#{esg.kioSoliciVaca.empleadoJefe.persona.nombreCompleto}" />
                             </p:column>
                             <f:facet name="footer">
@@ -98,7 +98,7 @@
                             <p:column headerText="ESTADO">
                                 <h:outputText value="#{esg.estado}" />
                             </p:column>
-                            <p:column headerText="EMPLEADO JEFE">
+                            <p:column rendered="#{esg.kioSoliciVaca.empleadoJefe != null}" headerText="EMPLEADO JEFE">
                                 <h:outputText value="#{esg.kioSoliciVaca.empleadoJefe.persona.nombreCompleto}" />
                             </p:column>
                             <f:facet name="footer">
