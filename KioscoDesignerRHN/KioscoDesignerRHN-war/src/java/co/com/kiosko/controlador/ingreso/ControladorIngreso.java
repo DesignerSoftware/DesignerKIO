@@ -117,81 +117,91 @@ public class ControladorIngreso implements Serializable {
                     try {
                         if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
                             try {
-                                if (validarCodigoUsuario()
-                                        && (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())
-                                        || administrarIngreso.validarAutorizador(usuario, cadena.getEsquema()))) {
-                                    if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
-                                        if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
-                                            if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave, cadena.getNit())) {
-                                                //nit = cadena.getNit();
-                                                System.out.println("El usuario que ingresa es: " + usuario);
-                                                System.out.println("Intervalo inactividad: " + ses.getMaxInactiveInterval());
+// 191129
+//                                if (validarCodigoUsuario()
+//                                        && (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())
+//                                        || administrarIngreso.validarAutorizador(usuario, cadena.getEsquema()))) {
+                                if (validarCodigoUsuario()) {
+                                    if (administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())
+                                            || administrarIngreso.validarAutorizador(usuario, cadena.getEsquema())) {
+                                        if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
+                                            if (administrarIngreso.validarEstadoUsuario(usuario, cadena.getNit())) {
+                                                if (administrarIngreso.validarIngresoUsuarioRegistrado(usuario, clave, cadena.getNit())) {
+                                                    //nit = cadena.getNit();
+                                                    imprimir("El usuario que ingresa es: " + usuario);
+                                                    imprimir("Intervalo inactividad: " + ses.getMaxInactiveInterval());
 //                                            if (ses.getMaxInactiveInterval() >= 200) {
 //                                                System.out.println("metodo autenticacion: " + contexto.getExternalContext().getAuthType());
 //                                                ses.invalidate();
 //                                                ses = (HttpSession) contexto.getExternalContext().getSession(true);
 //                                                
 //                                            }
-                                                if (ses.isNew()) {
-                                                    System.out.println("La sesion es nueva.");
-                                                } else {
-                                                    System.out.println("La sesion NO es nueva.");
-                                                }
-                                                administrarIngreso.adicionarConexionUsuario(ses.getId(), cadena.getEsquema());
-                                                ingresoExitoso = true;
-                                                intento = 0;
-                                                //return "inicio";
-                                                conexionEmpleado = administrarIngreso.obtenerConexionEmpelado(usuario, nit);
-                                                ultimaConexion = conexionEmpleado.getUltimaconexion();
-                                                administrarIngreso.modificarUltimaConexion(conexionEmpleado);
-                                                HttpSession session = Util.getSession();
-                                                session.setAttribute("idUsuario", usuario);
-                                                imprimir("Conectado a: " + session.getId());
-                                                PrimefacesContextUI.ejecutar("PF('estadoSesion').show()");
-                                                retorno = "plantilla";
-                                            } else {
-                                                // LA CONTRASEÑA ES INCORRECTA.
-                                                if (bckUsuario == null || bckUsuario.equals(usuario)) {
-                                                    intento++;
-                                                } else {
-                                                    intento = 1;
-                                                }
-                                                bckUsuario = usuario;
-                                                PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
-                                                MensajesUI.error(intento < 3 ? "La contraseña es inválida. Intento #" + intento
-                                                        : "La contraseña es inválida. Intento #" + intento + " Cuenta bloqueada.");
-
-                                                if (intento == 2) {
-                                                    PrimefacesContextUI.ejecutar("PF('dlgAlertaIntentos').show()");
-                                                } else if (intento >= 3) {
-                                                    administrarIngreso.bloquearUsuario(usuario, nit);
+                                                    if (ses.isNew()) {
+                                                        imprimir("La sesion es nueva.");
+                                                    } else {
+                                                        imprimir("La sesion NO es nueva.");
+                                                    }
+                                                    administrarIngreso.adicionarConexionUsuario(ses.getId(), cadena.getEsquema());
+                                                    ingresoExitoso = true;
                                                     intento = 0;
+                                                    //return "inicio";
+                                                    conexionEmpleado = administrarIngreso.obtenerConexionEmpelado(usuario, nit);
+                                                    ultimaConexion = conexionEmpleado.getUltimaconexion();
+                                                    administrarIngreso.modificarUltimaConexion(conexionEmpleado);
+                                                    HttpSession session = Util.getSession();
+                                                    session.setAttribute("idUsuario", usuario);
+                                                    imprimir("Conectado a: " + session.getId());
+                                                    PrimefacesContextUI.ejecutar("PF('estadoSesion').hide()");
+                                                    retorno = "plantilla";
+                                                } else {
+                                                    // LA CONTRASEÑA ES INCORRECTA.
+                                                    if (bckUsuario == null || bckUsuario.equals(usuario)) {
+                                                        intento++;
+                                                    } else {
+                                                        intento = 1;
+                                                    }
+                                                    bckUsuario = usuario;
+                                                    PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
+                                                    MensajesUI.error(intento < 3 ? "La contraseña es inválida. Intento #" + intento
+                                                            : "La contraseña es inválida. Intento #" + intento + " Cuenta bloqueada.");
+
+                                                    if (intento == 2) {
+                                                        PrimefacesContextUI.ejecutar("PF('dlgAlertaIntentos').show()");
+                                                    } else if (intento >= 3) {
+                                                        administrarIngreso.bloquearUsuario(usuario, nit);
+                                                        intento = 0;
+                                                    }
+                                                    ingresoExitoso = false;
                                                 }
+                                            } else {
+                                                //USUARIO BLOQUEADO
+                                                PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
+                                                MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de recursos humanos de su empresa.");
                                                 ingresoExitoso = false;
                                             }
                                         } else {
-                                            //USUARIO BLOQUEADO
-                                            PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
-                                            MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de recursos humanos de su empresa.");
-                                            ingresoExitoso = false;
+//                                administrarIngreso.adicionarConexionUsuario(ses.getId());
+                                            administrarIngreso.adicionarConexionUsuario(ses.getId(), cadena.getEsquema());
+                                            nit = cadena.getNit();
+                                            ingresoExitoso = true;
+                                            HttpSession session = Util.getSession();
+                                            session.setAttribute("idUsuario", usuario);
+                                            PrimefacesContextUI.ejecutar("PF('dlgPrimerIngreso').show()");
                                         }
                                     } else {
-//                                administrarIngreso.adicionarConexionUsuario(ses.getId());
-                                        administrarIngreso.adicionarConexionUsuario(ses.getId(), cadena.getEsquema());
-                                        nit = cadena.getNit();
-                                        ingresoExitoso = true;
-                                        HttpSession session = Util.getSession();
-                                        session.setAttribute("idUsuario", usuario);
-                                        PrimefacesContextUI.ejecutar("PF('dlgPrimerIngreso').show()");
+                                        //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
+                                        PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
+                                        MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");
+                                        ingresoExitoso = false;
                                     }
                                 } else {
-                                    //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
+                                    //EL USUARIO DIGITADO NO ES UN NUMERO
                                     PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
-                                    MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");
+                                    MensajesUI.error("El empleado " + usuario + " no es un código de empleado.");
                                     ingresoExitoso = false;
                                 }
                             } catch (Exception ex1) {
-                                System.out.println(ex1.getMessage());
+                                imprimir(ex1.getMessage());
                                 String mensajeExcep = "Fallo en la conexion: " + ex1.getMessage().substring(0, 40);
                                 PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                                 MensajesUI.error("ERROR: " + mensajeExcep);
@@ -203,9 +213,9 @@ public class ControladorIngreso implements Serializable {
                             MensajesUI.fatal("Unidad de persistencia inválida, por favor contactar al área de recursos humanos de su empresa.");
                             ingresoExitoso = false;
                         }
-                    } catch(Exception ex1){
+                    } catch (Exception ex1) {
                         PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
-                        System.out.println("MSJ_RAW: "+ex1);
+                        imprimir("MSJ_RAW: " + ex1);
 //                        String msjex = ExtraeCausaExcepcion.getLastThrowable(ex1).getMessage();
 //                        System.out.println("MSJ_EX: "+msjex);
                         //MensajesUI.fatal("Hubo un error de conexion, por favor ingresa nuevamente.");    
@@ -219,7 +229,7 @@ public class ControladorIngreso implements Serializable {
             } else {
                 usuario = "";
                 HttpSession session = Util.getSession();
-                System.out.println("la session con " + session.getAttribute("idUsuario") + " termino.");
+                imprimir("la session con " + session.getAttribute("idUsuario") + " termino.");
                 session.setAttribute("idUsuario", "");
                 session.removeAttribute("idUsuario");
                 ingresoExitoso = false;
@@ -232,22 +242,22 @@ public class ControladorIngreso implements Serializable {
                 try {
                     ec.invalidateSession();
                 } catch (NullPointerException npe) {
-                    System.out.println("ExternalContext vacio");
+                    imprimir("ExternalContext vacio");
                 }
                 PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
                 administrarIngreso.cerrarSession(ses.getId());
                 ec.redirect(ec.getRequestContextPath() + "/" + "?grupo=" + grupoSeleccionado);
             }
         } catch (EJBTransactionRolledbackException etre) {
-            System.out.println(this.getClass().getName() + ".ingresar() exception");
-            System.out.println("La transacción se deshizo.");
+            imprimir(this.getClass().getName() + ".ingresar() exception");
+            imprimir("La transacción se deshizo.");
             System.out.println(etre);
         }
         return retorno;
     }
 
     private boolean validarCodigoUsuario() {
-        boolean resultado;
+        boolean resultado = false;
         BigInteger numUsuario;
         try {
             numUsuario = new BigInteger(usuario);
@@ -267,7 +277,7 @@ public class ControladorIngreso implements Serializable {
             nit = cadena.getNit();
             if (administrarIngreso.conexionIngreso(cadena.getCadena())) {
                 try {
-                    if ((administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema()) 
+                    if ((administrarIngreso.validarUsuarioyEmpresa(usuario, cadena.getNit(), cadena.getEsquema())
                             || administrarIngreso.validarAutorizador(usuario, cadena.getEsquema()))
                             && validarCodigoUsuario()) {
                         if (administrarIngreso.validarUsuarioRegistrado(usuario, cadena.getNit())) {
@@ -389,14 +399,17 @@ public class ControladorIngreso implements Serializable {
     }
 
     public ConexionesKioskos getConexionEmpleado() {
+        imprimir(this.getClass().getName() + "." + "getConexionEmpleado" + "()");
         return conexionEmpleado;
     }
 
     public Date getUltimaConexion() {
+        imprimir(this.getClass().getName() + "." + "getUltimaConexion" + "()");
         return ultimaConexion;
     }
 
     public String getNit() {
+        imprimir(this.getClass().getName() + "." + "getNit" + "()");
         return nit;
     }
 

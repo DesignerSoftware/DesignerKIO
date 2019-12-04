@@ -53,6 +53,8 @@ public class AdministrarSesiones implements IAdministrarSesiones, Serializable {
             if (!sessionesActivas.isEmpty()) {
                 System.out.println("sesiones activas no vacias");
                 for (int i = 0; i < sessionesActivas.size(); i++) {
+                    System.out.println("IdSession: "+sessionesActivas.get(i).getIdSession());
+                    System.out.println("Sesion activa-UP: "+sessionesActivas.get(i).getUnidadPersistencia() );
                     if (sessionesActivas.get(i).getIdSession().equals(idSesion)) {
                         sesionActual = sessionesActivas.get(i);
                         i = sessionesActivas.size();

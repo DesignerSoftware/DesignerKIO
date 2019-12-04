@@ -338,7 +338,8 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
                 + "and vc.fechavigencia = (select max(vci.fechavigencia) "
                 + "                        from vigenciascargos vci "
                 + "                        where vci.empleado = vc.empleado "
-                + "                        and vci.fechavigencia <= sysdate) ";
+                + "                        and vci.fechavigencia <= sysdate) "
+                + "and (EMPLEADOCURRENT_PKG.TipoTrabajadorCorte(empl.secuencia, SYSDATE) = 'ACTIVO' OR EMPLEADOCURRENT_PKG.TipoTrabajadorCorte(empl.secuencia, SYSDATE) = 'PENSIONADO')";
         Empleados empleado = null;
         try {
             Query query = em.createNativeQuery(consulta, Empleados.class);
@@ -353,6 +354,7 @@ public class PersistenciaEmpleados implements IPersistenciaEmpleados {
         return empleado;
     }
 
+    @Override
     public boolean esAutorizador(EntityManager em, BigDecimal rfPersona) {
         String sqlQuery = "select count(*) "
                 + "from kioautorizadores ka "

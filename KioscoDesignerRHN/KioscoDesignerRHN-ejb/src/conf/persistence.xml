@@ -40,4 +40,14 @@
       <property name="eclipselink.logging.parameters" value="true"/>
     </properties>
   </persistence-unit>  
+  <persistence-unit name="DEFAULT5" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>jdbc/rhnlc</jta-data-source>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="eclipselink.canonicalmodel.subpackage" value="five"/>
+      <property name="eclipselink.logging.level" value="FINE"/>
+      <property name="eclipselink.logging.parameters" value="true"/>
+    </properties>
+  </persistence-unit>  
 </persistence>

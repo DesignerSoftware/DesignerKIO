@@ -31,10 +31,9 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     private IPersistenciaConexionesKioskos persistenciaConexionesKioskos;
 
     private String unidadPersistencia;
-//    private final ISesionEntityManagerFactory sessionEMF;
+    private ISesionEntityManagerFactory sessionEMF;
 
-    private transient EntityManagerFactory emf;
-
+//    private transient EntityManagerFactory emf;
 //    public AdministrarIngreso() {
 //        sessionEMF = new SesionEntityManagerFactory();
 //    }
@@ -42,10 +41,11 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     public boolean conexionIngreso(String unidadPersistencia) {
         System.out.println(this.getClass().getName() + ".conexionIngreso()");
         System.out.println("Unidad de persistencia: " + unidadPersistencia);
-//        EntityManagerFactory emf;
         boolean resul = false;
+        EntityManagerFactory emf;
         try {
-            ISesionEntityManagerFactory sessionEMF = new SesionEntityManagerFactory();
+//            ISesionEntityManagerFactory sessionEMF = new SesionEntityManagerFactory();
+            sessionEMF = new SesionEntityManagerFactory();
             emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
             if (emf != null) {
                 resul = true;
@@ -67,12 +67,12 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     }
 
     @Override
-    public boolean validarUsuarioyEmpresa(String usuario, String nitEmpresa, String esquema) throws Exception{
+    public boolean validarUsuarioyEmpresa(String usuario, String nitEmpresa, String esquema) throws Exception {
         System.out.println(this.getClass().getName() + ".validarUsuarioyEmpresa()");
-//        EntityManagerFactory emf;
+        EntityManagerFactory emf;
         boolean resul = false;
         try {
-//            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
+            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
             if (emf != null) {
                 EntityManager em = emf.createEntityManager();
 //                persistenciaConexionInicial.setearKiosko(em);
@@ -93,7 +93,9 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     public boolean validarAutorizador(String usuario, String esquema) throws Exception {
         System.out.println(this.getClass().getName() + ".validarAutorizador()");
         boolean resul = false;
+        EntityManagerFactory emf;
         try {
+            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
             if (emf != null) {
                 EntityManager em = emf.createEntityManager();
                 persistenciaConexionInicial.setearKiosko(em, esquema);
@@ -109,12 +111,13 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     }
 
     @Override
-    public boolean validarUsuarioRegistrado(String usuario, String nitEmpresa) throws Exception{
+    public boolean validarUsuarioRegistrado(String usuario, String nitEmpresa) throws Exception {
         System.out.println(this.getClass().getName() + ".validarUsuarioRegistrado()");
 //        EntityManagerFactory emf;
         boolean resul = false;
+        EntityManagerFactory emf;
         try {
-//            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
+            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
             if (emf != null) {
                 EntityManager em = emf.createEntityManager();
 //                persistenciaConexionInicial.setearKiosko(em);
@@ -144,10 +147,10 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     @Override
     public boolean validarEstadoUsuario(String usuario, String nitEmpresa) {
         System.out.println(this.getClass().getName() + ".validarEstadoUsuario()");
-//        EntityManagerFactory emf;
+        EntityManagerFactory emf;
         boolean resul = false;
         try {
-//            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
+            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
             if (emf != null) {
                 EntityManager em = emf.createEntityManager();
                 resul = persistenciaConexionInicial.validarEstadoUsuario(em, usuario, nitEmpresa);
@@ -160,6 +163,7 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
         }
         if (!resul) {
             try {
+                emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
                 if (emf != null) {
                     EntityManager em = emf.createEntityManager();
                     resul = persistenciaConexionInicial.validarEstadoUsuario(em, usuario);
@@ -176,10 +180,10 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     @Override
     public boolean validarIngresoUsuarioRegistrado(String usuario, String clave, String nitEmpresa) {
         System.out.println(this.getClass().getName() + ".validarIngresoUsuarioRegistrado()");
-//        EntityManagerFactory emf;
+        EntityManagerFactory emf;
         boolean resul = false;
         try {
-//            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
+            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
             if (emf != null) {
                 EntityManager em = emf.createEntityManager();
                 resul = persistenciaConexionInicial.validarIngresoUsuarioRegistrado(em, usuario, clave, nitEmpresa);
@@ -192,6 +196,7 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
         }
         if (!resul) {
             try {
+                emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
                 if (emf != null) {
                     EntityManager em = emf.createEntityManager();
                     resul = persistenciaConexionInicial.validarIngresoUsuarioRegistrado(em, usuario, clave);
@@ -206,9 +211,10 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     }
 
     @Override
-    public boolean adicionarConexionUsuario(String idSesion) throws Exception{
+    public boolean adicionarConexionUsuario(String idSesion) throws Exception {
         System.out.println(this.getClass().getName() + ".adicionarConexionUsuario()");
         boolean resul = false;
+        EntityManagerFactory emf;
         try {
             ISesionEntityManagerFactory sessionEMF = new SesionEntityManagerFactory();
             SessionEntityManager sem = new SessionEntityManager(idSesion, unidadPersistencia);
@@ -227,9 +233,10 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     }
 
     @Override
-    public boolean adicionarConexionUsuario(String idSesion, String esquema) throws Exception{
+    public boolean adicionarConexionUsuario(String idSesion, String esquema) throws Exception {
         System.out.println(this.getClass().getName() + ".adicionarConexionUsuario()");
         boolean resul = false;
+        EntityManagerFactory emf;
         try {
             ISesionEntityManagerFactory sessionEMF = new SesionEntityManagerFactory();
             SessionEntityManager sem = new SessionEntityManager(idSesion, unidadPersistencia);
@@ -270,11 +277,11 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
             System.out.println("Excepcion por formato numerico invalido.");
             System.out.println("Codigo de empleado invalido");
         }
-//        EntityManagerFactory emf;
+        EntityManagerFactory emf;
         ConexionesKioskos resul = null;
         if (control) {
             try {
-//                emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
+                emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
                 if (emf != null) {
                     EntityManager em = emf.createEntityManager();
                     resul = persistenciaConexionesKioskos.consultarConexionEmpleado(em, codigoEmpleado, Long.parseLong(nitEmpresa));
@@ -287,7 +294,7 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
             }
             if (resul == null) {
                 try {
-//                emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
+                    emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
                     if (emf != null) {
                         EntityManager em = emf.createEntityManager();
                         resul = persistenciaConexionesKioskos.consultarConexionEmpleado(em, codigoEmpleado);
@@ -306,13 +313,13 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     @Override
     public boolean bloquearUsuario(String codigoEmpleado, String nitEmpresa) {
         System.out.println(this.getClass().getName() + ".bloquearUsuario()");
-//        EntityManagerFactory emf;
+        EntityManagerFactory emf;
         EntityManager em;
         boolean resul = false;
         ConexionesKioskos cnx = obtenerConexionEmpelado(codigoEmpleado, nitEmpresa);
         cnx.setActivo("N");
         try {
-//            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
+            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
             if (emf != null) {
                 em = emf.createEntityManager();
                 resul = persistenciaConexionesKioskos.registrarConexion(em, cnx);
@@ -329,9 +336,9 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     @Override
     public void modificarUltimaConexion(ConexionesKioskos cnx) {
         System.out.println(this.getClass().getName() + ".modificarUltimaConexion()");
-//        EntityManagerFactory emf;
+        EntityManagerFactory emf;
         try {
-//            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
+            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
             if (emf != null) {
                 EntityManager em = emf.createEntityManager();
                 persistenciaConexionesKioskos.registrarConexion(em, cnx);
@@ -347,7 +354,9 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
     @Override
     public void cerrarSession(String idSesion) {
         System.out.println(this.getClass().getName() + ".modificarUltimaConexion()");
+        EntityManagerFactory emf;
         try {
+            emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
             administrarSessiones.borrarSesion(idSesion);
             emf.close();
         } catch (Exception e) {

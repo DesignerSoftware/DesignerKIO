@@ -29,6 +29,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 //import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.primefaces.PrimeFaces;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -40,7 +41,7 @@ import org.primefaces.model.StreamedContent;
 @ManagedBean
 @SessionScoped
 public class ControladorGenerarReporte implements Serializable {
-
+    
     @EJB
     private IAdministrarGenerarReporte administrarGenerarReporte;
     private OpcionesKioskos reporte;
@@ -54,10 +55,10 @@ public class ControladorGenerarReporte implements Serializable {
     private ExternalContext externalContext;
     private String userAgent;
     private LeerArchivoXML leerArchivoXML;
-
+    
     public ControladorGenerarReporte() {
     }
-
+    
     @PostConstruct
     public void inicializarAdministrador() {
         System.out.println(this.getClass().getName() + "." + "inicializarAdministrador" + "()");
@@ -79,7 +80,7 @@ public class ControladorGenerarReporte implements Serializable {
             System.out.println("Causa: " + e.getCause());
         }
     }
-
+    
     public void generarReporte() {
         System.out.println(this.getClass().getName() + "." + "generarReporte" + "()");
         if (administrarGenerarReporte.modificarConexionKisko(conexionEmpleado)) {
@@ -101,7 +102,7 @@ public class ControladorGenerarReporte implements Serializable {
             MensajesUI.error("Se generó un error registrando la conexión.");
         }
     }
-
+    
     private void generarAuditoria(String rutaReporteGen) {
         Calendar dtGen = Calendar.getInstance();
         System.out.println(dtGen.get(Calendar.YEAR) + "/" + (dtGen.get(Calendar.MONTH) + 1) + "/" + dtGen.get(Calendar.DAY_OF_MONTH) + " " + dtGen.get(Calendar.HOUR_OF_DAY) + ":" + dtGen.get(Calendar.MINUTE));
@@ -115,18 +116,18 @@ public class ControladorGenerarReporte implements Serializable {
         if (cuentasAud != null && !cuentasAud.isEmpty()) {
             for (String cuentaAud : cuentasAud) {
                 String mensaje = "Apreciado usuario(a): \n\n"
-                    + "Nos permitimos informar que el "
-                    + dtGen.get(Calendar.DAY_OF_MONTH) + "/" + (dtGen.get(Calendar.MONTH) + 1) + "/" + dtGen.get(Calendar.YEAR) + " a las " + dtGen.get(Calendar.HOUR_OF_DAY) + ":" + dtGen.get(Calendar.MINUTE)    
-                    + " se generó el "+reporte.getDescripcion()
-                    + " en el módulo de Kiosco Nómina Designer. "
-                    + "La persona que GENERÓ el reporte es: "
-                    + conexionEmpleado.getEmpleado().getPersona().getNombreCompleto() + ". \n\n";
+                        + "Nos permitimos informar que el "
+                        + dtGen.get(Calendar.DAY_OF_MONTH) + "/" + (dtGen.get(Calendar.MONTH) + 1) + "/" + dtGen.get(Calendar.YEAR) + " a las " + dtGen.get(Calendar.HOUR_OF_DAY) + ":" + dtGen.get(Calendar.MINUTE)
+                        + " se generó el " + reporte.getDescripcion()
+                        + " en el módulo de Kiosco Nómina Designer. "
+                        + "La persona que GENERÓ el reporte es: "
+                        + conexionEmpleado.getEmpleado().getPersona().getNombreCompleto() + ". \n\n";
                 mensaje = mensaje + "Le recordamos que esta dirección de correo es utilizada solamente para envíos "
-                    + "automáticos de la información solicitada. Por favor no responda este correo, "
-                    + "ya que no podrá ser atendido. Si desea contactarse con nosotros, envíe un correo "
-                    + "o comuníquese telefónicamente con Talento Humano de "
-                    + conexionEmpleado.getEmpleado().getEmpresa().getNombre() + " \n\n"
-                    + "Cordial saludo. ";
+                        + "automáticos de la información solicitada. Por favor no responda este correo, "
+                        + "ya que no podrá ser atendido. Si desea contactarse con nosotros, envíe un correo "
+                        + "o comuníquese telefónicamente con Talento Humano de "
+                        + conexionEmpleado.getEmpleado().getEmpresa().getNombre() + " \n\n"
+                        + "Cordial saludo. ";
                 if (administrarGenerarReporte.enviarCorreo(conexionEmpleado.getEmpleado().getEmpresa().getSecuencia(), cuentaAud,
                         "Auditoria: Reporte Kiosko - " + reporte.getDescripcion(),
                         mensaje,
@@ -161,13 +162,14 @@ public class ControladorGenerarReporte implements Serializable {
             }
         }
     }
-
+    
     public void validarDescargaReporte() {
         System.out.println(this.getClass().getName() + "." + "validarDescargaReporte" + "()");
         String nombrearchivo = "reporte.pdf";
         String[] arregloruta = new String[1];
         RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('generandoReporte').hide();");
+//        context.execute("PF('generandoReporte').hide();");
+        PrimeFaces.current().executeScript("PF('generandoReporte').hide();");
         if (pathReporteGenerado != null && !pathReporteGenerado.startsWith("Error:")) {
             //System.out.println("ruta: "+pathReporteGenerado);
             try {
@@ -198,25 +200,34 @@ public class ControladorGenerarReporte implements Serializable {
                         || userAgent.toUpperCase().contains("Android".toUpperCase())
                         || userAgent.toUpperCase().contains("IOS".toUpperCase())) {
                     //System.out.println("Acceso por mobiles.");
-                    context.update("principalForm:dwlReportePDF");
-                    context.execute("PF('dwlReportePDF').show();");
+//                    context.update("principalForm:dwlReportePDF");
+//                    context.execute("PF('dwlReportePDF').show();");
+                    PrimeFaces.current().ajax().update("principalForm:dwlReportePDF");
+                    PrimeFaces.current().executeScript("PF('dwlReportePDF').show();");
                 } else {
-                    context.update("principalForm:verReportePDF");
-                    context.execute("PF('verReportePDF').show();");
+//                    context.update("principalForm:verReportePDF");
+//                    context.execute("PF('verReportePDF').show();");
+                    PrimeFaces.current().ajax().update("principalForm:verReportePDF");
+                    PrimeFaces.current().executeScript("PF('verReportePDF').show();");
                 }
-                context.execute("validarEnvioCorreo();");
+//                context.execute("validarEnvioCorreo();");
+                PrimeFaces.current().executeScript("validarEnvioCorreo();");
             } else {
-                context.update("principalForm:errorGenerandoReporte");
-                context.execute("PF('errorGenerandoReporte').show();");
+//                context.update("principalForm:errorGenerandoReporte");
+//                context.execute("PF('errorGenerandoReporte').show();");
+                PrimeFaces.current().ajax().update("principalForm:errorGenerandoReporte");
+                PrimeFaces.current().executeScript("PF('errorGenerandoReporte').show();");
             }
             //pathReporteGenerado = null;
         } else {
-            context.update("principalForm:errorGenerandoReporte");
-            context.execute("PF('errorGenerandoReporte').show();");
+//            context.update("principalForm:errorGenerandoReporte");
+//            context.execute("PF('errorGenerandoReporte').show();");
+            PrimeFaces.current().ajax().update("principalForm:errorGenerandoReporte");
+            PrimeFaces.current().executeScript("PF('errorGenerandoReporte').show();");
         }
         generarAuditoria(pathReporteGenerado);
     }
-
+    
     public boolean validarCampos() {
         System.out.println(this.getClass().getName() + "." + "validarCampos" + "()");
         boolean retorno = false;
@@ -236,7 +247,7 @@ public class ControladorGenerarReporte implements Serializable {
         }
         return retorno;
     }
-
+    
     public boolean validarCorreo() {
         System.out.println(this.getClass().getName() + "." + "validarCorreo" + "()");
         if (conexionEmpleado.isEnvioCorreo()) {
@@ -254,14 +265,14 @@ public class ControladorGenerarReporte implements Serializable {
         }
         return false;
     }
-
+    
     public void validarEnviaCorreo() {
         System.out.println(this.getClass().getName() + "." + "validarEnviaCorreo" + "()");
         if (conexionEmpleado.isEnvioCorreo()) {
             String mensaje = "Apreciado usuario(a): \n\n"
-                    + "Nos permitimos informar que se acaba de generar el "+reporte.getDescripcion()
+                    + "Nos permitimos informar que se acaba de generar el " + reporte.getDescripcion()
                     + "en el módulo de Kiosco Nómina Designer. \n\n";
-                mensaje = mensaje + "Le recordamos que esta dirección de correo es utilizada solamente para envíos "
+            mensaje = mensaje + "Le recordamos que esta dirección de correo es utilizada solamente para envíos "
                     + "automáticos de la información solicitada. Por favor no responda este correo, "
                     + "ya que no podrá ser atendido. Si desea contactarse con nosotros, envíe un correo "
                     + "o comuníquese telefónicamente con Talento Humano de "
@@ -278,7 +289,7 @@ public class ControladorGenerarReporte implements Serializable {
             }
         }
     }
-
+    
     public boolean validarFechasCertificadoIngresosRetenciones() {
         System.out.println(this.getClass().getName() + "." + "validarFechasCertificadoIngresosRetenciones" + "()");
         SimpleDateFormat formatoDia, formatoMes, formatoAnio;
@@ -289,7 +300,7 @@ public class ControladorGenerarReporte implements Serializable {
         dia = formatoDia.format(conexionEmpleado.getFechadesde());
         mes = formatoMes.format(conexionEmpleado.getFechadesde());
         anio = formatoAnio.format(conexionEmpleado.getFechadesde());
-
+        
         if (dia.equals("01") && mes.equals("01")) {
             dia = formatoDia.format(conexionEmpleado.getFechahasta());
             mes = formatoMes.format(conexionEmpleado.getFechahasta());
@@ -299,7 +310,7 @@ public class ControladorGenerarReporte implements Serializable {
         }
         return false;
     }
-
+    
     public boolean validarConfigSMTP() {
         System.out.println(this.getClass().getName() + "." + "validarConfigSMTP" + "()");
         boolean resultado = false;
@@ -312,13 +323,13 @@ public class ControladorGenerarReporte implements Serializable {
         }
         return resultado;
     }
-
+    
     public void reiniciarStreamedContent() {
         System.out.println(this.getClass().getName() + "reiniciarStreamedContent" + "()");
         reporteGenerado = null;
         pathReporteGenerado = null;
     }
-
+    
     public void cerrarControlador() {
         System.out.println(this.getClass().getName() + "." + "cerrarControlador" + "()");
         FacesContext context = FacesContext.getCurrentInstance();
@@ -331,42 +342,42 @@ public class ControladorGenerarReporte implements Serializable {
         System.out.println(this.getClass().getName() + "." + "getReporte" + "()");
         return reporte;
     }
-
+    
     public ConexionesKioskos getConexionEmpleado() {
         System.out.println(this.getClass().getName() + "." + "getConexionEmpleado" + "()");
         return conexionEmpleado;
     }
-
+    
     public void setConexionEmpleado(ConexionesKioskos conexionEmpleado) {
         System.out.println(this.getClass().getName() + "." + "setConexionEmpleado" + "()");
         this.conexionEmpleado = conexionEmpleado;
     }
-
+    
     public String getEmail() {
         System.out.println(this.getClass().getName() + "." + "getEmail" + "()");
         return email;
     }
-
+    
     public void setEmail(String email) {
         System.out.println(this.getClass().getName() + "." + "setEmail" + "()");
         this.email = email;
     }
-
+    
     public String getAreaDe() {
         System.out.println(this.getClass().getName() + "." + "getAreaDe" + "()");
         return areaDe;
     }
-
+    
     public void setAreaDe(String areaDe) {
         System.out.println(this.getClass().getName() + "." + "setAreaDe" + "()");
         this.areaDe = areaDe;
     }
-
+    
     public String getPathReporteGenerado() {
         System.out.println(this.getClass().getName() + "." + "getPathReporteGenerado" + "()");
         return pathReporteGenerado;
     }
-
+    
     public StreamedContent getReporteGenerado() {
         System.out.println(this.getClass().getName() + "." + "getReporteGenerado" + "()");
         String nombrearchivo = "reporte.pdf";
@@ -401,10 +412,10 @@ public class ControladorGenerarReporte implements Serializable {
             System.out.println("reporte nulo");
             reporteGenerado = null;
         }
-
+        
         return reporteGenerado;
     }
-
+    
     public boolean isEnviocorreo() {
         System.out.println(this.getClass().getName() + "." + "isEnviocorreo" + "()");
         boolean retorno = false;
@@ -414,7 +425,7 @@ public class ControladorGenerarReporte implements Serializable {
         }
         return retorno;
     }
-
+    
     public void setEnviocorreo(boolean enviocorreo) {
         System.out.println(this.getClass().getName() + "." + "setEnviocorreo" + "()");
         if (enviocorreo) {

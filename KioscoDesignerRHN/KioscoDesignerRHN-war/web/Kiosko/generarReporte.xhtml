@@ -30,7 +30,7 @@
                                         showOn="button" style="width: 90px;"/>
                         </p:panelGrid>
                         <p:panelGrid id="pnlEnvioCorreo" columns="2" styleClass="noBorders">
-                            <p:outputLabel for="enviarCorreo" value="¿Desea enviar el reporte por correo?: " />
+                            <p:outputLabel for="enviarCorreo" value="Â¿Desea enviar el reporte por correo?: " />
                             <p:selectBooleanCheckbox id="enviarCorreo" widgetVar="enviarCorreo" value="#{controladorGenerarReporte.enviocorreo}" >
                                 <p:ajax update=":principalForm:pnlEnvioCorreo" />
                             </p:selectBooleanCheckbox>
@@ -44,7 +44,7 @@
                             <p:outputLabel for="dirigida" value="Constancia dirigida a: " />
                             <p:inputText id="dirigida" widgetVar="dirigida" value="#{controladorGenerarReporte.conexionEmpleado.dirigidoa}"/>
                             <!--
-                            <p:outputLabel for="area" value="Constancia al área de:" />
+                            <p:outputLabel for="area" value="Constancia al Ã¡rea de:" />
                             <p:inputText id="area" value="#{controladorGenerarReporte.areaDe}"/> 
                             -->
                         </p:panelGrid>
@@ -82,7 +82,9 @@
 
     <p:dialog header="Reporte generado" id="verReportePDF" widgetVar="verReportePDF" width="90%" height="530px" resizable="true" draggable="true" modal="true" onHide="reiniciarStreamedContent();">
         <p:media value="#{controladorGenerarReporte.reporteGenerado}" width="100%" height="500px" player="pdf" rendered="#{controladorGenerarReporte.reporteGenerado != null}" styleClass="curr_file"
-                 cache="false"/>
+                 cache="false">
+            Su navegador no puede mostrar pdf, <h:outputLink value="#{controladorGenerarReporte.reporteGenerado}">clic</h:outputLink> para descargar pdf.
+        </p:media>
     </p:dialog>
     <p:dialog header="Reporte a descargar" id="dwlReportePDF" widgetVar="dwlReportePDF" width="250px" height="70px" resizable="true" draggable="true" modal="true" onHide="reiniciarStreamedContent();">
         <p:commandButton value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">

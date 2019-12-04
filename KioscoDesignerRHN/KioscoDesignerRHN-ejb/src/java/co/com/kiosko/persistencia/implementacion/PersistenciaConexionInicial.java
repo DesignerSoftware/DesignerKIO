@@ -72,9 +72,9 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
     public boolean validarAutorizador(EntityManager eManager, String usuario) throws Exception {
         boolean resultado = false;
         try {
-            String sqlQuery = "SELECT COUNT(*) \n"
+            String sqlQuery = "SELECT COUNT(*) "
                     + "FROM KIOAUTORIZADORES KA, PERSONAS PER \n"
-                    + "WHERE PER.SECUENCIA = KA.PERSONA \n"
+                    + "WHERE PER.SECUENCIA = KA.PERSONA "
                     + "AND PER.NUMERODOCUMENTO = ? ";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.setParameter(1, usuario);
@@ -225,7 +225,7 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
 
     @Override
     public boolean validarIngresoUsuarioRegistrado(EntityManager eManager, String usuario, String clave) throws Exception {
-        boolean resultado = false;
+        boolean resultado; // = false;
         try {
             String sqlQuery = "SELECT COUNT(*) "
                     + "FROM CONEXIONESKIOSKOS ck, Personas per "

@@ -1,6 +1,7 @@
 package co.com.kiosko.correo;
 
 import co.com.kiosko.entidades.ConfiguracionCorreo;
+import java.io.Serializable;
 import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -20,12 +21,12 @@ import javax.mail.internet.MimeMultipart;
  *
  * @author Felipe Triviño
  */
-public class EnvioCorreo {
+public class EnvioCorreo implements Serializable{
 
     public EnvioCorreo() {
     }
 
-    public static boolean enviarCorreo(ConfiguracionCorreo cfc, String destinatario, String asunto, String mensaje, String pathAdjunto) {
+    public boolean enviarCorreo(ConfiguracionCorreo cfc, String destinatario, String asunto, String mensaje, String pathAdjunto) {
 //        try {
         boolean resEnvio = false;
         // Propiedades de la conexión

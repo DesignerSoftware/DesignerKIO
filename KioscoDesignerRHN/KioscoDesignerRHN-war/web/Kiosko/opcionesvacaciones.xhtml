@@ -21,7 +21,7 @@
             <h2 id="opcionActual" align="center">#{controladorOpcionesKiosko.opcionActual.descripcion}</h2>
             <p:panelGrid id="opcionesKiosko" columns="4" styleClass="noBorders">
                 <ui:repeat value="#{controladorOpcionesKiosko.opcionActual.opcionesHijas}" var="opcion">
-                    <p:commandButton value="#{opcion.descripcion}" style="margin: 10px"
+                    <p:commandButton value="#{opcion.descripcion}" style="margin: 10px;"
                                      actionListener="#{controladorOpcionesKiosko.seleccionOpcion(opcion)}"
                                      process="@this" styleClass="ui-button-opciones"/>
                 </ui:repeat>

@@ -28,25 +28,27 @@ public class AdministrarInicioKiosko implements IAdministrarInicioKiosko, Serial
     private IPersistenciaEmpleados persistenciaEmpleados;
     @EJB
     private IPersistenciaGenerales persistenciaGenerales;
-    private transient EntityManagerFactory emf;
+//    private transient EntityManagerFactory emf;
 
     @Override
-    public void obtenerConexion(String idSesion) {
-        emf = administrarSesiones.obtenerConexionSesion(idSesion);
+    public EntityManagerFactory obtenerConexion(String idSesion) {
+        return administrarSesiones.obtenerConexionSesion(idSesion);
     }
 
     @Override
-    public Empleados consultarEmpleado(BigInteger codigoEmpleado, long nit) {
-        EntityManager em = emf.createEntityManager();
+    public Empleados consultarEmpleado(String idSesion, BigInteger codigoEmpleado, long nit) {
+//        EntityManager em = emf.createEntityManager();
+        EntityManager em = obtenerConexion(idSesion).createEntityManager();
         Empleados empl = persistenciaEmpleados.consultarEmpleado(em, codigoEmpleado, nit);
         em.close();
         return empl;
     }
 
     @Override
-    public String fotoEmpleado() {
+    public String fotoEmpleado(String idSesion) {
         String rutaFoto = null;
-        EntityManager em = emf.createEntityManager();
+//        EntityManager em = emf.createEntityManager();
+        EntityManager em = obtenerConexion(idSesion).createEntityManager();
         Generales general = persistenciaGenerales.consultarRutasGenerales(em);
         if (general != null) {
 //            return general.getPathfoto();
@@ -56,5 +58,13 @@ public class AdministrarInicioKiosko implements IAdministrarInicioKiosko, Serial
             rutaFoto = null;
         }
         return rutaFoto;
+    }
+    @Override
+    public String consultarLogoEmpresa(String idSesion, long nit){
+//        EntityManager em = emf.createEntityManager();
+        EntityManager em = obtenerConexion(idSesion).createEntityManager();
+        String logo = persistenciaEmpleados.consultarEmpresa(em, nit).getLogo();
+        em.close();
+        return logo;
     }
 }

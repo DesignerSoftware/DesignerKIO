@@ -19,6 +19,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+import org.primefaces.PrimeFaces;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -29,7 +30,7 @@ import org.primefaces.model.StreamedContent;
  */
 @ManagedBean
 @ViewScoped
-public class ControladorArchivoReporte implements Serializable{
+public class ControladorArchivoReporte implements Serializable {
 
     private ExternalContext externalContext;
     private String userAgent;
@@ -93,9 +94,10 @@ public class ControladorArchivoReporte implements Serializable{
         System.out.println(this.getClass().getName() + "." + "validarDescargaReporte" + "()");
         String nombrearchivo = "reporte." + tipo;
         String[] arregloruta = new String[1];
-        RequestContext context = RequestContext.getCurrentInstance();
+//        RequestContext context = RequestContext.getCurrentInstance();
         String contentType = "";
-        context.execute("PF('generandoReporte').hide();");
+//        context.execute("PF('generandoReporte').hide();");
+        PrimeFaces.current().executeScript("PF('generandoReporte').hide();");
         if (pathReporteGenerado != null && !pathReporteGenerado.startsWith("Error:")) {
             System.out.println("ruta: " + pathReporteGenerado);
             try {
@@ -128,20 +130,29 @@ public class ControladorArchivoReporte implements Serializable{
                         || userAgent.toUpperCase().contains("Android".toUpperCase())
                         || userAgent.toUpperCase().contains("IOS".toUpperCase())) {
                     //System.out.println("Acceso por mobiles.");
-                    context.update("principalForm:dwlReportePDF");
-                    context.execute("PF('dwlReportePDF').show();");
+//                    context.update("principalForm:dwlReportePDF");
+//                    context.execute("PF('dwlReportePDF').show();");
+                    PrimeFaces.current().ajax().update("principalForm:dwlReportePDF");
+                    PrimeFaces.current().executeScript("PF('dwlReportePDF').show();");
                 } else {
-                    context.update("principalForm:verReportePDF");
-                    context.execute("PF('verReportePDF').show();");
+//                    context.update("principalForm:verReportePDF");
+//                    context.execute("PF('verReportePDF').show();");
+                    PrimeFaces.current().ajax().update("principalForm:verReportePDF");
+                    PrimeFaces.current().executeScript("PF('verReportePDF').show();");
                 }
-                context.execute("validarEnvioCorreo();");
+//                context.execute("validarEnvioCorreo();");
+                PrimeFaces.current().executeScript("validarEnvioCorreo();");
             } else {
-                context.update("principalForm:errorGenerandoReporte");
-                context.execute("PF('errorGenerandoReporte').show();");
+//                context.update("principalForm:errorGenerandoReporte");
+//                context.execute("PF('errorGenerandoReporte').show();");
+                PrimeFaces.current().ajax().update("principalForm:errorGenerandoReporte");
+                PrimeFaces.current().executeScript("PF('errorGenerandoReporte').show();");
             }
         } else {
-            context.update("principalForm:errorGenerandoReporte");
-            context.execute("PF('errorGenerandoReporte').show();");
+//            context.update("principalForm:errorGenerandoReporte");
+//            context.execute("PF('errorGenerandoReporte').show();");
+            PrimeFaces.current().ajax().update("principalForm:errorGenerandoReporte");
+            PrimeFaces.current().executeScript("PF('errorGenerandoReporte').show();");
         }
     }
 

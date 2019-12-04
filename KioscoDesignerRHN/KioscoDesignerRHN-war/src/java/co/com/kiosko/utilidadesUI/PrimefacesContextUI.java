@@ -1,7 +1,8 @@
 package co.com.kiosko.utilidadesUI;
 
 import java.util.List;
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
+//import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -10,14 +11,17 @@ import org.primefaces.context.RequestContext;
 public class PrimefacesContextUI {
 
     public static void actualizar(String componente) {
-        RequestContext.getCurrentInstance().update(componente);
+//        RequestContext.getCurrentInstance().update(componente);
+        PrimeFaces.current().ajax().update(componente);
     }
 
     public static void actualizarLista(List<String> componente) {
-        RequestContext.getCurrentInstance().update(componente);
+//        RequestContext.getCurrentInstance().update(componente);
+        PrimeFaces.current().ajax().update(componente);
     }
 
     public static void ejecutar(String instruccion) {
-        RequestContext.getCurrentInstance().execute(instruccion);
+//        RequestContext.getCurrentInstance().execute(instruccion);
+        PrimeFaces.current().executeScript(instruccion);
     }
 }

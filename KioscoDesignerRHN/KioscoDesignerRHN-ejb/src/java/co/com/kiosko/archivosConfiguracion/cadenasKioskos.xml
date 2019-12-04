@@ -108,4 +108,13 @@
         <emplnomina></emplnomina>
         <esquema></esquema>
     </cadenaKiosko>         
+        <cadenaKiosko id="12">
+        <descripcion>LINDE</descripcion>
+        <cadena>DEFAULT5</cadena>
+        <nit>860005114</nit>
+        <fondo>fondoMenu.png</fondo>
+        <grupo>GrupoEmpresarial5</grupo>
+        <emplnomina></emplnomina>
+        <esquema></esquema>
+    </cadenaKiosko>         
 </conexiones>

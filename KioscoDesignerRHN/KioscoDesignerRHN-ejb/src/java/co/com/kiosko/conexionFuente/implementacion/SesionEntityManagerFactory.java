@@ -1,7 +1,7 @@
 package co.com.kiosko.conexionFuente.implementacion;
 
 import co.com.kiosko.conexionFuente.interfaz.ISesionEntityManagerFactory;
-//import java.io.Serializable;
+import java.io.Serializable;
 //import javax.ejb.Stateful;
 //import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
@@ -13,7 +13,7 @@ import javax.persistence.Persistence;
  */
 //@Stateless
 //@Stateful
-public class SesionEntityManagerFactory implements ISesionEntityManagerFactory{ //, Serializable {
+public class SesionEntityManagerFactory implements ISesionEntityManagerFactory, Serializable {
 
     @Override
     public EntityManagerFactory crearConexionUsuario(String unidadPersistencia) {

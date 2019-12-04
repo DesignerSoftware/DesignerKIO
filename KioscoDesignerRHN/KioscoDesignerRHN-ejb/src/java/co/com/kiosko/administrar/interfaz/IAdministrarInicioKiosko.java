@@ -2,6 +2,7 @@ package co.com.kiosko.administrar.interfaz;
 
 import co.com.kiosko.entidades.Empleados;
 import java.math.BigInteger;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -9,9 +10,11 @@ import java.math.BigInteger;
  */
 public interface IAdministrarInicioKiosko {
 
-    public void obtenerConexion(String idSesion);
+    public EntityManagerFactory obtenerConexion(String idSesion);
 
-    public Empleados consultarEmpleado(BigInteger codigoEmpleado, long nit);
+    public Empleados consultarEmpleado(String idSesion, BigInteger codigoEmpleado, long nit);
 
-    public String fotoEmpleado();
+    public String fotoEmpleado(String idSesion);
+    
+    public String consultarLogoEmpresa(String idSesion, long nit);
 }

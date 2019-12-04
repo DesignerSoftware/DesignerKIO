@@ -20,8 +20,9 @@ import org.primefaces.model.StreamedContent;
 import co.com.kiosko.clasesAyuda.CadenasKioskos;
 import co.com.kiosko.clasesAyuda.LeerArchivoXML;
 import java.math.BigDecimal;
+import org.primefaces.PrimeFaces;
 //import javax.servlet.http.HttpServletRequest;
-import org.primefaces.context.RequestContext;
+//import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -70,9 +71,13 @@ public class ControladorInicioKiosko implements Serializable {
 //            System.out.println("getRequestedSessionId: "+origRequest.getRequestedSessionId() );
             administrarInicioKiosko.obtenerConexion(ses.getId());
             conexionEmpleado = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getConexionEmpleado();
+            System.out.println("conexionEmpleado: " + conexionEmpleado.toString());
             ultimaConexionEmpleado = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getUltimaConexion();
+            System.out.println("ultimaConexionEmpleado: " + ultimaConexionEmpleado.toString());
             nitEmpresa = ((ControladorIngreso) x.getApplication().evaluateExpressionGet(x, "#{controladorIngreso}", ControladorIngreso.class)).getNit();
-            pathFoto = administrarInicioKiosko.fotoEmpleado();
+            System.out.println("nitEmpresa: " + nitEmpresa);
+            pathFoto = administrarInicioKiosko.fotoEmpleado(ses.getId());
+            System.out.println("pathFoto: " + pathFoto);
             obtenerFotoEmpleado();
             System.out.println("Inicializado");
         } catch (ELException e) {
@@ -82,12 +87,17 @@ public class ControladorInicioKiosko implements Serializable {
     }
 
     public void obtenerFotoEmpleado() {
-        String formatoFotoEmpleado="image/jpg";
-        BigDecimal codFoto = conexionEmpleado.getEmpleado().getCodigoempleado();
-        if (codFoto == null ){
+        System.out.println(this.getClass().getName() + "." + "obtenerFotoEmpleado" + "()");
+        String formatoFotoEmpleado = "image/jpg";
+        BigDecimal codFoto = null;
+        if (conexionEmpleado.getEmpleado() != null && conexionEmpleado.getEmpleado().getSecuencia() != null) {
+            codFoto = conexionEmpleado.getEmpleado().getCodigoempleado();
+        }
+        if (codFoto == null) {
             codFoto = conexionEmpleado.getPersona().getNumerodocumento();
         }
         String rutaFoto = pathFoto + codFoto + ".jpg";
+        System.out.println("rutaFoto: " + rutaFoto);
         if (rutaFoto != null) {
             try {
                 fis = new FileInputStream(new File(rutaFoto));
@@ -143,43 +153,50 @@ public class ControladorInicioKiosko implements Serializable {
     }
 
     public void obtenerLogoEmpresa() {
-        String formatoFotoEmpleado="image/png";
-        String logo = conexionEmpleado.getEmpleado().getEmpresa().getLogo().substring(0,conexionEmpleado.getEmpleado().getEmpresa().getLogo().length()-4);
-        String rutaLogo = pathFoto + logo+".png";
+        String formatoFotoEmpleado = "image/png";
+        HttpSession ses = (HttpSession) (FacesContext.getCurrentInstance()).getExternalContext().getSession(false);
+//        String logo = conexionEmpleado.getEmpleado().getEmpresa().getLogo().substring(0,conexionEmpleado.getEmpleado().getEmpresa().getLogo().length()-4);
+        String logoFull = administrarInicioKiosko.consultarLogoEmpresa(ses.getId(), conexionEmpleado.getNitEmpresa());
+        System.out.println("logoFull: "+logoFull);
+        String logo = logoFull.substring(0, logoFull.length()-4);
+        System.out.println("logo: "+logo);
+        String rutaLogo = pathFoto + logo + ".png";
         if (rutaLogo != null) {
             try {
                 fis = new FileInputStream(new File(rutaLogo));
                 logoEmpresa = new DefaultStreamedContent(fis, formatoFotoEmpleado, logo);
             } catch (FileNotFoundException e) {
                 try {
-                    rutaLogo=pathFoto+"sinLogo.png";
+                    rutaLogo = pathFoto + "sinLogo.png";
                     fis = new FileInputStream(new File(rutaLogo));
                     logoEmpresa = new DefaultStreamedContent(fis, formatoFotoEmpleado, rutaLogo);
                 } catch (FileNotFoundException ex) {
                     System.out.println("ERROR. No se encontro el logo de la empresa. \n");
-                    System.out.println("ruta: "+rutaLogo);
-                    System.out.println("execption: "+ex);
+                    System.out.println("ruta: " + rutaLogo);
+                    System.out.println("execption: " + ex);
                 }
             }
         }
     }
+
     /*private void consultaNitEmpresa(){
         nitEmpresa = String.valueOf(conexionEmpleado.getEmpleado().getEmpresa().getNit());
     }*/
-    
-    public void obtenerFondoEmpresa(){
+    public void obtenerFondoEmpresa() {
         //String rutaFondo = null;
         //consultaNitEmpresa();
 //        for (CadenasKioskos elemento : LeerArchivoXML.getInstance().leerArchivoEmpresasKiosko()) {
         for (CadenasKioskos elemento : leerArchivoXML.leerArchivoEmpresasKiosko()) {
-            if ( elemento.getNit().equals( nitEmpresa ) ){
+            if (elemento.getNit().equals(nitEmpresa)) {
                 fondoEmpresa = elemento.getFondo();
             }
         }
     }
-    public void mostrarPagina(){
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('estadoSesion').hide();");
+
+    public void mostrarPagina() {
+//        RequestContext context = RequestContext.getCurrentInstance();
+//        context.execute("PF('estadoSesion').hide();");
+        PrimeFaces.current().executeScript("PF('estadoSesion').hide();");
     }
 
     //GETTER AND SETTER
@@ -232,7 +249,7 @@ public class ControladorInicioKiosko implements Serializable {
         if (fondoEmpresa == null) {
             obtenerFondoEmpresa();
         }
-        System.out.println("fondoEmpresa: "+fondoEmpresa);
+        System.out.println("fondoEmpresa: " + fondoEmpresa);
         return fondoEmpresa;
     }
 

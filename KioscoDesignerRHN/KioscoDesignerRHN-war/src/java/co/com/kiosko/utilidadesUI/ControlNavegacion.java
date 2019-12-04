@@ -20,6 +20,8 @@ public class ControlNavegacion implements Serializable {
     }
 
     public String getUrlNavegation() {
+        System.out.println(this.getClass().getName() + "." + "getUrlNavegation" + "()");
+        System.out.println("urlMenuNavegation: "+urlMenuNavegation );
         return urlMenuNavegation;
     }
 

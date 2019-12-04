@@ -127,10 +127,9 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte, Se
         try {
             EntityManager em = emf.createEntityManager();
             ConfiguracionCorreo cc = persistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo(em, secuenciaEmpresa);
-//            EnvioCorreo enviarCorreo = new EnvioCorreo();
-//            return enviarCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
             em.close();
-            resul = EnvioCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
+            EnvioCorreo envioCorreo = new EnvioCorreo();
+            resul = envioCorreo.enviarCorreo(cc, destinatario, asunto, mensaje, pathAdjunto);
         } catch (Exception e) {
             System.out.println("enviarCorreo: " + e);
         }
@@ -145,11 +144,6 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte, Se
             EntityManager em = emf.createEntityManager();
             ConfiguracionCorreo cc = persistenciaConfiguracionCorreo.consultarConfiguracionServidorCorreo(em, secuenciaEmpresa);
             em.close();
-//            if (cc.getServidorSmtp().length() != 0) {
-//                retorno = true;
-//            } else {
-//                retorno = false;
-//            }
             retorno = cc.getServidorSmtp().length() != 0;
         } catch (NullPointerException npe) {
             retorno = false;
