@@ -143,26 +143,28 @@ public class ControladorOpcionesKiosko implements Serializable {
             System.out.println("no es rol empleado.");
 //            System.out.println("es rol autorizador.");
             if (codigos == null) {
-                codigos = new String[7];
+                codigos = new String[8];
                 codigos[0] = "0121";
                 codigos[1] = "0122";
                 codigos[2] = "0123";
                 codigos[3] = "0124";
                 codigos[4] = "0125";
                 codigos[5] = "0126";
-                codigos[6] = "0131";
-                codigos[7] = "0132";
+                codigos[6] = "0127";
+                codigos[7] = "0131";
+                codigos[8] = "0132";
             } else {
-                String[] tmp = new String[codigos.length + 8];
+                String[] tmp = new String[codigos.length + 9];
                 for (int j = 0; j < codigos.length; j++) {
                     tmp[j] = codigos[j];
                 }
-                tmp[tmp.length - 8] = "0121";
-                tmp[tmp.length - 7] = "0122";
-                tmp[tmp.length - 6] = "0123";
-                tmp[tmp.length - 5] = "0124";
-                tmp[tmp.length - 4] = "0125";
-                tmp[tmp.length - 3] = "0126";
+                tmp[tmp.length - 9] = "0121";
+                tmp[tmp.length - 8] = "0122";
+                tmp[tmp.length - 7] = "0123";
+                tmp[tmp.length - 6] = "0124";
+                tmp[tmp.length - 5] = "0125";
+                tmp[tmp.length - 4] = "0126";
+                tmp[tmp.length - 3] = "0127";
                 tmp[tmp.length - 2] = "0131";
                 tmp[tmp.length - 1] = "0132";
                 codigos = tmp;

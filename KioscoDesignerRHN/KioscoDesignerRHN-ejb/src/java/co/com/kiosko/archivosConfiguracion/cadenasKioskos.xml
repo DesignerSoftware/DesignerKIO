@@ -110,7 +110,7 @@
     </cadenaKiosko>         
         <cadenaKiosko id="12">
         <descripcion>LINDE</descripcion>
-        <cadena>DEFAULT5</cadena>
+        <cadena>DEFAULT6</cadena>
         <nit>860005114</nit>
         <fondo>fondoMenu.png</fondo>
         <grupo>GrupoEmpresarial5</grupo>

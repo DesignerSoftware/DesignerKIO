@@ -35,9 +35,11 @@ public interface IPersistenciaConexionInicial {
 
     public boolean validarEstadoUsuario(EntityManager eManager, String usuario, String nitEmpresa) throws Exception;
 
+    @Deprecated
     public boolean validarUsuarioRegistrado(EntityManager eManager, String usuario) throws Exception;
 
     public boolean validarEstadoUsuario(EntityManager eManager, String usuario) throws Exception;
 
+    @Deprecated
     public boolean validarIngresoUsuarioRegistrado(EntityManager eManager, String usuario, String clave) throws Exception;
 }

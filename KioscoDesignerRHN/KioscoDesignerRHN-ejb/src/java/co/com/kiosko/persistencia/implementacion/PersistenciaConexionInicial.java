@@ -96,7 +96,7 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
             String sqlQuery = "SELECT COUNT(*) "
                     + "FROM CONEXIONESKIOSKOS ck, PERSONAS per, EMPLEADOS e, EMPRESAS em "
                     + "WHERE ck.EMPLEADO = e.SECUENCIA "
-//                    + "WHERE ck.PERSONA = per.SECUENCIA "
+                    //                    + "WHERE ck.PERSONA = per.SECUENCIA "
                     + "AND e.persona = per.secuencia "
                     + "AND e.empresa = em.secuencia "
                     + "AND e.codigoempleado = ? "
@@ -111,6 +111,26 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
             System.out.println("Error PersistenciaConexionInicial.validarUsuarioRegistrado: " + e);
             resultado = false;
             throw new Exception(e);
+        }
+        if (!resultado) {
+            try {
+                String sqlQuery = "SELECT COUNT(*) "
+                        + "FROM CONEXIONESKIOSKOS ck, PERSONAS per, KIOAUTORIZADORES ka "
+                        + "WHERE ck.PERSONA = per.SECUENCIA "
+                        + "AND ka.PERSONA = per.SECUENCIA "
+                        + "AND per.NUMERODOCUMENTO = ? "
+                        + "AND ck.nitempresa = ? ";
+                Query query = eManager.createNativeQuery(sqlQuery);
+                query.setParameter(1, usuario);
+                query.setParameter(2, nitEmpresa);
+                BigDecimal retorno = (BigDecimal) query.getSingleResult();
+                Integer instancia = retorno.intValueExact();
+                resultado = instancia > 0;
+            } catch (Exception e) {
+                System.out.println("Error PersistenciaConexionInicial.validarUsuarioRegistrado-2: " + e);
+                resultado = false;
+                throw new Exception(e);
+            }
         }
         return resultado;
     }
@@ -147,11 +167,11 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
         try {
             String sqlQuery = "SELECT COUNT(*) "
                     + "FROM CONEXIONESKIOSKOS ck, PERSONAS per, EMPLEADOS e, EMPRESAS em "
-//                    + "WHERE ck.PERSONA = per.SECUENCIA "
+                    //                    + "WHERE ck.PERSONA = per.SECUENCIA "
                     + "WHERE ck.EMPLEADO = e.SECUENCIA "
                     + "AND per.secuencia = e.persona "
                     + "AND e.empresa = em.secuencia "
-                    + "AND ck.activo = 'N' "
+                    + "AND ck.activo = 'S' "
                     + "AND e.codigoempleado = ? "
                     + "AND em.nit = ? ";
             Query query = eManager.createNativeQuery(sqlQuery);
@@ -159,7 +179,7 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
             query.setParameter(2, nitEmpresa);
             BigDecimal retorno = (BigDecimal) query.getSingleResult();
             Integer instancia = retorno.intValueExact();
-            resultado = !(instancia > 0);
+            resultado = (instancia > 0);
         } catch (Exception e) {
             System.out.println("Error PersistenciaConexionInicial.validarEstadoUsuario: " + e);
             resultado = false;
@@ -181,13 +201,13 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
                     + "FROM CONEXIONESKIOSKOS ck, PERSONAS per, KIOAUTORIZADORES ka "
                     + "WHERE ck.PERSONA = per.SECUENCIA "
                     + "AND per.SECUENCIA = ka.PERSONA "
-                    + "AND ck.activo = 'N' "
+                    + "AND ck.activo = 'S' "
                     + "AND per.numerodocumento = ? ";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.setParameter(1, usuario);
             BigDecimal retorno = (BigDecimal) query.getSingleResult();
             Integer instancia = retorno.intValueExact();
-            resultado = !(instancia > 0);
+            resultado = (instancia > 0);
         } catch (Exception e) {
             System.out.println("Error PersistenciaConexionInicial.validarEstadoUsuario-2: " + e);
             resultado = false;
@@ -201,13 +221,15 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
         boolean resultado = false;
         try {
             String sqlQuery = "SELECT COUNT(*) "
-                    + "FROM CONEXIONESKIOSKOS ck, Personas per, EMPLEADOS e, EMPRESAS em "
+                    + "FROM CONEXIONESKIOSKOS ck, Personas per, EMPLEADOS e "
                     + "WHERE ck.PERSONA = per.SECUENCIA "
                     + "AND per.secuencia = e.persona "
-                    + "AND e.empresa = em.secuencia "
                     + "AND e.codigoempleado = ? "
                     + "AND ck.PWD = GENERALES_PKG.ENCRYPT(?) "
-                    + "AND em.nit = ? ";
+                    + "AND ck.activo = 'S' "
+                    + "AND ck.nitempresa = ? "
+                    + "AND (EMPLEADOCURRENT_PKG.TipoTrabajadorCorte(e.secuencia, SYSDATE) = 'ACTIVO' "
+                    + "OR EMPLEADOCURRENT_PKG.TipoTrabajadorCorte(e.secuencia, SYSDATE) = 'PENSIONADO')";;
             Query query = eManager.createNativeQuery(sqlQuery);
             query.setParameter(1, usuario);
             query.setParameter(2, clave);
@@ -220,6 +242,28 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
             resultado = false;
             throw new Exception(e);
         }
+        if (!resultado) {
+            try {
+                String sqlQuery = "SELECT COUNT(*) "
+                        + "FROM CONEXIONESKIOSKOS ck, Personas per "
+                        + "WHERE ck.PERSONA = per.SECUENCIA "
+                        + "AND per.numerodocumento = ? "
+                        + "AND ck.activo = 'S' "
+                        + "AND ck.nitempresa = ? "
+                        + "AND ck.PWD = GENERALES_PKG.ENCRYPT(?) ";
+                Query query = eManager.createNativeQuery(sqlQuery);
+                query.setParameter(1, usuario);
+                query.setParameter(2, nitEmpresa);
+                query.setParameter(3, clave);
+                BigDecimal retorno = (BigDecimal) query.getSingleResult();
+                Integer instancia = retorno.intValueExact();
+                resultado = instancia > 0;
+            } catch (Exception e) {
+                System.out.println("Error PersistenciaConexionInicial.validarIngresoUsuarioRegistrado: " + e);
+                resultado = false;
+                throw new Exception(e);
+            }
+        }
         return resultado;
     }
 
@@ -231,6 +275,7 @@ public class PersistenciaConexionInicial implements IPersistenciaConexionInicial
                     + "FROM CONEXIONESKIOSKOS ck, Personas per "
                     + "WHERE ck.PERSONA = per.SECUENCIA "
                     + "AND per.numerodocumento = ? "
+                    + "AND ck.activo = 'S' "
                     + "AND ck.PWD = GENERALES_PKG.ENCRYPT(?) ";
             Query query = eManager.createNativeQuery(sqlQuery);
             query.setParameter(1, usuario);

@@ -130,7 +130,7 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
             resul = false;
             throw e;
         }
-        if (!resul) {
+        /*if (!resul) {
             try {
                 EntityManager em = emf.createEntityManager();
                 resul = persistenciaConexionInicial.validarUsuarioRegistrado(em, usuario);
@@ -140,7 +140,7 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
                 resul = false;
                 throw e;
             }
-        }
+        }*/
         return resul;
     }
 
@@ -182,6 +182,7 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
         System.out.println(this.getClass().getName() + ".validarIngresoUsuarioRegistrado()");
         EntityManagerFactory emf;
         boolean resul = false;
+        
         try {
             emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
             if (emf != null) {
@@ -194,7 +195,7 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
             System.out.println("validarIngresoUsuarioRegistrado-1: " + e);
             resul = false;
         }
-        if (!resul) {
+        /*if (!resul) {
             try {
                 emf = sessionEMF.crearConexionUsuario(unidadPersistencia);
                 if (emf != null) {
@@ -206,7 +207,7 @@ public class AdministrarIngreso implements IAdministrarIngreso, Serializable {
                 System.out.println("validarIngresoUsuarioRegistrado-2: " + e);
                 resul = false;
             }
-        }
+        }*/
         return resul;
     }
 
