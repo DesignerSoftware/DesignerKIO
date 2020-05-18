@@ -44,12 +44,12 @@ public class AdministrarRegistrarSolicitud implements IAdministrarRegistrarSolic
 
     @Override
     public void cambiarEstadoSolicitud(KioSoliciVacas solicitud, Empleados emplEjecuta, String estado, String motivo) throws Exception {
-        System.out.println(this.getClass().getName() + ".cambiarEstadoSolicitud()");
+//        System.out.println(this.getClass().getName() + ".cambiarEstadoSolicitud()");
         EntityManager em = emf.createEntityManager();
-        System.out.println("cambiarEstadoSolicitud: guardado");
+//        System.out.println("cambiarEstadoSolicitud: guardado");
         try {
             persistenciaEstadoSolicitud.crearEstadoSolicitud(em, solicitud, emplEjecuta.getSecuencia(), estado, motivo);
-            System.out.println("cambiarEstadoSolicitud: enviando");
+//            System.out.println("cambiarEstadoSolicitud: enviando");
         } catch (Exception e) {
             throw e;
         } finally {
@@ -61,8 +61,8 @@ public class AdministrarRegistrarSolicitud implements IAdministrarRegistrarSolic
 
     @Override
     public void registrarNovedad(KioSoliciVacas solicitud) throws Exception {
-        System.out.println(this.getClass().getName() + ".registrarNovedad()");
-        System.out.println("registrarNovedad-solicitud: "+solicitud);
+//        System.out.println(this.getClass().getName() + ".registrarNovedad()");
+//        System.out.println("registrarNovedad-solicitud: "+solicitud);
         EntityManager em = emf.createEntityManager();
         try {
             persistenciaNovedadSolicitud.modificarNovedadSolici(em, solicitud.getKioNovedadesSolici());
@@ -91,7 +91,7 @@ public class AdministrarRegistrarSolicitud implements IAdministrarRegistrarSolic
         try {
             em = emf.createEntityManager();
             fechaUltPago = persistenciaVwVacaPendEmpl.consultaFechaUltimoPago(em, empleado.getSecuencia());
-            System.out.println("fechaUltimoPago: " + fechaUltPago);
+//            System.out.println("fechaUltimoPago: " + fechaUltPago);
         } catch (Exception exi) {
             System.out.println("AdministrarRegistrarSolicitud. Error consultando la fecha de último pago.");
             exi.printStackTrace();
@@ -110,7 +110,7 @@ public class AdministrarRegistrarSolicitud implements IAdministrarRegistrarSolic
         try {
             em = emf.createEntityManager();
             fechaUltPago = persistenciaVwVacaPendEmpl.calculaFechaPago(em, empleado.getSecuencia(), fini, ffin, proceso);
-            System.out.println("fechaPago: " + fechaUltPago);
+//            System.out.println("fechaPago: " + fechaUltPago);
         } catch (Exception exi) {
             System.out.println("AdministrarRegistrarSolicitud. Error calculandos la fecha de último pago.");
             exi.printStackTrace();

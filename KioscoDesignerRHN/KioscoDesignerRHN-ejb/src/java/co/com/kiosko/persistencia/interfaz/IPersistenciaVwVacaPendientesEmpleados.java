@@ -93,4 +93,12 @@ public interface IPersistenciaVwVacaPendientesEmpleados {
      * @throws Exception 
      */
     public BigDecimal consultarDiasRealPendPeriodo(EntityManager em, BigDecimal rfVacacion) throws Exception;
+
+    public BigDecimal consultarDiasPenGanDerecho(EntityManager em, BigDecimal rfEmpleado) throws Exception;
+
+    public BigDecimal consultarDiasProvisionados(EntityManager em, BigDecimal rfEmpleado) throws Exception;
+
+    public BigDecimal consultarDiasProvisiMenosDisfruta(EntityManager em, BigDecimal rfEmpleado) throws Exception;
+
+    public BigDecimal consultarDiasSolicitados(EntityManager em, BigDecimal rfEmpleado) throws Exception;
 }

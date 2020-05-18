@@ -49,13 +49,13 @@ public class AdministrarProcesarSolicitud implements IAdministrarProcesarSolicit
     public void cambiarEstadoSolicitud(KioSoliciVacas solicitud, Empleados emplEjecuta, String estado, String motivo, Personas perEjecuta) throws Exception {
         System.out.println(this.getClass().getName() + ".cambiarEstadoSolicitud()");
         EntityManager em = null;
-        System.out.println("cambiarEstadoSolicitud: guardado");
+//        System.out.println("cambiarEstadoSolicitud: guardado");
         BigInteger secPersona = null;
-        if (perEjecuta != null){
+        if (perEjecuta != null) {
             secPersona = perEjecuta.getSecuencia();
         }
         BigDecimal secEmpleado = null;
-        if (emplEjecuta != null){
+        if (emplEjecuta != null) {
             secEmpleado = emplEjecuta.getSecuencia();
         }
         try {
@@ -73,7 +73,7 @@ public class AdministrarProcesarSolicitud implements IAdministrarProcesarSolicit
 
     @Override
     public void registrarNovedad(KioSoliciVacas solicitud) throws Exception {
-        System.out.println(this.getClass().getName() + ".registrarNovedad()");
+//        System.out.println(this.getClass().getName() + ".registrarNovedad()");
         EntityManager em = emf.createEntityManager();
         try {
             persistenciaEstadoSolicitud.registrarNovedad(em, solicitud);
@@ -115,7 +115,7 @@ public class AdministrarProcesarSolicitud implements IAdministrarProcesarSolicit
         try {
             em = emf.createEntityManager();
             fechaUltPago = persistenciaVwVacaPendEmpl.consultaFechaUltimoPago(em, empleado.getSecuencia());
-            System.out.println("fechaUltimoPago: " + fechaUltPago);
+//            System.out.println("fechaUltimoPago: " + fechaUltPago);
         } catch (Exception exi) {
             System.out.println("AdministrarProcesarSolicitud. Error consultando la fecha de último pago.");
             exi.printStackTrace();
@@ -127,4 +127,36 @@ public class AdministrarProcesarSolicitud implements IAdministrarProcesarSolicit
         return fechaUltPago;
     }
 
+    @Override
+    public BigDecimal consultarDiasProvisionados(Empleados empleado) throws Exception {
+        System.out.println(this.getClass().getName() + ".consultarDiasProvisionados()");
+        EntityManager em = emf.createEntityManager();
+        BigDecimal res;
+        try {
+            res = persistenciaVwVacaPendEmpl.consultarDiasProvisionados(em, empleado.getSecuencia());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+        return res;
+    }
+    @Override
+    public BigDecimal consultarDiasSolicitados(Empleados empleado) throws Exception {
+        System.out.println(this.getClass().getName() + ".consultarDiasSolicitados()");
+        EntityManager em = emf.createEntityManager();
+        BigDecimal res;
+        try {
+            res = persistenciaVwVacaPendEmpl.consultarDiasSolicitados(em, empleado.getSecuencia());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+        return res;
+    }
 }

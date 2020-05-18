@@ -40,7 +40,7 @@
     </session-config>
     <welcome-file-list>
         <welcome-file>faces/Ingreso/ingreso.xhtml</welcome-file>
-        <!-- <welcome-file>faces/Pruebas/paginaPruebas.xhtml</welcome-file> -->
+         <!--<welcome-file>faces/Pruebas/paginaPruebas.xhtml</welcome-file>--> 
     </welcome-file-list>
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>

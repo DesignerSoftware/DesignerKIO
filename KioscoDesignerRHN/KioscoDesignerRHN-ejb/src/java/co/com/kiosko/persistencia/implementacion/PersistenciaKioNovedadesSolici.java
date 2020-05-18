@@ -4,6 +4,7 @@ import co.com.kiosko.entidades.KioNovedadesSolici;
 import javax.ejb.Stateless;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaKioNovedadesSolici;
 import java.math.BigDecimal;
+//import java.text.SimpleDateFormat;
 //import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,11 +48,11 @@ public class PersistenciaKioNovedadesSolici implements IPersistenciaKioNovedades
             throw new Exception(e.toString());
         }
     }
-    
+
     @Override
     public void modificarNovedadSolici(EntityManager em, KioNovedadesSolici novedadSolici) throws EntityExistsException, TransactionRolledbackLocalException, Exception {
         System.out.println(this.getClass().getName() + ".modificarNovedadSolici()");
-        System.out.println("modificarNovedadSolici-novedadSolici: "+novedadSolici);
+        System.out.println("modificarNovedadSolici-novedadSolici: " + novedadSolici);
         em.clear();
         try {
             em.merge(novedadSolici);
@@ -66,29 +67,92 @@ public class PersistenciaKioNovedadesSolici implements IPersistenciaKioNovedades
         }
     }
 
+    private void contarNovedadSolici(EntityManager em, KioNovedadesSolici novedadSolici) {
+        String consulta = "select count(*) \n"
+                + "from KioNovedadesSolici kns \n"
+                + "where kns.empleado = ? \n";
+        try {
+            Query query = em.createNativeQuery(consulta);
+            query.setParameter(1, novedadSolici.getEmpleado().getSecuencia());
+            Object res = query.getSingleResult();
+            System.out.println("Resultado del conteo: " + res);
+            System.out.println("tipo: " + res.getClass().getName());
+        } catch (Exception ex) {
+            System.out.println("contarNovedadSolici.ex: " + ex);
+        }
+    }
+
     @Override
     public KioNovedadesSolici recargarNovedadSolici(EntityManager em, KioNovedadesSolici novedadSolici) throws NoResultException, NonUniqueResultException, IllegalStateException {
         System.out.println(this.getClass().getName() + ".recargarNovedadSolici()");
         em.clear();
-        String consulta = "select kns from KioNovedadesSolici kns "
-                + "where kns.empleado.secuencia = :secEmpleado "
-                + "and kns.fechaInicialDisfrute = :dtInicialDis "
-                + "and kns.fechaSistema between CURRENT_DATE and :dtSistema "
-                + "and kns.vacacion.rfVacacion = :vacacion "
-                + "and kns.dias = :dias "
-                + "and kns.subtipo = :subtipo "
-                + "and kns.adelantaPagoHasta = :dtPagoHasta "
-                + "order by kns.fechaInicialDisfrute ";
+        contarNovedadSolici(em, novedadSolici);
+        String consulta;
+        if (novedadSolici.getVacacion() == null) {
+            consulta = "select kns from KioNovedadesSolici kns "
+                    + "where kns.empleado.secuencia = :secEmpleado "
+                    + "and kns.fechaInicialDisfrute = :dtInicialDis "
+                    + "and kns.fechaSistema between CURRENT_DATE and :dtSistema "
+                    + "and kns.dias = :dias "
+                    + "and kns.subtipo = :subtipo "
+                    + "and kns.adelantaPagoHasta = :dtPagoHasta "
+                    + "order by kns.fechaInicialDisfrute ";
+        } else {
+            consulta = "select kns from KioNovedadesSolici kns "
+                    + "where kns.empleado.secuencia = :secEmpleado "
+                    + "and kns.fechaInicialDisfrute = :dtInicialDis "
+                    + "and kns.fechaSistema between CURRENT_DATE and :dtSistema "
+                    + "and kns.vacacion.rfVacacion = :vacacion "
+                    + "and kns.dias = :dias "
+                    + "and kns.subtipo = :subtipo "
+                    + "and kns.adelantaPagoHasta = :dtPagoHasta "
+                    + "order by kns.fechaInicialDisfrute ";
+        }
+        /*SimpleDateFormat formato = new SimpleDateFormat("ddMMyyyy");
+        SimpleDateFormat formato2 = new SimpleDateFormat("ddMMyyyy HH:mm:ss.SSS");
+        String txtFechaIniDisf = formato.format(novedadSolici.getFechaInicialDisfrute());
+        String txtAdelantaPagoHasta = formato.format(novedadSolici.getAdelantaPagoHasta());
+        String txtFechaSistema = formato2.format(novedadSolici.getFechaSistema());
+        String consulta = "select kns.* \n"
+                + "from KioNovedadesSolici kns \n"
+                + "where kns.empleado = ? \n"
+                + "and kns.fechaInicialDisfrute = to_date( ? ,'DDMMYYYY') \n"
+                + "and kns.fechaSistema between trunc(SYSTIMESTAMP,'HH') and TO_TIMESTAMP( ? , 'DDMMYYYY HH24:MI:SS.FF') \n";
+        if (novedadSolici.getVacacion() == null) {
+            consulta = consulta + "and kns.vacacion is null \n";
+        } else {
+            consulta = consulta + "and kns.vacacion = ? \n";
+        }
+        consulta = consulta + "and kns.dias = ? \n"
+                + "and kns.subtipo = ? \n"
+                + "and kns.adelantaPagoHasta = to_date( ? ,'DDMMYYYY') \n"
+                + "order by kns.fechaInicialDisfrute \n";*/
         List lista = new ArrayList();
         try {
             Query query = em.createQuery(consulta);
             query.setParameter("secEmpleado", novedadSolici.getEmpleado().getSecuencia());
             query.setParameter("dtInicialDis", novedadSolici.getFechaInicialDisfrute());
             query.setParameter("dtSistema", novedadSolici.getFechaSistema(), TemporalType.TIMESTAMP);
-            query.setParameter("vacacion", novedadSolici.getVacacion().getRfVacacion());
+            if (novedadSolici.getVacacion() != null) {
+                query.setParameter("vacacion", novedadSolici.getVacacion().getRfVacacion());
+            }
             query.setParameter("dias", novedadSolici.getDias());
             query.setParameter("subtipo", novedadSolici.getSubtipo());
             query.setParameter("dtPagoHasta", novedadSolici.getAdelantaPagoHasta());
+            /*Query query = em.createNativeQuery(consulta);
+            query.setParameter(1, novedadSolici.getEmpleado().getSecuencia());
+            query.setParameter(2, txtFechaIniDisf);
+            query.setParameter(3, txtFechaSistema);
+            if (novedadSolici.getVacacion() != null) {
+                query.setParameter(4, novedadSolici.getVacacion().getRfVacacion());
+                query.setParameter(5, novedadSolici.getDias());
+                query.setParameter(6, novedadSolici.getSubtipo());
+                query.setParameter(7, txtAdelantaPagoHasta);
+            } else {
+                query.setParameter(4, novedadSolici.getDias());
+                query.setParameter(5, novedadSolici.getSubtipo());
+                query.setParameter(6, txtAdelantaPagoHasta);
+            }*/
             lista = query.getResultList();
             Calendar cl1 = Calendar.getInstance();
             cl1.setTime(novedadSolici.getFechaSistema());
@@ -136,7 +200,7 @@ public class PersistenciaKioNovedadesSolici implements IPersistenciaKioNovedades
             }
             try {
                 //Pregunta si la entidad esta en el contexto de persistencia.
-                if ( !em.contains(novedadSolici) ){
+                if (!em.contains(novedadSolici)) {
                     //Si no esta en el contexto de persistencia hace la consulta para obtenerla.
                     em.find(novedadSolici.getClass(), novedadSolici.getSecuencia());
                 }
@@ -174,6 +238,7 @@ public class PersistenciaKioNovedadesSolici implements IPersistenciaKioNovedades
             throw new Exception(e.toString());
         }
     }
+
     @Override
     public BigDecimal consultaTraslapamientos(EntityManager em, BigDecimal secEmpleado, Date fechaIniVaca, Date fechaFinVaca) throws PersistenceException, NullPointerException, Exception {
         System.out.println(this.getClass().getName() + "." + "consultaTraslapamientos" + "()");
@@ -188,7 +253,7 @@ public class PersistenciaKioNovedadesSolici implements IPersistenciaKioNovedades
             query.setParameter(2, fechaIniVaca, TemporalType.DATE);
             query.setParameter(3, fechaFinVaca, TemporalType.DATE);
             contTras = (BigDecimal) (query.getSingleResult());
-            System.out.println("Resultado consulta traslapamiento: "+contTras);
+            System.out.println("Resultado consulta traslapamiento: " + contTras);
             return contTras;
         } catch (PersistenceException pe) {
             System.out.println("Error de persistencia en consultaTraslapamientos.");

@@ -1,0 +1,333 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <p:remoteCommand name="pantallaDinamica" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
+                     actionListener="#{controladorKio_VerTiemposEmpleado.limpiarListas()}"
+                     process="@this" update=":principalForm"/>
+    <p:remoteCommand name="refrescarListas" update=":principalForm:resulEnvio"
+                     process="@this" oncomplete="pantallaDinamica()"/>
+    <p:remoteCommand name="procesarsolici" actionListener="#{controladorKio_VerTiemposEmpleado.procesarSolicitud()}"
+                     process="@this" oncomplete="PF('creandoSolici').hide();" update=":principalForm:resulEnvio"/>
+    <p:panel header="Ver solicitudes propias" style="border: none; padding: 0px; margin: 0px; background: transparent" styleClass="noBorders">
+        <center>
+            <h:form id="frmsolicitudes">
+                <p:tabView>
+                    <p:tab title="GUARDADOS">
+                        <p:dataTable id="tbsoliciguarda" var="esg" 
+                                     value="#{controladorKio_VerTiemposEmpleado.estadoSoliciGuardadas}" 
+                                     selection="#{controladorKio_VerTiemposEmpleado.estSoliciSelec}" 
+                                     rowKey="#{esg.secuencia}"
+                                     rowIndexVar="#{esg.secuencia}" 
+                                     paginator="true"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} "
+                                     lazy="true" rows="5"
+                                     >
+                            <f:facet name="header">
+                                INFORMES GUARDADOS
+                            </f:facet>
+                            <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                            <p:column headerText="CREACION SOLICITUD">
+                                <h:outputText value="#{esg.kioSoliciLocaliza.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="FECHA PROCESADA">
+                                <h:outputText value="#{esg.fechaProcesamiento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="ESTADO">
+                                <h:outputText value="#{esg.estado}" />
+                            </p:column>
+                            <p:column rendered="#{esg.kioSoliciLocaliza.empleadoJefe != null}" headerText="EMPLEADO JEFE">
+                                <h:outputText value="#{esg.kioSoliciLocaliza.empleadoJefe.persona.nombreCompleto}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton process="tbsoliciguarda" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " 
+                                                 actionListener="#{controladorKio_VerTiemposEmpleado.consultarDetalleReporte()}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="ENVIADOS">
+                        <p:dataTable id="tbsolicienvia" var="esg" 
+                                     value="#{controladorKio_VerTiemposEmpleado.estadoSoliciEnviadas}" 
+                                     selection="#{controladorKio_VerTiemposEmpleado.estSoliciSelec}" 
+                                     rowKey="#{esg.secuencia}"
+                                     rowIndexVar="#{esg.secuencia}"
+                                     paginator="true"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} "
+                                     lazy="true" rows="5"
+                                     >
+                            <f:facet name="header">
+                                INFORMES ENVIADOS
+                            </f:facet>
+                            <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                            <p:column headerText="CREACION SOLICITUD">
+                                <h:outputText value="#{esg.kioSoliciLocaliza.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="FECHA PROCESADA">
+                                <h:outputText value="#{esg.fechaProcesamiento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="ESTADO">
+                                <h:outputText value="#{esg.estado}" />
+                            </p:column>
+                            <p:column rendered="#{esg.kioSoliciLocaliza.empleadoJefe != null}" headerText="EMPLEADO JEFE">
+                                <h:outputText value="#{esg.kioSoliciLocaliza.empleadoJefe.persona.nombreCompleto}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton process="tbsolicienvia" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " 
+                                                 actionListener="#{controladorKio_VerTiemposEmpleado.consultarDetalleReporte()}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="APROBADOS">
+                        <p:dataTable id="tbsoliciaprobada" var="esg" 
+                                     value="#{controladorKio_VerTiemposEmpleado.estadoSoliciAprobadas}" 
+                                     selection="#{controladorKio_VerTiemposEmpleado.estSoliciSelec}" 
+                                     rowKey="#{esg.secuencia}"
+                                     rowIndexVar="#{esg.secuencia}"
+                                     paginator="true"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} "
+                                     lazy="true" rows="5"
+                                     >
+                            <f:facet name="header">
+                                TIEMPOS APROBADOS
+                            </f:facet>
+                            <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                            <p:column headerText="CREACION REPORTE">
+                                <h:outputText value="#{esg.kioSoliciLocaliza.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="FECHA PROCESADA">
+                                <h:outputText value="#{esg.fechaProcesamiento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="ESTADO">
+                                <h:outputText value="#{esg.estado}" />
+                            </p:column>
+                            <p:column headerText="EMPLEADO EJECUTA">
+                                <h:outputText value="#{esg.personaEjecuta.nombreCompleto}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton process="tbsoliciaprobada" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " 
+                                                 actionListener="#{controladorKio_VerTiemposEmpleado.consultarDetalleReporte()}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="RECHAZADOS">
+                        <p:dataTable id="tbsolicirechazada" var="esg" 
+                                     value="#{controladorKio_VerTiemposEmpleado.estadoSoliciRechazadas}" 
+                                     selection="#{controladorKio_VerTiemposEmpleado.estSoliciSelec}" 
+                                     rowKey="#{esg.secuencia}"
+                                     rowIndexVar="#{esg.secuencia}"
+                                     paginator="true"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} "
+                                     lazy="true" rows="5"
+                                     >
+                            <f:facet name="header">
+                                REPORTES RECHAZADOS
+                            </f:facet>
+                            <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                            <p:column headerText="CREACION SOLICITUD">
+                                <h:outputText value="#{esg.kioSoliciLocaliza.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="FECHA PROCESADA">
+                                <h:outputText value="#{esg.fechaProcesamiento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="ESTADO">
+                                <h:outputText value="#{esg.estado}" />
+                            </p:column>
+                            <p:column headerText="EMPLEADO EJECUTA">
+                                <h:outputText value="#{esg.personaEjecuta.nombreCompleto}" />
+                            </p:column>
+                            <p:column headerText="MOTIVO">
+                                <h:outputText value="#{esg.motivoProcesa}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton process="tbsolicirechazada" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " 
+                                                 actionListener="#{controladorKio_VerTiemposEmpleado.consultarDetalleReporte()}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="CORREGIR">
+                        <p:dataTable id="tbsoliciliqui" var="esg" 
+                                     value="#{controladorKio_VerTiemposEmpleado.estadoSoliciLiquidadas}" 
+                                     selection="#{controladorKio_VerTiemposEmpleado.estSoliciSelec}" 
+                                     rowKey="#{esg.secuencia}"
+                                     rowIndexVar="#{esg.secuencia}"
+                                     paginator="true"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} "
+                                     lazy="true" rows="5"
+                                     >
+                            <f:facet name="header">
+                                TIEMPOS A CORREGIR
+                            </f:facet>
+                            <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                            <p:column headerText="CREACION SOLICITUD">
+                                <h:outputText value="#{esg.kioSoliciLocaliza.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="FECHA PROCESADA">
+                                <h:outputText value="#{esg.fechaProcesamiento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="ESTADO">
+                                <h:outputText value="#{esg.estado}" />
+                            </p:column>
+                            <p:column headerText="EMPLEADO EJECUTA">
+                                <h:outputText value="#{esg.personaEjecuta.nombreCompleto}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton process="tbsoliciliqui" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " 
+                                                 actionListener="#{controladorKio_VerTiemposEmpleado.consultarDetalleReporte()}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="CANCELADAS">
+                        <p:dataTable id="tbsolicicancelada" var="esg" 
+                                     value="#{controladorKio_VerTiemposEmpleado.estadoSoliciCanceladas}" 
+                                     selection="#{controladorKio_VerTiemposEmpleado.estSoliciSelec}" 
+                                     rowKey="#{esg.secuencia}"
+                                     rowIndexVar="#{esg.secuencia}"
+                                     paginator="true"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} "
+                                     lazy="true" rows="5"
+                                     >
+                            <f:facet name="header">
+                                REPORTES CANCELADOS
+                            </f:facet>
+                            <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                            <p:column headerText="CREACION SOLICITUD">
+                                <h:outputText value="#{esg.kioSoliciLocaliza.fechaGeneracion}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="FECHA PROCESADA">
+                                <h:outputText value="#{esg.fechaProcesamiento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column headerText="ESTADO">
+                                <h:outputText value="#{esg.estado}" />
+                            </p:column>
+                            <p:column headerText="EMPLEADO EJECUTA">
+                                <h:outputText value="#{esg.personaEjecuta.nombreCompleto}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton process="tbsolicicancelada" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitud" oncomplete="PF('soliciDialog').show(); " 
+                                                 actionListener="#{controladorKio_VerTiemposEmpleado.consultarDetalleReporte()}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:tab>
+                </p:tabView>
+            </h:form>
+        </center>
+    </p:panel>
+
+
+    <p:panel style="border: none; padding: 0px; margin: 0px; background: transparent;" styleClass="noBorders">
+        <center>
+            <p:commandButton value="Volver" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
+                             update=":principalForm" process="@this" icon="ui-icon-closethick"
+                             actionListener="#{controladorKio_VerTiemposEmpleado.limpiarListas}"/>
+        </center>
+    </p:panel>
+    <p:dialog id="soliciDialog" widgetVar="soliciDialog" modal="true" resizable="true"
+              >
+        <p:outputPanel id="soliciDetail">
+            <center>
+                <p:outputLabel value="DETALLE DE LA SOLICITUD" 
+                               rendered="#{not empty controladorKio_VerTiemposEmpleado.estSoliciSelec}"
+                               style="font-weight: bold;"/>
+                <p:outputLabel value="SELECCIONE UNA SOLICITUD" 
+                               rendered="#{empty controladorKio_VerTiemposEmpleado.estSoliciSelec}"
+                               style="font-weight: bold;"/>
+            </center>
+            <br/>
+            <p:panelGrid columns="2" rendered="#{not empty controladorKio_VerTiemposEmpleado.estSoliciSelec}" >
+                <h:outputText value="Observación: " />
+                <h:outputText value="#{controladorKio_VerTiemposEmpleado.estSoliciSelec.motivoProcesa}" >
+                </h:outputText> 
+            </p:panelGrid>
+            <br/>
+            <p:dataTable id="tbtiempos" 
+                         widgetVar="tbtiempos"
+                         var="localiza" 
+                         value="#{controladorKio_VerTiemposEmpleado.localizacionesEmpleado}" 
+                         lazy="true" rows="5"
+                         rowKey="#{localiza.secuencia}" 
+                         rowIndexVar="#{localiza.secuencia}" 
+                         sortBy="#{localiza.fecha}"
+                         style="width: 528px;"
+                         >
+                <f:facet name="header">
+                    LISTADO DE LOCALIZACIONES REPORTADAS
+                </f:facet>
+                <p:column headerText="FECHA" >
+                    <h:outputText value="#{localiza.fecha}" >
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="LOCALIZACION" >
+                    <h:outputText value="#{localiza.kioLocaliza.codigo}-#{localiza.kioLocaliza.nombre}" />
+                </p:column>
+                <p:column headerText="PORCENTAJE" >
+                    <h:outputText value="#{localiza.porcentaje}" >
+                    </h:outputText> 
+                </p:column>
+            </p:dataTable>     
+            <center>
+                <p:commandButton value="REGRESAR" onclick="PF('soliciDialog').hide();" />
+            </center>
+        </p:outputPanel>
+    </p:dialog>
+    <p:dialog id="recarDatos" header="Informaci&oacute;n" widgetVar="recarDatos" 
+              resizable="false" draggable="false" modal="true" 
+              height="85" width="350px" style="font-size: 12px;" closable="true">  
+        <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50" 
+                        style="position: absolute; left: 15px; top: 20px;" />
+        <h:outputText value="Recargando datos, esto puede tardar un poco..." 
+                      style="position: absolute; left: 80px; top: 20px; width: 240px; text-align: justify;" />
+    </p:dialog>
+    <p:dialog id="resulEnvio" header="Información" widgetVar="resulEnvio" modal="true" resizable="true">
+        <p:panelGrid columns="1" styleClass="noBorders">
+            <p:column>
+                <center>
+                    <h:outputText id="mensajecreacion" value="#{controladorKio_VerTiemposEmpleado.mensajeCreacion}"/>
+                </center>
+            </p:column>
+            <p:column>
+                <p:commandButton value="Aceptar" 
+                                 onclick="PF('resulEnvio').hide(); refrescarListas();"
+                                 process="@this"/>
+            </p:column>
+        </p:panelGrid>
+    </p:dialog>
+    <p:dialog id="creandoSolici" header="Procesando solicitud" widgetVar="creandoSolici"  
+              resizable="false" draggable="true" modal="true" height="65" width="350" 
+              closable="false" >  
+        <p:panelGrid columns="2" styleClass="noBorders">
+            <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50"/>
+            <h:outputText value="Enviando solicitud al sistema, por favor espere." 
+                          style="width: 240px; text-align: justify; font-weight: bold;" />
+        </p:panelGrid>
+    </p:dialog>
+</ui:composition>

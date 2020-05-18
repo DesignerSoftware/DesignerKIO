@@ -9,6 +9,8 @@
     xmlns:c="http://java.sun.com/jsp/jstl/core">
     <p:remoteCommand name="reporte" actionListener="#{controlNavegacion.configuracionAction_GenerarReporte}"
                      process="@this" update=":principalForm"/>
+    <p:remoteCommand name="descargarep" actionListener="#{controlNavegacion.configuracionAction_DescargarReporte}"
+                     process="@this" update=":principalForm"/>
     <p:remoteCommand name="pantallaDinamica" actionListener="#{controlNavegacion.pantallaDinamica(controladorOpcionesKiosko.opcionReporte.nombrearchivo)}"
                      process="@this" update=":principalForm"/>
     <p:panel id="pnlOpciones" style="border: none; padding: 0px; margin: 0px; background: transparent; min-width: 745px;">

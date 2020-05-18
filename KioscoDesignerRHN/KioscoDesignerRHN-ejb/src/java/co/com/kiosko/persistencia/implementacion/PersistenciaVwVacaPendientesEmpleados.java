@@ -503,4 +503,130 @@ public class PersistenciaVwVacaPendientesEmpleados implements IPersistenciaVwVac
             throw new Exception(e.toString());
         }
     }
+    
+    @Override
+    public BigDecimal consultarDiasPenGanDerecho(EntityManager em, BigDecimal rfEmpleado) throws Exception{
+        System.out.println(this.getClass().getName() + "." + "consultarDiasPenGanDerecho" + "()");
+        String consulta = "select (KIOVACACIONES_PKG.DIASGANADOMASPROV( ?, ? )-KIOVACACIONES_PKG.DIASDISFRUTADOS_SOLICITADOS( ?, ? )) from dual ";
+        Query query = null;
+        BigDecimal diasPendientes = null;
+        Calendar fecha = Calendar.getInstance();
+        try {
+            query = em.createNativeQuery(consulta);
+            query.setParameter(1, rfEmpleado);
+            query.setParameter(2, fecha.getTime(), TemporalType.DATE);
+            query.setParameter(3, rfEmpleado);
+            query.setParameter(4, fecha.getTime(), TemporalType.DATE);
+            Object res = query.getSingleResult();
+            if (res instanceof BigDecimal){
+                System.out.println("Los DiasPenGanDerecho es BigDecimal");
+                diasPendientes = (BigDecimal) res;
+                System.out.println("Los DiasPenGanDerecho es: "+diasPendientes);
+            }
+            return diasPendientes;
+        } catch (PersistenceException pe) {
+            System.out.println("consultarDiasPenGanDerecho-Error de persistencia.");
+            throw new Exception(pe.toString());
+        } catch (NullPointerException npee) {
+            System.out.println("consultarDiasPenGanDerecho-Nulo general");
+            throw new Exception(npee.toString());
+        } catch (Exception e) {
+            System.out.println("consultarDiasPenGanDerecho-Error general. " + e);
+            throw new Exception(e.toString());
+        }
+    }
+    
+    @Override
+    public BigDecimal consultarDiasProvisiMenosDisfruta(EntityManager em, BigDecimal rfEmpleado) throws Exception{
+        System.out.println(this.getClass().getName() + "." + "consultarDiasGanados" + "()");
+        String consulta = "select (KIOVACACIONES_PKG.DIASPROVISIONADOS( ?, ? )-KIOVACACIONES_PKG.DIASSOLICITADOS( ?, ? )) from dual ";
+        Query query = null;
+        BigDecimal diasPendientes = null;
+        Calendar fecha = Calendar.getInstance();
+        try {
+            query = em.createNativeQuery(consulta);
+            query.setParameter(1, rfEmpleado);
+            query.setParameter(2, fecha.getTime(), TemporalType.DATE);
+            query.setParameter(3, rfEmpleado);
+            query.setParameter(4, fecha.getTime(), TemporalType.DATE);
+            Object res = query.getSingleResult();
+            if (res instanceof BigDecimal){
+                System.out.println("Los DiasPenGanDerecho es BigDecimal");
+                diasPendientes = (BigDecimal) res;
+                System.out.println("Los DiasPenGanDerecho es: "+diasPendientes);
+            }
+            return diasPendientes;
+        } catch (PersistenceException pe) {
+            System.out.println("consultarDiasPenGanDerecho-Error de persistencia.");
+            throw new Exception(pe.toString());
+        } catch (NullPointerException npee) {
+            System.out.println("consultarDiasPenGanDerecho-Nulo general");
+            throw new Exception(npee.toString());
+        } catch (Exception e) {
+            System.out.println("consultarDiasPenGanDerecho-Error general. " + e);
+            throw new Exception(e.toString());
+        }
+    }
+    @Override
+    public BigDecimal consultarDiasProvisionados(EntityManager em, BigDecimal rfEmpleado) throws Exception{
+        System.out.println(this.getClass().getName() + "." + "consultarDiasGanados" + "()");
+        String consulta = "select KIOVACACIONES_PKG.DIASPROVISIONADOS( ?, ? ) from dual ";
+        Query query = null;
+        BigDecimal diasPendientes = null;
+        Calendar fecha = Calendar.getInstance();
+        try {
+            query = em.createNativeQuery(consulta);
+            query.setParameter(1, rfEmpleado);
+            query.setParameter(2, fecha.getTime(), TemporalType.DATE);
+//            query.setParameter(3, rfEmpleado);
+//            query.setParameter(4, fecha.getTime(), TemporalType.DATE);
+            Object res = query.getSingleResult();
+            if (res instanceof BigDecimal){
+                System.out.println("Los DiasProvisionados es BigDecimal");
+                diasPendientes = (BigDecimal) res;
+                System.out.println("Los DiasProvisionados es: "+diasPendientes);
+            }
+            return diasPendientes;
+        } catch (PersistenceException pe) {
+            System.out.println("consultarDiasProvisionados-Error de persistencia.");
+            throw new Exception(pe.toString());
+        } catch (NullPointerException npee) {
+            System.out.println("consultarDiasProvisionados-Nulo general");
+            throw new Exception(npee.toString());
+        } catch (Exception e) {
+            System.out.println("consultarDiasProvisionados-Error general. " + e);
+            throw new Exception(e.toString());
+        }
+    }
+    @Override
+    public BigDecimal consultarDiasSolicitados(EntityManager em, BigDecimal rfEmpleado) throws Exception{
+        System.out.println(this.getClass().getName() + "." + "consultarDiasGanados" + "()");
+        String consulta = "select KIOVACACIONES_PKG.DIASSOLICITADOS( ?, ? ) from dual ";
+        Query query = null;
+        BigDecimal diasPendientes = null;
+        Calendar fecha = Calendar.getInstance();
+        try {
+            query = em.createNativeQuery(consulta);
+            query.setParameter(1, rfEmpleado);
+            query.setParameter(2, fecha.getTime(), TemporalType.DATE);
+            query.setParameter(3, rfEmpleado);
+            query.setParameter(4, fecha.getTime(), TemporalType.DATE);
+            Object res = query.getSingleResult();
+            if (res instanceof BigDecimal){
+                System.out.println("Los DiasProvisionados es BigDecimal");
+                diasPendientes = (BigDecimal) res;
+                System.out.println("Los DiasProvisionados es: "+diasPendientes);
+            }
+            return diasPendientes;
+        } catch (PersistenceException pe) {
+            System.out.println("consultarDiasSolicitados-Error de persistencia.");
+            throw new Exception(pe.toString());
+        } catch (NullPointerException npee) {
+            System.out.println("consultarDiasSolicitados-Nulo general");
+            throw new Exception(npee.toString());
+        } catch (Exception e) {
+            System.out.println("consultarDiasSolicitados-Error general. " + e);
+            throw new Exception(e.toString());
+        }
+    }
 }

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <p:remoteCommand name="pantallaDinamica" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
+                     actionListener="#{controladorKio_ProcesarTiempos.limpiarListas()}"
+                     process="@this" update=":principalForm"/>
+    <p:remoteCommand name="refrescarListas" actionListener="#{controladorKio_ProcesarTiempos.limpiarListas()}"
+                     process="@this" oncomplete="pantallaDinamica()"/>
+    <p:remoteCommand name="procesarsolici" actionListener="#{controladorKio_ProcesarTiempos.procesarSolicitud()}"
+                     process="@this" oncomplete="PF('creandoSolici').hide();" update=":principalForm:resulEnvio"/>
+    <p:remoteCommand name="recargartablap" 
+                     update=":principalForm:frmempleados:tbempleados"/>
+    <p:panel header="Ver reporte de tiempos sin procesar" 
+             style="border: none; padding: 0px; margin: 0px; background: transparent;" 
+             styleClass="noBorders">
+        <center>
+            <h:form id="frmempleados">
+                <p:dataTable id="tbempleados" widgetVar="tbempleados"
+                             var="solici" 
+                             value="#{controladorKio_ProcesarTiempos.reportesTiemposEmpleados}" 
+                             lazy="true" rows="5"
+                             rowKey="#{solici.secuencia}" 
+                             rowIndexVar="#{solici.secuencia}" 
+                             sortBy="#{solici.kioSoliciLocaliza.empleado.codigoempleado}"
+                             selection="#{controladorKio_ProcesarTiempos.solicitudSelec}" 
+                             paginator="true"
+                             paginatorTemplate="{buscar} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} "
+                             paginatorPosition="top"
+                             >
+                    <f:facet name="header">
+                        LISTADO DE REPORTES DE TIEMPOS LABORADOS
+                    </f:facet>
+                    <p:column selectionMode="single" style="width:16px; text-align:center;"/>
+                    <p:column headerText="CODIGO" >
+                        <h:outputText value="#{solici.kioSoliciLocaliza.empleado.codigoempleado}" />
+                    </p:column>
+                    <p:column headerText="NOMBRE" >
+                        <h:outputText value="#{solici.kioSoliciLocaliza.empleado.persona.nombreCompleto}" />
+                    </p:column>
+                    <p:column headerText="FECHA DE ENVÍO" >
+                        <h:outputText value="#{solici.kioSoliciLocaliza.fechaGeneracion}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                        </h:outputText> 
+                    </p:column>
+                    <p:column headerText="OBSERVACIÓN" >
+                        <h:outputText value="#{solici.motivoProcesa}" />
+                    </p:column>
+                    <f:facet name="footer">
+                        <p:commandButton process="tbempleados" update=":principalForm:soliciDetail" icon="ui-icon-search" value="Mostrar solicitudes" oncomplete="PF('soliciDialog').show()" 
+                                         actionListener="#{controladorKio_ProcesarTiempos.consultarDetalleReporte()}" />
+                    </f:facet>
+                </p:dataTable>                
+            </h:form>
+        </center>
+    </p:panel>
+
+
+    <p:panel style="border: none; padding: 0px; margin: 0px; background: transparent;" styleClass="noBorders">
+        <center>
+            <p:commandButton value="Volver" action="#{controlNavegacion.configuracionAction_OpcionesKiosko}"
+                             update=":principalForm" process="@this" icon="ui-icon-closethick"
+                             actionListener="#{controladorKio_ProcesarTiempos.limpiarListas}"/>
+        </center>
+    </p:panel>
+    <p:dialog id="soliciDialog" widgetVar="soliciDialog" modal="true" resizable="true">
+        <p:outputPanel id="soliciDetail">
+            <p:outputLabel value="DETALLE DE LA SOLICITUD" style="font-weight: bold;"/>
+            <br/>
+            <p:panelGrid  columns="2" rendered="#{not empty controladorKio_ProcesarTiempos.solicitudSelec}" >
+
+                <h:outputText value="Codigo empleado: " />
+                <h:outputText value="#{controladorKio_ProcesarTiempos.solicitudSelec.kioSoliciLocaliza.empleado.codigoempleado}" />
+
+                <h:outputText value="Nombre completo: " />
+                <h:outputText value="#{controladorKio_ProcesarTiempos.solicitudSelec.kioSoliciLocaliza.empleado.persona.nombreCompleto}" />
+                <h:outputText value="Observación: " />
+                <h:outputText value="#{controladorKio_ProcesarTiempos.solicitudSelec.motivoProcesa}" />
+
+            </p:panelGrid>
+            <br/>
+            <p:dataTable id="tbtiempos" 
+                         widgetVar="tbtiempos"
+                         var="localiza" 
+                         value="#{controladorKio_ProcesarTiempos.localizacionesEmpleado}" 
+                         lazy="true" rows="5"
+                         rowKey="#{localiza.secuencia}" 
+                         rowIndexVar="#{localiza.secuencia}" 
+                         sortBy="#{localiza.fecha}"
+                         style="width: 528px;"
+                         >
+                <f:facet name="header">
+                    LISTADO DE LOCALIZACIONES REPORTADAS
+                </f:facet>
+                <p:column headerText="FECHA" >
+                    <h:outputText value="#{localiza.fecha}" >
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="LOCALIZACION" >
+                    <h:outputText value="#{localiza.kioLocaliza.codigo}-#{localiza.kioLocaliza.nombre}" />
+                </p:column>
+                <p:column headerText="PORCENTAJE" >
+                    <h:outputText value="#{localiza.porcentaje}" >
+                    </h:outputText> 
+                </p:column>
+            </p:dataTable>      
+            <br/>
+            <p:outputLabel value="ACCIONES PERMITIDAS" style="font-weight: bold;" />
+            <br/>
+            <h:form id="frmprocesar">
+                <p:panelGrid columns="2" rendered="#{not empty controladorKio_ProcesarTiempos.solicitudSelec}">
+                    <p:outputLabel for="opcionproc" value="Seleccione una opción: " />
+                    <p:selectOneMenu id="opcionproc" value="#{controladorKio_ProcesarTiempos.estadoNuevo}">
+                        <f:selectItem itemLabel="APROBAR" itemValue="PREAPROBADO"/>
+                        <f:selectItem itemLabel="RECHAZAR" itemValue="RECHAZADO"/>
+                        <f:selectItem itemLabel="A CORREGIR" itemValue="PENDIENTE_CORR"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="txtmotivo" value="Motivo: " />
+                    <p:inputText id="txtmotivo" value="#{controladorKio_ProcesarTiempos.motivo}" />
+                    <p:outputLabel for="btnProc" value="Dé clic para aplicar el cambio" />
+                    <p:commandButton id="btnProc" value="PROCESAR" 
+                                     actionListener="#{controladorKio_ProcesarTiempos.validaMotivo()}"
+                                     process="@form" />
+                </p:panelGrid>
+            </h:form>
+            <center>
+                <p:commandButton value="REGRESAR" onclick="PF('soliciDialog').hide();" />
+            </center>
+        </p:outputPanel>
+    </p:dialog>
+    <p:dialog id="recarDatos" header="Informaci&oacute;n" widgetVar="recarDatos" 
+              resizable="false" draggable="false" modal="true" 
+              height="85" width="350px" style="font-size: 12px;" closable="true">  
+        <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50" 
+                        style="position: absolute; left: 15px; top: 20px;" />
+        <h:outputText value="Recargando datos, esto puede tardar un poco..." 
+                      style="position: absolute; left: 80px; top: 20px; width: 240px; text-align: justify;" />
+    </p:dialog>
+    <p:dialog id="confirmEnvio" widgetVar="confirmEnvio" modal="true" resizable="true">
+        <p:panelGrid columns="1" styleClass="noBorders">
+            <p:column>
+                <center>
+                    <h:outputText value="¿Esta seguro(a) de que desea enviar la solicitud?"/>
+                </center>
+            </p:column>
+            <p:column>
+                <p:commandButton value="No" style="float: right;"
+                                 onclick="PF('confirmEnvio').hide();"
+                                 process="@this"/>
+                <p:commandButton value="Si" style="float: right;"
+                                 actionListener="#{controladorKio_ProcesarTiempos.procesarSolicitud()}"
+                                 process="@this"/>
+            </p:column>
+        </p:panelGrid>
+    </p:dialog>
+    <p:dialog id="creandoSolici" header="Enviando solicitud" widgetVar="creandoSolici"  
+              resizable="false" draggable="true" modal="true" height="65" width="350" 
+              closable="false" >  
+        <p:panelGrid columns="2" styleClass="noBorders">
+            <h:graphicImage value="resources/imagenes/cargando.gif" width="50" height="50"/>
+            <h:outputText value="Enviando solicitud al sistema, por favor espere." 
+                          style="width: 240px; text-align: justify; font-weight: bold;" />
+        </p:panelGrid>
+    </p:dialog>
+    <p:dialog id="resulEnvio" header="Información" widgetVar="resulEnvio" modal="true" resizable="true">
+        <p:panelGrid columns="1" styleClass="noBorders">
+            <p:column>
+                <center>
+                    <h:outputText id="mensajecreacion" value="#{controladorKio_ProcesarTiempos.mensajeCreacion}"/>
+                </center>
+            </p:column>
+            <p:column>
+                <p:commandButton value="Aceptar" 
+                                 onclick="PF('resulEnvio').hide(); refrescarListas();"
+                                 process="@this"/>
+            </p:column>
+        </p:panelGrid>
+    </p:dialog>
+</ui:composition>

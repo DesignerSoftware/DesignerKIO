@@ -28,11 +28,11 @@ public class AdministrarSesiones implements IAdministrarSesiones, Serializable {
     
     @Override
     public void adicionarSesion(SessionEntityManager session) {
-        System.out.println(this.getClass().getName() + "." + "adicionarSesion" + "()");
+//        System.out.println(this.getClass().getName() + "." + "adicionarSesion" + "()");
         sessionesActivas.add(session);
     }
 
-    @Override
+//    @Override
     public void consultarSessionesActivas() {
         System.out.println(this.getClass().getName() + "." + "consultarSessionesActivas" + "()");
         if (!sessionesActivas.isEmpty()) {
@@ -45,16 +45,16 @@ public class AdministrarSesiones implements IAdministrarSesiones, Serializable {
 
     @Override
     public EntityManagerFactory obtenerConexionSesion(String idSesion) {
-        System.out.println(this.getClass().getName() + "." + "obtenerConexionSesion" + "()");
+//        System.out.println(this.getClass().getName() + "." + "obtenerConexionSesion" + "()");
         SessionEntityManager sesionActual = null;
 //        EntityManager eManager = null;
         
         try {
             if (!sessionesActivas.isEmpty()) {
-                System.out.println("sesiones activas no vacias");
+//                System.out.println("sesiones activas no vacias");
                 for (int i = 0; i < sessionesActivas.size(); i++) {
-                    System.out.println("IdSession: "+sessionesActivas.get(i).getIdSession());
-                    System.out.println("Sesion activa-UP: "+sessionesActivas.get(i).getUnidadPersistencia() );
+//                    System.out.println("IdSession: "+sessionesActivas.get(i).getIdSession());
+//                    System.out.println("Sesion activa-UP: "+sessionesActivas.get(i).getUnidadPersistencia() );
                     if (sessionesActivas.get(i).getIdSession().equals(idSesion)) {
                         sesionActual = sessionesActivas.get(i);
                         i = sessionesActivas.size();
@@ -66,20 +66,20 @@ public class AdministrarSesiones implements IAdministrarSesiones, Serializable {
             System.out.println("Causa: " + e);
             sesionActual = null;
         }
-        System.out.println("sesion activa: "+sesionActual);
+//        System.out.println("sesion activa: "+sesionActual);
         EntityManagerFactory emf = null;
         if (sesionActual != null) {
             emf = sessionEMF.crearConexionUsuario(sesionActual.getUnidadPersistencia());
 //            eManager = emf.createEntityManager();
-            System.out.println("Se creó entityManagerFactory.");
-            System.out.println("eManager" + emf.toString());
+//            System.out.println("Se creó entityManagerFactory.");
+//            System.out.println("eManager" + emf.toString());
         }
         return emf;
     }
 
     @Override
     public void borrarSesion(String idSesion) {
-        System.out.println(this.getClass().getName() + "." + "borrarSesion" + "()");
+//        System.out.println(this.getClass().getName() + "." + "borrarSesion" + "()");
         if (!sessionesActivas.isEmpty()) {
             for (int i = 0; i < sessionesActivas.size(); i++) {
                 if (sessionesActivas.get(i).getIdSession().equals(idSesion)) {
@@ -93,7 +93,7 @@ public class AdministrarSesiones implements IAdministrarSesiones, Serializable {
 
     @Override
     public boolean borrarSesiones() {
-        System.out.println(this.getClass().getName() + "." + "borrarSesiones" + "()");
+//        System.out.println(this.getClass().getName() + "." + "borrarSesiones" + "()");
         try {
             if (!sessionesActivas.isEmpty()) {
 //                for (int i = 0; i < sessionesActivas.size(); i++) {

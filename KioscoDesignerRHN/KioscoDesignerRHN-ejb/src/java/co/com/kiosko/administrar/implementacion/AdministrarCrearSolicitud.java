@@ -7,6 +7,7 @@ import co.com.kiosko.entidades.KioNovedadesSolici;
 import co.com.kiosko.entidades.KioSoliciVacas;
 import co.com.kiosko.entidades.Personas;
 import co.com.kiosko.entidades.VwVacaPendientesEmpleados;
+import co.com.kiosko.persistencia.interfaz.IPersistenciaConexionInicial;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaEmpleados;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaKioEstadosSolici;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaKioNovedadesSolici;
@@ -14,6 +15,7 @@ import co.com.kiosko.persistencia.interfaz.IPersistenciaKioSoliciVacas;
 import co.com.kiosko.persistencia.interfaz.IPersistenciaVwVacaPendientesEmpleados;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 //import java.math.BigInteger;
 import java.util.Date;
 //import java.math.BigDecimal;
@@ -50,6 +52,8 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud, Se
     private IPersistenciaKioSoliciVacas persistenciaSolicitud;
     @EJB
     private IPersistenciaKioEstadosSolici persistenciaEstadoSolicitud;
+    @EJB
+    private IPersistenciaConexionInicial persistenciaConexionInicial;
 
     @Override
     public void obtenerConexion(String idSesion) {
@@ -260,6 +264,44 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud, Se
             throw new Exception("La fecha de regreso de las vacaciones no puede ser calculada.");
         }
     }
+    
+    @Override
+    public void calcularFechasFin(KioSoliciVacas solicitud, int opcion) throws Exception {
+        Date fechaRegreso = null;
+        EntityManager em = emf.createEntityManager();
+        try {
+            BigInteger diasSolicitados = solicitud.getKioNovedadesSolici().getDias().add(solicitud.getKioNovedadesSolici().getDiasAnticipo());
+            fechaRegreso = persistenciaVwVacaPendEmpl.calculaFechaRegreso(em, solicitud.getKioNovedadesSolici().getEmpleado().getSecuencia(),
+                    solicitud.getKioNovedadesSolici().getFechaInicialDisfrute(),diasSolicitados
+                    );
+            solicitud.getKioNovedadesSolici().setFechaSiguienteFinVaca(fechaRegreso);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+        Date fechaFinVaca = null;
+        em = emf.createEntityManager();
+        if (fechaRegreso != null) {
+            try {
+                fechaFinVaca = persistenciaVwVacaPendEmpl.calculaFechaFinVaca(
+                        em, solicitud.getKioNovedadesSolici().getEmpleado().getSecuencia(),
+                        solicitud.getKioNovedadesSolici().getFechaInicialDisfrute(),
+                        fechaRegreso);
+                solicitud.getKioNovedadesSolici().setAdelantaPagoHasta(fechaFinVaca);
+            } catch (Exception e) {
+                throw e;
+            } finally {
+                if (em != null && em.isOpen()) {
+                    em.close();
+                }
+            }
+        } else {
+            throw new Exception("La fecha de regreso de las vacaciones no puede ser calculada.");
+        }
+    }
 
     @Override
     public Empleados consultarEmpleadoJefe(Empleados empleado) throws Exception {
@@ -388,4 +430,21 @@ public class AdministrarCrearSolicitud implements IAdministrarCrearSolicitud, Se
             }
         }
     } 
+    
+    @Override
+    public BigDecimal consultarDiasPendientesTotal(Empleados empleado) throws Exception{
+        System.out.println(this.getClass().getName() + ".consultarDiasPendientesTotal()");
+        EntityManager em = emf.createEntityManager();
+        BigDecimal res ;
+        try {
+            res = persistenciaVwVacaPendEmpl.consultarDiasProvisiMenosDisfruta(em, empleado.getSecuencia());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+        return res;
+    }
 }

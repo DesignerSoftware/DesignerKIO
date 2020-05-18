@@ -53,6 +53,14 @@ public class ControlNavegacion implements Serializable {
             System.out.println("Error configuracionAction_GenerarReporte: " + e.getMessage());
         }
     }
+    
+    public void configuracionAction_DescargarReporte() throws Exception {
+        try {
+            this.urlMenuNavegation = NavegationPageURL.DESCARGARREPORTE.getUrl();
+        } catch (Exception e) {
+            System.out.println("Error configuracionAction_DescargarReporte: " + e.getMessage());
+        }
+    }
 
     public void configuracionAction_CambiarClave() throws Exception {
         try {

@@ -41,4 +41,20 @@ public class PersistenciaUtilidadesBD implements IPersistenciaUtilidadesBD {
         System.out.println("Resultado: "+resultado);
         return resultado;
     }
+    @Override
+    public String consultaUsuario(EntityManager eManager) {
+        System.out.println(this.getClass().getName()+".consultaUsuario()");
+        String resultado = "";
+        try {
+            String sqlQuery = "SELECT SYS_CONTEXT ('USERENV', 'SESSION_USER') FROM DUAL ";
+            Query query = eManager.createNativeQuery(sqlQuery);
+            resultado = (String) query.getSingleResult();
+        } catch (Exception e) {
+            System.out.println("Error PersistenciaUtilidadesBD.desencriptar: " + e);
+            resultado = null;
+        }
+        System.out.println("Usuario: "+resultado);
+        return resultado;
+    }
+    
 }

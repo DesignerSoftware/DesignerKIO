@@ -30,7 +30,7 @@
                                         showOn="button" style="width: 90px;"/>
                         </p:panelGrid>
                         <p:panelGrid id="pnlEnvioCorreo" columns="2" styleClass="noBorders">
-                            <p:outputLabel for="enviarCorreo" value="Â¿Desea enviar el reporte por correo?: " />
+                            <p:outputLabel for="enviarCorreo" value="¿Desea enviar el reporte por correo?: " />
                             <p:selectBooleanCheckbox id="enviarCorreo" widgetVar="enviarCorreo" value="#{controladorGenerarReporte.enviocorreo}" >
                                 <p:ajax update=":principalForm:pnlEnvioCorreo" />
                             </p:selectBooleanCheckbox>
@@ -44,7 +44,7 @@
                             <p:outputLabel for="dirigida" value="Constancia dirigida a: " />
                             <p:inputText id="dirigida" widgetVar="dirigida" value="#{controladorGenerarReporte.conexionEmpleado.dirigidoa}"/>
                             <!--
-                            <p:outputLabel for="area" value="Constancia al Ã¡rea de:" />
+                            <p:outputLabel for="area" value="Constancia al Área de:" />
                             <p:inputText id="area" value="#{controladorGenerarReporte.areaDe}"/> 
                             -->
                         </p:panelGrid>

@@ -99,8 +99,8 @@ public class AdministrarOlvidoClave implements IAdministrarOlvidoClave, Serializ
 
     @Override
     public ParametrizaClave obtenerFormatoClave(long nitEmpresa) {
-        System.out.println(this.getClass().getName()+".obtenerFormatoClave");
-        System.out.println("nitEmpresa: " + nitEmpresa);
+//        System.out.println(this.getClass().getName()+".obtenerFormatoClave");
+//        System.out.println("nitEmpresa: " + nitEmpresa);
         ParametrizaClave pc = null;
         try {
             EntityManager em = emf.createEntityManager();

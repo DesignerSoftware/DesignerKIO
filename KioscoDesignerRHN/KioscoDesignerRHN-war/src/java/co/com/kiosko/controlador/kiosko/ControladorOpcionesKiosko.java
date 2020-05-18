@@ -124,16 +124,22 @@ public class ControladorOpcionesKiosko implements Serializable {
             //y quitarlas.
             System.out.println("no es rol jefe.");
             if (codigos == null) {
-                codigos = new String[2];
+                codigos = new String[5];
                 codigos[0] = "0133";
                 codigos[1] = "0134";
+                codigos[2] = "01393";
+                codigos[3] = "0144";
+                codigos[4] = "0145";
             } else {
-                String[] tmp = new String[codigos.length + 2];
+                String[] tmp = new String[codigos.length + 5];
                 System.out.println("longitud tmp: " + tmp.length);
                 System.out.println("longitud codigos: " + codigos.length);
                 for (int j = 0; j < codigos.length; j++) {
                     tmp[j] = codigos[j];
                 }
+                tmp[tmp.length - 5] = "0145";
+                tmp[tmp.length - 4] = "0144";
+                tmp[tmp.length - 3] = "01393";
                 tmp[tmp.length - 2] = "0133";
                 tmp[tmp.length - 1] = "0134";
                 codigos = tmp;
@@ -143,7 +149,7 @@ public class ControladorOpcionesKiosko implements Serializable {
             System.out.println("no es rol empleado.");
 //            System.out.println("es rol autorizador.");
             if (codigos == null) {
-                codigos = new String[8];
+                codigos = new String[13];
                 codigos[0] = "0121";
                 codigos[1] = "0122";
                 codigos[2] = "0123";
@@ -153,36 +159,48 @@ public class ControladorOpcionesKiosko implements Serializable {
                 codigos[6] = "0127";
                 codigos[7] = "0131";
                 codigos[8] = "0132";
+                codigos[9] = "01392";
+                codigos[10] = "0141";
+                codigos[11] = "0142";
+                codigos[12] = "0143";
             } else {
-                String[] tmp = new String[codigos.length + 9];
+                String[] tmp = new String[codigos.length + 13];
                 for (int j = 0; j < codigos.length; j++) {
                     tmp[j] = codigos[j];
                 }
-                tmp[tmp.length - 9] = "0121";
-                tmp[tmp.length - 8] = "0122";
-                tmp[tmp.length - 7] = "0123";
-                tmp[tmp.length - 6] = "0124";
-                tmp[tmp.length - 5] = "0125";
-                tmp[tmp.length - 4] = "0126";
-                tmp[tmp.length - 3] = "0127";
-                tmp[tmp.length - 2] = "0131";
-                tmp[tmp.length - 1] = "0132";
+                tmp[tmp.length - 1] = "0143";
+                tmp[tmp.length - 2] = "0142";
+                tmp[tmp.length - 3] = "0141";
+                tmp[tmp.length - 4] = "01392";
+                tmp[tmp.length - 5] = "0132";
+                tmp[tmp.length - 6] = "0131";
+                tmp[tmp.length - 7] = "0127";
+                tmp[tmp.length - 8] = "0126";
+                tmp[tmp.length - 9] = "0125";
+                tmp[tmp.length - 10] = "0124";
+                tmp[tmp.length - 11] = "0123";
+                tmp[tmp.length - 12] = "0122";
+                tmp[tmp.length - 13] = "0121";
                 codigos = tmp;
             }
         }
         if (!roles.contains("AUTORIZADOR")) {
             System.out.println("no es rol autorizador.");
             if (codigos == null) {
-                codigos = new String[2];
+                codigos = new String[4];
                 codigos[0] = "0139";
                 codigos[1] = "01391";
+                codigos[2] = "0146";
+                codigos[3] = "0147";
             } else {
-                String[] tmp = new String[codigos.length + 2];
+                String[] tmp = new String[codigos.length + 4];
                 for (int j = 0; j < codigos.length; j++) {
                     tmp[j] = codigos[j];
                 }
-                tmp[tmp.length - 2] = "0139";
-                tmp[tmp.length - 1] = "01391";
+                tmp[tmp.length - 4] = "0139";
+                tmp[tmp.length - 3] = "01391";
+                tmp[tmp.length - 2] = "0146";
+                tmp[tmp.length - 1] = "0147";
                 codigos = tmp;
             }
         }
@@ -241,6 +259,8 @@ public class ControladorOpcionesKiosko implements Serializable {
                 PrimefacesContextUI.ejecutar("pantallaDinamica();");
             } else if (opc.getClase().equals("REPORTE")) {
                 PrimefacesContextUI.ejecutar("reporte();");
+            } else if (opc.getClase().equals("ARCHIVO")){
+                PrimefacesContextUI.ejecutar("descargarep();");
             }
         }
     }

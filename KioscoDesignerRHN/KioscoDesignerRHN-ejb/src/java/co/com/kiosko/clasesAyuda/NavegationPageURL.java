@@ -4,7 +4,8 @@ public enum NavegationPageURL {
 
 	OPCIONESKIOSKO("Opciones Kiosko","/Kiosko/opcionesKiosko.xhtml"), 
 	CAMBIARCLAVE("Cambiar clave","/Ingreso/cambiarClave.xhtml"), 
-	GENERARREPORTE("Generar Reporte","/Kiosko/generarReporte.xhtml");
+	GENERARREPORTE("Generar Reporte","/Kiosko/generarReporte.xhtml"),
+	DESCARGARREPORTE("Descargar Reporte","/Kiosko/descargarReporte.xhtml");
 
 	private String page;
 	private String url;

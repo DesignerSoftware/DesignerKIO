@@ -108,7 +108,7 @@
         <emplnomina></emplnomina>
         <esquema></esquema>
     </cadenaKiosko>         
-        <cadenaKiosko id="12">
+    <cadenaKiosko id="12">
         <descripcion>LINDE</descripcion>
         <cadena>DEFAULT6</cadena>
         <nit>860005114</nit>
@@ -116,5 +116,14 @@
         <grupo>GrupoEmpresarial5</grupo>
         <emplnomina></emplnomina>
         <esquema></esquema>
-    </cadenaKiosko>         
+    </cadenaKiosko> 
+    <cadenaKiosko id="13">
+        <descripcion>STRABAG</descripcion>
+        <cadena>DEFAULT7</cadena>
+        <nit>900637571</nit>
+        <fondo>fondoMenu.png</fondo>
+        <grupo>GrupoEmpresarial6</grupo>
+        <emplnomina></emplnomina>
+        <esquema></esquema>
+    </cadenaKiosko>
 </conexiones>

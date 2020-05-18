@@ -122,7 +122,11 @@ public class AdministrarGenerarReporte implements IAdministrarGenerarReporte, Se
 
     @Override
     public boolean enviarCorreo(BigInteger secuenciaEmpresa, String destinatario, String asunto, String mensaje, String pathAdjunto) {
-        System.out.println(this.getClass().getName()+".enviarCorreo()");
+        System.out.println("sid: "+this.idSesion+" "+this.getClass().getName()+".enviarCorreo()");
+        System.out.println("sid: "+this.idSesion+" "+destinatario);
+        System.out.println("sid: "+this.idSesion+" "+asunto);
+//        System.out.println("sid: "+this.idSesion+" "+mensaje);
+        System.out.println("sid: "+this.idSesion+" "+pathAdjunto);
         boolean resul = false;
         try {
             EntityManager em = emf.createEntityManager();

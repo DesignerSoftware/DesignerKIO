@@ -71,30 +71,10 @@ public class Personas implements Serializable {
     private Long numerolibretamilitar;
     @Column(name = "DISTRITOMILITAR")
     private Short distritomilitar;
-    @Size(max = 15)
-    @Column(name = "CERTIFICADOJUDICIAL")
-    private String certificadojudicial;
-    @Size(max = 100)
-    @Column(name = "PATHFOTO")
-    private String pathfoto;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Size(max = 100)
     @Column(name = "EMAIL")
     private String email;
-    @Size(max = 10)
-    @Column(name = "PLACAVEHICULO")
-    private String placavehiculo;
-    @Size(max = 20)
-    @Column(name = "NUMEROMATRICULAPROF")
-    private String numeromatriculaprof;
-    @Column(name = "FECHAEXPMATRICULA")
-    @Temporal(TemporalType.DATE)
-    private Date fechaexpmatricula;
-    @Column(name = "DIGITOVERIFICACIONDOCUMENTO")
-    private Short digitoverificaciondocumento;
-    @Size(max = 50)
-    @Column(name = "OBSERVACION")
-    private String observacion;
     @Size(max = 1)
     @Column(name = "VEHICULOEMPRESA")
     private String vehiculoempresa;
@@ -260,68 +240,12 @@ public class Personas implements Serializable {
         this.distritomilitar = distritomilitar;
     }
 
-    public String getCertificadojudicial() {
-        return certificadojudicial;
-    }
-
-    public void setCertificadojudicial(String certificadojudicial) {
-        this.certificadojudicial = certificadojudicial;
-    }
-
-    public String getPathfoto() {
-        return pathfoto;
-    }
-
-    public void setPathfoto(String pathfoto) {
-        this.pathfoto = pathfoto;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPlacavehiculo() {
-        return placavehiculo;
-    }
-
-    public void setPlacavehiculo(String placavehiculo) {
-        this.placavehiculo = placavehiculo;
-    }
-
-    public String getNumeromatriculaprof() {
-        return numeromatriculaprof;
-    }
-
-    public void setNumeromatriculaprof(String numeromatriculaprof) {
-        this.numeromatriculaprof = numeromatriculaprof;
-    }
-
-    public Date getFechaexpmatricula() {
-        return fechaexpmatricula;
-    }
-
-    public void setFechaexpmatricula(Date fechaexpmatricula) {
-        this.fechaexpmatricula = fechaexpmatricula;
-    }
-
-    public Short getDigitoverificaciondocumento() {
-        return digitoverificaciondocumento;
-    }
-
-    public void setDigitoverificaciondocumento(Short digitoverificaciondocumento) {
-        this.digitoverificaciondocumento = digitoverificaciondocumento;
-    }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
     }
 
     public String getVehiculoempresa() {

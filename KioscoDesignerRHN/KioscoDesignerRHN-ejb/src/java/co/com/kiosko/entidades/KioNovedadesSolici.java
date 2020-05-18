@@ -45,6 +45,8 @@ public class KioNovedadesSolici implements Serializable {
     private Date fechaInicialDisfrute;
     @Column(name = "DIAS")
     private BigInteger dias;
+    @Column(name = "DIASANTICIPO")
+    private BigInteger diasAnticipo;
     @Size(max = 30)
     @Column(name = "TIPO")
     private String tipo;
@@ -111,6 +113,14 @@ public class KioNovedadesSolici implements Serializable {
 
     public void setDias(BigInteger dias) {
         this.dias = dias;
+    }
+
+    public BigInteger getDiasAnticipo() {
+        return diasAnticipo;
+    }
+
+    public void setDiasAnticipo(BigInteger diasAnticipo) {
+        this.diasAnticipo = diasAnticipo;
     }
 
     public String getTipo() {

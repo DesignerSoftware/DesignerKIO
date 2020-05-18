@@ -49,4 +49,18 @@
             </auditoriaModulo>
         </empresaModulo>
     </moduloConfig>
+    <moduloConfig nombre="reporteTiempos">
+	    <empresaModulo nit="900637571">
+		    <auditoriaModulo codigo="0141">
+			    <emailsMod>
+			        <cuenta>edwinh@nomina.com.co</cuenta>
+				</emailsMod>
+			</auditoriaModulo>
+		    <auditoriaModulo codigo="0144">
+			    <emailsMod>
+			        <cuenta>edwinh@nomina.com.co</cuenta>
+				</emailsMod>
+			</auditoriaModulo>
+		</empresaModulo>
+	</moduloConfig>
 </configModulos>

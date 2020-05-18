@@ -239,7 +239,13 @@ public class ControladorKio_VerSoliciSinProcesar implements Serializable {
             } else {
                 respuesta2 = " No hay jefe inmediato relacionado";
             }
-            String respuesta = respuesta1 + respuesta2;
+            String respuesta3 = "";
+            if (this.empleado.getPersona().getEmail() != null && !this.empleado.getPersona().getEmail().isEmpty()) {
+                administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
+                        this.empleado.getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
+                respuesta3 = " Solicitud enviada correctamente al usuario conectado";
+            }
+            String respuesta = respuesta1 + respuesta2 + respuesta3;
             mensajeCreacion = respuesta;
             MensajesUI.info(respuesta);
         } catch (Exception e) {

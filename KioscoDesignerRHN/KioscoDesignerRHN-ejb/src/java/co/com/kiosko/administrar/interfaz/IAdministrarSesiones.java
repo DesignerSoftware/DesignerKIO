@@ -11,7 +11,7 @@ public interface IAdministrarSesiones {
 
     public void adicionarSesion(SessionEntityManager session);
 
-    public void consultarSessionesActivas();
+//    public void consultarSessionesActivas();
 
     public EntityManagerFactory obtenerConexionSesion(String idSesion);
 

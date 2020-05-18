@@ -118,4 +118,8 @@ public interface IAdministrarCrearSolicitud {
     public boolean existeSolicitudFecha(KioSoliciVacas solicitud) throws Exception;
     public BigDecimal consultarTraslapamientos(KioNovedadesSolici novedad) throws Exception;
     public Personas consultarAutorizador(Empleados empleado) throws Exception;
+
+    public void calcularFechasFin(KioSoliciVacas solicitud, int opcion) throws Exception;
+
+    public BigDecimal consultarDiasPendientesTotal(Empleados empleado) throws Exception;
 }
