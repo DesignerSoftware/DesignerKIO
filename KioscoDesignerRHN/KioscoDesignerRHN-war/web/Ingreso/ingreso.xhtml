@@ -13,14 +13,14 @@
         <meta charset="UTF-8"/>
         <link href="././resources/css/estiloLogin.css" rel="stylesheet" type="text/css" />
         <link href="././resources/imagenes/favicon.ico" rel="shortcut icon"/>
-	<link rel="apple-touch-icon-precomposed" href="././resources/imagenes/quiosco_icono_57x57.png" />
-	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="././resources/imagenes/quiosco_icono_72x72.png" />
+        <link rel="apple-touch-icon-precomposed" href="././resources/imagenes/quiosco_icono_57x57.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="././resources/imagenes/quiosco_icono_72x72.png" />
         <link rel="apple-touch-icon-precomposed" sizes="180x180" href="././resources/imagenes/quiosco_icono_180x180.png" />
         <title>..::Designer.Kio::..</title>
     </h:head>
     <h:body style="font-size: 14px;" >
         <script>
-            $(function(){
+            $(function () {
                 $("#fprincipal").attr("autocomplete", "off");
             });
         </script>
@@ -102,6 +102,9 @@
                                     <p:commandLink value="¿Olvidó su clave?" action="#{controladorIngreso.olvidoClave()}"/>
                                 </p:column>
                             </p:row>
+<!--                            <p:row>
+                                <p:captcha label="Captcha" language="es"/>
+                            </p:row>-->
                             <p:row>
                                 <p:column>
                                     <p:commandButton id="btnEntrar" widgetVar="btnEntrar" value="#{!controladorIngreso.ingresoExitoso ? '' : 'Entrar'}" 

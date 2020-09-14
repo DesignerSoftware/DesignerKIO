@@ -118,14 +118,14 @@ public class ControladorKio_CrearSoliciAnticipo implements Serializable {
             this.topeDias = 0;
         }
         if (this.topeDias > 0) {
-                if (this.topeDias == 1) {
-                    msjDiasProv = "Cuenta con " + this.topeDias + " día disponible.";
-                } else {
-                    msjDiasProv = "Cuenta con " + this.topeDias + " días disponibles.";
-                }
+            if (this.topeDias == 1) {
+                msjDiasProv = "Cuenta con " + this.topeDias + " día disponible.";
             } else {
-                msjDiasProv = "No cuenta con días disponibles de la provisión. Los días serán tomados como anticipados.";
+                msjDiasProv = "Cuenta con " + this.topeDias + " días disponibles.";
             }
+        } else {
+            msjDiasProv = "No cuenta con días disponibles de la provisión. Los días serán tomados como anticipados.";
+        }
         Personas autorizador = null;
         try {
             autorizador = administrarCrearSolicitud.consultarAutorizador(empleado);
@@ -172,6 +172,10 @@ public class ControladorKio_CrearSoliciAnticipo implements Serializable {
 
     public void onDateSelect(SelectEvent event) {
         System.out.println("Fecha seleccionada: " + event.getObject());
+        actualizaCampos();
+    }
+
+    private void actualizaCampos() {
         Calendar cl = Calendar.getInstance();
         cl.setTime(administrarCrearSolicitud.fechaPago(empleado));
         if (!validaFechaPago()) {
@@ -189,6 +193,12 @@ public class ControladorKio_CrearSoliciAnticipo implements Serializable {
         asignarFechas();
         PrimefacesContextUI.actualizar("principalForm:frmcreasolicitud:ffindis");
 //        PrimefacesContextUI.actualizar("principalForm:frmcreasolicitud:fregrelab");
+    }
+
+    public void onChangeDate(AjaxBehaviorEvent event) {
+        System.out.println("Fecha modificada: " + event.getClass().getName() );
+//        onDateSelect(event);
+        actualizaCampos();
     }
 
     private boolean validaFechaPago() {

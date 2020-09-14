@@ -14,6 +14,7 @@ public class CadenasKioskos implements Comparable{
     private String grupo;
     private String emplnomina;
     private String esquema;
+    private String captcha;
 
     public CadenasKioskos(String id, String descripcion, String cadena, String nit, String fondo, String grupo) {
         this.id = id;
@@ -24,6 +25,7 @@ public class CadenasKioskos implements Comparable{
         this.grupo = grupo;
         this.emplnomina = null;
         this.esquema = null;
+        this.captcha = null;
     }
     
     public CadenasKioskos(String id, String descripcion, String cadena, String nit, String fondo, String grupo, String emplnomina) {
@@ -35,9 +37,10 @@ public class CadenasKioskos implements Comparable{
         this.grupo = grupo;
         this.emplnomina = emplnomina;
         this.esquema = null;
+        this.captcha = null;
     }
 
-    public CadenasKioskos(String id, String descripcion, String cadena, String nit, String fondo, String grupo, String emplnomina, String esquema) {
+    public CadenasKioskos(String id, String descripcion, String cadena, String nit, String fondo, String grupo, String emplnomina, String esquema, String captcha) {
         this.id = id;
         this.descripcion = descripcion;
         this.cadena = cadena;
@@ -46,6 +49,7 @@ public class CadenasKioskos implements Comparable{
         this.grupo = grupo;
         this.emplnomina = emplnomina;
         this.esquema = esquema;
+        this.captcha = captcha;
     }    
 
     public String getCadena() {
@@ -111,6 +115,15 @@ public class CadenasKioskos implements Comparable{
     public void setEsquema(String esquema) {
         this.esquema = esquema;
     }
+
+    public String getCaptcha() {
+        return captcha;
+    }
+
+    public void setCaptcha(String captcha) {
+        this.captcha = captcha;
+    }
+    
     
     @Override
     public int compareTo(Object o) {

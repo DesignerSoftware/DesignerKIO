@@ -155,6 +155,7 @@
                                  process="@this"/>
                 <p:commandButton value="Si" style="float: right;"
                                  actionListener="#{controladorKio_ProcesarTiempos.procesarSolicitud()}"
+                                 onclick="PF('confirmEnvio').hide(); PF('creandoSolici').show();"
                                  process="@this"/>
             </p:column>
         </p:panelGrid>

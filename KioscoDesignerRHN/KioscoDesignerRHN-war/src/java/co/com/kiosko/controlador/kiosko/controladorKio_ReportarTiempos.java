@@ -398,6 +398,7 @@ public class controladorKio_ReportarTiempos implements Serializable {
         if (res) {
             construirCorreo();
         }
+        PrimefacesContextUI.ejecutar("PF('confirmEnvio').hide()");
         PrimefacesContextUI.ejecutar("PF('creandoSolici').hide()");
         PrimefacesContextUI.ejecutar("PF('resulEnvio').show()");
     }

@@ -86,7 +86,8 @@ public class LeerArchivoXML {
                             eElement.getElementsByTagName("fondo").item(0).getTextContent(),
                             eElement.getElementsByTagName("grupo").item(0).getTextContent(),
                             eElement.getElementsByTagName("emplnomina").item(0).getTextContent(),
-                            eElement.getElementsByTagName("esquema").item(0).getTextContent()
+                            eElement.getElementsByTagName("esquema").item(0).getTextContent(),
+                            eElement.getElementsByTagName("captcha").item(0).getTextContent()
                     ));
                 }
             }

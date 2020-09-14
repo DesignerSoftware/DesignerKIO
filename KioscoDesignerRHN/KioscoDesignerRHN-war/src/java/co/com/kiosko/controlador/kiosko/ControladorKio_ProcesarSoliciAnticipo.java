@@ -198,9 +198,13 @@ public class ControladorKio_ProcesarSoliciAnticipo implements Serializable {
                     + "Cordial saludo. ";
             String respuesta1 = "";
             String respuesta2 = "";
-            if (empleado.getPersona().getEmail() != null && !empleado.getPersona().getEmail().isEmpty()) {
+//            if (empleado.getPersona().getEmail() != null && !empleado.getPersona().getEmail().isEmpty()) {
+            if (solicitudSelec.getKioSoliciVaca().getEmpleado().getPersona().getEmail() != null && 
+                    !solicitudSelec.getKioSoliciVaca().getEmpleado().getPersona().getEmail().isEmpty()) {
                 administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
-                        empleado.getPersona().getEmail(), "Solicitud de vacaciones Kiosco", mensaje, "");
+//                        empleado.getPersona().getEmail(), 
+                        solicitudSelec.getKioSoliciVaca().getEmpleado().getPersona().getEmail(), 
+                        "Solicitud de vacaciones Kiosco", mensaje, "");
                 respuesta1 = "Solicitud enviada correctamente al empleado";
             } else {
                 respuesta1 = "El empleado no tiene correo registrado";
@@ -383,7 +387,8 @@ public class ControladorKio_ProcesarSoliciAnticipo implements Serializable {
         if (soliciEmpleado == null || soliciEmpleado.isEmpty()) {
             try {
                 if (empleadoSelec == null) {
-                    soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa(), "SIN PROCESAR", null);
+//                    soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa(), "SIN PROCESAR", null);
+                    soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpre(empleado.getEmpresa(), "SIN PROCESAR", empleado);
                 } else {
                     soliciEmpleado = administrarHistoVacas.consultarEstadoSoliciEmpl(empleadoSelec);
                 }

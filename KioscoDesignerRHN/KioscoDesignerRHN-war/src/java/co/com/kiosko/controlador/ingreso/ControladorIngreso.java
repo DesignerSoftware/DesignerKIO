@@ -176,7 +176,8 @@ public class ControladorIngreso implements Serializable {
                                             } else {
                                                 //USUARIO BLOQUEADO
                                                 PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
-                                                MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de recursos humanos de su empresa.");
+//                                                MensajesUI.error("El empleado " + usuario + " se encuentra bloqueado, por favor comuníquese con el área de recursos humanos de su empresa.");
+                                                MensajesUI.error("El empleado se encuentra bloqueado, por favor comuníquese con el área de recursos humanos de su empresa.");
                                                 ingresoExitoso = false;
                                             }
                                         } else {
@@ -191,13 +192,15 @@ public class ControladorIngreso implements Serializable {
                                     } else {
                                         //EL USUARIO NO EXISTE O LA EMPRESA SELECCIONADA NO ES CORRECTA.
                                         PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
-                                        MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");
+//                                        MensajesUI.error("El empleado " + usuario + " no existe, no pertenece ó no esta activo a la empresa seleccionada.");
+                                        MensajesUI.error("El empleado no existe, no pertenece ó no esta activo a la empresa seleccionada.");
                                         ingresoExitoso = false;
                                     }
                                 } else {
                                     //EL USUARIO DIGITADO NO ES UN NUMERO
                                     PrimefacesContextUI.ejecutar("PF('estadoSesion').hide();");
-                                    MensajesUI.error("El empleado " + usuario + " no es un código de empleado.");
+//                                    MensajesUI.error("El empleado " + usuario + " no es un código de empleado.");
+                                    MensajesUI.error("El empleado no es un código de empleado.");
                                     ingresoExitoso = false;
                                 }
                             } catch (Exception ex1) {

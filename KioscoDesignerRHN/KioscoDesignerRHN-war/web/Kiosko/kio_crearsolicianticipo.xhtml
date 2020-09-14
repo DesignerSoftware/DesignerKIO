@@ -23,6 +23,7 @@
                                 showOn="button"
                                 >
                         <p:ajax event="dateSelect" listener="#{controladorKio_CrearSoliciAnticipo.onDateSelect}" update=":principalForm:frmcreasolicitud:dias"/>
+                        <p:ajax event="change" listener="#{controladorKio_CrearSoliciAnticipo.onChangeDate}" update=":principalForm:frmcreasolicitud:dias"/>
                     </p:calendar>
                     <p:column/>
                     <p:outputLabel id="msjdiaprov" value="#{controladorKio_CrearSoliciAnticipo.msjDiasProv}" />

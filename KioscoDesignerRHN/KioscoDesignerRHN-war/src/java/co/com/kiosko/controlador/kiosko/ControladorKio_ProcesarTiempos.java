@@ -152,9 +152,13 @@ public class ControladorKio_ProcesarTiempos implements Serializable {
                     + "Cordial saludo. ";
             String respuesta1 = "";
             String respuesta2 = "";
-            if (empleado.getPersona().getEmail() != null && !empleado.getPersona().getEmail().isEmpty()) {
+//            if (empleado.getPersona().getEmail() != null && !empleado.getPersona().getEmail().isEmpty()) {
+            if (solicitudSelec.getKioSoliciLocaliza().getEmpleado().getPersona().getEmail() != null && 
+                    !solicitudSelec.getKioSoliciLocaliza().getEmpleado().getPersona().getEmail().isEmpty()) {
                 administrarGenerarReporte.enviarCorreo(empleado.getEmpresa().getSecuencia(),
-                        empleado.getPersona().getEmail(), "Reporte de tiempos laborados Kiosco", mensaje, "");
+//                        empleado.getPersona().getEmail(), 
+                        solicitudSelec.getKioSoliciLocaliza().getEmpleado().getPersona().getEmail(), 
+                        "Reporte de tiempos laborados Kiosco", mensaje, "");
                 respuesta1 = "Solicitud enviada correctamente al empleado";
             } else {
                 respuesta1 = "El empleado no tiene correo registrado";
@@ -218,7 +222,9 @@ public class ControladorKio_ProcesarTiempos implements Serializable {
 
     public void procesarSolicitud() {
         System.out.println(this.getClass().getName() + "procesarSolicitud()");
-        System.out.println("solicitudSelec: " + solicitudSelec.getSecuencia());
+        if (solicitudSelec != null) {
+            System.out.println("solicitudSelec: " + solicitudSelec.getSecuencia());
+        }
         boolean res = false;
         if ("RECHAZADO".equals(estadoNuevo) || "PENDIENTE_CORR".equals(estadoNuevo)) {
             if ((motivo == null || motivo.isEmpty())) {
@@ -243,7 +249,7 @@ public class ControladorKio_ProcesarTiempos implements Serializable {
                 res = false;
             }
         }
-        if (res){
+        if (res) {
             reportesTiemposEmpleados.clear();
         }
         if (res) {
@@ -259,7 +265,7 @@ public class ControladorKio_ProcesarTiempos implements Serializable {
                 System.out.println("Error procesando la solicitud: " + mensajeCreacion);
                 MensajesUI.error(mensajeCreacion);
             }
-            PrimefacesContextUI.ejecutar("recargartablap(); PF('soliciDialog').hide(); PF('creandoSolici').hide();");
+            PrimefacesContextUI.ejecutar("recargartablap(); PF('soliciDialog').hide(); PF('confirmEnvio').hide(); PF('creandoSolici').hide();");
         }
 //        if (res){
 //            PrimefacesContextUI.ejecutar("PF('soliciDialog').hide(); PF('creandoSolici').hide();");
