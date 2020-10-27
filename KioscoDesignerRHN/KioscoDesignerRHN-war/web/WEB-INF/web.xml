@@ -16,14 +16,14 @@
         <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
         <param-value>true</param-value>
     </context-param>
-<!--    <context-param>
+    <context-param>
         <param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
         <param-value>6LeJd7oZAAAAAP2ZHny-3smzv3v8-IriUqihxrlz</param-value>
     </context-param>
     <context-param>
         <param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
         <param-value>6LeJd7oZAAAAAICcZC0GOddF0ZJU3-IBbWV3COwB</param-value>
-    </context-param>-->
+    </context-param>
     <context-param>
         <param-name>primefaces.CSP</param-name>
         <param-value>true</param-value>

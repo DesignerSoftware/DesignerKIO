@@ -8,8 +8,8 @@
         <Node id="Ingreso/ingreso.xhtml" x="150" y="150" zoom="true"/>
         <Node id="Kiosko/inicioKiosko.xhtml" x="131" y="567" zoom="true"/>
         <Node id="Pruebas/paginaPruebas.xhtml" x="650" y="150" zoom="true"/>
-        <Node id="Plantilla/plantilla.xhtml" x="86" y="33" zoom="true"/>
         <Node id="Kiosko/generarReporte.xhtml" x="473" y="540" zoom="true"/>
+        <Node id="Plantilla/plantilla.xhtml" x="86" y="33" zoom="true"/>
         <Node id="Ingreso/primerIngreso.xhtml" x="181" y="300" zoom="true"/>
     </Scope>
     <Scope Scope="All Faces Configurations"/>

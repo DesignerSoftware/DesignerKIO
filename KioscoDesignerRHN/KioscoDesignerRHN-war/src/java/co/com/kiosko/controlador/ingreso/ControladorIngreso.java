@@ -50,6 +50,10 @@ public class ControladorIngreso implements Serializable {
     private String grupoSeleccionado;
 
     public ControladorIngreso() {
+        imprimir("constructor ControladorIngreso");
+        FacesContext contexto = FacesContext.getCurrentInstance();
+        HttpSession ses = (HttpSession) contexto.getExternalContext().getSession(false);
+        imprimir("sessionA: "+ses);
         intento = 0;
         logo = "logonominadesignertrans.png";
         leerArchivoXML = new LeerArchivoXML();
@@ -57,6 +61,10 @@ public class ControladorIngreso implements Serializable {
 
     @PostConstruct
     public void inicializarAdministrador() {
+        imprimir("inicializarAdministrador");
+        FacesContext contexto = FacesContext.getCurrentInstance();
+        HttpSession ses = (HttpSession) contexto.getExternalContext().getSession(false);
+        imprimir("sessionB: "+ses);
         validarGrupo();
     }
 
@@ -137,9 +145,9 @@ public class ControladorIngreso implements Serializable {
 //                                                
 //                                            }
                                                     if (ses.isNew()) {
-                                                        imprimir("La sesion es nueva.");
+                                                        imprimir("La sesion es nueva. "+ses);
                                                     } else {
-                                                        imprimir("La sesion NO es nueva.");
+                                                        imprimir("La sesion NO es nueva. "+ses);
                                                     }
                                                     administrarIngreso.adicionarConexionUsuario(ses.getId(), cadena.getEsquema());
                                                     ingresoExitoso = true;
@@ -252,7 +260,7 @@ public class ControladorIngreso implements Serializable {
                 ec.redirect(ec.getRequestContextPath() + "/" + "?grupo=" + grupoSeleccionado);
             }
         } catch (EJBTransactionRolledbackException etre) {
-            imprimir(this.getClass().getName() + ".ingresar() exception");
+            imprimir(".ingresar() exception");
             imprimir("La transacción se deshizo.");
             System.out.println(etre);
         }
@@ -402,17 +410,17 @@ public class ControladorIngreso implements Serializable {
     }
 
     public ConexionesKioskos getConexionEmpleado() {
-        imprimir(this.getClass().getName() + "." + "getConexionEmpleado" + "()");
+        imprimir("." + "getConexionEmpleado" + "()");
         return conexionEmpleado;
     }
 
     public Date getUltimaConexion() {
-        imprimir(this.getClass().getName() + "." + "getUltimaConexion" + "()");
+        imprimir("." + "getUltimaConexion" + "()");
         return ultimaConexion;
     }
 
     public String getNit() {
-        imprimir(this.getClass().getName() + "." + "getNit" + "()");
+        imprimir("." + "getNit" + "()");
         return nit;
     }
 
@@ -425,6 +433,7 @@ public class ControladorIngreso implements Serializable {
     }
 
     public void setGrupo(String grupo) {
+        imprimir(".setGrupo:grupo: "+grupo);
         this.grupo = grupo;
         validarGrupo();
     }
@@ -436,6 +445,9 @@ public class ControladorIngreso implements Serializable {
 
     public void setGrupoSeleccionado(String grupoSeleccionado) {
         imprimir("setGrupoSeleccionado: " + grupoSeleccionado);
+        FacesContext contexto = FacesContext.getCurrentInstance();
+        HttpSession ses = (HttpSession) contexto.getExternalContext().getSession(false);
+        imprimir("sessionC: "+ses);
         this.grupoSeleccionado = grupoSeleccionado;
     }
 
@@ -452,7 +464,7 @@ public class ControladorIngreso implements Serializable {
 
     private void imprimir(String mensajeConsola) {
         if (true) {
-            System.out.println(mensajeConsola);
+            System.out.println(this.getClass().getName()+": "+mensajeConsola);
         }
     }
 }
